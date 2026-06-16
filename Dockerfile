@@ -1,4 +1,3 @@
-# syntax=docker/dockerfile:1.7
 # Build the Vite SPA, then serve the static output with nginx.
 # Coolify builds this image from the repo (Dockerfile build pack) and maps the
 # container's port 3000.
