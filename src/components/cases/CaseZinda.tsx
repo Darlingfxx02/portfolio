@@ -226,11 +226,14 @@ export function CaseZinda() {
         {/* 7. Что выцепил из проекта                                         */}
         {/* ──────────────────────────────────────────────────────────────── */}
         <section>
-          <Narrow>
-            <h2 className="text-[32px] font-semibold leading-[1.1] tracking-[-0.01em] text-[#263238]">
-              Что выцепил из проекта
-            </h2>
-            <div className="mt-10 space-y-6 text-[18px] leading-[1.6] text-[#263238]">
+          <Row
+            heading={
+              <h2 className="text-[32px] font-semibold leading-[1.1] tracking-[-0.01em] text-[#263238]">
+                Что выцепил из проекта
+              </h2>
+            }
+          >
+            <div className="space-y-6 text-[18px] leading-[1.6] text-[#263238]">
               <p>
                 Чтобы понять, во что упёрлись предыдущие итерации, провели с
                 командой 8 глубинных интервью — 4 владельца бизнеса и 4
@@ -252,7 +255,7 @@ export function CaseZinda() {
                 легаси, не как декоративный артефакт.
               </p>
             </div>
-          </Narrow>
+          </Row>
         </section>
 
         <div className="h-40" />
@@ -261,16 +264,15 @@ export function CaseZinda() {
         {/* 8. Главная JTBD                                                   */}
         {/* ──────────────────────────────────────────────────────────────── */}
         <section>
-          <Narrow>
-            <Eyebrow>Главная JTBD</Eyebrow>
-            <p className="mt-8 text-[24px] font-semibold leading-[1.3] tracking-[-0.005em] text-[#263238]">
+          <Row heading={<Eyebrow>Главная JTBD</Eyebrow>}>
+            <p className="text-[24px] font-semibold leading-[1.3] tracking-[-0.005em] text-[#263238]">
               «Как бухгалтер, я хочу быстро переключаться между счетами разных
               бизнесов, чтобы решать задачи в режиме единого потока».
             </p>
             <p className="mt-6 text-[18px] leading-[1.6] text-[#546e7a]">
               Эта формулировка стала фундаментом архитектурных решений.
             </p>
-          </Narrow>
+          </Row>
         </section>
 
         <div className="h-20" />
@@ -295,14 +297,13 @@ export function CaseZinda() {
               />
             </div>
           </div>
-          <Narrow className="mt-10">
-            <Eyebrow>Цепочка research → design</Eyebrow>
-            <p className="mt-4 text-[18px] leading-[1.6] text-[#546e7a]">
+          <Row className="mt-10" heading={<Eyebrow>Цепочка research → design</Eyebrow>}>
+            <p className="text-[18px] leading-[1.6] text-[#546e7a]">
               8 интервью → инсайт о многосчётности → JTBD «единый поток между
               счетами» → архитектурные решения. Юзер-флоу как диагностический
               инструмент против легаси предыдущих итераций.
             </p>
-          </Narrow>
+          </Row>
         </section>
 
         <div className="h-40" />
@@ -361,17 +362,22 @@ export function CaseZinda() {
         {/* 11. Развилка · MVP-скоуп                                          */}
         {/* ──────────────────────────────────────────────────────────────── */}
         <section>
-          <Narrow>
-            <Eyebrow>Развилка</Eyebrow>
-            <h2 className="mt-4 text-[32px] font-semibold leading-[1.1] tracking-[-0.01em] text-[#263238]">
-              MVP-скоуп
-            </h2>
-            <p className="mt-6 text-[20px] font-medium leading-[1.4] tracking-[-0.005em] text-[#263238]">
+          <Row
+            heading={
+              <>
+                <Eyebrow>Развилка</Eyebrow>
+                <h2 className="mt-4 text-[32px] font-semibold leading-[1.1] tracking-[-0.01em] text-[#263238]">
+                  MVP-скоуп
+                </h2>
+              </>
+            }
+          >
+            <p className="text-[20px] font-medium leading-[1.4] tracking-[-0.005em] text-[#263238]">
               Что делать с кредитными продуктами, если заказчик не может
               сформулировать сценарии, а они цепляются за главную, счета и
               операции?
             </p>
-          </Narrow>
+          </Row>
           <div className="mt-12 flex w-full items-stretch gap-5">
             <ForkOption
               letter="A"
@@ -412,16 +418,21 @@ export function CaseZinda() {
         {/* 12. Развилка · Архитектура                                        */}
         {/* ──────────────────────────────────────────────────────────────── */}
         <section>
-          <Narrow>
-            <Eyebrow>Развилка</Eyebrow>
-            <h2 className="mt-4 text-[32px] font-semibold leading-[1.1] tracking-[-0.01em] text-[#263238]">
-              Архитектура
-            </h2>
-            <p className="mt-6 text-[20px] font-medium leading-[1.4] tracking-[-0.005em] text-[#263238]">
+          <Row
+            heading={
+              <>
+                <Eyebrow>Развилка</Eyebrow>
+                <h2 className="mt-4 text-[32px] font-semibold leading-[1.1] tracking-[-0.01em] text-[#263238]">
+                  Архитектура
+                </h2>
+              </>
+            }
+          >
+            <p className="text-[20px] font-medium leading-[1.4] tracking-[-0.005em] text-[#263238]">
               Где счета живут на главном экране и как переключаешься между
               бизнесами?
             </p>
-          </Narrow>
+          </Row>
           <div className="mt-12 flex w-full items-stretch gap-5">
             <ForkOption
               letter="A"
