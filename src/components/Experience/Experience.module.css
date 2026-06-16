@@ -1,0 +1,66 @@
+.section {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 12px;
+  width: 100%;
+  max-width: 640px;
+}
+
+.label {
+  color: var(--text-dim);
+  font-size: 16px;
+  font-weight: var(--wt-regular);
+  letter-spacing: var(--tracking);
+}
+
+.accent {
+  width: 46px;
+  height: 1px;
+  background: var(--line);
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  width: 100%;
+}
+
+.row {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 14px;
+  width: 100%;
+}
+
+.who {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+}
+
+.company {
+  color: var(--text);
+  font-size: 16px;
+  font-weight: var(--wt-regular);
+  letter-spacing: var(--tracking);
+}
+
+.role {
+  color: var(--text-dim);
+  font-size: 16px;
+  font-weight: var(--wt-regular);
+  letter-spacing: var(--tracking);
+}
+
+.period {
+  flex-shrink: 0;
+  color: var(--text-dim);
+  font-size: 16px;
+  font-weight: var(--wt-regular);
+  letter-spacing: var(--tracking);
+  white-space: nowrap;
+}

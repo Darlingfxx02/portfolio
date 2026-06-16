@@ -1,0 +1,178 @@
+:root {
+  /* ── Color tokens ───────────────────────────── */
+  --bg: #000;
+  --paper: #ffffff;
+  --slot: #fafafa;
+  /* Neutral placeholder fill — dark: a hair lighter than black.
+     (Light theme would be rgba(0, 0, 0, 0.05) — a hair darker than white.) */
+  --fill: rgba(255, 255, 255, 0.05);
+
+  --text: #ffffff;
+  --text-strong: rgba(255, 255, 255, 0.8);
+  --text-mid: rgba(255, 255, 255, 0.6);
+  --text-dim: rgba(255, 255, 255, 0.4);
+  --text-faint: rgba(255, 255, 255, 0.2);
+  --ink: #000000;
+  --ink-dim: rgba(0, 0, 0, 0.4);
+
+  --line: rgba(255, 255, 255, 0.08);
+  --hover: rgba(255, 255, 255, 0.1);
+  --surface: rgba(20, 20, 20, 0.8);
+  --dot: #d10c14;
+  --hairline: rgba(255, 255, 255, 0.03);
+
+  --bar-bg: rgba(19, 19, 19, 0.8);
+  --bar-border: rgba(255, 255, 255, 0.06);
+
+  /* Floating-element shadows — dark theme leans on a single deep black cast. */
+  --shadow-dock: 0 14px 40px -12px rgba(0, 0, 0, 0.6);
+  --shadow-panel: 0 28px 70px -20px rgba(0, 0, 0, 0.6);
+
+  /* Dock + folder-panel surface — dark theme reuses the translucent surface. */
+  --dock-bg: var(--surface);
+  --dock-line: var(--line);
+
+  /* ── Typography ─────────────────────────────── */
+  --font-sans: 'Geist', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  /* Body copy — SF Pro on Apple, graceful fallback elsewhere. */
+  --font-sf: -apple-system, 'SF Pro Text', system-ui, 'Geist', sans-serif;
+  /* Hero quote — SF Pro Rounded on Apple via the ui-rounded generic. */
+  --font-rounded: ui-rounded, 'SF Pro Rounded', 'Hiragino Maru Gothic ProN', system-ui, sans-serif;
+
+  /* Weights — slightly heavier across both themes (variable fonts). */
+  --wt-regular: 430;
+  --wt-medium: 520;
+  --wt-strong: 610;
+
+  /* Letter-spacing — tightened a hair to offset the wider glyphs. */
+  --tracking: -0.02em;
+  --tracking-body: 0.01em;
+
+  /* ── Layout ─────────────────────────────────── */
+  --maxw: 1440px;
+  --pad: 12px;
+  --radius: 16px;
+  --radius-lg: 32px;
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+
+  color-scheme: dark;
+  font-family: var(--font-sans);
+  font-size: 16px;
+  line-height: 1.2;
+  color: var(--text);
+  background: var(--bg);
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ── Light theme ──────────────────────────────── */
+:root[data-theme='light'] {
+  --bg: #ffffff;
+  --fill: rgba(0, 0, 0, 0.05);
+  --text: #0a0a0a;
+  --text-strong: rgba(0, 0, 0, 0.82);
+  --text-mid: rgba(0, 0, 0, 0.6);
+  --text-dim: rgba(0, 0, 0, 0.45);
+  --text-faint: rgba(0, 0, 0, 0.25);
+  --line: rgba(0, 0, 0, 0.1);
+  --hover: rgba(0, 0, 0, 0.06);
+  --surface: rgba(245, 245, 245, 0.85);
+  --hairline: rgba(0, 0, 0, 0.04);
+  /* Light theme: soft, layered, cool-slate shadows — a single dense black
+     cast reads as a grimy smudge on white, so split it into a tight contact
+     shadow + a wide low-opacity ambient one. */
+  --shadow-dock: 0 8px 24px -8px rgba(17, 24, 39, 0.12), 0 2px 6px -2px rgba(17, 24, 39, 0.08);
+  --shadow-panel: 0 20px 50px -16px rgba(17, 24, 39, 0.16), 0 4px 12px -4px rgba(17, 24, 39, 0.08);
+  /* Dock + panel: solid white, near-invisible hairline — soft shadow carries
+     the float instead of a visible border. */
+  --dock-bg: #ffffff;
+  --dock-line: rgba(0, 0, 0, 0.04);
+  color-scheme: light;
+}
+
+/* ── Reset ────────────────────────────────────── */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+/* Margin reset. Lives in @layer base so it never defeats the Tailwind-driven
+   case pages: their margin utilities (@layer utilities, ordered after base)
+   win, and explicit unlayered main-site rules win too. Main-site elements
+   with no other margin rule still fall back to 0. */
+@layer base {
+  * {
+    margin: 0;
+  }
+}
+
+html {
+  scroll-behavior: smooth;
+  /* Hide the native scrollbar — a custom pill (ScrollBar) replaces it.
+     Keeps it from appearing, taking width, or shifting the layout. */
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* legacy Edge */
+}
+
+html::-webkit-scrollbar {
+  display: none; /* WebKit */
+}
+
+body {
+  min-height: 100svh;
+  background: var(--bg);
+  transition:
+    background-color 0.3s ease,
+    color 0.3s ease;
+}
+
+img,
+svg,
+video {
+  display: block;
+  max-width: 100%;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button {
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+  border: none;
+  background: none;
+}
+
+p {
+  text-wrap: pretty;
+}
+
+h1,
+h2,
+h3 {
+  font-weight: var(--wt-medium);
+  letter-spacing: var(--tracking);
+}
+
+:focus-visible {
+  outline: 2px solid var(--text);
+  outline-offset: 3px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}

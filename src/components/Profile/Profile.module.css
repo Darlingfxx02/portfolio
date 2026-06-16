@@ -1,0 +1,156 @@
+.section {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 48px;
+  width: 100%;
+  max-width: 640px;
+}
+
+.nameTrigger {
+  cursor: pointer;
+  outline-offset: 3px;
+}
+
+/* ── Identity ───────────────────────────── */
+.id {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.name {
+  color: var(--text-strong);
+  font-family: var(--font-sf);
+  font-size: 14px;
+  font-weight: var(--wt-regular);
+  letter-spacing: var(--tracking-body);
+}
+
+.role {
+  color: var(--text-dim);
+  font-family: var(--font-sf);
+  font-size: 14px;
+  font-weight: var(--wt-regular);
+  letter-spacing: var(--tracking-body);
+}
+
+.employer {
+  color: var(--text-dim);
+  text-decoration: underline;
+  text-decoration-color: var(--line);
+  text-underline-offset: 3px;
+  text-decoration-thickness: 1px;
+  transition: color 0.2s var(--ease);
+}
+
+.employer:hover {
+  color: var(--text);
+}
+
+/* ── Bio ────────────────────────────────── */
+.bio {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5em;
+  width: 100%;
+  color: var(--text-mid);
+  font-family: var(--font-sf);
+  font-size: 14px;
+  font-weight: var(--wt-regular);
+  line-height: 1.5;
+  letter-spacing: var(--tracking-body);
+}
+
+/* ── Inline link blocks ─────────────────── */
+.link {
+  color: var(--text);
+  font: inherit;
+  display: inline;
+  padding: 0;
+  background: none;
+  border: 0;
+  cursor: pointer;
+  text-decoration: underline;
+  text-decoration-color: var(--line);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+  transition:
+    color 0.2s var(--ease),
+    text-decoration-color 0.2s var(--ease);
+}
+
+.link:hover {
+  color: var(--text);
+  text-decoration-color: var(--text-faint);
+}
+
+.explore {
+  color: var(--text-strong);
+}
+
+/* ── Copy toast (above cursor) ──────────── */
+.copyToast {
+  position: fixed;
+  z-index: 200;
+  padding: 4px 12px;
+  border-radius: 999px;
+  background: var(--text);
+  color: var(--bg);
+  font-family: var(--font-sf);
+  font-size: 13px;
+  font-weight: var(--wt-medium);
+  letter-spacing: var(--tracking);
+  white-space: nowrap;
+  pointer-events: none;
+  box-shadow: 0 10px 24px -10px rgba(0, 0, 0, 0.5);
+  animation: copyToast 1500ms linear forwards;
+}
+
+@keyframes copyToast {
+  /* Rise up from near the cursor (soft ease-out). */
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -80%) scale(0.96);
+    animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  22% {
+    opacity: 1;
+    transform: translate(-50%, -150%) scale(1);
+    animation-timing-function: linear;
+  }
+  /* Hold. */
+  70% {
+    opacity: 1;
+    transform: translate(-50%, -150%) scale(1);
+    animation-timing-function: cubic-bezier(0.4, 0, 1, 1);
+  }
+  /* Drop back down + fade out (ease-in). */
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -84%) scale(0.96);
+  }
+}
+
+/* ── Clickable local time ───────────────── */
+.timeBtn {
+  color: var(--text);
+  font: inherit;
+  display: inline;
+  padding: 0;
+  background: none;
+  border: 0;
+  cursor: pointer;
+  font-variant-numeric: tabular-nums;
+  text-decoration: underline;
+  text-decoration-color: var(--line);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+  transition: color 0.2s var(--ease);
+}
+
+.timeBtn:hover {
+  color: var(--text);
+}

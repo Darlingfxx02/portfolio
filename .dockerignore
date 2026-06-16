@@ -1,0 +1,12 @@
+.git
+.gitignore
+node_modules
+dist
+dist-ssr
+.DS_Store
+*.log
+.claude
+.vscode
+.idea
+*.tsbuildinfo
+README.md

@@ -1,0 +1,4 @@
+/* Tailwind v4 — used by the ported case-study pages.
+   Preflight lands in @layer base, so the unlayered main-site styles
+   (index.css + CSS modules) still win and stay unaffected. */
+@import 'tailwindcss';

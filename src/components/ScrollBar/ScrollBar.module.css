@@ -1,0 +1,27 @@
+/* Trackless thumb — a fill pill on the right edge, no rail behind it. */
+.thumb {
+  position: fixed;
+  top: 0;
+  right: 6px;
+  width: 6px;
+  z-index: 120;
+  border-radius: 999px;
+  background: var(--text-faint);
+  cursor: grab;
+  touch-action: none;
+  will-change: transform;
+  transition:
+    background 0.2s var(--ease),
+    width 0.15s var(--ease);
+}
+
+.thumb:hover {
+  width: 8px;
+  background: var(--text-dim);
+}
+
+.thumb[data-dragging='true'] {
+  width: 8px;
+  background: var(--text-mid);
+  cursor: grabbing;
+}

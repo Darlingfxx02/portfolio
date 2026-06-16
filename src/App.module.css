@@ -1,0 +1,25 @@
+.page {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 48px;
+  width: 100%;
+  padding: 80px var(--pad) 140px;
+  background: var(--bg);
+}
+
+/* Pinboard zone — room below the résumé where draggable stickers live. */
+.playground {
+  width: 100%;
+  max-width: 640px;
+  min-height: 320px;
+}
+
+.playgroundLabel {
+  color: var(--text-faint);
+  font-family: var(--font-sf);
+  font-size: 14px;
+  font-weight: var(--wt-regular);
+  letter-spacing: var(--tracking-body);
+}

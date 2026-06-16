@@ -1,0 +1,108 @@
+.page {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  min-height: 100vh;
+  padding: clamp(96px, 16vh, 200px) var(--pad) 160px;
+  background: var(--bg);
+}
+
+.inner {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 32px;
+  width: 100%;
+  max-width: 460px;
+}
+
+/* ── Intro copy (matches Profile bio) ───── */
+.lead {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2em;
+  color: var(--text-mid);
+  font-family: var(--font-sf);
+  font-size: 14px;
+  font-weight: var(--wt-regular);
+  line-height: 1.5;
+  letter-spacing: var(--tracking-body);
+}
+
+.lead p {
+  text-wrap: pretty;
+}
+
+/* ── Mailto form ────────────────────────── */
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+  max-width: 460px;
+}
+
+.input,
+.textarea {
+  width: 100%;
+  padding: 12px 14px;
+  border-radius: 12px;
+  background: var(--fill);
+  border: none;
+  color: var(--text);
+  font-family: var(--font-sf);
+  font-size: 14px;
+  font-weight: var(--wt-regular);
+  letter-spacing: var(--tracking-body);
+  transition: background 0.2s var(--ease);
+}
+
+.textarea {
+  min-height: 112px;
+  line-height: 1.5;
+  resize: none;
+  overflow: hidden;
+}
+
+.input::placeholder,
+.textarea::placeholder {
+  color: var(--text-faint);
+}
+
+.input:focus,
+.textarea:focus {
+  outline: none;
+  background: var(--hover);
+}
+
+/* ── Socials ────────────────────────────── */
+.socials {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px clamp(14px, 1.6vw, 18px);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* Underlined link, matching the homepage bio links. */
+.social {
+  color: var(--text);
+  font-family: var(--font-sf);
+  font-size: 15px;
+  font-weight: var(--wt-medium);
+  letter-spacing: -0.02em;
+  text-decoration: underline;
+  text-decoration-color: var(--line);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+  transition:
+    color 0.2s var(--ease),
+    text-decoration-color 0.2s var(--ease);
+}
+
+.social:hover {
+  color: var(--text);
+  text-decoration-color: var(--text-faint);
+}
