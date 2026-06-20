@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Портфолио — Админка персонализации</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://unpkg.com/@phosphor-icons/web@2.1.1"></script>
+<style>
+  :root {
+    --park-bg: hsl(240, 6%, 6%);
+    --park-surface: hsl(240, 5%, 10%);
+    --park-border: hsl(240, 5%, 18%);
+    --park-border-strong: hsl(240, 5%, 25%);
+    --park-fg: hsl(240, 5%, 96%);
+    --park-fg-muted: hsl(240, 5%, 65%);
+    --park-fg-subtle: hsl(240, 5%, 45%);
+    --park-accent: hsl(36, 100%, 60%); /* amber */
+    --park-accent-fg: hsl(20, 20%, 8%);
+    --park-accent-soft: hsla(36, 100%, 60%, 0.12);
+    --park-success: hsl(151, 55%, 55%);
+    --park-success-soft: hsla(151, 55%, 55%, 0.12);
+    --park-danger: hsl(0, 70%, 65%);
+    --park-danger-soft: hsla(0, 70%, 65%, 0.12);
+  }
+  body {
+    background: var(--park-bg);
+    color: var(--park-fg);
+    font-family: ui-sans-serif, system-ui, -apple-system, "SF Pro", "Inter", sans-serif;
+  }
+  .tp-heading { font-size: 1.5rem; font-weight: 700; letter-spacing: -0.02em; line-height: 1.25; color: var(--park-fg); }
+  .tp-subheading { font-size: 1rem; font-weight: 600; letter-spacing: -0.005em; line-height: 1.35; color: var(--park-fg); }
+  .tp-body { font-size: 0.875rem; font-weight: 400; line-height: 1.5; color: var(--park-fg); }
+  .tp-muted { font-size: 0.8125rem; font-weight: 400; line-height: 1.5; color: var(--park-fg-muted); }
+
+  .pk-card { background: var(--park-surface); border: 1px solid var(--park-border); border-radius: 0.5rem; padding: 1.25rem; }
+
+  .pk-callout { border-radius: 0.5rem; padding: 1rem 1.125rem; display: flex; align-items: flex-start; gap: 0.875rem; border: 1px solid; }
+  .pk-callout-neutral { background: var(--park-surface); border-color: var(--park-border); }
+  .pk-callout-info { background: rgba(80, 120, 220, 0.08); border-color: rgba(120, 160, 240, 0.3); }
+  .pk-callout-danger { background: var(--park-danger-soft); border-color: rgba(220, 100, 100, 0.3); }
+  .pk-callout-icon { width: 1.5rem; height: 1.5rem; flex-shrink: 0; display: inline-flex; align-items: center; justify-content: center; border-radius: 0.375rem; font-size: 0.75rem; font-weight: 700; }
+
+  .pk-badge { display: inline-flex; align-items: center; gap: 0.25rem; padding: 0.125rem 0.5rem; border-radius: 0.25rem; font-size: 0.6875rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; border: 1px solid; }
+  .pk-badge-success { background: var(--park-success-soft); border-color: rgba(120, 220, 160, 0.3); color: var(--park-success); }
+  .pk-badge-danger { background: var(--park-danger-soft); border-color: rgba(220, 100, 100, 0.3); color: var(--park-danger); }
+  .pk-badge-neutral { background: transparent; border-color: var(--park-border-strong); color: var(--park-fg-muted); }
+
+  .pk-btn { display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem; padding: 0.5rem 1rem; border-radius: 0.375rem; font-size: 0.875rem; font-weight: 500; border: 1px solid transparent; cursor: pointer; transition: all 0.12s; font-family: inherit; }
+  .pk-btn-solid { background: var(--park-accent); color: var(--park-accent-fg); }
+  .pk-btn-solid:hover { background: hsl(36, 100%, 55%); }
+  .pk-btn-solid:disabled { background: var(--park-border); color: var(--park-fg-subtle); cursor: not-allowed; }
+  .pk-btn-ghost { background: transparent; color: var(--park-fg-muted); border-color: transparent; }
+  .pk-btn-ghost:hover { background: var(--park-surface); color: var(--park-fg); }
+  .pk-btn-sm { padding: 0.25rem 0.625rem; font-size: 0.75rem; }
+
+  .pk-close { width: 2rem; height: 2rem; display: inline-flex; align-items: center; justify-content: center; border-radius: 0.375rem; background: transparent; border: none; color: var(--park-fg-muted); cursor: pointer; transition: all 0.12s; font-family: inherit; }
+  .pk-close:hover { background: var(--park-surface); color: var(--park-fg); }
+  .pk-close i { font-size: 1.125rem; }
+
+  .pk-radio-group { display: flex; flex-direction: column; gap: 0.375rem; }
+  .pk-radio-card { position: relative; display: block; }
+  .pk-radio-card input { position: absolute; opacity: 0; pointer-events: none; }
+  .pk-radio-card label { display: flex; align-items: center; gap: 0.625rem; width: 100%; padding: 0.625rem 0.875rem; border-radius: 0.375rem; border: 1px solid var(--park-border); background: transparent; color: var(--park-fg); font-size: 0.875rem; font-weight: 400; cursor: pointer; transition: all 0.12s; user-select: none; }
+  .pk-radio-card label::before { content: ""; width: 1rem; height: 1rem; border: 1.5px solid var(--park-border-strong); border-radius: 50%; flex-shrink: 0; transition: all 0.12s; }
+  .pk-radio-card label:hover { border-color: var(--park-border-strong); background: var(--park-surface); }
+  .pk-radio-card label:hover::before { border-color: var(--park-fg-muted); }
+  .pk-radio-card input:checked + label { background: var(--park-accent-soft); border-color: var(--park-accent); color: var(--park-fg); font-weight: 500; }
+  .pk-radio-card input:checked + label::before { border-color: var(--park-accent); background: var(--park-accent); box-shadow: inset 0 0 0 3px var(--park-bg); }
+
+  .pk-custom-row { display: flex; align-items: center; gap: 0.625rem; width: 100%; padding: 0.625rem 0.875rem; border-radius: 0.375rem; border: 1px dashed var(--park-border-strong); background: transparent; color: var(--park-fg-muted); transition: all 0.12s; cursor: text; }
+  .pk-custom-row:hover { border-color: var(--park-accent); }
+  .pk-custom-row:focus-within { border-style: solid; border-color: var(--park-accent); background: var(--park-accent-soft); color: var(--park-fg); }
+  .pk-custom-row.has-value { border-style: solid; border-color: var(--park-accent); background: var(--park-accent-soft); color: var(--park-fg); }
+  .pk-custom-row input { flex: 1; background: transparent; border: none; outline: none; color: var(--park-fg); font-size: 0.875rem; font-family: inherit; padding: 0; }
+  .pk-custom-row input::placeholder { color: var(--park-fg-muted); }
+  .pk-custom-row i { color: inherit; flex-shrink: 0; }
+
+  .pk-textarea { width: 100%; background: var(--park-surface); border: 1px solid var(--park-border); color: var(--park-fg); border-radius: 0.375rem; padding: 0.625rem 0.75rem; font: inherit; font-size: 0.875rem; resize: vertical; }
+  .pk-textarea:focus { outline: none; border-color: var(--park-accent); box-shadow: 0 0 0 3px var(--park-accent-soft); }
+  .pk-textarea::placeholder { color: var(--park-fg-subtle); }
+
+  .pk-table-wrap { border: 1px solid var(--park-border); border-radius: 0.5rem; overflow: hidden; }
+  .pk-table { width: 100%; border-collapse: collapse; font-size: 0.875rem; }
+  .pk-table thead { background: hsl(240, 5%, 8%); }
+  .pk-table th { text-align: left; padding: 0.625rem 0.875rem; font-weight: 600; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--park-fg-muted); border-bottom: 1px solid var(--park-border); }
+  .pk-table td { padding: 0.625rem 0.875rem; border-bottom: 1px solid var(--park-border); vertical-align: top; }
+  .pk-table tr:last-child td { border-bottom: none; }
+  .pk-table .pro { color: var(--park-success); }
+  .pk-table .con { color: var(--park-danger); }
+
+  code.pk-code { background: hsl(240, 5%, 14%); border: 1px solid var(--park-border); padding: 0.0625rem 0.375rem; border-radius: 0.25rem; font-size: 0.75rem; }
+  pre.pk-pre { background: hsl(240, 5%, 4%); border: 1px solid var(--park-border); border-radius: 0.5rem; padding: 0.875rem 1rem; overflow-x: auto; font-size: 0.75rem; color: var(--park-fg); white-space: pre; }
+
+  [data-tip] { position: relative; }
+  [data-tip]:hover::after { content: attr(data-tip); position: absolute; left: 50%; bottom: calc(100% + 8px); transform: translateX(-50%); background: hsl(240, 5%, 16%); border: 1px solid var(--park-border-strong); color: var(--park-fg); padding: 0.5rem 0.75rem; border-radius: 0.375rem; font-size: 0.75rem; line-height: 1.4; font-weight: 400; white-space: normal; width: max-content; max-width: 320px; z-index: 30; box-shadow: 0 8px 24px rgba(0,0,0,0.4); pointer-events: none; }
+
+  .q { margin-bottom: 2.5rem; }
+  .q:last-child { margin-bottom: 0; }
+</style>
+</head>
+<body>
+
+<div class="mx-auto max-w-4xl px-6 py-10">
+
+  <header class="mb-10">
+    <h1 class="tp-heading">Портфолио — админка персонализации</h1>
+    <p class="tp-muted mt-3">Сабдомен-админка + нейронка кастомят портфолио под каждую компанию. Публичный сайт уже читает компанию из <code class="pk-code">?to=slug</code>. Это наметки архитектуры — наведись на варианты, выбери развилки, скопируй JSON в конце.</p>
+  </header>
+
+  <!-- SECTION 1: WHAT -->
+  <section class="mb-20">
+    <h2 class="tp-heading mb-6">1. Что кастомизируем</h2>
+    <div class="pk-callout pk-callout-neutral mb-8">
+      <span class="pk-callout-icon" style="background: var(--park-accent-soft); color: var(--park-accent)"><i class="ph-bold ph-target" style="font-size: 0.875rem"></i></span>
+      <div>
+        <div class="tp-subheading">Один публичный сайт → много «версий под компанию»</div>
+        <p class="tp-muted mt-1">Открываешь админку, вставляешь вакансию, нейронка собирает релевантную версию, ты правишь и публикуешь. Рекрутёр открывает <code class="pk-code">site/?to=plata</code> — видит подобранное под него.</p>
+      </div>
+    </div>
+
+    <figure class="my-6">
+      <svg viewBox="0 0 900 360" class="w-full h-auto">
+        <defs>
+          <marker id="arr-axis" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--park-accent)"/></marker>
+        </defs>
+        <!-- hub -->
+        <rect x="350" y="150" width="200" height="64" rx="10" fill="var(--park-accent-soft)" stroke="var(--park-accent)" stroke-width="1.5"/>
+        <text x="450" y="178" text-anchor="middle" fill="var(--park-fg)" font-size="15" font-family="ui-sans-serif" font-weight="700">Конфиг компании</text>
+        <text x="450" y="198" text-anchor="middle" fill="var(--park-accent)" font-size="11" font-family="ui-sans-serif">company.json · ?to=slug</text>
+
+        <!-- axis 1: cases (top-left) -->
+        <rect x="40" y="30" width="300" height="76" rx="8" fill="var(--park-surface)" stroke="var(--park-border-strong)"/>
+        <text x="60" y="58" fill="var(--park-fg)" font-size="14" font-family="ui-sans-serif" font-weight="600">1 · Кейсы (3 самых релевантных)</text>
+        <text x="60" y="80" fill="var(--park-fg-muted)" font-size="12" font-family="ui-sans-serif">из базы страниц кейсов, подбор под вакансию</text>
+        <text x="60" y="97" fill="var(--park-fg-subtle)" font-size="11" font-family="ui-sans-serif">сейчас: zinda · uxart · ovork</text>
+        <line x1="340" y1="90" x2="360" y2="160" stroke="var(--park-accent)" stroke-width="1.5" marker-end="url(#arr-axis)"/>
+
+        <!-- axis 2: text (top-right) -->
+        <rect x="560" y="30" width="300" height="76" rx="8" fill="var(--park-surface)" stroke="var(--park-border-strong)"/>
+        <text x="580" y="58" fill="var(--park-fg)" font-size="14" font-family="ui-sans-serif" font-weight="600">2 · Центральный текст</text>
+        <text x="580" y="80" fill="var(--park-fg-muted)" font-size="12" font-family="ui-sans-serif">блоки пишем мы, нейронка выбирает,</text>
+        <text x="580" y="97" fill="var(--park-fg-muted)" font-size="12" font-family="ui-sans-serif">что подчеркнуть / выделить</text>
+        <line x1="560" y1="90" x2="540" y2="160" stroke="var(--park-accent)" stroke-width="1.5" marker-end="url(#arr-axis)"/>
+
+        <!-- axis 3: experience (bottom-left) -->
+        <rect x="40" y="258" width="300" height="76" rx="8" fill="var(--park-surface)" stroke="var(--park-border-strong)"/>
+        <text x="60" y="286" fill="var(--park-fg)" font-size="14" font-family="ui-sans-serif" font-weight="600">3 · Опыт (подсветка)</text>
+        <text x="60" y="308" fill="var(--park-fg-muted)" font-size="12" font-family="ui-sans-serif">подсвечиваем релевантные места работы</text>
+        <text x="60" y="325" fill="var(--park-fg-muted)" font-size="12" font-family="ui-sans-serif">под конкретную вакансию</text>
+        <line x1="340" y1="280" x2="360" y2="208" stroke="var(--park-accent)" stroke-width="1.5" marker-end="url(#arr-axis)"/>
+
+        <!-- axis 4: video (bottom-right) -->
+        <rect x="560" y="258" width="300" height="76" rx="8" fill="var(--park-surface)" stroke="var(--park-border-strong)"/>
+        <text x="580" y="286" fill="var(--park-fg)" font-size="14" font-family="ui-sans-serif" font-weight="600">4 · Презентационное видео</text>
+        <text x="580" y="308" fill="var(--park-fg-muted)" font-size="12" font-family="ui-sans-serif">общий ролик по умолчанию +</text>
+        <text x="580" y="325" fill="var(--park-fg-muted)" font-size="12" font-family="ui-sans-serif">кастомный под отдельные компании</text>
+        <line x1="560" y1="280" x2="540" y2="208" stroke="var(--park-accent)" stroke-width="1.5" marker-end="url(#arr-axis)"/>
+      </svg>
+      <figcaption class="tp-muted mt-2 text-center">Четыре оси кастомизации сходятся в один конфиг под компанию</figcaption>
+    </figure>
+  </section>
+
+  <!-- SECTION 2: PIPELINE -->
+  <section class="mb-20">
+    <h2 class="tp-heading mb-6">2. Поток: вакансия → версия</h2>
+    <figure class="my-6">
+      <svg viewBox="0 0 1080 120" class="w-full h-auto">
+        <defs>
+          <marker id="arr-pipe" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--park-accent)"/></marker>
+        </defs>
+        <rect x="10" y="35" width="170" height="56" rx="8" fill="var(--park-surface)" stroke="var(--park-border-strong)"/>
+        <text x="95" y="60" text-anchor="middle" fill="var(--park-fg)" font-size="13" font-family="ui-sans-serif" font-weight="600">Вставил вакансию</text>
+        <text x="95" y="78" text-anchor="middle" fill="var(--park-fg-muted)" font-size="11" font-family="ui-sans-serif">текст + компания</text>
+        <line x1="185" y1="63" x2="220" y2="63" stroke="var(--park-accent)" stroke-width="2" marker-end="url(#arr-pipe)"/>
+
+        <rect x="225" y="35" width="170" height="56" rx="8" fill="var(--park-accent-soft)" stroke="var(--park-accent)" stroke-width="1.5"/>
+        <text x="310" y="60" text-anchor="middle" fill="var(--park-fg)" font-size="13" font-family="ui-sans-serif" font-weight="600">Нейронка</text>
+        <text x="310" y="78" text-anchor="middle" fill="var(--park-accent)" font-size="11" font-family="ui-sans-serif">подбор + акценты</text>
+        <line x1="400" y1="63" x2="435" y2="63" stroke="var(--park-accent)" stroke-width="2" marker-end="url(#arr-pipe)"/>
+
+        <rect x="440" y="35" width="170" height="56" rx="8" fill="var(--park-surface)" stroke="var(--park-border-strong)"/>
+        <text x="525" y="60" text-anchor="middle" fill="var(--park-fg)" font-size="13" font-family="ui-sans-serif" font-weight="600">Черновик конфига</text>
+        <text x="525" y="78" text-anchor="middle" fill="var(--park-fg-muted)" font-size="11" font-family="ui-sans-serif">3 кейса · акценты · видео</text>
+        <line x1="615" y1="63" x2="650" y2="63" stroke="var(--park-accent)" stroke-width="2" marker-end="url(#arr-pipe)"/>
+
+        <rect x="655" y="35" width="170" height="56" rx="8" fill="var(--park-surface)" stroke="var(--park-border-strong)"/>
+        <text x="740" y="60" text-anchor="middle" fill="var(--park-fg)" font-size="13" font-family="ui-sans-serif" font-weight="600">Ты правишь</text>
+        <text x="740" y="78" text-anchor="middle" fill="var(--park-fg-muted)" font-size="11" font-family="ui-sans-serif">ревью в админке</text>
+        <line x1="830" y1="63" x2="865" y2="63" stroke="var(--park-accent)" stroke-width="2" marker-end="url(#arr-pipe)"/>
+
+        <rect x="870" y="35" width="200" height="56" rx="8" fill="var(--park-accent)" stroke="var(--park-accent)"/>
+        <text x="970" y="60" text-anchor="middle" fill="var(--park-accent-fg)" font-size="13" font-family="ui-sans-serif" font-weight="700">Публикация</text>
+        <text x="970" y="78" text-anchor="middle" fill="var(--park-accent-fg)" font-size="11" font-family="ui-sans-serif" opacity="0.8">?to=slug живёт</text>
+      </svg>
+      <figcaption class="tp-muted mt-2 text-center">Нейронка делает черновик — финальное слово и публикация за тобой</figcaption>
+    </figure>
+    <div class="pk-callout pk-callout-info">
+      <span class="pk-callout-icon" style="background: rgba(120, 160, 240, 0.2); color: hsl(220, 80%, 75%)"><i class="ph-bold ph-info" style="font-size: 0.875rem"></i></span>
+      <p class="tp-body"><strong>Нейронка не публикует сама.</strong> Она готовит черновик из заранее заготовленного материала (кейсы, текстовые блоки, опыт). Ты — редактор-гейт. Это снимает риск, что AI напишет ерунду на живой сайт.</p>
+    </div>
+  </section>
+
+  <!-- SECTION 3: SYSTEM -->
+  <section class="mb-20">
+    <h2 class="tp-heading mb-6">3. Система целиком</h2>
+    <figure class="my-6">
+      <svg viewBox="0 0 1080 420" class="w-full h-auto">
+        <defs>
+          <marker id="arr-sys" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--park-accent)"/></marker>
+          <marker id="arr-sys-dim" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--park-border-strong)"/></marker>
+        </defs>
+
+        <!-- admin -->
+        <text x="30" y="36" fill="var(--park-fg-muted)" font-size="10" font-family="ui-sans-serif" letter-spacing="2">АДМИНКА · admin.site</text>
+        <rect x="30" y="48" width="250" height="92" rx="8" fill="var(--park-surface)" stroke="var(--park-border-strong)"/>
+        <text x="50" y="78" fill="var(--park-fg)" font-size="14" font-family="ui-sans-serif" font-weight="600">Админ-SPA</text>
+        <text x="50" y="100" fill="var(--park-fg-muted)" font-size="11" font-family="ui-sans-serif">вставка вакансии, ревью</text>
+        <text x="50" y="116" fill="var(--park-fg-muted)" font-size="11" font-family="ui-sans-serif">правка конфига, публикация</text>
+        <text x="50" y="132" fill="var(--park-fg-subtle)" font-size="10" font-family="ui-sans-serif">за авторизацией</text>
+
+        <!-- backend -->
+        <text x="415" y="36" fill="var(--park-fg-muted)" font-size="10" font-family="ui-sans-serif" letter-spacing="2">СЕРВЕР · Coolify</text>
+        <rect x="415" y="48" width="250" height="92" rx="8" fill="var(--park-accent-soft)" stroke="var(--park-accent)" stroke-width="1.5"/>
+        <text x="435" y="78" fill="var(--park-fg)" font-size="14" font-family="ui-sans-serif" font-weight="600">Бэкенд-сервис</text>
+        <text x="435" y="100" fill="var(--park-fg-muted)" font-size="11" font-family="ui-sans-serif">Claude API (ключ на сервере)</text>
+        <text x="435" y="116" fill="var(--park-fg-muted)" font-size="11" font-family="ui-sans-serif">подбор/акценты, запись конфигов</text>
+        <text x="435" y="132" fill="var(--park-accent)" font-size="10" font-family="ui-sans-serif">★ единственное место с AI-ключом</text>
+
+        <!-- AI cloud -->
+        <rect x="770" y="48" width="280" height="92" rx="8" fill="var(--park-surface)" stroke="var(--park-border-strong)" stroke-dasharray="4,3"/>
+        <text x="790" y="78" fill="var(--park-fg)" font-size="14" font-family="ui-sans-serif" font-weight="600">Claude API</text>
+        <text x="790" y="100" fill="var(--park-fg-muted)" font-size="11" font-family="ui-sans-serif">вход: вакансия + каталог кейсов,</text>
+        <text x="790" y="116" fill="var(--park-fg-muted)" font-size="11" font-family="ui-sans-serif">блоки текста, список опыта</text>
+        <text x="790" y="132" fill="var(--park-fg-muted)" font-size="11" font-family="ui-sans-serif">выход: структурированный конфиг</text>
+
+        <line x1="280" y1="94" x2="410" y2="94" stroke="var(--park-accent)" stroke-width="2" marker-end="url(#arr-sys)"/>
+        <text x="345" y="86" text-anchor="middle" fill="var(--park-fg-muted)" font-size="10" font-family="ui-sans-serif">API</text>
+        <line x1="665" y1="94" x2="765" y2="94" stroke="var(--park-accent)" stroke-width="2" marker-end="url(#arr-sys)"/>
+
+        <!-- store -->
+        <text x="415" y="196" fill="var(--park-fg-muted)" font-size="10" font-family="ui-sans-serif" letter-spacing="2">ХРАНИЛИЩЕ</text>
+        <rect x="415" y="208" width="250" height="100" rx="8" fill="var(--park-surface)" stroke="var(--park-border-strong)"/>
+        <text x="435" y="236" fill="var(--park-fg)" font-size="14" font-family="ui-sans-serif" font-weight="600">Данные</text>
+        <text x="435" y="258" fill="var(--park-fg-muted)" font-size="11" font-family="ui-sans-serif">companies/* (конфиги)</text>
+        <text x="435" y="276" fill="var(--park-fg-muted)" font-size="11" font-family="ui-sans-serif">cases-registry (теги, матч)</text>
+        <text x="435" y="294" fill="var(--park-fg-muted)" font-size="11" font-family="ui-sans-serif">text-blocks · experience</text>
+        <line x1="540" y1="140" x2="540" y2="204" stroke="var(--park-accent)" stroke-width="2" marker-end="url(#arr-sys)"/>
+        <text x="556" y="176" fill="var(--park-fg-muted)" font-size="10" font-family="ui-sans-serif">пишет конфиг</text>
+
+        <!-- public -->
+        <text x="30" y="320" fill="var(--park-fg-muted)" font-size="10" font-family="ui-sans-serif" letter-spacing="2">ПУБЛИЧНЫЙ САЙТ · site</text>
+        <rect x="30" y="332" width="635" height="74" rx="8" fill="var(--park-accent)" stroke="var(--park-accent)"/>
+        <text x="50" y="362" fill="var(--park-accent-fg)" font-size="14" font-family="ui-sans-serif" font-weight="700">Vite-SPA (как сейчас)</text>
+        <text x="50" y="384" fill="var(--park-accent-fg)" font-size="11" font-family="ui-sans-serif" opacity="0.85">читает ?to=slug → берёт конфиг компании → рендерит кейсы / текст / опыт / видео</text>
+        <text x="50" y="399" fill="var(--park-accent-fg)" font-size="10" font-family="ui-sans-serif" opacity="0.7">без конфига — дефолтная версия</text>
+        <line x1="540" y1="312" x2="540" y2="328" stroke="var(--park-border-strong)" stroke-width="1.5" stroke-dasharray="3,3" marker-end="url(#arr-sys-dim)"/>
+        <text x="640" y="300" text-anchor="middle" fill="var(--park-fg-muted)" font-size="10" font-family="ui-sans-serif">читает конфиг</text>
+      </svg>
+      <figcaption class="tp-muted mt-2 text-center">Публичный сайт остаётся лёгкой статикой. Бэкенд — только для админки и AI. Развилка как именно конфиг доезжает до сайта — ниже.</figcaption>
+    </figure>
+  </section>
+
+  <!-- SECTION 4: FORKS -->
+  <section class="mb-20">
+    <h2 class="tp-heading mb-6">4. Развилки — что решаем</h2>
+
+    <h3 class="tp-subheading mt-10 mb-5">4.1 Как конфиг доезжает до сайта <span class="pk-badge pk-badge-danger">ключевая</span></h3>
+    <figure class="mb-6">
+      <svg viewBox="0 0 1080 180" class="w-full h-auto">
+        <!-- static -->
+        <text x="180" y="26" text-anchor="middle" fill="var(--park-fg)" font-size="13" font-family="ui-sans-serif" font-weight="600">Статика (rebuild)</text>
+        <rect x="40" y="44" width="280" height="58" rx="6" fill="var(--park-surface)" stroke="var(--park-border-strong)"/>
+        <text x="180" y="70" text-anchor="middle" fill="var(--park-fg-muted)" font-size="11" font-family="ui-sans-serif">конфиг в билд → пере-деплой</text>
+        <text x="180" y="88" text-anchor="middle" fill="var(--park-fg-muted)" font-size="11" font-family="ui-sans-serif">сайта на каждую правку</text>
+        <text x="180" y="125" text-anchor="middle" fill="var(--park-success)" font-size="11" font-family="ui-sans-serif">+ ноль рантайма</text>
+        <text x="180" y="143" text-anchor="middle" fill="var(--park-danger)" font-size="11" font-family="ui-sans-serif">− медленно, деплой ради текста</text>
+
+        <line x1="370" y1="73" x2="370" y2="73" stroke="var(--park-border)"/>
+        <line x1="360" y1="30" x2="360" y2="150" stroke="var(--park-border)" stroke-dasharray="2,4"/>
+
+        <!-- hybrid -->
+        <text x="540" y="26" text-anchor="middle" fill="var(--park-accent)" font-size="13" font-family="ui-sans-serif" font-weight="600">Гибрид (рекоменд.)</text>
+        <rect x="400" y="44" width="280" height="58" rx="6" fill="var(--park-accent-soft)" stroke="var(--park-accent)" stroke-width="1.5"/>
+        <text x="540" y="70" text-anchor="middle" fill="var(--park-fg)" font-size="11" font-family="ui-sans-serif">бэкенд пишет companies/*.json</text>
+        <text x="540" y="88" text-anchor="middle" fill="var(--park-fg)" font-size="11" font-family="ui-sans-serif">nginx отдаёт как статику, SPA fetch</text>
+        <text x="540" y="125" text-anchor="middle" fill="var(--park-success)" font-size="11" font-family="ui-sans-serif">+ мгновенно, сайт остаётся быстрым</text>
+        <text x="540" y="143" text-anchor="middle" fill="var(--park-danger)" font-size="11" font-family="ui-sans-serif">− нужен общий volume / папка</text>
+
+        <line x1="720" y1="30" x2="720" y2="150" stroke="var(--park-border)" stroke-dasharray="2,4"/>
+
+        <!-- live api -->
+        <text x="900" y="26" text-anchor="middle" fill="var(--park-fg)" font-size="13" font-family="ui-sans-serif" font-weight="600">Live API</text>
+        <rect x="760" y="44" width="280" height="58" rx="6" fill="var(--park-surface)" stroke="var(--park-border-strong)"/>
+        <text x="900" y="70" text-anchor="middle" fill="var(--park-fg-muted)" font-size="11" font-family="ui-sans-serif">SPA дёргает /api/config?to=</text>
+        <text x="900" y="88" text-anchor="middle" fill="var(--park-fg-muted)" font-size="11" font-family="ui-sans-serif">бэкенд всегда онлайн</text>
+        <text x="900" y="125" text-anchor="middle" fill="var(--park-success)" font-size="11" font-family="ui-sans-serif">+ динамика, аналитика открытий</text>
+        <text x="900" y="143" text-anchor="middle" fill="var(--park-danger)" font-size="11" font-family="ui-sans-serif">− сайт зависит от бэкенда</text>
+      </svg>
+    </figure>
+    <div class="q" data-q="delivery" data-question="Как персонализированный конфиг попадает на публичный сайт">
+      <div class="tp-subheading mb-1 flex items-center gap-2"><i class="ph ph-question" style="color: var(--park-accent); font-size: 1.125rem"></i>Доставка конфига</div>
+      <p class="q-note tp-muted mb-4">Определяет, нужен ли публичному сайту живой бэкенд и как быстро видны правки.</p>
+      <div class="pk-radio-group">
+        <span class="pk-radio-card"><input type="radio" name="delivery" id="delivery-1" class="q-radio" data-v="Гибрид: бэкенд пишет JSON, nginx отдаёт статикой"><label for="delivery-1" data-tip="Бэкенд по публикации кладёт companies/plata.json в папку, которую nginx раздаёт. Публичная SPA просто fetch'ит этот JSON. Сайт остаётся статикой и не падает вместе с бэкендом. Правки видны сразу, без пере-деплоя.">Гибрид — JSON-файлы, отдаёт nginx (рекоменд.)</label></span>
+        <span class="pk-radio-card"><input type="radio" name="delivery" id="delivery-2" class="q-radio" data-v="Live API: SPA читает конфиг с бэкенда в рантайме"><label for="delivery-2" data-tip="Публичный сайт на каждой загрузке дёргает /api/config?to=slug. Можно считать открытия, менять на лету. Минус — публичный сайт теперь зависит от живого бэкенда.">Live API — рантайм-запрос к бэкенду</label></span>
+        <span class="pk-radio-card"><input type="radio" name="delivery" id="delivery-3" class="q-radio" data-v="Статика: конфиг вшит в билд, пере-деплой на правку"><label for="delivery-3" data-tip="Конфиги — часть исходников, попадают в сборку. Любая правка = новый деплой сайта через Coolify. Максимально просто и надёжно, но медленно и тяжело ради смены текста.">Статика — конфиг в билд, пере-деплой</label></span>
+      </div>
+      <div class="q-comment-slot"></div>
+    </div>
+
+    <h3 class="tp-subheading mt-10 mb-5">4.2 Где крутится бэкенд + нейронка</h3>
+    <div class="q" data-q="backend" data-question="Где хостится бэкенд-сервис с Claude API">
+      <div class="tp-subheading mb-1 flex items-center gap-2"><i class="ph ph-question" style="color: var(--park-accent); font-size: 1.125rem"></i>Хостинг бэкенда</div>
+      <p class="q-note tp-muted mb-4">Ключ Claude API должен жить только на сервере — никогда в браузере.</p>
+      <div class="pk-radio-group">
+        <span class="pk-radio-card"><input type="radio" name="backend" id="backend-1" class="q-radio" data-v="Отдельный Node-сервис на том же Coolify"><label for="backend-1" data-tip="Маленький Node (Hono/Express) рядом с сайтом на твоём Coolify-сервере. Тот же инфра-контур, общий volume с конфигами. Привычный деплой.">Node-сервис на твоём Coolify (рекоменд.)</label></span>
+        <span class="pk-radio-card"><input type="radio" name="backend" id="backend-2" class="q-radio" data-v="Serverless (Vercel / Cloudflare Workers)"><label for="backend-2" data-tip="Функции в облаке, не надо держать сервер. Но конфиги-файлы хранить негде (нужен внешний стор/KV), и это другой провайдер вне твоего Coolify.">Serverless (Vercel / CF Workers)</label></span>
+        <span class="pk-radio-card"><input type="radio" name="backend" id="backend-3" class="q-radio" data-v="Внутри того же контейнера, что и сайт"><label for="backend-3" data-tip="nginx + node в одном контейнере. Меньше сущностей, но мешает статику и динамику, сложнее масштабировать и обновлять по отдельности.">В одном контейнере с сайтом</label></span>
+      </div>
+      <div class="q-comment-slot"></div>
+    </div>
+
+    <h3 class="tp-subheading mt-10 mb-5">4.3 Где хранить данные</h3>
+    <div class="pk-table-wrap mb-6">
+      <table class="pk-table">
+        <thead><tr><th></th><th>JSON-файлы</th><th>SQLite</th><th>Postgres</th></tr></thead>
+        <tbody>
+          <tr><td class="tp-muted">Сложность</td><td class="pro">ноль</td><td>низкая</td><td class="con">сервер БД</td></tr>
+          <tr><td class="tp-muted">Запросы/фильтры</td><td class="con">руками</td><td class="pro">SQL</td><td class="pro">SQL</td></tr>
+          <tr><td class="tp-muted">Бэкап</td><td class="pro">git / копия</td><td class="pro">один файл</td><td>дамп</td></tr>
+          <tr><td class="tp-muted">Под текущий объём</td><td class="pro">хватает</td><td class="pro">хватает</td><td class="con">избыточно</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="q" data-q="store" data-question="Чем хранить конфиги компаний и каталог кейсов">
+      <div class="tp-subheading mb-1 flex items-center gap-2"><i class="ph ph-question" style="color: var(--park-accent); font-size: 1.125rem"></i>Хранилище</div>
+      <p class="q-note tp-muted mb-4">Объёмы маленькие (десятки компаний, единицы кейсов). Не усложняем заранее.</p>
+      <div class="pk-radio-group">
+        <span class="pk-radio-card"><input type="radio" name="store" id="store-1" class="q-radio" data-v="JSON-файлы на диске"><label for="store-1" data-tip="Каждая компания — файл companies/slug.json, каталог кейсов — cases.json. Просто, наглядно, версионируется git'ом, легко руками поправить. Идеально для старта.">JSON-файлы (рекоменд. для старта)</label></span>
+        <span class="pk-radio-card"><input type="radio" name="store" id="store-2" class="q-radio" data-v="SQLite (один файл-БД)"><label for="store-2" data-tip="Один .db-файл на сервере. Появляются нормальные запросы/фильтры (например, по тегам кейсов), но добавляется слой ORM/SQL.">SQLite — если захотим фильтры</label></span>
+        <span class="pk-radio-card"><input type="radio" name="store" id="store-3" class="q-radio" data-v="Postgres"><label for="store-3" data-tip="Полноценная БД. Для текущего объёма избыточна — лишний сервис держать и бэкапить.">Postgres (избыточно сейчас)</label></span>
+      </div>
+      <div class="q-comment-slot"></div>
+    </div>
+
+    <h3 class="tp-subheading mt-10 mb-5">4.4 База страниц кейсов</h3>
+    <div class="pk-callout pk-callout-neutral mb-6">
+      <span class="pk-callout-icon" style="background: var(--park-surface); color: var(--park-fg-muted)"><i class="ph-bold ph-stack" style="font-size: 0.875rem"></i></span>
+      <p class="tp-body">Сейчас кейсы — это богатые React-страницы (<code class="pk-code">CaseZinda</code> и т.д.) с уникальной вёрсткой. «База кейсов» может быть либо реестром <em>метаданных</em> (а страницы остаются кодом), либо полностью data-driven.</p>
+    </div>
+    <div class="q" data-q="cases_store" data-question="Как устроена база страниц кейсов">
+      <div class="tp-subheading mb-1 flex items-center gap-2"><i class="ph ph-question" style="color: var(--park-accent); font-size: 1.125rem"></i>Кейсы в базе</div>
+      <p class="q-note tp-muted mb-4">Влияет на то, насколько легко добавлять кейсы и насколько богатой остаётся вёрстка.</p>
+      <div class="pk-radio-group">
+        <span class="pk-radio-card"><input type="radio" name="cases_store" id="cases-1" class="q-radio" data-v="Реестр метаданных в БД, страницы — React-компоненты"><label for="cases-1" data-tip="В базе: id, заголовок, теги, ключевые слова под матчинг вакансии, превью. Сама страница остаётся уникальным React-компонентом. Нейронка выбирает 3 id по релевантности. Минимум переделок, вёрстка не страдает.">Реестр метаданных + страницы кодом (рекоменд.)</label></span>
+        <span class="pk-radio-card"><input type="radio" name="cases_store" id="cases-2" class="q-radio" data-v="Полностью data-driven: кейс = блоки в БД, общий рендерер"><label for="cases-2" data-tip="Кейс — это набор блоков (текст/медиа/девайс) в БД, единый рендерер их собирает. Гибко добавлять без кода, но огромная переделка и потеря уникальной вёрстки каждого кейса.">Полностью data-driven блоки (большая переделка)</label></span>
+      </div>
+      <div class="q-comment-slot"></div>
+    </div>
+
+    <h3 class="tp-subheading mt-10 mb-5">4.5 Роль нейронки</h3>
+    <div class="q" data-q="ai_role" data-question="Что именно делает нейронка с текстом и подбором">
+      <div class="tp-subheading mb-1 flex items-center gap-2"><i class="ph ph-question" style="color: var(--park-accent); font-size: 1.125rem"></i>Что делает AI</div>
+      <p class="q-note tp-muted mb-4">Ты говорил: блоки пишем мы, нейронка выбирает, что подчеркнуть. Насколько даём ей свободу?</p>
+      <div class="pk-radio-group">
+        <span class="pk-radio-card"><input type="radio" name="ai_role" id="ai-1" class="q-radio" data-v="Только выбор: какие кейсы/опыт/акценты из заготовленного"><label for="ai-1" data-tip="Весь текст и блоки авторишь ты. Нейронка только РАНЖИРУЕТ и ВЫБИРАЕТ: 3 кейса, какие места опыта подсветить, какие фиксированные фразы подчеркнуть, какой видос. Предсказуемо, без галлюцинаций.">Только выбор/ранжирование из готового (рекоменд.)</label></span>
+        <span class="pk-radio-card"><input type="radio" name="ai_role" id="ai-2" class="q-radio" data-v="Выбор + генерация черновика текста, ты правишь"><label for="ai-2" data-tip="Нейронка и выбирает, и может переписать центральный текст под вакансию. Больше «магии», но нужен обязательный твой ревью — иначе риск кривого тона.">Выбор + генерация текста (с твоим ревью)</label></span>
+        <span class="pk-radio-card"><input type="radio" name="ai_role" id="ai-3" class="q-radio" data-v="Полная генерация без заготовок"><label for="ai-3" data-tip="Нейронка пишет всё с нуля под каждую компанию. Максимум гибкости, максимум риска и непредсказуемости тона. Не рекомендую для публичного портфолио.">Полная генерация с нуля (рискованно)</label></span>
+      </div>
+      <div class="q-comment-slot"></div>
+    </div>
+
+    <h3 class="tp-subheading mt-10 mb-5">4.6 Авторизация в админку</h3>
+    <div class="q" data-q="auth" data-question="Авторизация в админку на сабдомене">
+      <div class="tp-subheading mb-1 flex items-center gap-2"><i class="ph ph-question" style="color: var(--park-accent); font-size: 1.125rem"></i>Доступ к админке</div>
+      <p class="q-note tp-muted mb-4">Админка публично доступна по сабдомену — нужен хотя бы простой барьер.</p>
+      <div class="pk-radio-group">
+        <span class="pk-radio-card"><input type="radio" name="auth" id="auth-1" class="q-radio" data-v="Один пароль / basic-auth"><label for="auth-1" data-tip="Пользователь один — ты. Достаточно пароля (basic-auth на nginx или простая сессия на бэкенде). Минимум кода, нормальная защита.">Один пароль / basic-auth (рекоменд.)</label></span>
+        <span class="pk-radio-card"><input type="radio" name="auth" id="auth-2" class="q-radio" data-v="OAuth через GitHub/Google"><label for="auth-2" data-tip="Логин через GitHub/Google. Солиднее, не надо помнить пароль, но лишняя интеграция ради одного пользователя.">OAuth (GitHub/Google)</label></span>
+        <span class="pk-radio-card"><input type="radio" name="auth" id="auth-3" class="q-radio" data-v="Без авторизации"><label for="auth-3" data-tip="Любой по ссылке зайдёт и поменяет твоё портфолио. Не делаем так.">Без авторизации (нельзя)</label></span>
+      </div>
+      <div class="q-comment-slot"></div>
+    </div>
+
+    <h3 class="tp-subheading mt-10 mb-5">4.7 Ключ ссылки под компанию</h3>
+    <div class="q" data-q="perso_key" data-question="Каким должен быть ключ ?to= в ссылке под компанию">
+      <div class="tp-subheading mb-1 flex items-center gap-2"><i class="ph ph-question" style="color: var(--park-accent); font-size: 1.125rem"></i>Вид ссылки</div>
+      <p class="q-note tp-muted mb-4">Читаемый слаг легко перебрать (увидят все твои версии). Токен — не угадать.</p>
+      <div class="pk-radio-group">
+        <span class="pk-radio-card"><input type="radio" name="perso_key" id="key-1" class="q-radio" data-v="Читаемый слаг ?to=plata"><label for="key-1" data-tip="?to=plata — красиво и понятно. Но конкурент/рекрутёр может подставить чужое имя и увидеть версию под другую компанию.">Читаемый слаг ?to=plata (просто)</label></span>
+        <span class="pk-radio-card"><input type="radio" name="perso_key" id="key-2" class="q-radio" data-v="Непубличный токен ?c=8fa3k2"><label for="key-2" data-tip="?c=8fa3k2 — случайный код на компанию. Нельзя перебрать и подсмотреть чужие версии. Чуть менее красивый URL.">Случайный токен ?c=8fa3k2 (приватно)</label></span>
+        <span class="pk-radio-card"><input type="radio" name="perso_key" id="key-3" class="q-radio" data-v="Слаг + показывать имя компании в приветствии"><label for="key-3" data-tip="Слаг, и он же подставляется в «Hello {Компания}». Просто, но имя видно в URL и его можно менять.">Слаг и он же в «Hello {company}»</label></span>
+      </div>
+      <div class="q-comment-slot"></div>
+    </div>
+  </section>
+
+  <!-- SECTION 5: DATA MODEL -->
+  <section class="mb-20">
+    <h2 class="tp-heading mb-6">5. Модель данных (черновик)</h2>
+    <p class="tp-body mb-4">Грубый набросок, чтобы было от чего отталкиваться — поля уточним после развилок выше.</p>
+    <pre class="pk-pre">Company {
+  slug            // "plata"  → ?to=plata
+  name            // "Plata"  → "Hello Plata"
+  vacancyText     // вставленный текст вакансии (вход для AI)
+  caseIds[3]      // выбранные кейсы из реестра, по порядку
+  emphasis[]      // id фиксированных фраз, которые подчёркиваем
+  textOverrides?  // опционально: правки блоков под компанию
+  expHighlights[] // id мест опыта для подсветки
+  video { url, duration } // кастом или дефолт
+  updatedAt
+}
+
+CaseEntry {        // реестр кейсов (страница остаётся React-компонентом)
+  id              // "zinda"
+  title, year, category
+  tags[]          // "финтех", "b2b", "mobile"
+  matchKeywords[] // под матчинг вакансии
+  component       // какой компонент рендерить
+}
+
+TextBlock {        // центральный текст — авторим мы
+  id, text
+  emphasizable[]  // какие фразы AI может подчёркивать
+}
+
+ExperienceItem { id, company, role, period, tags[] }</pre>
+  </section>
+
+  <!-- GLOBAL COMMENT -->
+  <section class="mb-6">
+    <h3 class="tp-subheading mb-2">Общий комментарий</h3>
+    <textarea id="global-comment-text" rows="4" class="pk-textarea" placeholder="Что не влезло в развилки: приоритеты, что делаем первым, ограничения, идеи…"></textarea>
+  </section>
+
+  <!-- ANSWERS PANEL -->
+  <section class="mb-20 pk-card">
+    <div class="flex items-center justify-between mb-3">
+      <h4 class="tp-subheading">Решения</h4>
+      <div class="flex items-center gap-2">
+        <button class="pk-btn pk-btn-ghost pk-btn-sm" onclick="resetAnswers()">сброс</button>
+        <button class="pk-close" aria-label="Закрыть" onclick="this.closest('section').style.display='none'"><i class="ph ph-x"></i></button>
+      </div>
+    </div>
+    <div id="answers-list"><p class="tp-muted italic">пока ничего не выбрано</p></div>
+    <button id="copy-btn" onclick="copyAnswers()" disabled class="pk-btn pk-btn-solid mt-4 w-full"><i class="ph-bold ph-clipboard-text"></i>Скопировать решения для Claude</button>
+  </section>
+
+  <!-- SECTION 6: NOT NOW -->
+  <section class="mb-20">
+    <h2 class="tp-heading mb-6">6. Что НЕ делаем в первой версии</h2>
+    <ul class="space-y-2 tp-body">
+      <li class="flex items-center gap-2"><span class="pk-badge pk-badge-neutral">потом</span>Аналитика открытий ссылок (кто смотрел)</li>
+      <li class="flex items-center gap-2"><span class="pk-badge pk-badge-neutral">потом</span>Полностью data-driven кейсы (если выбрали реестр)</li>
+      <li class="flex items-center gap-2"><span class="pk-badge pk-badge-neutral">потом</span>Несколько пользователей / роли в админке</li>
+      <li class="flex items-center gap-2"><span class="pk-badge pk-badge-neutral">потом</span>Авто-генерация видео под компанию</li>
+      <li class="flex items-center gap-2"><span class="pk-badge pk-badge-neutral">потом</span>A/B разных версий на одну компанию</li>
+    </ul>
+  </section>
+
+</div>
+
+<script>
+  const STORAGE_KEY = 'portfolio_admin_plan_v1';
+  function loadState() {
+    try { const s = JSON.parse(localStorage.getItem(STORAGE_KEY)); return s || { answers: {}, comments: {}, global: '' }; }
+    catch { return { answers: {}, comments: {}, global: '' }; }
+  }
+  function saveState() { try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch {} }
+  function escapeHtml(s) { return s.replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+
+  let state = loadState();
+
+  document.querySelectorAll('.q').forEach(q => {
+    const key = q.dataset.q;
+    const radioGroup = q.querySelector('.pk-radio-group');
+    const customRow = document.createElement('label');
+    customRow.className = 'pk-custom-row';
+    customRow.innerHTML = '<i class="ph ph-pencil-simple-line"></i>';
+    const customInput = document.createElement('input');
+    customInput.type = 'text';
+    customInput.placeholder = 'свой вариант';
+    customRow.appendChild(customInput);
+    radioGroup.appendChild(customRow);
+    customInput.addEventListener('input', () => {
+      const v = customInput.value.trim();
+      if (v) { state.answers[key] = v; q.querySelectorAll('.q-radio').forEach(r => r.checked = false); }
+      else { delete state.answers[key]; }
+      saveState(); render();
+    });
+    q._customInput = customInput;
+    q._customRow = customRow;
+  });
+
+  document.querySelectorAll('.q-radio').forEach(r => {
+    r.addEventListener('change', () => {
+      const q = r.closest('.q');
+      state.answers[q.dataset.q] = r.dataset.v;
+      if (q._customInput) q._customInput.value = '';
+      saveState(); render();
+    });
+  });
+
+  document.querySelectorAll('.pk-radio-card label').forEach(lbl => {
+    lbl.addEventListener('click', (e) => {
+      const input = document.getElementById(lbl.getAttribute('for'));
+      if (input.checked) {
+        e.preventDefault(); input.checked = false;
+        const q = input.closest('.q');
+        delete state.answers[q.dataset.q];
+        saveState(); render();
+      }
+    });
+  });
+
+  const globalTa = document.getElementById('global-comment-text');
+  globalTa.addEventListener('input', () => { state.global = globalTa.value.trim(); saveState(); render(); });
+
+  function render() {
+    document.querySelectorAll('.q').forEach(q => {
+      const val = state.answers[q.dataset.q];
+      q.classList.toggle('answered', !!val);
+      const radios = q.querySelectorAll('.q-radio');
+      let matched = false;
+      radios.forEach(r => { if (r.dataset.v === val) { r.checked = true; matched = true; } else r.checked = false; });
+      const isCustom = !!val && !matched;
+      if (q._customInput) {
+        if (isCustom) { if (q._customInput.value !== val) q._customInput.value = val; q._customRow.classList.add('has-value'); }
+        else { if (!val) q._customInput.value = ''; q._customRow.classList.remove('has-value'); }
+      }
+    });
+    if (globalTa.value !== state.global) globalTa.value = state.global;
+
+    const list = document.getElementById('answers-list');
+    const aKeys = Object.keys(state.answers);
+    const hasGlobal = !!state.global;
+    if (!aKeys.length && !hasGlobal) {
+      list.innerHTML = '<p class="tp-muted italic">пока ничего не выбрано</p>';
+      document.getElementById('copy-btn').disabled = true; return;
+    }
+    const items = [];
+    aKeys.forEach(k => {
+      const q = document.querySelector(`.q[data-q="${k}"]`);
+      const qText = q ? q.dataset.question : k;
+      const v = state.answers[k];
+      items.push(`<div class="py-2" style="border-bottom: 1px solid var(--park-border)"><div class="tp-muted">${escapeHtml(qText)}</div><div class="tp-body"><strong style="color: var(--park-success)">${escapeHtml(v)}</strong></div></div>`);
+    });
+    if (hasGlobal) items.push(`<div class="py-2"><div class="tp-muted">Общий комментарий</div><div class="tp-muted italic mt-1 flex gap-1.5 items-start" style="border-left: 2px solid var(--park-border-strong); padding-left: 0.5rem"><i class="ph ph-chat-circle-dots" style="margin-top: 2px"></i><span>${escapeHtml(state.global)}</span></div></div>`);
+    list.innerHTML = items.join('');
+    document.getElementById('copy-btn').disabled = false;
+  }
+
+  function buildAnswersText() {
+    const out = {};
+    Object.keys(state.answers).forEach(k => {
+      const q = document.querySelector(`.q[data-q="${k}"]`);
+      out[k] = { question: q ? q.dataset.question : k, answer: state.answers[k] };
+    });
+    if (state.global) out.global_comment = state.global;
+    return JSON.stringify(out, null, 2);
+  }
+
+  function showFallback(text) {
+    const old = document.getElementById('copy-fallback'); if (old) old.remove();
+    const box = document.createElement('div');
+    box.id = 'copy-fallback'; box.className = 'mt-3';
+    box.style.cssText = 'padding: 0.75rem; border: 1px solid var(--park-accent); border-radius: 0.375rem; background: var(--park-accent-soft)';
+    box.innerHTML = '<div class="tp-muted mb-1.5">Clipboard заблокирован — выдели и скопируй (Cmd/Ctrl+C):</div><textarea class="pk-textarea" rows="6"></textarea>';
+    document.getElementById('copy-btn').parentElement.appendChild(box);
+    const ta = box.querySelector('textarea'); ta.value = text; ta.focus(); ta.select();
+  }
+
+  function copyAnswers() {
+    const text = buildAnswersText();
+    const btn = document.getElementById('copy-btn');
+    const onSuccess = () => {
+      btn.innerHTML = '<i class="ph-bold ph-check"></i>Скопировано';
+      btn.style.background = 'var(--park-success)';
+      const old = document.getElementById('copy-fallback'); if (old) old.remove();
+      setTimeout(() => { btn.innerHTML = '<i class="ph-bold ph-clipboard-text"></i>Скопировать решения для Claude'; btn.style.background = ''; }, 2200);
+    };
+    if (navigator.clipboard && window.isSecureContext) navigator.clipboard.writeText(text).then(onSuccess).catch(() => tryExec(text, onSuccess));
+    else tryExec(text, onSuccess);
+  }
+
+  function tryExec(text, onSuccess) {
+    try {
+      const ta = document.createElement('textarea');
+      ta.value = text; ta.style.cssText = 'position:fixed;left:-9999px;top:0';
+      document.body.appendChild(ta); ta.focus(); ta.select();
+      const ok = document.execCommand('copy'); document.body.removeChild(ta);
+      if (ok) onSuccess(); else showFallback(text);
+    } catch { showFallback(text); }
+  }
+
+  function resetAnswers() {
+    state = { answers: {}, comments: {}, global: '' };
+    saveState();
+    document.querySelectorAll('.q-radio').forEach(r => r.checked = false);
+    document.querySelectorAll('.q').forEach(q => { if (q._customInput) q._customInput.value = ''; if (q._customRow) q._customRow.classList.remove('has-value'); });
+    render();
+  }
+
+  render();
+</script>
+
+</body>
+</html>

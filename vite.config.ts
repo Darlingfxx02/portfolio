@@ -11,4 +11,14 @@ export default defineConfig({
       '@': fileURLToPath(new URL('./src', import.meta.url)),
     },
   },
+  // Dev: proxy the personalization API to the backend (server/). In prod nginx
+  // proxies /api → the Node service, so the frontend always calls /api relative.
+  server: {
+    proxy: {
+      '/api': {
+        target: process.env.VITE_API_TARGET || 'http://localhost:8787',
+        changeOrigin: true,
+      },
+    },
+  },
 })

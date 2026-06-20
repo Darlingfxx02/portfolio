@@ -1,9 +1,11 @@
 import { useEffect, useRef, useState } from 'react'
-import { cases } from '@/data/cases'
 import { CaseItem } from './CaseItem'
+import { orderedCases, useCompanyConfig } from '@/lib/personalization'
 import styles from './CaseStudies.module.css'
 
 export function CaseStudies() {
+  const { caseIds } = useCompanyConfig()
+  const items = orderedCases(caseIds)
   const [box, setBox] = useState({ x: 0, y: 0, w: 0, h: 0 })
   const [show, setShow] = useState(false)
   const listRef = useRef<HTMLDivElement | null>(null)
@@ -45,7 +47,7 @@ export function CaseStudies() {
           style={{ transform: `translate(${box.x}px, ${box.y}px)`, width: box.w, height: box.h }}
           aria-hidden
         />
-        {cases.map((c) => (
+        {items.map((c) => (
           <CaseItem key={c.id} study={c} />
         ))}
       </div>

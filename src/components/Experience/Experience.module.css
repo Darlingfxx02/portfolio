@@ -33,6 +33,12 @@
   justify-content: space-between;
   gap: 14px;
   width: 100%;
+  transition: opacity 0.3s var(--ease);
+}
+
+/* Нерелевантный под выбранную компанию опыт — приглушён. */
+.dim {
+  opacity: 0.32;
 }
 
 .who {

@@ -9,13 +9,19 @@ export function CaseZinda() {
         {/* 1. Обзор                                                          */}
         {/* ──────────────────────────────────────────────────────────────── */}
         <section>
-          <Row heading={<Eyebrow>Обзор</Eyebrow>}>
-            <p className="text-[36px] font-semibold leading-[1.1] tracking-[-0.02em] text-[#263238]">
-              Согласовали концепт с первой попытки после трёх отклонённых
-              раундов до меня — за счёт многосчётной архитектуры под B2B-рынок
-              Таджикистана.
-            </p>
-            <ul className="mt-10 flex flex-wrap items-start gap-2">
+          <Row
+            heading={
+              <>
+                <Eyebrow>Обзор</Eyebrow>
+                <p className="mt-4 text-[36px] font-semibold leading-[1.1] tracking-[-0.02em] text-[#263238]">
+                  Согласовали концепт с первой попытки после трёх отклонённых
+                  раундов до меня — за счёт многосчётной архитектуры под B2B-рынок
+                  Таджикистана.
+                </p>
+              </>
+            }
+          >
+            <ul className="flex flex-wrap items-start gap-2">
               {["Финтех · B2B", "Web + Mobile", "2025"].map((tag) => (
                 <li
                   key={tag}
@@ -496,16 +502,15 @@ export function CaseZinda() {
               Временно консенсусное решение
             </span>
           </div>
-          <Narrow className="mt-10">
-            <Eyebrow>Три варианта в ряд · выбран средний</Eyebrow>
-            <p className="mt-4 text-[18px] leading-[1.6] text-[#546e7a]">
+          <Row className="mt-10" heading={<Eyebrow>Три варианта в ряд · выбран средний</Eyebrow>}>
+            <p className="text-[18px] leading-[1.6] text-[#546e7a]">
               Студия хотела вверху экрана расположить логотип бренда. Я хотел
               расположить там кнопку управления компаниями, чтобы не объединять
               настройки и компанию. Но в итоге такое решение не удалось
               продавить и мы сохранили нечто среднее, что визуально не
               разбивается на два блока, неинтуитивных.
             </p>
-          </Narrow>
+          </Row>
         </section>
 
         <div className="h-40" />
@@ -514,17 +519,22 @@ export function CaseZinda() {
         {/* 14. Развилка · Визуальный тон                                     */}
         {/* ──────────────────────────────────────────────────────────────── */}
         <section>
-          <Narrow>
-            <Eyebrow>Развилка</Eyebrow>
-            <h2 className="mt-4 text-[32px] font-semibold leading-[1.1] tracking-[-0.01em] text-[#263238]">
-              Визуальный тон
-            </h2>
-            <p className="mt-6 text-[20px] font-medium leading-[1.4] tracking-[-0.005em] text-[#263238]">
+          <Row
+            heading={
+              <>
+                <Eyebrow>Развилка</Eyebrow>
+                <h2 className="mt-4 text-[32px] font-semibold leading-[1.1] tracking-[-0.01em] text-[#263238]">
+                  Визуальный тон
+                </h2>
+              </>
+            }
+          >
+            <p className="text-[20px] font-medium leading-[1.4] tracking-[-0.005em] text-[#263238]">
               Конфликт с прокси-заказчиком-студией: ей нужен выразительный
               кейс в портфолио, нам — спокойный B2B-инструмент. Бой развалился
               на две части с разным исходом.
             </p>
-          </Narrow>
+          </Row>
           <div className="mt-12 flex h-[480px] w-full gap-5">
             <div className="flex flex-1 items-center justify-center overflow-hidden rounded-[16px] bg-[#f3f3f3] px-10">
               <img
@@ -561,11 +571,14 @@ export function CaseZinda() {
         {/* 15. Что менялось за 4 месяца                                      */}
         {/* ──────────────────────────────────────────────────────────────── */}
         <section>
-          <Narrow>
-            <h2 className="text-[32px] font-semibold leading-[1.1] tracking-[-0.01em] text-[#263238]">
-              Что менялось за 4 месяца
-            </h2>
-            <div className="mt-10 space-y-6 text-[18px] leading-[1.6] text-[#263238]">
+          <Row
+            heading={
+              <h2 className="text-[32px] font-semibold leading-[1.1] tracking-[-0.01em] text-[#263238]">
+                Что менялось за 4 месяца
+              </h2>
+            }
+          >
+            <div className="space-y-6 text-[18px] leading-[1.6] text-[#263238]">
               <p>
                 После согласования концепта работа разбилась на циклы:
                 отрисовка → ревью с прокси-заказчиком → правки. Переломных
@@ -589,7 +602,7 @@ export function CaseZinda() {
                 состояния и ошибки.
               </p>
             </div>
-          </Narrow>
+          </Row>
         </section>
 
         <div className="h-40" />
@@ -625,14 +638,13 @@ export function CaseZinda() {
               </div>
             </div>
           </div>
-          <Narrow className="mt-10">
-            <Eyebrow>Главный экран · многосчётная выкладка</Eyebrow>
-            <p className="mt-4 text-[18px] leading-[1.6] text-[#546e7a]">
+          <Row className="mt-10" heading={<Eyebrow>Главный экран · многосчётная выкладка</Eyebrow>}>
+            <p className="text-[18px] leading-[1.6] text-[#546e7a]">
               Плашки расчётных счетов разных юрлиц на одной поверхности,
               каждая со своим балансом и статусом. Бухгалтер видит общий срез
               по всем бизнесам с первого экрана — без подменю и переключателей.
             </p>
-          </Narrow>
+          </Row>
         </section>
 
         <div className="h-40" />
@@ -670,11 +682,14 @@ export function CaseZinda() {
         {/* 18. Что получилось                                                */}
         {/* ──────────────────────────────────────────────────────────────── */}
         <section>
-          <Narrow>
-            <h2 className="text-[32px] font-semibold leading-[1.1] tracking-[-0.01em] text-[#263238]">
-              Что получилось
-            </h2>
-            <p className="mt-10 text-[18px] leading-[1.6] text-[#263238]">
+          <Row
+            heading={
+              <h2 className="text-[32px] font-semibold leading-[1.1] tracking-[-0.01em] text-[#263238]">
+                Что получилось
+              </h2>
+            }
+          >
+            <p className="text-[18px] leading-[1.6] text-[#263238]">
               Сигналы вместо метрик: продуктовых цифр у меня нет — после сдачи
               макетов в разработку доступ к проекту был закрыт.
             </p>
@@ -697,7 +712,7 @@ export function CaseZinda() {
                 muted
               />
             </div>
-          </Narrow>
+          </Row>
         </section>
 
         <div className="h-40" />
@@ -737,10 +752,13 @@ export function CaseZinda() {
         {/* 20. Команда                                                       */}
         {/* ──────────────────────────────────────────────────────────────── */}
         <section>
-          <Narrow>
-            <h2 className="text-[32px] font-semibold leading-[1.1] tracking-[-0.01em] text-[#263238]">
-              Команда
-            </h2>
+          <Row
+            heading={
+              <h2 className="text-[32px] font-semibold leading-[1.1] tracking-[-0.01em] text-[#263238]">
+                Команда
+              </h2>
+            }
+          >
             <div className="mt-10 space-y-8">
               <Credit
                 role="Дизайнер дизайн-системы"
@@ -761,7 +779,7 @@ export function CaseZinda() {
             <p className="mt-10 text-[13px] leading-[1.5] text-[#90a4ae]">
               Заказчик и прокси-заказчик не указаны под NDA.
             </p>
-          </Narrow>
+          </Row>
         </section>
 
         <div className="h-40" />

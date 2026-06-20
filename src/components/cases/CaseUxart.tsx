@@ -1,3 +1,5 @@
+import { Row } from "@/components/case/Row";
+
 export function CaseUxart() {
   return (
     <div className="uxart-page min-h-dvh w-full bg-white text-[#263238]">
@@ -6,12 +8,17 @@ export function CaseUxart() {
         {/* 1. Обзор                                                          */}
         {/* ──────────────────────────────────────────────────────────────── */}
         <section>
-          <Narrow>
-            <Eyebrow>Обзор</Eyebrow>
-            <p className="mt-10 text-[48px] font-semibold leading-[1.08] tracking-[-0.02em] text-[#263238]">
-              Vibe-coded прототипы: от провала до нового стандарта студии.
-            </p>
-            <ul className="mt-10 flex flex-wrap items-start gap-2">
+          <Row
+            heading={
+              <>
+                <Eyebrow>Обзор</Eyebrow>
+                <p className="mt-4 text-[48px] font-semibold leading-[1.08] tracking-[-0.02em] text-[#263238]">
+                  Vibe-coded прототипы: от провала до нового стандарта студии.
+                </p>
+              </>
+            }
+          >
+            <ul className="flex flex-wrap items-start gap-2">
               {["AI · процессы", "Дизайн-студия", "2025–2026"].map((tag) => (
                 <li
                   key={tag}
@@ -21,7 +28,7 @@ export function CaseUxart() {
                 </li>
               ))}
             </ul>
-          </Narrow>
+          </Row>
         </section>
 
         <div className="h-40" />
@@ -32,14 +39,14 @@ export function CaseUxart() {
         <section className="flex items-center justify-center gap-8 rounded-[24px] bg-[#45c1ff] px-8 py-12">
           <Shot
             src="/uxart/hero-1.png"
-            alt="Прототип Приморских бань — интерьер парилки со слонами"
-            aspect="1713 / 862"
+            alt="Прототип Приморских бань — зал с фонтаном и фирменными слонами"
+            aspect="1400 / 708"
             className="flex-1"
           />
           <Shot
             src="/uxart/hero-2.png"
             alt="Прототип Приморских бань — главный экран лендинга"
-            aspect="1713 / 862"
+            aspect="1400 / 708"
             className="flex-1"
           />
         </section>
@@ -50,11 +57,14 @@ export function CaseUxart() {
         {/* 3. Контекст: студия, моя роль, стек                               */}
         {/* ──────────────────────────────────────────────────────────────── */}
         <section>
-          <Narrow>
-            <h2 className="text-[44px] font-semibold leading-[1.08] tracking-[-0.02em] text-[#263238]">
-              Студия, в которую пришёл, и зачем.
-            </h2>
-            <div className="mt-10 space-y-6 text-[18px] leading-[1.6] text-[#263238]">
+          <Row
+            heading={
+              <h2 className="text-[44px] font-semibold leading-[1.08] tracking-[-0.02em] text-[#263238]">
+                Студия, в которую пришёл, и зачем.
+              </h2>
+            }
+          >
+            <div className="space-y-6 text-[18px] leading-[1.6] text-[#263238]">
               <p>
                 UXART — топ-8 дизайн-студия РФ, специализация — сложные
                 интерфейсы: дашборды, админки, B2B-системы. CEO — Артём
@@ -68,7 +78,7 @@ export function CaseUxart() {
                 результата.
               </p>
             </div>
-          </Narrow>
+          </Row>
         </section>
 
         <div className="h-20" />
@@ -100,12 +110,17 @@ export function CaseUxart() {
         {/* 4. Пресейл 1                                                      */}
         {/* ──────────────────────────────────────────────────────────────── */}
         <section>
-          <Narrow>
-            <Eyebrow>Пресейл 1</Eyebrow>
-            <h2 className="mt-4 text-[44px] font-semibold leading-[1.08] tracking-[-0.02em] text-[#263238]">
-              HR-платформа для Всеинструменты.ru — провал.
-            </h2>
-            <div className="mt-10 space-y-6 text-[18px] leading-[1.6] text-[#263238]">
+          <Row
+            heading={
+              <>
+                <Eyebrow>Пресейл 1</Eyebrow>
+                <h2 className="mt-4 text-[44px] font-semibold leading-[1.08] tracking-[-0.02em] text-[#263238]">
+                  HR-платформа для Всеинструменты.ru — провал.
+                </h2>
+              </>
+            }
+          >
+            <div className="space-y-6 text-[18px] leading-[1.6] text-[#263238]">
               <p>
                 Внутренняя HR-платформа: найм одновременно на IT и рядовые
                 позиции, отдельные лендинги под направления плюс общий.
@@ -119,7 +134,7 @@ export function CaseUxart() {
                 выверенная сетка, рабочая логика, готов к интеграции с БД.
               </p>
             </div>
-          </Narrow>
+          </Row>
         </section>
 
         <div className="h-20" />
@@ -191,9 +206,8 @@ export function CaseUxart() {
         {/* 6. Реакция клиента + решение в моменте                            */}
         {/* ──────────────────────────────────────────────────────────────── */}
         <section>
-          <Narrow>
-            <Eyebrow>Реакция клиента</Eyebrow>
-            <p className="mt-8 text-[32px] font-semibold leading-[1.2] tracking-[-0.01em] text-[#263238]">
+          <Row heading={<Eyebrow>Реакция клиента</Eyebrow>}>
+            <p className="text-[32px] font-semibold leading-[1.2] tracking-[-0.01em] text-[#263238]">
               «Презентационное видео — неплохое. Всё остальное — никакой
               ценности для бизнеса нести не может».
             </p>
@@ -204,7 +218,7 @@ export function CaseUxart() {
               «разбор виноватых», а не системный анализ. Принял удар, через
               1,5 дня сел с командой на обучение.
             </p>
-          </Narrow>
+          </Row>
         </section>
 
         <div className="h-40" />
@@ -213,18 +227,21 @@ export function CaseUxart() {
         {/* 7. Ретро                                                          */}
         {/* ──────────────────────────────────────────────────────────────── */}
         <section>
-          <Narrow>
-            <h2 className="text-[44px] font-semibold leading-[1.08] tracking-[-0.02em] text-[#263238]">
-              Ретро и сдвиг подхода
-            </h2>
-            <p className="mt-10 text-[18px] leading-[1.6] text-[#263238]">
+          <Row
+            heading={
+              <h2 className="text-[44px] font-semibold leading-[1.08] tracking-[-0.02em] text-[#263238]">
+                Ретро и сдвиг подхода
+              </h2>
+            }
+          >
+            <p className="text-[18px] leading-[1.6] text-[#263238]">
               Проблема была не в технологии, а в том, что новый артефакт попал
               в команду без точек стыковки. Разработчики не знали, что делать
               с архивом; арт-дир не понимал, как ревьюить не-Figma макет;
               CEO видел растяжение процесса. Я недооценил, насколько чужой
               этот формат для существующего процесса.
             </p>
-          </Narrow>
+          </Row>
           <div className="mt-10 rounded-[20px] bg-[#f3f3f3] px-8 py-10">
             <p className="text-[28px] font-semibold leading-[1.25] tracking-[-0.01em] text-[#263238]">
               Внедрение нового инструмента — это на 30% про инструмент и на
@@ -236,11 +253,14 @@ export function CaseUxart() {
         <div className="h-20" />
 
         <section>
-          <Narrow>
-            <h3 className="text-[32px] font-semibold leading-[1.15] tracking-[-0.01em] text-[#263238]">
-              Что сделал по обучению
-            </h3>
-            <p className="mt-8 text-[18px] leading-[1.6] text-[#263238]">
+          <Row
+            heading={
+              <h3 className="text-[32px] font-semibold leading-[1.15] tracking-[-0.01em] text-[#263238]">
+                Что сделал по обучению
+              </h3>
+            }
+          >
+            <p className="text-[18px] leading-[1.6] text-[#263238]">
               Собрал 1,5-часовой звонок с командой — выжимка по работе с
               Claude Artifacts и Nano Banana / GPT Image:
             </p>
@@ -261,7 +281,7 @@ export function CaseUxart() {
               свои задачи — никаких многонедельных тренингов. Знание начало
               размножаться без меня.
             </p>
-          </Narrow>
+          </Row>
         </section>
 
         <div className="h-40" />
@@ -270,12 +290,17 @@ export function CaseUxart() {
         {/* 8. Пресейл 2                                                      */}
         {/* ──────────────────────────────────────────────────────────────── */}
         <section>
-          <Narrow>
-            <Eyebrow>Пресейл 2</Eyebrow>
-            <h2 className="mt-4 text-[44px] font-semibold leading-[1.08] tracking-[-0.02em] text-[#263238]">
-              Приморские бани — пересборка процесса.
-            </h2>
-            <div className="mt-10 space-y-6 text-[18px] leading-[1.6] text-[#263238]">
+          <Row
+            heading={
+              <>
+                <Eyebrow>Пресейл 2</Eyebrow>
+                <h2 className="mt-4 text-[44px] font-semibold leading-[1.08] tracking-[-0.02em] text-[#263238]">
+                  Приморские бани — пересборка процесса.
+                </h2>
+              </>
+            }
+          >
+            <div className="space-y-6 text-[18px] leading-[1.6] text-[#263238]">
               <p>
                 Лендинг бани с пред-зашитой странностью: по главной плавают
                 нарисованные розовые слоны — брендинговая идея клиента.
@@ -283,34 +308,37 @@ export function CaseUxart() {
                 бренд для серьёзного бизнеса». Мы пошли в обратную сторону.
               </p>
             </div>
-          </Narrow>
+          </Row>
         </section>
 
         <div className="h-20" />
 
-        <section className="flex h-[620px] items-center justify-center gap-6 rounded-[24px] bg-[#eceff1] p-8">
+        <section className="flex flex-col gap-6 rounded-[24px] bg-[#eceff1] p-8">
           <Shot
             src="/uxart/presale2-1.png"
-            alt="Приморские бани — экран цен"
-            aspect="1168 / 630"
-            className="flex-1"
+            alt="Приморские бани — экран с ценами и тарифами"
+            aspect="2200 / 828"
+            className="w-full"
           />
           <Shot
             src="/uxart/presale2-2.png"
-            alt="Приморские бани — план этажа"
-            aspect="1040 / 1712"
-            className="h-full shrink-0"
+            alt="Приморские бани — блок «Услуги комплекса»"
+            aspect="2200 / 785"
+            className="w-full"
           />
         </section>
 
         <div className="h-20" />
 
         <section>
-          <Narrow>
-            <h3 className="text-[32px] font-semibold leading-[1.15] tracking-[-0.01em] text-[#263238]">
-              Слоны как фича, а не шум.
-            </h3>
-            <p className="mt-8 text-[18px] leading-[1.6] text-[#263238]">
+          <Row
+            heading={
+              <h3 className="text-[32px] font-semibold leading-[1.15] tracking-[-0.01em] text-[#263238]">
+                Слоны как фича, а не шум.
+              </h3>
+            }
+          >
+            <p className="text-[18px] leading-[1.6] text-[#263238]">
               Оставили слонов и сделали их рабочим элементом интерфейса, а не
               декоративным фоном:
             </p>
@@ -328,28 +356,31 @@ export function CaseUxart() {
               Странность бренда стала навигационной системой и эмоциональным
               якорем.
             </p>
-          </Narrow>
+          </Row>
         </section>
 
         <div className="h-20" />
 
-        <section className="flex h-[620px] items-center justify-center rounded-[24px] bg-[#f7f9fb] px-8">
+        <section className="rounded-[24px] bg-[#f7f9fb] p-8">
           <Shot
             src="/uxart/embed.png"
-            alt="Интерактивный прототип Приморских бань — карта локаций"
-            aspect="1165 / 583"
-            className="flex-1"
+            alt="Интерактивный прототип Приморских бань — карта локаций (план комплекса)"
+            aspect="2200 / 1095"
+            className="w-full"
           />
         </section>
 
         <div className="h-40" />
 
         <section>
-          <Narrow>
-            <h3 className="text-[32px] font-semibold leading-[1.15] tracking-[-0.01em] text-[#263238]">
-              Что поменяли в процессе
-            </h3>
-            <div className="mt-8">
+          <Row
+            heading={
+              <h3 className="text-[32px] font-semibold leading-[1.15] tracking-[-0.01em] text-[#263238]">
+                Что поменяли в процессе
+              </h3>
+            }
+          >
+            <div>
               <Signal
                 label="Четыре сдвига"
                 items={[
@@ -360,22 +391,21 @@ export function CaseUxart() {
                 ]}
               />
             </div>
-          </Narrow>
+          </Row>
         </section>
 
         <div className="h-40" />
 
         <section>
-          <Narrow>
-            <Eyebrow>Реакция клиента</Eyebrow>
-            <p className="mt-8 text-[32px] font-semibold leading-[1.2] tracking-[-0.01em] text-[#263238]">
+          <Row heading={<Eyebrow>Реакция клиента</Eyebrow>}>
+            <p className="text-[32px] font-semibold leading-[1.2] tracking-[-0.01em] text-[#263238]">
               «Попали и анимашками, и оформлением в самое сердечко. Удобно
               работать: открыл ссылку, увидел примерный результат».
             </p>
             <p className="mt-6 text-[18px] leading-[1.6] text-[#263238]">
               Пресейл забрали.
             </p>
-          </Narrow>
+          </Row>
         </section>
 
         <div className="h-40" />
@@ -384,11 +414,14 @@ export function CaseUxart() {
         {/* 9. Что изменилось в студии                                        */}
         {/* ──────────────────────────────────────────────────────────────── */}
         <section>
-          <Narrow>
-            <h2 className="text-[44px] font-semibold leading-[1.08] tracking-[-0.02em] text-[#263238]">
-              Что изменилось в студии
-            </h2>
-            <div className="mt-10">
+          <Row
+            heading={
+              <h2 className="text-[44px] font-semibold leading-[1.08] tracking-[-0.02em] text-[#263238]">
+                Что изменилось в студии
+              </h2>
+            }
+          >
+            <div>
               <Signal
                 label="Сигналы"
                 items={[
@@ -400,7 +433,7 @@ export function CaseUxart() {
                 ]}
               />
             </div>
-          </Narrow>
+          </Row>
         </section>
 
         <div className="h-40" />
@@ -440,10 +473,13 @@ export function CaseUxart() {
         {/* 12. Команда                                                       */}
         {/* ──────────────────────────────────────────────────────────────── */}
         <section>
-          <Narrow>
-            <h2 className="text-[44px] font-semibold leading-[1.08] tracking-[-0.02em] text-[#263238]">
-              Команда
-            </h2>
+          <Row
+            heading={
+              <h2 className="text-[44px] font-semibold leading-[1.08] tracking-[-0.02em] text-[#263238]">
+                Команда
+              </h2>
+            }
+          >
             <div className="mt-10 space-y-8">
               <Credit
                 role="CEO студии"
@@ -466,7 +502,7 @@ export function CaseUxart() {
                 body="Внедрение стека, пресейл-прототипы, ретро после провала, обучение команды, пересборка процесса."
               />
             </div>
-          </Narrow>
+          </Row>
         </section>
 
         <div className="h-40" />
@@ -475,10 +511,13 @@ export function CaseUxart() {
         {/* 13. Карточка проекта                                             */}
         {/* ──────────────────────────────────────────────────────────────── */}
         <section>
-          <Narrow>
-            <h2 className="text-[44px] font-semibold leading-[1.08] tracking-[-0.02em] text-[#263238]">
-              Карточка проекта
-            </h2>
+          <Row
+            heading={
+              <h2 className="text-[44px] font-semibold leading-[1.08] tracking-[-0.02em] text-[#263238]">
+                Карточка проекта
+              </h2>
+            }
+          >
             <div className="mt-10 flex flex-col">
               <Fact
                 label="Роль"
@@ -497,7 +536,7 @@ export function CaseUxart() {
                 value="Пресейл Приморских забрали. 80% команды используют AI на пресейлах. Vibe-coded прототипы — стандарт студии."
               />
             </div>
-          </Narrow>
+          </Row>
         </section>
 
         <div className="h-40" />

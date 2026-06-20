@@ -1,17 +1,24 @@
+import { Row } from "@/components/case/Row";
+
 export function CaseOvork() {
   return (
     <div className="ovork-page min-h-dvh w-full bg-white text-[#263238]">
       <div className="mx-auto w-full max-w-[1280px] px-6 pt-24 pb-32">
         {/* 01 · Обзор */}
         <section className="flex w-full flex-col items-start">
-          <Narrow>
-            <Eyebrow>Обзор</Eyebrow>
-            <h1 className="mt-[40px] text-[36px] font-semibold leading-[1.1] tracking-[-0.72px] text-[#263238]">
-              Довёл кошелёк ОВорк до требований ФНС, не сломав еженедельный
-              релизный ритм — и пересобрал раздел в систему, которая снимает
-              недоверие пользователя к выплатам.
-            </h1>
-            <ul className="mt-[40px] flex flex-wrap gap-[8px]">
+          <Row
+            heading={
+              <>
+                <Eyebrow>Обзор</Eyebrow>
+                <h1 className="mt-4 text-[36px] font-semibold leading-[1.1] tracking-[-0.72px] text-[#263238]">
+                  Довёл кошелёк ОВорк до требований ФНС, не сломав еженедельный
+                  релизный ритм — и пересобрал раздел в систему, которая снимает
+                  недоверие пользователя к выплатам.
+                </h1>
+              </>
+            }
+          >
+            <ul className="flex flex-wrap gap-[8px]">
               {["Финтех · самозанятые", "Mobile", "2025 — 2026"].map((tag) => (
                 <li
                   key={tag}
@@ -21,7 +28,7 @@ export function CaseOvork() {
                 </li>
               ))}
             </ul>
-          </Narrow>
+          </Row>
         </section>
 
         <div className="h-40" />
@@ -57,11 +64,14 @@ export function CaseOvork() {
 
         {/* 03 · Кошелёк внутри живого продукта */}
         <section className="flex w-full flex-col items-start">
-          <Narrow>
-            <h2 className="text-[32px] font-semibold leading-[1.1] tracking-[-0.32px] text-[#263238]">
-              Кошелёк внутри живого продукта с релизами раз в 5–10 дней.
-            </h2>
-            <p className="mt-10 text-[18px] leading-[1.6] text-[#546e7a]">
+          <Row
+            heading={
+              <h2 className="text-[32px] font-semibold leading-[1.1] tracking-[-0.32px] text-[#263238]">
+                Кошелёк внутри живого продукта с релизами раз в 5–10 дней.
+              </h2>
+            }
+          >
+            <p className="text-[18px] leading-[1.6] text-[#546e7a]">
               ОВорк — мобильное приложение для исполнителей-самозанятых в
               гиг-аутсорсе линейного персонала. Раздел кошелька подхватил у
               ушедшей коллеги. Кроме меня в команде на проекте — только
@@ -69,7 +79,7 @@ export function CaseOvork() {
               развилки, макеты, юр-ревью, согласование с арт-директором перед
               сдачей.
             </p>
-          </Narrow>
+          </Row>
         </section>
 
         <div className="h-[160px]" />
@@ -105,9 +115,8 @@ export function CaseOvork() {
 
         {/* 05 · Развилки */}
         <section className="flex w-full flex-col items-start">
-          <Narrow>
-            <Eyebrow>Развилки</Eyebrow>
-            <p className="mt-[32px] text-[24px] font-semibold leading-[1.3] tracking-[-0.12px] text-[#263238]">
+          <Row heading={<Eyebrow>Развилки</Eyebrow>}>
+            <p className="text-[24px] font-semibold leading-[1.3] tracking-[-0.12px] text-[#263238]">
               Как впустить ФНС в интерфейс, не разрушив остальной UX.
             </p>
             <p className="mt-[24px] text-[18px] leading-[1.6] text-[#546e7a]">
@@ -117,23 +126,28 @@ export function CaseOvork() {
               но обе про одно: как сделать регуляторно-обязательную информацию
               видимой, не сломав то, что уже работает.
             </p>
-          </Narrow>
+          </Row>
         </section>
 
         <div className="h-[80px]" />
 
         {/* 06 · Развилка A */}
         <section className="flex w-full flex-col items-start">
-          <Narrow>
-            <Eyebrow>Развилка A</Eyebrow>
-            <h2 className="mt-[16px] text-[32px] font-semibold leading-[1.1] tracking-[-0.32px] text-[#263238]">
-              Куда поставить уведомление о задолженности ФНС
-            </h2>
-            <p className="mt-[24px] w-[505px] text-[18px] leading-[1.5] text-[#546e7a]">
+          <Row
+            heading={
+              <>
+                <Eyebrow>Развилка A</Eyebrow>
+                <h2 className="mt-[16px] text-[32px] font-semibold leading-[1.1] tracking-[-0.32px] text-[#263238]">
+                  Куда поставить уведомление о задолженности ФНС
+                </h2>
+              </>
+            }
+          >
+            <p className="w-[505px] text-[18px] leading-[1.5] text-[#546e7a]">
               Регулятор требует постоянной видимости. Продукт требует не мешать
               пользователю искать смены.
             </p>
-          </Narrow>
+          </Row>
           <div className="mt-[48px] flex w-full items-start gap-[20px]">
             <ForkCard
               letter="A"
@@ -176,26 +190,33 @@ export function CaseOvork() {
               />
             </div>
           </div>
-          <Narrow className="mt-[40px]">
-            <Eyebrow>Главный экран до и после</Eyebrow>
-            <p className="mt-[16px] text-[18px] leading-[1.6] text-[#546e7a]">
+          <Row
+            className="mt-[40px]"
+            heading={<Eyebrow>Главный экран до и после</Eyebrow>}
+          >
+            <p className="text-[18px] leading-[1.6] text-[#546e7a]">
               Side-by-side сравнение прежней и новой иерархии топ-бара. Раньше
               там жил статус «онлайн / готов к смене» — ужал до иконки, чтобы
               впустить баннер.
             </p>
-          </Narrow>
+          </Row>
         </section>
 
         <div className="h-[160px]" />
 
         {/* 08 · Развилка B */}
         <section className="flex w-full flex-col items-start">
-          <Narrow>
-            <Eyebrow>Развилка B · параллельно</Eyebrow>
-            <h2 className="mt-[16px] text-[32px] font-semibold leading-[1.1] tracking-[-0.32px] text-[#263238]">
-              Уведомления — из профиля в шапку главного
-            </h2>
-            <p className="mt-10 text-[18px] leading-[1.6] text-[#263238]">
+          <Row
+            heading={
+              <>
+                <Eyebrow>Развилка B · параллельно</Eyebrow>
+                <h2 className="mt-[16px] text-[32px] font-semibold leading-[1.1] tracking-[-0.32px] text-[#263238]">
+                  Уведомления — из профиля в шапку главного
+                </h2>
+              </>
+            }
+          >
+            <p className="text-[18px] leading-[1.6] text-[#263238]">
               Регулятор требовал не «можно найти», а «доступно за один тап с
               главного». Отдельную вкладку в таб-баре отбросил — раздувает
               навигацию ради непостоянной задачи. Иконка в шапке с badge — один
@@ -212,16 +233,15 @@ export function CaseOvork() {
               В первый месяц ~15% пользователей всё ещё открывали уведомления
               через профиль по старой привычке. Нормальная цена миграции.
             </p>
-          </Narrow>
+          </Row>
         </section>
 
         <div className="h-[160px]" />
 
         {/* 09 · Обратная задача */}
         <section className="flex w-full flex-col items-start">
-          <Narrow>
-            <Eyebrow>Обратная задача</Eyebrow>
-            <p className="mt-[32px] text-[24px] font-semibold leading-[1.3] tracking-[-0.12px] text-[#263238]">
+          <Row heading={<Eyebrow>Обратная задача</Eyebrow>}>
+            <p className="text-[24px] font-semibold leading-[1.3] tracking-[-0.12px] text-[#263238]">
               Два флоу, которые я делал намеренно неудобными.
             </p>
             <p className="mt-[24px] text-[18px] leading-[1.6] text-[#546e7a]">
@@ -229,23 +249,28 @@ export function CaseOvork() {
               сценарии бизнес и регулятор хотят, чтобы существовали — но
               использовались редко.
             </p>
-          </Narrow>
+          </Row>
         </section>
 
         <div className="h-[80px]" />
 
         {/* 10 · Развилка C */}
         <section className="flex w-full flex-col items-start">
-          <Narrow>
-            <Eyebrow>Развилка C</Eyebrow>
-            <h2 className="mt-[16px] text-[32px] font-semibold leading-[1.1] tracking-[-0.32px] text-[#263238]">
-              Аннулирование чека в ФНС
-            </h2>
-            <p className="mt-[24px] w-[524px] text-[18px] leading-[1.5] text-[#546e7a]">
+          <Row
+            heading={
+              <>
+                <Eyebrow>Развилка C</Eyebrow>
+                <h2 className="mt-[16px] text-[32px] font-semibold leading-[1.1] tracking-[-0.32px] text-[#263238]">
+                  Аннулирование чека в ФНС
+                </h2>
+              </>
+            }
+          >
+            <p className="w-[524px] text-[18px] leading-[1.5] text-[#546e7a]">
               Регулятор требует видимости функции. Бизнес-логика обратная: чем
               реже её нажимают — тем спокойнее.
             </p>
-          </Narrow>
+          </Row>
           <div className="mt-[48px] flex w-full items-start gap-[20px]">
             <ForkCard
               letter="A"
@@ -288,26 +313,33 @@ export function CaseOvork() {
               alt="Подтверждение аннулирования чека"
             />
           </div>
-          <Narrow className="mt-[40px]">
-            <Eyebrow>Двухшаговое аннулирование</Eyebrow>
-            <p className="mt-[16px] text-[18px] leading-[1.6] text-[#546e7a]">
+          <Row
+            className="mt-[40px]"
+            heading={<Eyebrow>Двухшаговое аннулирование</Eyebrow>}
+          >
+            <p className="text-[18px] leading-[1.6] text-[#546e7a]">
               Второй шаг — не пустой confirm, а осознанный выбор причины из
               списка. Это и даёт пользователю паузу, и решает требование
               осмысленности действия — без лишних шагов и блокирующих модалок.
             </p>
-          </Narrow>
+          </Row>
         </section>
 
         <div className="h-[160px]" />
 
         {/* 12 · Развилка D */}
         <section className="flex w-full flex-col items-start">
-          <Narrow>
-            <Eyebrow>Развилка D · параллельно</Eyebrow>
-            <h2 className="mt-[16px] text-[32px] font-semibold leading-[1.1] tracking-[-0.32px] text-[#263238]">
-              Вывод средств — шаблоны для своих карт, ручной ввод для чужих
-            </h2>
-            <p className="mt-10 text-[18px] leading-[1.6] text-[#263238]">
+          <Row
+            heading={
+              <>
+                <Eyebrow>Развилка D · параллельно</Eyebrow>
+                <h2 className="mt-[16px] text-[32px] font-semibold leading-[1.1] tracking-[-0.32px] text-[#263238]">
+                  Вывод средств — шаблоны для своих карт, ручной ввод для чужих
+                </h2>
+              </>
+            }
+          >
+            <p className="text-[18px] leading-[1.6] text-[#263238]">
               Со стороны регулятора переводы на собственные карты выглядят
               чисто, СБП на чужие реквизиты — потенциальный красный флаг.
               Убирать СБП целиком — ломает UX для пользователей без привязанной
@@ -328,37 +360,39 @@ export function CaseOvork() {
               До релиза на моём этапе не дошло, но флоу проектировался с
               расчётом на неё.
             </p>
-          </Narrow>
+          </Row>
         </section>
 
         <div className="h-[160px]" />
 
         {/* 13 · Принцип */}
         <section className="flex w-full flex-col items-start">
-          <Narrow>
-            <Eyebrow>Принцип, к которому пришёл за проект</Eyebrow>
-            <p className="mt-[32px] text-[24px] font-semibold leading-[1.3] tracking-[-0.12px] text-[#263238]">
+          <Row heading={<Eyebrow>Принцип, к которому пришёл за проект</Eyebrow>}>
+            <p className="text-[24px] font-semibold leading-[1.3] tracking-[-0.12px] text-[#263238]">
               Функцию нельзя прятать, если она требуется регулятором — но можно
               проектировать её скорость. Скорость UI — такой же design lever,
               как иерархия или цвет.
             </p>
-          </Narrow>
+          </Row>
         </section>
 
         <div className="h-[160px]" />
 
         {/* 14 · Финальное решение */}
         <section className="flex w-full flex-col items-start">
-          <Narrow>
-            <h2 className="text-[32px] font-semibold leading-[1.1] tracking-[-0.32px] text-[#263238]">
-              Четыре артефакта, из которых сложился раздел
-            </h2>
-            <p className="mt-10 text-[18px] leading-[1.6] text-[#546e7a]">
+          <Row
+            heading={
+              <h2 className="text-[32px] font-semibold leading-[1.1] tracking-[-0.32px] text-[#263238]">
+                Четыре артефакта, из которых сложился раздел
+              </h2>
+            }
+          >
+            <p className="text-[18px] leading-[1.6] text-[#546e7a]">
               Раздел собирался не одним релизом, а серией шагов в рамках
               релизного ритма клиента. Четыре ключевых артефакта, каждый
               закрывает конкретный фрагмент проблемы.
             </p>
-          </Narrow>
+          </Row>
         </section>
 
         <div className="h-[80px]" />
@@ -373,15 +407,17 @@ export function CaseOvork() {
               alt="Главный экран с иконкой уведомлений"
             />
           </Tile>
-          <Narrow className="mt-[40px]">
-            <Eyebrow>01 · Главный экран</Eyebrow>
-            <p className="mt-[16px] text-[18px] leading-[1.6] text-[#546e7a]">
+          <Row
+            className="mt-[40px]"
+            heading={<Eyebrow>01 · Главный экран</Eyebrow>}
+          >
+            <p className="text-[18px] leading-[1.6] text-[#546e7a]">
               При задолженности — sticky-баннер с суммой и кнопкой быстрого
               перехода к погашению. Параллельно иконка уведомлений с badge.
               Иерархия шапки пересобрана с нуля, чтобы регуляторные элементы
               сосуществовали с основным CTA.
             </p>
-          </Narrow>
+          </Row>
         </section>
 
         <div className="h-[160px]" />
@@ -400,9 +436,11 @@ export function CaseOvork() {
             />
             <Phone src="/ovork/notif-4.png" alt="Уведомление — сжатый режим" />
           </Tile>
-          <Narrow className="mt-[40px]">
-            <Eyebrow>02 · Универсальный компонент уведомления</Eyebrow>
-            <p className="mt-[16px] text-[18px] leading-[1.6] text-[#263238]">
+          <Row
+            className="mt-[40px]"
+            heading={<Eyebrow>02 · Универсальный компонент уведомления</Eyebrow>}
+          >
+            <p className="text-[18px] leading-[1.6] text-[#263238]">
               До меня каждый тип уведомления делался отдельной вёрсткой.
               Перепроектировал как один компонент с тремя режимами рендера:
               полный (заголовок + подзаголовок + тело), сжатый (адаптация по
@@ -413,7 +451,7 @@ export function CaseOvork() {
               под новый тип». Все будущие события от ФНС, банка и внутренних
               триггеров укладываются в существующий компонент.
             </p>
-          </Narrow>
+          </Row>
         </section>
 
         <div className="h-[160px]" />
@@ -434,27 +472,32 @@ export function CaseOvork() {
               alt="Экран кошелька — ошибка загрузки чека"
             />
           </Tile>
-          <Narrow className="mt-[40px]">
-            <Eyebrow>03 · Структура баланса</Eyebrow>
-            <p className="mt-[16px] text-[18px] leading-[1.6] text-[#263238]">
+          <Row
+            className="mt-[40px]"
+            heading={<Eyebrow>03 · Структура баланса</Eyebrow>}
+          >
+            <p className="text-[18px] leading-[1.6] text-[#263238]">
               Переход от одной цифры баланса к структуре состояний: «доступно
               к выводу», «в обработке», «удержано». Прямой ответ на инсайт из
               ресёрча — пользователь читает «баланс» как «что мне должны», и
               любое расхождение между заработанным и доступным вызывает
               ощущение, что приложение его обманывает.
             </p>
-          </Narrow>
+          </Row>
         </section>
 
         <div className="h-[160px]" />
 
         {/* 15 · Что получилось */}
         <section className="flex w-full flex-col items-start">
-          <Narrow>
-            <h2 className="text-[32px] font-semibold leading-[1.1] tracking-[-0.32px] text-[#263238]">
-              Что получилось
-            </h2>
-            <p className="mt-10 text-[18px] leading-[1.6] text-[#263238]">
+          <Row
+            heading={
+              <h2 className="text-[32px] font-semibold leading-[1.1] tracking-[-0.32px] text-[#263238]">
+                Что получилось
+              </h2>
+            }
+          >
+            <p className="text-[18px] leading-[1.6] text-[#263238]">
               Для агентской работы качественные результаты важнее цифр — они
               напрямую отвечают на «оправдала ли студия деньги клиента».
             </p>
@@ -476,16 +519,15 @@ export function CaseOvork() {
                 </li>
               ))}
             </ul>
-          </Narrow>
+          </Row>
         </section>
 
         <div className="h-40" />
 
         {/* 16 · Метрики */}
         <section className="flex w-full flex-col items-start">
-          <Narrow>
-            <Eyebrow>Метрики · вспомогательные</Eyebrow>
-            <div className="mt-[32px] flex flex-col border-t border-[#eceff1]">
+          <Row heading={<Eyebrow>Метрики · вспомогательные</Eyebrow>}>
+            <div className="flex flex-col border-t border-[#eceff1]">
               <MetricRow
                 label="Доля «денежных» обращений в саппорте"
                 unit="%"
@@ -536,7 +578,7 @@ export function CaseOvork() {
               Раздел документов трогал точечно — основную работу там вёл
               арт-директор.
             </p>
-          </Narrow>
+          </Row>
         </section>
 
         <div className="h-[160px]" />
@@ -572,11 +614,14 @@ export function CaseOvork() {
 
         {/* 18 · Карточка проекта */}
         <section className="flex w-full flex-col items-start">
-          <Narrow>
-            <h2 className="text-[32px] font-semibold leading-[1.1] tracking-[-0.32px] text-[#263238]">
-              Карточка проекта
-            </h2>
-            <div className="mt-[40px] flex flex-col">
+          <Row
+            heading={
+              <h2 className="text-[32px] font-semibold leading-[1.1] tracking-[-0.32px] text-[#263238]">
+                Карточка проекта
+              </h2>
+            }
+          >
+            <div className="flex flex-col">
               <Fact
                 label="Роль"
                 value="Product Designer (middle) · на стороне дизайн-студии · 2025 — 2026"
@@ -603,7 +648,7 @@ export function CaseOvork() {
                 value="Регуляторные требования закрыты в срок, релизный ритм не сорван. Тикеты 41% → 19%, конверсия 71% → 89%, время до вывода 4,2 → 1,6 дня."
               />
             </div>
-          </Narrow>
+          </Row>
         </section>
 
         <div className="h-[160px]" />

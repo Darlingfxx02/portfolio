@@ -91,6 +91,17 @@
   color: var(--text-strong);
 }
 
+/* ── Emphasis (AI/owner-surfaced phrases, per company) ── */
+.em {
+  color: var(--text);
+  font-weight: var(--wt-medium);
+  transition: color 0.2s var(--ease);
+}
+/* Keep emphasized links readable: brighten their underline too. */
+.em .link {
+  text-decoration-color: var(--text-faint);
+}
+
 /* ── Copy toast (above cursor) ──────────── */
 .copyToast {
   position: fixed;

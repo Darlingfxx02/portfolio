@@ -36,16 +36,34 @@
   z-index: 2;
 }
 
+.sticker[data-shadow='alpha'][data-dragging='true'] {
+  filter: none;
+}
+
 .media {
   display: block;
   width: 100%;
-  height: 100%;
+  height: auto;
   object-fit: cover;
   border-radius: 14px;
   background: var(--surface);
   box-shadow: var(--shadow-panel);
 }
 
+.sticker[data-shadow='alpha'] .media {
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+  filter: drop-shadow(0 18px 30px rgba(0, 0, 0, 0.18));
+  object-fit: contain;
+}
+
+.sticker[data-shadow='alpha'][data-dragging='true'] .media {
+  filter: drop-shadow(0 22px 34px rgba(0, 0, 0, 0.24));
+}
+
 .sticker[data-shape='circle'] .media {
   border-radius: 50%;
+  height: 100%;
+  object-fit: cover;
 }

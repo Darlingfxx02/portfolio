@@ -1,0 +1,382 @@
+/* ── Page shell (site-themed bg around the paper sheet) ───────────── */
+.page {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 18px;
+  width: 100%;
+  min-height: 100vh;
+  padding: 40px var(--pad) 140px;
+  background: var(--bg);
+}
+
+/* Toolbar floats above the sheet; it sits OUTSIDE .cv-sheet so the print
+   stylesheet hides it automatically. */
+.toolbar {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 12px;
+  width: 210mm;
+  max-width: 100%;
+}
+
+.download {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 11px 18px;
+  border-radius: 999px;
+  background: var(--text);
+  color: var(--bg);
+  font-family: var(--font-sf);
+  font-size: 14px;
+  font-weight: var(--wt-medium);
+  letter-spacing: var(--tracking-body);
+  box-shadow: var(--shadow-dock);
+  transition: transform 0.2s var(--ease);
+}
+
+.download:hover {
+  transform: translateY(-1px);
+}
+
+.download:active {
+  transform: translateY(0);
+}
+
+/* ── The A4 sheet — always paper-white, prints 1:1 ────────────────── */
+.sheet {
+  /* Ink-on-paper tokens, scoped so the document reads as a printed CV
+     regardless of the site's dark/light theme. */
+  --cv-ink: #0b0b0c;
+  --cv-strong: rgba(0, 0, 0, 0.82);
+  --cv-mid: rgba(0, 0, 0, 0.58);
+  --cv-dim: rgba(0, 0, 0, 0.42);
+  --cv-line: rgba(0, 0, 0, 0.12);
+  --cv-fill: rgba(0, 0, 0, 0.03);
+
+  /* One spacing scale drives the whole document — no ad-hoc values.
+     section: gap between major blocks · label: heading → its content ·
+     item: list rows · tight: chips / bullet rows. */
+  --s-section: 24px;
+  --s-group: 16px;
+  --s-label: 12px;
+  --s-item: 10px;
+  --s-tight: 6px;
+
+  width: 210mm;
+  min-height: 297mm;
+  max-width: 100%;
+  padding: 16mm;
+  background: #fff;
+  color: var(--cv-ink);
+  border-radius: 18px;
+  box-shadow: var(--shadow-panel);
+  font-family: var(--font-sf);
+  font-size: 13px; /* body baseline */
+  line-height: 1.5;
+}
+
+/* ── Header band ──────────────────────────────────────────────────── */
+.head {
+  padding-bottom: var(--s-section);
+  border-bottom: 1px solid var(--cv-line);
+}
+
+.name {
+  font-family: var(--font-sans);
+  font-size: 28px;
+  font-weight: var(--wt-strong);
+  letter-spacing: var(--tracking);
+  line-height: 1.1;
+}
+
+.title {
+  margin-top: 6px;
+  font-size: 14px;
+  color: var(--cv-mid);
+  letter-spacing: var(--tracking-body);
+}
+
+/* ── Two-column intro ─────────────────────────────────────────────── */
+.intro {
+  display: grid;
+  grid-template-columns: 62mm 1fr;
+  gap: 0;
+  margin-top: var(--s-section);
+}
+
+/* Left column: no fill — just a divider rule between the columns. */
+.side {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-section);
+  padding-right: 10mm;
+  border-right: 1px solid var(--cv-line);
+}
+
+.introMain {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-section);
+  min-width: 0;
+  padding-left: 12mm;
+}
+
+/* ── One heading system ───────────────────────────────────────────── */
+/* Level 1 — section label: small, uppercase, dim. Used by every section. */
+.blockLabel {
+  font-family: var(--font-sans);
+  font-size: 11px;
+  font-weight: var(--wt-strong);
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: var(--cv-dim);
+  margin-bottom: var(--s-label);
+}
+
+.block {
+  break-inside: avoid;
+}
+
+/* Divider ("отсечка") separating the intro block from the experience. */
+.expBlock {
+  margin-top: var(--s-section);
+  padding-top: var(--s-section);
+  border-top: 1px solid var(--cv-line);
+}
+
+/* ── Sidebar: contacts ────────────────────────────────────────────── */
+.contacts {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-item);
+  list-style: none;
+}
+
+.contacts li {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  min-width: 0;
+}
+
+.contactIcon {
+  flex: none;
+  color: var(--cv-ink);
+}
+
+.contacts a {
+  color: var(--cv-strong);
+  font-weight: var(--wt-medium);
+  overflow-wrap: anywhere;
+}
+
+.contacts a:hover {
+  color: var(--cv-ink);
+}
+
+/* ── Sidebar: skills as chip groups ───────────────────────────────── */
+.skillGroups {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-group);
+}
+
+/* Level 2 — sub-label inside a section. */
+.skillGroupLabel {
+  font-size: 12px;
+  font-weight: var(--wt-strong);
+  color: var(--cv-ink);
+  margin-bottom: 8px;
+  letter-spacing: var(--tracking);
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s-tight);
+}
+
+.chip {
+  display: inline-flex;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: var(--cv-fill);
+  font-size: 11px;
+  color: var(--cv-strong);
+  letter-spacing: var(--tracking-body);
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+}
+
+/* ── Intro main: summary ──────────────────────────────────────────── */
+.summary {
+  color: var(--cv-strong);
+}
+
+/* ── Headline metrics strip ───────────────────────────────────────── */
+.stats {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+}
+
+/* Each metric sits in a soft-filled card. */
+.stat {
+  padding: 14px;
+  border-radius: 12px;
+  background: var(--cv-fill);
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+}
+
+.statValue {
+  font-family: var(--font-sans);
+  font-size: 24px;
+  font-weight: var(--wt-strong);
+  letter-spacing: var(--tracking);
+  color: var(--cv-ink);
+  line-height: 1;
+}
+
+.statLabel {
+  margin-top: 6px;
+  font-size: 12px;
+  color: var(--cv-mid);
+  line-height: 1.35;
+}
+
+/* ── Experience timeline (full width) ─────────────────────────────── */
+.timeline {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding-left: 20px;
+}
+
+/* The vertical rail. */
+.timeline::before {
+  content: '';
+  position: absolute;
+  left: 4px;
+  top: 6px;
+  bottom: 6px;
+  width: 1px;
+  background: var(--cv-line);
+}
+
+.entry {
+  position: relative;
+  break-inside: avoid;
+}
+
+/* Node dot sitting on the rail. */
+.entry::before {
+  content: '';
+  position: absolute;
+  left: -20px;
+  top: 4px;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: #fff;
+  border: 2px solid var(--cv-ink);
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+}
+
+.entryHead {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 12px;
+}
+
+.company {
+  font-size: 15px;
+  font-weight: var(--wt-strong);
+  color: var(--cv-ink);
+  letter-spacing: var(--tracking);
+}
+
+.period {
+  font-size: 12px;
+  color: var(--cv-dim);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.role {
+  margin-top: 3px;
+  font-size: 12px;
+  color: var(--cv-mid);
+  font-weight: var(--wt-medium);
+}
+
+.desc {
+  margin-top: var(--s-tight);
+  color: var(--cv-strong);
+}
+
+/* Quantified achievement bullets. */
+.bullets {
+  list-style: none;
+  margin-top: var(--s-item);
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-tight);
+}
+
+.bullets li {
+  position: relative;
+  padding-left: 16px;
+  color: var(--cv-strong);
+}
+
+.bullets li::before {
+  content: '';
+  position: absolute;
+  left: 3px;
+  top: 8px;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: var(--cv-ink);
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+}
+
+/* On narrow screens let the sheet scroll horizontally rather than squish. */
+@media (max-width: 840px) {
+  .page {
+    align-items: flex-start;
+    overflow-x: auto;
+  }
+}
+
+/* ── Print: lay the sheet out as static flow so it paginates to A4 ── */
+@media print {
+  .page {
+    display: block;
+    padding: 0;
+    min-height: 0;
+    background: none;
+  }
+
+  .toolbar {
+    display: none;
+  }
+
+  .sheet {
+    position: static;
+    width: auto;
+    max-width: none;
+    min-height: 0;
+    margin: 0;
+    padding: 0; /* @page margin (index.css) supplies the page margins */
+  }
+}

@@ -29,3 +29,6 @@ export type { TestimonialProps } from "./Testimonial";
 
 export { ContactCTA } from "./ContactCTA";
 export type { ContactCTAProps, ContactItem } from "./ContactCTA";
+
+export { VideoCard } from "./VideoCard";
+export type { VideoCardProps } from "./VideoCard";

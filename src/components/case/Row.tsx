@@ -15,7 +15,7 @@ export function Row({
   className?: string;
 }) {
   return (
-    <div className={`grid grid-cols-1 gap-y-4 md:grid-cols-2 md:gap-x-16 ${className}`}>
+    <div className={`grid w-full grid-cols-1 gap-y-4 md:grid-cols-2 md:gap-x-16 ${className}`}>
       <div>{heading}</div>
       <div>{children}</div>
     </div>

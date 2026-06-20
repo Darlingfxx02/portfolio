@@ -24,7 +24,7 @@ export type FolderSection = {
 export const sections: FolderSection[] = [
   { label: 'Главная', href: '#top', Icon: House, color: '#3b82f6' },
   { label: 'Работы', href: '#works', Icon: ImagesSquare, color: '#3b82f6' },
-  { label: 'CV', href: '/cv.pdf', Icon: ReadCvLogo, color: '#3b82f6', download: true },
+  { label: 'CV', href: '#cv', Icon: ReadCvLogo, color: '#3b82f6' },
   { label: 'Контакты', href: '#contact', Icon: PaperPlaneTilt, color: '#3b82f6' },
 ]
 

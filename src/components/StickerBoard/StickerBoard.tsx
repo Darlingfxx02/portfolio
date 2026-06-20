@@ -60,7 +60,7 @@ export function StickerBoard({ anchorId = 'playground' }: { anchorId?: string })
       }
       return next
     })
-  }, [anchorId])
+  }, [anchorId, seed.length])
 
   function onPointerDown(e: RPointerEvent<HTMLDivElement>, id: string) {
     const layer = layerRef.current
@@ -117,6 +117,7 @@ export function StickerBoard({ anchorId = 'playground' }: { anchorId?: string })
             key={s.id}
             className={styles.sticker}
             data-shape={s.shape ?? 'rounded'}
+            data-shadow={s.shadow ?? 'panel'}
             style={style}
             onPointerDown={(e) => onPointerDown(e, s.id)}
             onPointerMove={(e) => onPointerMove(e, s.id)}

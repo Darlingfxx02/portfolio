@@ -1,15 +1,32 @@
-import { useState } from 'react'
+import { useState, type ReactNode } from 'react'
 import { profile } from '@/data/profile'
 import { PhotoFan, type FanPhoto } from '@/components/PhotoFan/PhotoFan'
+import { useCompanyConfig } from '@/lib/personalization'
 import { LocalTime } from './LocalTime'
 import { CopyEmail } from './CopyEmail'
 import styles from './Profile.module.css'
 
-// Placeholder reveal photos — swap for real ones later.
+/**
+ * Emphasizable phrase in the bio. When the active company config lists this
+ * id in `emphasis`, the phrase is surfaced (full color + medium weight).
+ * The phrases (ids) are authored here; the AI only chooses which to emphasize.
+ * Keep ids in sync with the text_blocks seed in server/src/seed.ts.
+ */
+function Em({ id, children }: { id: string; children: ReactNode }) {
+  const { emphasis } = useCompanyConfig()
+  const on = emphasis?.includes(id) ?? false
+  return (
+    <span className={on ? styles.em : undefined} data-em={on || undefined}>
+      {children}
+    </span>
+  )
+}
+
+// Reveal photos shown when hovering/focusing the name.
 const namePhotos: FanPhoto[] = [
-  { src: '/about/who.png', x: 0, y: 64, rotate: -9, w: 188 },
   { src: '/about/hobby2.png', x: 152, y: 44, rotate: 8, w: 188 },
   { src: '/about/hobby1.png', x: 80, y: 98, rotate: -2, w: 180 },
+  { src: '/stickers/self-portrait.png', x: 0, y: 64, rotate: -9, w: 188, alt: 'Портрет' },
 ]
 
 export function Profile() {
@@ -48,43 +65,35 @@ export function Profile() {
 
       <div className={styles.bio}>
         <p>
-          Независимый продуктовый дизайнер, фокус — AI. Сейчас здесь <LocalTime />.
+          Сейчас у меня <LocalTime />. Превращаю размытые бизнес-задачи в продукты,
+          которыми пользуются. Ключевые направления — <Em id="domains">финтех и AI</Em>.
         </p>
         <p>
-          Делаю инструменты, где дизайн и код сходятся, — от vibe-coded прототипов
-          до{' '}
-          <a className={styles.link} href={profile.links.claudeSkills} target="_blank" rel="noreferrer">
-            скиллов для Claude
-          </a>
-          , которые собирают макеты прямо в Figma.
-        </p>
-        <p>
-          Раньше вёл продукты в{' '}
-          <a className={styles.link} href={profile.links.comboGpt} target="_blank" rel="noreferrer">
-            ComboGPT
-          </a>
-          ,{' '}
-          <a className={styles.link} href={profile.links.zinda} target="_blank" rel="noreferrer">
-            Zinda
-          </a>{' '}
-          и{' '}
-          <a className={styles.link} href={profile.links.uxart} target="_blank" rel="noreferrer">
-            UXART
-          </a>{' '}
-          — AI-агрегаторы, финтех и дизайн-студия из топа Ruward.
-        </p>
-        <p>
-          Открыт к founding / product design ролям в AI-стартапах. Пиши на{' '}
-          <CopyEmail email={profile.email} /> или в{' '}
+          Открыт к founding / product ролям — пиши в{' '}
           <a className={styles.link} href={profile.telegram} target="_blank" rel="noreferrer">
             Telegram
-          </a>
+          </a>{' '}
+          или на <CopyEmail email={profile.email} />.
+        </p>
+        <p>
+          Сильная сторона — <Em id="product-mind">продуктовое мышление</Em>: пайплайны,
+          диалог с бизнесом и распутывание сложных ситуаций.
+        </p>
+        <p>
+          <Em id="design-code">Код — мой множитель</Em>: проверяю гипотезы живыми
+          прототипами, а не макетами, и держу руку на современных инструментах — под
+          задачу бизнеса соберу нужный, вплоть до собственных{' '}
+          <Em id="claude-skills">
+            <a className={styles.link} href={profile.links.claudeSkills} target="_blank" rel="noreferrer">
+              AI-скиллов
+            </a>
+          </Em>
           .
         </p>
         <p className={styles.explore}>
-          Explore my{' '}
+          Посмотреть{' '}
           <a className={styles.link} href="#works">
-            Selected work
+            избранные работы
           </a>
           .
         </p>
