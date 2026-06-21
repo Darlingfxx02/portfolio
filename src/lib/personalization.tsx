@@ -24,15 +24,15 @@ export type CompanyConfig = {
   emphasis?: string[]
   /** Id мест опыта (data/experience), которые подсвечиваем как релевантные. */
   experienceHighlights?: string[]
-  /** Презентационное видео — общий дефолт или кастом под компанию. */
-  video: { url: string; duration?: string }
+  /** Презентационное видео — опционально, задаётся бэкендом под компанию.
+   *  Без него карточка видео на фронте не рендерится. */
+  video?: { url: string; duration?: string }
 }
 
-// TODO: заменить url на реальное презентационное видео (сейчас тест Big Buck Bunny).
+// Без видео по умолчанию — бэкенд может прислать его под конкретную компанию.
 export const DEFAULT_CONFIG: CompanyConfig = {
   slug: '',
   name: 'there',
-  video: { url: 'https://youtu.be/aqz-KE-bpKQ', duration: '1m 30s' },
 }
 
 /** Слаг компании из URL (?to=plata). Позже его будет проставлять админка. */
@@ -54,7 +54,6 @@ export async function loadCompanyConfig(slug: string): Promise<CompanyConfig> {
       ...DEFAULT_CONFIG,
       ...data,
       slug,
-      video: { ...DEFAULT_CONFIG.video, ...(data.video ?? {}) },
     }
   } catch {
     return { ...DEFAULT_CONFIG, slug }

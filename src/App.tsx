@@ -77,13 +77,15 @@ function App() {
       ) : (
         <div id="top" className={styles.page}>
           <Profile />
-          <div className="w-full max-w-[640px]">
-            <VideoCard
-              company={config.name}
-              href={config.video.url}
-              duration={config.video.duration}
-            />
-          </div>
+          {config.video?.url && (
+            <div className="w-full max-w-[640px]">
+              <VideoCard
+                company={config.name}
+                href={config.video.url}
+                duration={config.video.duration}
+              />
+            </div>
+          )}
           <CaseStudies />
           <Experience />
           <section id="playground" className={styles.playground}>

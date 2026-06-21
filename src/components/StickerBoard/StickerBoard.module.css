@@ -47,9 +47,21 @@
   object-fit: cover;
   border-radius: 14px;
   background: var(--surface);
+}
+
+/* Photos get a white matte frame — same look as the name-hover reveal cards. */
+.sticker[data-shadow='panel'] {
+  padding: 6px;
+  background: #ffffff;
+  border-radius: 16px;
   box-shadow: var(--shadow-panel);
 }
 
+.sticker[data-shadow='panel'] .media {
+  border-radius: 10px;
+}
+
+/* App icons stay transparent — no frame. */
 .sticker[data-shadow='alpha'] .media {
   border-radius: 0;
   background: transparent;
@@ -60,6 +72,11 @@
 
 .sticker[data-shadow='alpha'][data-dragging='true'] .media {
   filter: drop-shadow(0 22px 34px rgba(0, 0, 0, 0.24));
+}
+
+/* Circle photo → round white ring. */
+.sticker[data-shape='circle'][data-shadow='panel'] {
+  border-radius: 50%;
 }
 
 .sticker[data-shape='circle'] .media {

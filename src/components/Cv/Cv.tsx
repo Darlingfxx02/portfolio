@@ -49,19 +49,18 @@ export function Cv() {
 
   return (
     <main className={styles.page}>
-      <div className={styles.toolbar}>
-        <button type="button" className={styles.download} onClick={onDownload}>
-          <DownloadSimple size={17} weight="bold" />
-          Скачать PDF
-        </button>
-      </div>
-
       <article className={`${styles.sheet} cv-sheet`}>
         <header className={styles.head}>
-          <h1 className={styles.name}>{cv.name}</h1>
-          <p className={styles.title}>
-            {cv.title} · {cv.focus}
-          </p>
+          <div className={styles.headText}>
+            <h1 className={styles.name}>{cv.name}</h1>
+            <p className={styles.title}>
+              {cv.title} · {cv.focus}
+            </p>
+          </div>
+          <button type="button" className={styles.download} onClick={onDownload}>
+            <DownloadSimple size={17} weight="bold" />
+            Скачать PDF
+          </button>
         </header>
 
         <div className={styles.intro}>

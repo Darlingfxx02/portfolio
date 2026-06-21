@@ -8,22 +8,15 @@
   width: 100%;
   min-height: 100vh;
   padding: 40px var(--pad) 140px;
+  /* Theme-aware: matches the sheet so the document lies flat on the page
+     (seamless in light AND dark) — no floating-card edge. */
   background: var(--bg);
 }
 
-/* Toolbar floats above the sheet; it sits OUTSIDE .cv-sheet so the print
-   stylesheet hides it automatically. */
-.toolbar {
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
-  gap: 12px;
-  width: 210mm;
-  max-width: 100%;
-}
-
+/* Download CTA lives in the sheet header (right of the name); hidden in print. */
 .download {
   display: inline-flex;
+  flex: none;
   align-items: center;
   gap: 8px;
   padding: 11px 18px;
@@ -48,14 +41,15 @@
 
 /* ── The A4 sheet — always paper-white, prints 1:1 ────────────────── */
 .sheet {
-  /* Ink-on-paper tokens, scoped so the document reads as a printed CV
-     regardless of the site's dark/light theme. */
-  --cv-ink: #0b0b0c;
-  --cv-strong: rgba(0, 0, 0, 0.82);
-  --cv-mid: rgba(0, 0, 0, 0.58);
-  --cv-dim: rgba(0, 0, 0, 0.42);
-  --cv-line: rgba(0, 0, 0, 0.12);
-  --cv-fill: rgba(0, 0, 0, 0.03);
+  /* On screen the document follows the site theme (maps onto the global
+     tokens) so it lies seamlessly on the page in light AND dark. Print forces
+     real ink-on-paper — see @media print at the bottom. */
+  --cv-ink: var(--text);
+  --cv-strong: var(--text-strong);
+  --cv-mid: var(--text-mid);
+  --cv-dim: var(--text-dim);
+  --cv-line: var(--line);
+  --cv-fill: color-mix(in srgb, var(--text) 3%, transparent);
 
   /* One spacing scale drives the whole document — no ad-hoc values.
      section: gap between major blocks · label: heading → its content ·
@@ -70,10 +64,8 @@
   min-height: 297mm;
   max-width: 100%;
   padding: 16mm;
-  background: #fff;
+  background: var(--bg);
   color: var(--cv-ink);
-  border-radius: 18px;
-  box-shadow: var(--shadow-panel);
   font-family: var(--font-sf);
   font-size: 13px; /* body baseline */
   line-height: 1.5;
@@ -81,8 +73,16 @@
 
 /* ── Header band ──────────────────────────────────────────────────── */
 .head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
   padding-bottom: var(--s-section);
   border-bottom: 1px solid var(--cv-line);
+}
+
+.headText {
+  min-width: 0;
 }
 
 .name {
@@ -283,7 +283,7 @@
   width: 9px;
   height: 9px;
   border-radius: 50%;
-  background: #fff;
+  background: var(--bg);
   border: 2px solid var(--cv-ink);
   -webkit-print-color-adjust: exact;
   print-color-adjust: exact;
@@ -364,13 +364,14 @@
     display: block;
     padding: 0;
     min-height: 0;
-    background: none;
+    background: #fff;
   }
 
-  .toolbar {
+  .download {
     display: none;
   }
 
+  /* Force real ink-on-paper for the PDF regardless of the on-screen theme. */
   .sheet {
     position: static;
     width: auto;
@@ -378,5 +379,16 @@
     min-height: 0;
     margin: 0;
     padding: 0; /* @page margin (index.css) supplies the page margins */
+    background: #fff;
+    --cv-ink: #0b0b0c;
+    --cv-strong: rgba(0, 0, 0, 0.82);
+    --cv-mid: rgba(0, 0, 0, 0.58);
+    --cv-dim: rgba(0, 0, 0, 0.42);
+    --cv-line: rgba(0, 0, 0, 0.12);
+    --cv-fill: rgba(0, 0, 0, 0.03);
+  }
+
+  .entry::before {
+    background: #fff;
   }
 }
