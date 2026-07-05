@@ -11,6 +11,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@paper-design/shaders-react": "^0.0.77",
     "@phosphor-icons/react": "^2.1.10",
     "gsap": "^3.15.0",
     "party-js": "^2.2.0",

@@ -1,9 +1,83 @@
 import { useEffect, useLayoutEffect, useRef, useState, type CSSProperties } from 'react'
 import { ArrowUUpLeft, List, X } from '@phosphor-icons/react'
+import { LiquidMetal } from '@paper-design/shaders-react'
 import { MiniFolder, sections } from './folders'
 import styles from './DockBar.module.css'
 
 const CTA_HREF = 'https://t.me/darling_dsgn'
+
+type Theme = 'light' | 'dark'
+
+/**
+ * The CTA background is a liquid-metal shader instead of a flat fill. Each theme
+ * gets its own metal so the label (which stays var(--bg)) keeps its contrast:
+ * dark theme has a light/silver pill → bright metal; light theme has a dark pill
+ * → noir metal. Values adapted from the shader's Default / Noir presets.
+ */
+const METAL: Record<Theme, Record<string, number | string>> = {
+  dark: {
+    colorBack: '#b7b7bd',
+    colorTint: '#ffffff',
+    softness: 0.05,
+    repetition: 1.5,
+    shiftRed: 0.3,
+    shiftBlue: 0.3,
+    distortion: 0.1,
+    contour: 0.4,
+    angle: 90,
+    scale: 1,
+    shape: 'none',
+    // worldWidth/Height 0 → the shader fills the canvas (Backdrop mode) instead
+    // of drawing a boxed object letterboxed in the middle of the pill.
+    worldWidth: 0,
+    worldHeight: 0,
+  },
+  light: {
+    colorBack: '#0b0b0c',
+    colorTint: '#7a7a7a',
+    softness: 0.1,
+    repetition: 1.5,
+    shiftRed: 0,
+    shiftBlue: 0,
+    distortion: 0.06,
+    contour: 0.3,
+    angle: 90,
+    scale: 1,
+    shape: 'none',
+    worldWidth: 0,
+    worldHeight: 0,
+  },
+}
+
+/** Tracks `<html data-theme>`, which ThemeToggle flips imperatively. */
+function useTheme(): Theme {
+  const [theme, setTheme] = useState<Theme>(() =>
+    typeof document !== 'undefined' && document.documentElement.dataset.theme === 'light'
+      ? 'light'
+      : 'dark',
+  )
+  useEffect(() => {
+    const el = document.documentElement
+    const read = () => setTheme(el.dataset.theme === 'light' ? 'light' : 'dark')
+    read()
+    const mo = new MutationObserver(read)
+    mo.observe(el, { attributes: true, attributeFilter: ['data-theme'] })
+    return () => mo.disconnect()
+  }, [])
+  return theme
+}
+
+function usePrefersReducedMotion(): boolean {
+  const [reduce, setReduce] = useState(false)
+  useEffect(() => {
+    const mq = window.matchMedia('(prefers-reduced-motion: reduce)')
+    const on = () => setReduce(mq.matches)
+    on()
+    mq.addEventListener('change', on)
+    return () => mq.removeEventListener('change', on)
+  }, [])
+  return reduce
+}
 
 export function DockBar({
   showBack = false,
@@ -14,6 +88,8 @@ export function DockBar({
 }) {
   const [open, setOpen] = useState(false)
   const rootRef = useRef<HTMLDivElement | null>(null)
+  const theme = useTheme()
+  const reduceMotion = usePrefersReducedMotion()
 
   // The CTA morphs between "Work with me" and "Send". Keep it a single
   // persistent element and animate its width to the active label so the
@@ -112,6 +188,14 @@ export function DockBar({
           onClick={onCta}
           aria-label={onContact ? 'Send' : 'Work with me'}
         >
+          <LiquidMetal
+            className={styles.ctaShader}
+            style={{ position: 'absolute', inset: 0, width: '100%', height: '100%' }}
+            fit="contain"
+            speed={reduceMotion ? 0 : 0.8}
+            {...METAL[theme]}
+            aria-hidden
+          />
           <span
             ref={workRef}
             className={styles.ctaLabel}
