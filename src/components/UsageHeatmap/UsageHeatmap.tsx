@@ -83,6 +83,40 @@ async function loadEstimate(): Promise<EstimatePayload | null> {
   return null
 }
 
+// Module-level cache so the snapshot is fetched ONCE per session. The widget
+// unmounts when navigating to a case / selected-works page and remounts on
+// return; without this each return re-fetches and the grid pops in late. The
+// resolved value is reused synchronously, and an in-flight promise is shared so
+// concurrent mounts never double-fetch.
+let usageValue: UsagePayload | null = null
+let usagePromise: Promise<UsagePayload | null> | null = null
+let estimateValue: EstimatePayload | null = null
+let estimatePromise: Promise<EstimatePayload | null> | null = null
+
+function getUsage(): Promise<UsagePayload | null> {
+  if (usageValue) return Promise.resolve(usageValue)
+  if (!usagePromise) {
+    usagePromise = loadUsage().then((d) => {
+      if (d) usageValue = d
+      else usagePromise = null // nothing cached → allow a later retry
+      return d
+    })
+  }
+  return usagePromise
+}
+
+function getEstimate(): Promise<EstimatePayload | null> {
+  if (estimateValue) return Promise.resolve(estimateValue)
+  if (!estimatePromise) {
+    estimatePromise = loadEstimate().then((e) => {
+      if (e) estimateValue = e
+      else estimatePromise = null
+      return e
+    })
+  }
+  return estimatePromise
+}
+
 /** Monday=0 … Sunday=6 (GitHub-style week rows, Monday on top). */
 function weekdayMon(d: Date): number {
   return (d.getDay() + 6) % 7
@@ -199,8 +233,10 @@ function levelOf(value: number, thresholds: number[]): number {
 }
 
 export function UsageHeatmap() {
-  const [data, setData] = useState<UsagePayload | null>(null)
-  const [estimate, setEstimate] = useState<EstimatePayload | null>(null)
+  // Seed from the module cache so a remount (returning from a case page) renders
+  // instantly with no fetch/flash.
+  const [data, setData] = useState<UsagePayload | null>(usageValue)
+  const [estimate, setEstimate] = useState<EstimatePayload | null>(estimateValue)
   const [tip, setTip] = useState<{ text: string; x: number; y: number } | null>(null)
   // Left edge fade+blur, shown only while there's off-screen history to the
   // left (i.e. the year overflows and we're scrolled away from the start). It
@@ -213,12 +249,8 @@ export function UsageHeatmap() {
 
   useEffect(() => {
     let alive = true
-    loadUsage().then((d) => {
-      if (alive) setData(d)
-    })
-    loadEstimate().then((e) => {
-      if (alive) setEstimate(e)
-    })
+    if (!usageValue) getUsage().then((d) => alive && setData(d))
+    if (!estimateValue) getEstimate().then((e) => alive && setEstimate(e))
     return () => {
       alive = false
     }
