@@ -31,35 +31,52 @@ export function StickerBoard({ anchorId = 'playground' }: { anchorId?: string })
   const dragId = useRef<string | null>(null)
   const dragOff = useRef<Pos>({ x: 0, y: 0 })
 
-  // First paint: scatter stickers around the anchor block, but honour any
-  // positions the visitor has already dragged things to.
+  // Scatter stickers around the anchor block, honouring any positions the
+  // visitor has already dragged things to. The anchor sits at the bottom of the
+  // page, so its position only settles once images/fonts finish loading (they
+  // grow the page and push it down) — we therefore re-place on `load` and on any
+  // reflow, otherwise a baseTop measured too early strands the stickers up over
+  // the résumé.
   useLayoutEffect(() => {
     const layer = layerRef.current
     if (!layer) return
-    const layerRect = layer.getBoundingClientRect()
-    const anchor = document.getElementById(anchorId)
-    const pageW = layerRect.width
-    const baseTop = anchor
-      ? anchor.getBoundingClientRect().top - layerRect.top
-      : layer.scrollHeight - 360
-    const saved = loadSaved()
 
-    setPos(() => {
-      const next: Record<string, Pos> = {}
-      for (const s of seed) {
-        const w = s.width
-        const seeded: Pos = {
-          x: Math.max(0, Math.min(pageW - w, s.rx * (pageW - w))),
-          y: baseTop + s.ry,
+    const place = () => {
+      if (dragId.current) return // don't yank a sticker out from under a drag
+      const layerRect = layer.getBoundingClientRect()
+      const anchor = document.getElementById(anchorId)
+      const pageW = layerRect.width
+      const baseTop = anchor
+        ? anchor.getBoundingClientRect().top - layerRect.top
+        : layer.scrollHeight - 360
+      const saved = loadSaved()
+
+      setPos(() => {
+        const next: Record<string, Pos> = {}
+        for (const s of seed) {
+          const w = s.width
+          const seeded: Pos = {
+            x: Math.max(0, Math.min(pageW - w, s.rx * (pageW - w))),
+            y: baseTop + s.ry,
+          }
+          // Clamp saved x back on-screen in case the viewport shrank.
+          const save = saved[s.id]
+          next[s.id] = save
+            ? { x: Math.max(0, Math.min(pageW - w, save.x)), y: save.y }
+            : seeded
         }
-        // Clamp saved x back on-screen in case the viewport shrank.
-        const save = saved[s.id]
-        next[s.id] = save
-          ? { x: Math.max(0, Math.min(pageW - w, save.x)), y: save.y }
-          : seeded
-      }
-      return next
-    })
+        return next
+      })
+    }
+
+    place()
+    window.addEventListener('load', place)
+    const ro = new ResizeObserver(place)
+    ro.observe(document.body)
+    return () => {
+      window.removeEventListener('load', place)
+      ro.disconnect()
+    }
   }, [anchorId, seed.length])
 
   function onPointerDown(e: RPointerEvent<HTMLDivElement>, id: string) {
