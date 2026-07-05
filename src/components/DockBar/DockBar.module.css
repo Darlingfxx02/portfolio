@@ -246,17 +246,9 @@
   opacity: 0.9;
 }
 
-/* Liquid-metal shader fills the pill behind the label. Parent's overflow:hidden
-   + border-radius clips it to the rounded shape; sits below the label. */
-.ctaShader {
-  z-index: 0;
-  pointer-events: none;
-}
-
 /* Both labels stacked dead-centre; the inactive one fades + scales out. */
 .ctaLabel {
   position: absolute;
-  z-index: 1;
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
