@@ -229,8 +229,22 @@ export function UsageHeatmap() {
   useEffect(() => {
     const el = scrollRef.current
     if (!el) return
-    el.scrollLeft = el.scrollWidth
-    setLeftFade(el.scrollWidth - el.clientWidth > 4)
+    // Pin to the right edge (most recent). On mobile the scroll width isn't
+    // final on the first tick, so a single set lands short and leaves the grid
+    // showing the OLDEST weeks. Re-pin across settling signals so it reliably
+    // opens on today.
+    const pin = () => {
+      el.scrollLeft = el.scrollWidth
+      setLeftFade(el.scrollWidth - el.clientWidth > 4)
+    }
+    pin()
+    const raf = requestAnimationFrame(pin)
+    const t = window.setTimeout(pin, 150)
+    document.fonts?.ready.then(pin).catch(() => {})
+    return () => {
+      cancelAnimationFrame(raf)
+      window.clearTimeout(t)
+    }
   }, [data])
 
   const grid = useMemo(
