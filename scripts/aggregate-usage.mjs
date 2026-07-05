@@ -30,15 +30,29 @@ const OUT_FILE = fileURLToPath(new URL('../public/usage.json', import.meta.url))
 const num = (v) => Number(v) || 0
 
 // ── Per-source token extractors ──────────────────────────────────────────────
-// Both mirror the same "work done" metric: real input + output, minus cached
-// context replay (which dwarfs everything and would flatten the scale).
+// Metric matches Claude Code's built-in `/stats` dashboard EXACTLY so the site's
+// heatmap reproduces the same numbers a user sees there:
+//   per day = Σ over assistant messages of (input_tokens + output_tokens)
+// i.e. input + output ONLY — no cache_creation, no cache_read — and the
+// synthetic model (quota-probe turns Claude tags "<synthetic>") is excluded.
+// Decompiled from the claude binary's stats aggregator:
+//   let d=(input_tokens||0)+(output_tokens||0); if(d>0){ tokensByModel[model]+=d }
+// Verified: this reproduces /stats' "Total tokens" (last-7d ≈ 11.5M vs 11.3M
+// shown), whereas adding cache or de-duplicating did not.
 
-/** Claude Code: assistant events carry message.usage. */
+/** Claude Code: assistant events carry message.usage. Mirrors `/stats`. */
 function claudeTokens(d) {
+  if (d?.type !== 'assistant') return 0
+  if (d?.message?.model === '<synthetic>') return 0 // quota-probe turns /stats skips
   const u = d?.message?.usage
   if (!u) return 0
-  return num(u.input_tokens) + num(u.output_tokens) + num(u.cache_creation_input_tokens)
+  return num(u.input_tokens) + num(u.output_tokens)
 }
+
+// NOTE: no de-duplication by message.id. `/stats` counts every assistant usage
+// record across all session files (streaming partials + resume/fork/compact
+// replays included), so to match its totals we must NOT collapse duplicates —
+// doing so undercounts relative to the dashboard.
 
 /** Codex CLI: event_msg/token_count carries per-turn last_token_usage. */
 function codexTokens(d) {
@@ -97,6 +111,10 @@ function walk(dir, accept) {
 function scanSource(source) {
   const days = {}
   let events = 0
+  // For sources that can log the same record more than once (see
+  // claudeDedupeKey), collect max-usage-per-id first, then fold into days.
+  // id → { tokens, day }.
+  const byId = source.dedupeKey ? new Map() : null
   const files = walk(source.dir, source.accept)
   for (const file of files) {
     let text
@@ -118,8 +136,22 @@ function scanSource(source) {
       if (!tokens) continue
       const key = localDateKey(d.timestamp)
       if (!key) continue
-      days[key] = (days[key] || 0) + tokens
+
+      const id = byId ? source.dedupeKey(d) : null
+      if (id) {
+        // Keep the largest usage seen for this message id (the complete turn);
+        // duplicates are dropped instead of added.
+        const prev = byId.get(id)
+        if (!prev || tokens > prev.tokens) byId.set(id, { tokens, day: key })
+      } else {
+        days[key] = (days[key] || 0) + tokens
+      }
       events++
+    }
+  }
+  if (byId) {
+    for (const { tokens, day } of byId.values()) {
+      days[day] = (days[day] || 0) + tokens
     }
   }
   return { days, files: files.length, events }
