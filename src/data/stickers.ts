@@ -33,6 +33,7 @@ export const stickers: Sticker[] = [
   // they sit on top of the photo cluster.
   { id: 'claude-icon', kind: 'image', src: '/stickers/claude-icon.webp', width: 88, rotate: 4, rx: 0.78, ry: 150, shape: 'rounded', shadow: 'alpha', alt: 'Claude' },
   { id: 'codex-icon', kind: 'image', src: '/stickers/codex-icon.webp', width: 84, rotate: -6, rx: 0.88, ry: 236, shape: 'rounded', shadow: 'alpha', alt: 'Codex' },
+  { id: 'figma-icon', kind: 'image', src: '/stickers/figma-icon.webp', width: 86, rotate: 5, rx: 0.7, ry: 46, shape: 'rounded', shadow: 'alpha', alt: 'Figma' },
   // Telegram-style video circle — drop a square clip here to enable:
   // { id: 'krug', kind: 'video', src: '/stickers/krug.mp4', width: 120, rotate: -3, rx: 0.5, ry: 210, shape: 'circle' },
 ]

@@ -20,7 +20,7 @@
    desktop scatter — give the zone room so the bottom row isn't clipped. */
 @media (max-width: 560px) {
   .playground {
-    min-height: 720px;
+    min-height: 790px;
   }
 }
 
