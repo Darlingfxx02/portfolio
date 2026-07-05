@@ -38,13 +38,13 @@ export function CaseUxart() {
         {/* ──────────────────────────────────────────────────────────────── */}
         <section className="flex items-center justify-center gap-8 rounded-[24px] bg-[#45c1ff] px-8 py-12">
           <Shot
-            src="/uxart/hero-1.png"
+            src="/uxart/hero-1.webp"
             alt="Прототип Приморских бань — зал с фонтаном и фирменными слонами"
             aspect="1400 / 708"
             className="flex-1"
           />
           <Shot
-            src="/uxart/hero-2.png"
+            src="/uxart/hero-2.webp"
             alt="Прототип Приморских бань — главный экран лендинга"
             aspect="1400 / 708"
             className="flex-1"
@@ -141,19 +141,19 @@ export function CaseUxart() {
 
         <section className="flex items-center justify-center gap-8 rounded-[24px] bg-[#020202] px-16 py-8">
           <Shot
-            src="/uxart/presale1-1.png"
+            src="/uxart/presale1-1.webp"
             alt="HR-платформа Всеинструменты.ру — универсальный лендинг"
             aspect="1656 / 4096"
             className="flex-1"
           />
           <Shot
-            src="/uxart/presale1-2.png"
+            src="/uxart/presale1-2.webp"
             alt="HR-платформа Всеинструменты.ру — список и поиск вакансий"
             aspect="2460 / 4096"
             className="flex-1"
           />
           <Shot
-            src="/uxart/presale1-3.png"
+            src="/uxart/presale1-3.webp"
             alt="HR-платформа Всеинструменты.ру — карточка вакансии"
             aspect="1957 / 4096"
             className="flex-1"
@@ -315,13 +315,13 @@ export function CaseUxart() {
 
         <section className="flex flex-col gap-6 rounded-[24px] bg-[#eceff1] p-8">
           <Shot
-            src="/uxart/presale2-1.png"
+            src="/uxart/presale2-1.webp"
             alt="Приморские бани — экран с ценами и тарифами"
             aspect="2200 / 828"
             className="w-full"
           />
           <Shot
-            src="/uxart/presale2-2.png"
+            src="/uxart/presale2-2.webp"
             alt="Приморские бани — блок «Услуги комплекса»"
             aspect="2200 / 785"
             className="w-full"
@@ -363,7 +363,7 @@ export function CaseUxart() {
 
         <section className="rounded-[24px] bg-[#f7f9fb] p-8">
           <Shot
-            src="/uxart/embed.png"
+            src="/uxart/embed.webp"
             alt="Интерактивный прототип Приморских бань — карта локаций (план комплекса)"
             aspect="2200 / 1095"
             className="w-full"

@@ -24,13 +24,15 @@ export type Sticker = {
  * Positions are remembered per-visitor in localStorage once dragged.
  */
 export const stickers: Sticker[] = [
-  { id: 'device-stack', kind: 'image', src: '/stickers/device-stack.png', width: 132, rotate: -4, rx: 0.22, ry: 8, shape: 'rounded', alt: '' },
-  { id: 'hobby1', kind: 'image', src: '/about/hobby1.png', width: 138, rotate: 6, rx: 0.34, ry: 130, shape: 'rounded', alt: '' },
-  { id: 'claude-icon', kind: 'image', src: '/stickers/claude-icon.png', width: 88, rotate: 4, rx: 0.49, ry: 170, shape: 'rounded', shadow: 'alpha', alt: '' },
-  { id: 'hobby2', kind: 'image', src: '/about/hobby2.png', width: 160, rotate: -4, rx: 0.6, ry: 24, shape: 'rounded', alt: '' },
-  { id: 'cloud-terminal', kind: 'image', src: '/stickers/cloud-terminal.png', width: 98, rotate: 7, rx: 0.73, ry: 18, shape: 'rounded', shadow: 'alpha', alt: '' },
-  { id: 'self-portrait', kind: 'image', src: '/stickers/self-portrait.png', width: 146, rotate: -3, rx: 0.18, ry: 205, shape: 'rounded', alt: 'Портрет' },
-  { id: 'friends-selfie', kind: 'image', src: '/stickers/friends-selfie.png', width: 146, rotate: 5, rx: 0.41, ry: 228, shape: 'rounded', alt: '' },
+  { id: 'device-stack', kind: 'image', src: '/stickers/device-stack.webp', width: 132, rotate: -4, rx: 0.22, ry: 8, shape: 'rounded', alt: '' },
+  { id: 'hobby1', kind: 'image', src: '/about/hobby1.webp', width: 138, rotate: 6, rx: 0.34, ry: 130, shape: 'rounded', alt: '' },
+  { id: 'hobby2', kind: 'image', src: '/about/hobby2.webp', width: 160, rotate: -4, rx: 0.6, ry: 24, shape: 'rounded', alt: '' },
+  { id: 'self-portrait', kind: 'image', src: '/stickers/self-portrait.webp', width: 146, rotate: -3, rx: 0.18, ry: 205, shape: 'rounded', alt: 'Портрет' },
+  { id: 'friends-selfie', kind: 'image', src: '/stickers/friends-selfie.webp', width: 146, rotate: 5, rx: 0.41, ry: 228, shape: 'rounded', alt: '' },
+  // Real macOS app icons, extracted from Claude.app / Codex.app — paint last so
+  // they sit on top of the photo cluster.
+  { id: 'claude-icon', kind: 'image', src: '/stickers/claude-icon.webp', width: 88, rotate: 4, rx: 0.78, ry: 150, shape: 'rounded', shadow: 'alpha', alt: 'Claude' },
+  { id: 'codex-icon', kind: 'image', src: '/stickers/codex-icon.webp', width: 84, rotate: -6, rx: 0.88, ry: 236, shape: 'rounded', shadow: 'alpha', alt: 'Codex' },
   // Telegram-style video circle — drop a square clip here to enable:
   // { id: 'krug', kind: 'video', src: '/stickers/krug.mp4', width: 120, rotate: -3, rx: 0.5, ry: 210, shape: 'circle' },
 ]

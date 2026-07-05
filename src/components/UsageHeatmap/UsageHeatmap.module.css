@@ -1,0 +1,204 @@
+/* GitHub-style contribution cubes for local Claude usage. Intensity = tokens
+   per day, shaded off the brand accent (--dot) so it themes with the site. */
+
+.section {
+  /* Container width == grid width so the footer (stat + icons) lines up flush
+     with the cells' right edge: 53*10 + 52*2 = 634. */
+  --cell: 10px;
+  --gap: 2px;
+  --month-row: 16px;
+  position: relative; /* anchor for the absolutely-positioned tooltip */
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 12px;
+  width: 100%;
+  max-width: 634px;
+}
+
+.stat {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--text-faint);
+  font-size: 13px;
+  font-weight: var(--wt-regular);
+  letter-spacing: var(--tracking-body);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+/* Real Claude / Codex app icons, inline beside the stat. */
+.statIcon {
+  width: 20px;
+  height: 20px;
+  border-radius: 5px;
+  flex: none;
+  object-fit: contain;
+}
+.statIcon:first-of-type {
+  margin-left: 2px;
+}
+
+/* Grid overflows 640px → scrolls horizontally on narrow viewports. */
+.scroll {
+  width: 100%;
+  overflow-x: auto;
+  padding-bottom: 4px;
+}
+
+.body {
+  display: flex;
+  width: max-content;
+}
+
+.gridWrap {
+  display: flex;
+  flex-direction: column;
+}
+
+.months {
+  display: flex;
+  gap: var(--gap);
+  height: var(--month-row);
+}
+
+.month {
+  width: var(--cell);
+  font-size: 9px;
+  line-height: var(--month-row);
+  color: var(--text-faint);
+  white-space: nowrap;
+  overflow: visible; /* label spans several columns, GitHub-style */
+}
+
+.cols {
+  display: flex;
+  gap: var(--gap);
+}
+
+.col {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap);
+}
+
+.cell {
+  width: var(--cell);
+  height: var(--cell);
+  border-radius: 2px;
+  background: var(--fill);
+  outline: 1px solid var(--hairline);
+  outline-offset: -1px;
+}
+
+.cols .cell:hover {
+  outline-color: var(--text-mid);
+}
+
+.cell[data-level='0'] {
+  background: var(--fill);
+  outline: none;
+}
+.cell[data-level='1'] {
+  background: color-mix(in srgb, var(--dot) 30%, transparent);
+}
+.cell[data-level='2'] {
+  background: color-mix(in srgb, var(--dot) 55%, transparent);
+}
+.cell[data-level='3'] {
+  background: color-mix(in srgb, var(--dot) 78%, transparent);
+}
+.cell[data-level='4'] {
+  background: var(--dot);
+}
+
+/* Birthday cell (6 Mar) — plain white, no glow. */
+.cell[data-birthday] {
+  background: #fff;
+  outline: none;
+  box-shadow: none;
+  cursor: default;
+}
+.cols .cell[data-birthday]:hover {
+  outline: none;
+}
+
+.cellFuture {
+  width: var(--cell);
+  height: var(--cell);
+}
+
+.footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  width: 100%;
+}
+
+.legend {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
+  color: var(--text-faint);
+  letter-spacing: var(--tracking-body);
+}
+
+.legend span:first-child {
+  margin-right: 2px;
+}
+.legend span:last-child {
+  margin-left: 2px;
+}
+
+/* Disclosure line for the reconstructed estimate — honest by default, visible
+   without hovering. Swatch echoes the muted estimated cells. */
+.disclosure {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  max-width: 640px;
+  margin: 0;
+  color: var(--text-faint);
+  font-size: 11px;
+  line-height: 1.4;
+  letter-spacing: var(--tracking-body);
+}
+
+.disclosure .cell {
+  flex: none;
+}
+
+/* Custom hover tooltip — replaces the native title bubble. */
+.tooltip {
+  position: absolute;
+  transform: translate(-50%, calc(-100% - 8px));
+  padding: 5px 9px;
+  border-radius: 8px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  box-shadow: var(--shadow-dock);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  color: var(--text-strong);
+  font-size: 12px;
+  line-height: 1.2;
+  letter-spacing: var(--tracking-body);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+  pointer-events: none;
+  z-index: 10;
+}
+
+/* Caret pointing down at the hovered cell. */
+.tooltip::after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%) translateY(-1px);
+  border: 4px solid transparent;
+  border-top-color: var(--surface);
+}

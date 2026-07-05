@@ -46,13 +46,13 @@ export function CaseZinda() {
             style={{ height: 630 }}
           >
             <img
-              src="/zinda/ellipse-1.png"
+              src="/zinda/ellipse-1.webp"
               alt=""
               aria-hidden
               className="pointer-events-none absolute -inset-[30%] h-[160%] w-[160%] object-cover"
             />
             <img
-              src="/zinda/ellipse-2.png"
+              src="/zinda/ellipse-2.webp"
               alt=""
               aria-hidden
               className="pointer-events-none absolute -inset-[30%] h-[160%] w-[160%] rotate-90 object-cover"
@@ -66,7 +66,7 @@ export function CaseZinda() {
               <div className="absolute right-0 top-[105.3px] h-[47.9px] w-[1.44px] rounded-r-[0.5px] bg-[#333]" />
               <div className="absolute inset-x-[11.96px] inset-y-[10.53px] overflow-hidden rounded-[19.14px] bg-white">
                 <img
-                  src="/zinda/phone-screen.png"
+                  src="/zinda/phone-screen.webp"
                   alt="Мобильный экран Zinda"
                   className="absolute inset-0 h-full w-full object-cover"
                 />
@@ -80,12 +80,12 @@ export function CaseZinda() {
             style={{ height: 630 }}
           >
             <img
-              src="/zinda/hero-laptop.png"
+              src="/zinda/hero-laptop.webp"
               alt="Zinda на лэптопе"
               className="absolute inset-0 h-full w-full rounded-[20px] object-cover"
             />
             <img
-              src="/zinda/hero-overlay.png"
+              src="/zinda/hero-overlay.webp"
               alt=""
               aria-hidden
               className="absolute inset-0 h-full w-full rounded-[20px] object-cover"
@@ -175,7 +175,7 @@ export function CaseZinda() {
         {/* 5. Три MacBook-мокапа                                             */}
         {/* ──────────────────────────────────────────────────────────────── */}
         <section className="flex w-full items-start gap-8 rounded-[24px] bg-[#f3f3f3] px-6 py-10">
-          {["macbook-1.png", "macbook-2.png", "macbook-3.png"].map((src) => (
+          {["macbook-1.webp", "macbook-2.webp", "macbook-3.webp"].map((src) => (
             <div
               key={src}
               className="relative flex-1 aspect-[3846/2344] min-w-0"
@@ -290,14 +290,14 @@ export function CaseZinda() {
           <div className="flex w-full items-start gap-4">
             <div className="relative aspect-[1200/1396] flex-1 overflow-hidden rounded-[24px] bg-black">
               <img
-                src="/zinda/research-1.png"
+                src="/zinda/research-1.webp"
                 alt="Карта research → design — фрагмент 1"
                 className="absolute inset-0 h-full w-full object-cover"
               />
             </div>
             <div className="relative aspect-[1200/1396] flex-1 overflow-hidden rounded-[24px] bg-black">
               <img
-                src="/zinda/research-2.png"
+                src="/zinda/research-2.webp"
                 alt="Карта research → design — фрагмент 2"
                 className="absolute inset-0 h-full w-full object-cover"
               />
@@ -328,7 +328,7 @@ export function CaseZinda() {
             <div className="aspect-[773/520] flex h-full shrink-0 items-end justify-center overflow-clip rounded-[24px] bg-[#f3f3f3] px-12 pt-12">
               <div className="relative h-full min-w-0 flex-1 rounded-t-[12px] bg-black shadow-[0_0_0_8px_black,0_0_0_9px_#a1a1a1]">
                 <img
-                  src="/zinda/concept-bento-laptop.png"
+                  src="/zinda/concept-bento-laptop.webp"
                   alt="Концепт-макет десктопного интерфейса Zinda"
                   className="absolute inset-0 h-full w-full rounded-t-[12px] object-cover"
                 />
@@ -338,14 +338,14 @@ export function CaseZinda() {
             <div className="flex h-full min-w-0 flex-1 flex-col gap-4">
               <div className="flex min-h-0 flex-1 items-center justify-center overflow-clip rounded-[24px] bg-[#f3f3f3] px-5">
                 <img
-                  src="/zinda/concept-bento-channels.png"
+                  src="/zinda/concept-bento-channels.webp"
                   alt="Сетка карточек платёжных каналов"
                   className="block max-h-full w-full object-contain"
                 />
               </div>
               <div className="flex min-h-0 flex-1 items-center justify-center overflow-clip rounded-[24px] bg-[#f3f3f3] px-5 py-4">
                 <img
-                  src="/zinda/concept-bento-exchange.png"
+                  src="/zinda/concept-bento-exchange.webp"
                   alt="Виджет обмена валюты"
                   className="block max-h-full w-auto object-contain"
                 />
@@ -488,7 +488,7 @@ export function CaseZinda() {
             }}
           >
             <img
-              src="/zinda/three-variants.png"
+              src="/zinda/three-variants.webp"
               alt="Три варианта архитектуры — выбран средний"
               className="block h-full w-auto object-contain"
             />
@@ -538,14 +538,14 @@ export function CaseZinda() {
           <div className="mt-12 flex h-[480px] w-full gap-5">
             <div className="flex flex-1 items-center justify-center overflow-hidden rounded-[16px] bg-[#f3f3f3] px-10">
               <img
-                src="/zinda/tone-1.png"
+                src="/zinda/tone-1.webp"
                 alt="Скриншот — версия с акцентным тоном"
                 className="w-full rounded-[8px] object-cover"
               />
             </div>
             <div className="flex flex-1 items-center justify-center overflow-hidden rounded-[16px] bg-[#f3f3f3] px-10">
               <img
-                src="/zinda/tone-2.png"
+                src="/zinda/tone-2.webp"
                 alt="Скриншот — версия со спокойным тоном"
                 className="w-full rounded-[8px] object-cover"
               />
@@ -615,7 +615,7 @@ export function CaseZinda() {
             <div className="flex h-full w-[851px] flex-col items-center justify-end">
               <div className="relative aspect-[2880/1800] w-full rounded-t-[12px] bg-black shadow-[0_0_0_8px_black,0_0_0_9px_#a1a1a1]">
                 <img
-                  src="/zinda/main-screen.png"
+                  src="/zinda/main-screen.webp"
                   alt="Главный экран Zinda — десктоп"
                   className="absolute inset-0 h-full w-full rounded-t-[12px] object-cover"
                 />
@@ -630,7 +630,7 @@ export function CaseZinda() {
               <div className="absolute right-0 top-[105.3px] h-[47.9px] w-[1.44px] rounded-r-[0.5px] bg-[#333]" />
               <div className="absolute inset-x-[11.96px] inset-y-[10.53px] overflow-hidden rounded-[19.14px] bg-white">
                 <img
-                  src="/zinda/main-screen-phone.png"
+                  src="/zinda/main-screen-phone.webp"
                   alt="Главный экран Zinda — мобильный"
                   className="absolute inset-0 h-full w-full object-cover"
                 />

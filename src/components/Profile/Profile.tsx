@@ -1,6 +1,7 @@
 import { useState, type ReactNode } from 'react'
 import { profile } from '@/data/profile'
 import { PhotoFan, type FanPhoto } from '@/components/PhotoFan/PhotoFan'
+import { UsageHeatmap } from '@/components/UsageHeatmap/UsageHeatmap'
 import { useCompanyConfig } from '@/lib/personalization'
 import { LocalTime } from './LocalTime'
 import { CopyEmail } from './CopyEmail'
@@ -24,9 +25,9 @@ function Em({ id, children }: { id: string; children: ReactNode }) {
 
 // Reveal photos shown when hovering/focusing the name.
 const namePhotos: FanPhoto[] = [
-  { src: '/about/hobby2.png', x: 152, y: 44, rotate: 8, w: 188 },
-  { src: '/about/hobby1.png', x: 80, y: 98, rotate: -2, w: 180 },
-  { src: '/stickers/self-portrait.png', x: 0, y: 64, rotate: -9, w: 188, alt: 'Портрет' },
+  { src: '/about/hobby2.webp', x: 152, y: 44, rotate: 8, w: 188 },
+  { src: '/about/hobby1.webp', x: 80, y: 98, rotate: -2, w: 180 },
+  { src: '/stickers/self-portrait.webp', x: 0, y: 64, rotate: -9, w: 188, alt: 'Портрет' },
 ]
 
 export function Profile() {
@@ -80,15 +81,19 @@ export function Profile() {
           диалог с бизнесом и распутывание сложных ситуаций.
         </p>
         <p>
-          <Em id="design-code">Код — мой множитель</Em>: проверяю гипотезы живыми
-          прототипами, а не макетами, и держу руку на современных инструментах — под
-          задачу бизнеса соберу нужный, вплоть до собственных{' '}
+          За продуктовым мышлением стоит ежедневная практика: ритм работы с AI и
+          автоматизация процессов растут с каждым годом. Создаю собственные решения — от{' '}
           <Em id="claude-skills">
             <a className={styles.link} href={profile.links.claudeSkills} target="_blank" rel="noreferrer">
-              AI-скиллов
+              скиллов
             </a>
-          </Em>
-          .
+          </Em>{' '}
+          и плагинов до полноценных сервисов.
+        </p>
+        <UsageHeatmap />
+        <p>
+          <Em id="design-code">Использую AI для оптимизации всех возможных процессов</Em>{' '}
+          без ущерба качества — от ресёрча и прототипов до наглядной аргументации решений.
         </p>
         <p className={styles.explore}>
           Посмотреть{' '}

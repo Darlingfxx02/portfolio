@@ -36,7 +36,7 @@ export function CaseOvork() {
         {/* 02 · Hero — макеты */}
         <section className="flex w-full items-center justify-center gap-[16px]">
           <HeroPhone
-            src="/ovork/hero-1.png"
+            src="/ovork/hero-1.webp"
             alt="Главный экран ОВорк с баннером ФНС"
             blobs={[
               { img: "/ovork/blob-a.svg", left: -208, top: 499, w: 450, h: 450 },
@@ -44,7 +44,7 @@ export function CaseOvork() {
             ]}
           />
           <HeroPhone
-            src="/ovork/hero-2.png"
+            src="/ovork/hero-2.webp"
             alt="Экран кошелька ОВорк со структурой баланса"
             blobs={[
               { img: "/ovork/blob-b.svg", left: -458, top: -182, w: 584, h: 450 },
@@ -52,7 +52,7 @@ export function CaseOvork() {
             ]}
           />
           <HeroPhone
-            src="/ovork/hero-3.png"
+            src="/ovork/hero-3.webp"
             alt="Уведомление о поступившем платеже в ОВорк"
             blobs={[
               { img: "/ovork/blob-a.svg", left: -225, top: 116, w: 450, h: 450 },
@@ -179,13 +179,13 @@ export function CaseOvork() {
           <div className="flex w-full items-start gap-[16px]">
             <div className="flex h-[560px] flex-1 items-center justify-center overflow-hidden rounded-[24px] bg-[#f4f4f4] p-[24px]">
               <Phone
-                src="/ovork/tile07-1.png"
+                src="/ovork/tile07-1.webp"
                 alt="Старый главный экран — «Три шага до отклика»"
               />
             </div>
             <div className="flex h-[560px] flex-1 items-center justify-center overflow-hidden rounded-[24px] bg-[#f4f4f4] p-[24px]">
               <Phone
-                src="/ovork/hero-1.png"
+                src="/ovork/hero-1.webp"
                 alt="Новый главный экран с баннером ФНС в шапке"
               />
             </div>
@@ -301,15 +301,15 @@ export function CaseOvork() {
         <section className="flex w-full flex-col items-start">
           <div className="flex h-[620px] w-full items-center justify-center gap-[64px] overflow-hidden rounded-[24px] bg-[#f4f4f4]">
             <Phone
-              src="/ovork/annul-1.png"
+              src="/ovork/annul-1.webp"
               alt="Лента операций — тап «аннулировать»"
             />
             <Phone
-              src="/ovork/annul-2.png"
+              src="/ovork/annul-2.webp"
               alt="Выбор причины аннулирования"
             />
             <Phone
-              src="/ovork/annul-3.png"
+              src="/ovork/annul-3.webp"
               alt="Подтверждение аннулирования чека"
             />
           </div>
@@ -400,10 +400,10 @@ export function CaseOvork() {
         {/* 14.1 · Главный экран */}
         <section className="flex w-full flex-col items-start">
           <Tile>
-            <Phone src="/ovork/hero-1.png" alt="Главный экран с баннером ФНС" />
-            <Phone src="/ovork/main-2.png" alt="Профиль с уведомлениями" />
+            <Phone src="/ovork/hero-1.webp" alt="Главный экран с баннером ФНС" />
+            <Phone src="/ovork/main-2.webp" alt="Профиль с уведомлениями" />
             <Phone
-              src="/ovork/main-3.png"
+              src="/ovork/main-3.webp"
               alt="Главный экран с иконкой уведомлений"
             />
           </Tile>
@@ -425,16 +425,16 @@ export function CaseOvork() {
         {/* 14.2 · Универсальный компонент уведомления */}
         <section className="flex w-full flex-col items-start">
           <Tile>
-            <Phone src="/ovork/notif-1.png" alt="Уведомление — полный режим" />
+            <Phone src="/ovork/notif-1.webp" alt="Уведомление — полный режим" />
             <Phone
-              src="/ovork/notif-2.png"
+              src="/ovork/notif-2.webp"
               alt="Уведомление — финансовый режим"
             />
             <Phone
-              src="/ovork/notif-3.png"
+              src="/ovork/notif-3.webp"
               alt="Уведомление — финансовый режим со скидкой"
             />
-            <Phone src="/ovork/notif-4.png" alt="Уведомление — сжатый режим" />
+            <Phone src="/ovork/notif-4.webp" alt="Уведомление — сжатый режим" />
           </Tile>
           <Row
             className="mt-[40px]"
@@ -460,15 +460,15 @@ export function CaseOvork() {
         <section className="flex w-full flex-col items-start">
           <Tile>
             <Phone
-              src="/ovork/balance-1.png"
+              src="/ovork/balance-1.webp"
               alt="Экран кошелька — чек формируется"
             />
             <Phone
-              src="/ovork/balance-2.png"
+              src="/ovork/balance-2.webp"
               alt="Экран кошелька — детали выплаты"
             />
             <Phone
-              src="/ovork/balance-3.png"
+              src="/ovork/balance-3.webp"
               alt="Экран кошелька — ошибка загрузки чека"
             />
           </Tile>
