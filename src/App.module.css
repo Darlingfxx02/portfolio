@@ -16,6 +16,14 @@
   min-height: 320px;
 }
 
+/* Phones fall back to a two-column sticker masonry that stacks taller than the
+   desktop scatter — give the zone room so the bottom row isn't clipped. */
+@media (max-width: 560px) {
+  .playground {
+    min-height: 720px;
+  }
+}
+
 .playgroundLabel {
   color: var(--text-faint);
   font-family: var(--font-sf);

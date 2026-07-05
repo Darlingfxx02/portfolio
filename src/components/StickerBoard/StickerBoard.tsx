@@ -8,9 +8,11 @@ import {
 import { stickers as seed } from '@/data/stickers'
 import styles from './StickerBoard.module.css'
 
-type Pos = { x: number; y: number }
+type Pos = { x: number; y: number; w?: number }
 
-const STORAGE_KEY = 'sticker-positions-v1'
+// v2: reset saved drags — v1 stored absolute positions from an older seed layout
+// that piled stickers up in one corner once the scatter changed.
+const STORAGE_KEY = 'sticker-positions-v2'
 
 function loadSaved(): Record<string, Pos> {
   try {
@@ -53,21 +55,46 @@ export function StickerBoard({ anchorId = 'playground' }: { anchorId?: string })
         ? anchor.getBoundingClientRect().top - layerRect.top
         : layer.scrollHeight - 360
       const saved = loadSaved()
+      const narrow = pageW < 560
+      const nodes = Array.from(layer.children) as HTMLElement[]
+      const clampX = (x: number, w: number) => Math.max(0, Math.min(pageW - w, x))
 
       setPos(() => {
         const next: Record<string, Pos> = {}
-        for (const s of seed) {
-          const w = s.width
-          const seeded: Pos = {
-            x: Math.max(0, Math.min(pageW - w, s.rx * (pageW - w))),
-            y: baseTop + s.ry,
+        // On phones the desktop rx/ry scatter piles the (proportionally huge)
+        // photos on top of each other. Fall back to a tidy two-column masonry,
+        // centred in each half, with shortest-column packing to balance the
+        // stacks. Start below the "Stuff I like" label so it isn't covered. On
+        // wider screens keep the freeform scatter.
+        const colH = [40, 40]
+        seed.forEach((s, i) => {
+          const w = narrow ? Math.min(s.width, Math.round(pageW * 0.42)) : s.width
+          let seeded: Pos
+          if (narrow) {
+            const node = nodes[i]
+            // Height at the mobile width: scale the measured box (circles stay
+            // square). Before images load we fall back to a square, then re-place.
+            const h =
+              s.shape === 'circle'
+                ? w
+                : node && node.offsetWidth
+                  ? Math.round(node.offsetHeight * (w / node.offsetWidth))
+                  : w
+            const col = colH[0] <= colH[1] ? 0 : 1
+            const colW = pageW / 2
+            seeded = {
+              x: clampX(Math.round(col * colW + (colW - w) / 2), w),
+              y: baseTop + colH[col],
+              w,
+            }
+            colH[col] += h + 16
+          } else {
+            seeded = { x: clampX(s.rx * (pageW - w), w), y: baseTop + s.ry, w }
           }
           // Clamp saved x back on-screen in case the viewport shrank.
           const save = saved[s.id]
-          next[s.id] = save
-            ? { x: Math.max(0, Math.min(pageW - w, save.x)), y: save.y }
-            : seeded
-        }
+          next[s.id] = save ? { x: clampX(save.x, w), y: save.y, w } : seeded
+        })
         return next
       })
     }
@@ -132,11 +159,12 @@ export function StickerBoard({ anchorId = 'playground' }: { anchorId?: string })
         const p = pos[s.id]
         if (!p) return null
         const isCircle = s.shape === 'circle'
+        const w = p.w ?? s.width
         const style: CSSProperties = {
           left: p.x,
           top: p.y,
-          width: s.width,
-          height: isCircle ? s.width : undefined,
+          width: w,
+          height: isCircle ? w : undefined,
           ['--rot' as string]: `${s.rotate}deg`,
         }
         return (
