@@ -34,9 +34,12 @@ export function StickerBoard({ anchorId = 'playground' }: { anchorId?: string })
   // Scatter stickers around the anchor block, honouring any positions the
   // visitor has already dragged things to. The anchor sits at the bottom of the
   // page, so its position only settles once images/fonts finish loading (they
-  // grow the page and push it down) — we therefore re-place on `load` and on any
-  // reflow, otherwise a baseTop measured too early strands the stickers up over
-  // the résumé.
+  // grow the page and push it down) — a baseTop measured too early strands the
+  // stickers up over the résumé. A ResizeObserver on <body> alone misses this:
+  // content images loading above the anchor reflow the page without a resize the
+  // observer reliably reports. So we re-place on every settling signal — the next
+  // frame, web-font readiness, window `load`, and a capture-phase `load` listener
+  // that catches each image finishing (load doesn't bubble, but capture sees it).
   useLayoutEffect(() => {
     const layer = layerRef.current
     if (!layer) return
@@ -70,11 +73,18 @@ export function StickerBoard({ anchorId = 'playground' }: { anchorId?: string })
     }
 
     place()
+    const raf = requestAnimationFrame(place)
+    document.fonts?.ready.then(place)
     window.addEventListener('load', place)
+    // Capture phase: `load` from <img>/<video> doesn't bubble, but it is visible
+    // on the way down — this fires as each content image settles the layout.
+    document.addEventListener('load', place, true)
     const ro = new ResizeObserver(place)
     ro.observe(document.body)
     return () => {
+      cancelAnimationFrame(raf)
       window.removeEventListener('load', place)
+      document.removeEventListener('load', place, true)
       ro.disconnect()
     }
   }, [anchorId, seed.length])

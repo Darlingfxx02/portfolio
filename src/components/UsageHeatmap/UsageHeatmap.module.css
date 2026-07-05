@@ -40,11 +40,40 @@
   margin-left: 2px;
 }
 
-/* Grid overflows 640px → scrolls horizontally on narrow viewports. */
+/* Grid overflows 640px → scrolls horizontally on narrow viewports. No
+   scrollbar: recent activity is pinned to the right edge and the left fade
+   hints there's more; whoever wants the rest just swipes. */
 .scroll {
   width: 100%;
   overflow-x: auto;
   padding-bottom: 4px;
+  scrollbar-width: none;
+}
+.scroll::-webkit-scrollbar {
+  display: none;
+}
+
+/* Left edge fade + blur over the grid — appears only when older weeks sit
+   off-screen to the left (JS toggles data-show on scroll/overflow). Height
+   tracks the grid box so it never bleeds onto the footer. */
+.leftFade {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 46px;
+  height: calc(var(--month-row) + 7 * var(--cell) + 6 * var(--gap) + 4px);
+  z-index: 5;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.28s var(--ease);
+  background: linear-gradient(to right, var(--bg) 12%, transparent);
+  backdrop-filter: blur(2.5px);
+  -webkit-backdrop-filter: blur(2.5px);
+  -webkit-mask-image: linear-gradient(to right, #000 35%, transparent);
+  mask-image: linear-gradient(to right, #000 35%, transparent);
+}
+.leftFade[data-show] {
+  opacity: 1;
 }
 
 .body {

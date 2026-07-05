@@ -202,6 +202,11 @@ export function UsageHeatmap() {
   const [data, setData] = useState<UsagePayload | null>(null)
   const [estimate, setEstimate] = useState<EstimatePayload | null>(null)
   const [tip, setTip] = useState<{ text: string; x: number; y: number } | null>(null)
+  // Left edge fade+blur, shown only while there's off-screen history to the
+  // left (i.e. the year overflows and we're scrolled away from the start). It
+  // hints "scroll for more" without a scrollbar; on desktop the grid fits, so
+  // there's no overflow and the fade never appears.
+  const [leftFade, setLeftFade] = useState(false)
   const lastPop = useRef(0)
   const scrollRef = useRef<HTMLDivElement>(null)
   const sectionRef = useRef<HTMLElement>(null)
@@ -223,7 +228,9 @@ export function UsageHeatmap() {
   // year overflows, start scrolled to the end so it's visible, not clipped off.
   useEffect(() => {
     const el = scrollRef.current
-    if (el) el.scrollLeft = el.scrollWidth
+    if (!el) return
+    el.scrollLeft = el.scrollWidth
+    setLeftFade(el.scrollWidth - el.clientWidth > 4)
   }, [data])
 
   const grid = useMemo(
@@ -283,7 +290,12 @@ export function UsageHeatmap() {
 
   return (
     <section id="usage" className={styles.section} ref={sectionRef}>
-      <div className={styles.scroll} ref={scrollRef}>
+      <div className={styles.leftFade} data-show={leftFade || undefined} aria-hidden />
+      <div
+        className={styles.scroll}
+        ref={scrollRef}
+        onScroll={(e) => setLeftFade(e.currentTarget.scrollLeft > 4)}
+      >
         <div className={styles.body}>
           <div className={styles.gridWrap}>
             <div className={styles.months}>
