@@ -1,7 +1,10 @@
 import { useEffect, useState } from 'react'
 import styles from './Profile.module.css'
 
-/** Local clock that toggles between 12-hour (am/pm) and 24-hour on click. */
+/**
+ * My clock, not the visitor's — "Сейчас у меня …" shows Moscow time regardless
+ * of where the page is opened. Toggles 12-hour (am/pm) ↔ 24-hour on click.
+ */
 export function LocalTime() {
   const [h24, setH24] = useState(false)
   const [now, setNow] = useState(() => new Date())
@@ -12,6 +15,7 @@ export function LocalTime() {
   }, [])
 
   const time = now.toLocaleTimeString(h24 ? 'ru-RU' : 'en-US', {
+    timeZone: 'Europe/Moscow',
     hour: 'numeric',
     minute: '2-digit',
     hour12: !h24,
