@@ -4,7 +4,11 @@
 // back to neutral placeholder tiles so the page never looks broken — same
 // degrade-silently posture as the usage widget and personalization.
 
-const BASE = (import.meta.env.VITE_DIRECTUS_URL ?? '').replace(/\/+$/, '')
+// Same-origin by default: the site's nginx proxies /directus/* to the Directus
+// container over the shared Docker network (see nginx.conf), so no build arg,
+// public CMS subdomain, or CORS is needed in prod. Override with
+// VITE_DIRECTUS_URL only to point at a different/absolute Directus.
+const BASE = (import.meta.env.VITE_DIRECTUS_URL ?? '/directus').replace(/\/+$/, '')
 
 export type Work = {
   id: string

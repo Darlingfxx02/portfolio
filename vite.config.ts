@@ -19,6 +19,14 @@ export default defineConfig({
         target: process.env.VITE_API_TARGET || 'http://localhost:8787',
         changeOrigin: true,
       },
+      // Dev parity for the Selected Work grid: the app calls the same-origin
+      // /directus path in prod (nginx → Directus container). Locally, forward it
+      // to the deployed Directus so the grid shows real CMS images.
+      '/directus': {
+        target: process.env.VITE_DIRECTUS_TARGET || 'https://darlingdesign.pro',
+        changeOrigin: true,
+        secure: true,
+      },
     },
   },
 })

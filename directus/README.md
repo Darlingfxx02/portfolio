@@ -42,14 +42,15 @@ next visit — pixel size drives the tile aspect ratio automatically.
 
 ## 4. Point the site at it
 
-Set the build arg on the **portfolio** Coolify resource:
+Nothing to configure — the site defaults to the same-origin `/directus` path,
+which nginx proxies to the Directus container over the shared Docker network
+(see `nginx.conf`). No public CMS subdomain, build arg, or CORS needed. Just
+redeploy the site (push to `main`). If Directus is down the grid degrades to
+neutral placeholder tiles.
 
-```
-VITE_DIRECTUS_URL=https://cms.darlingdesign.pro
-```
-
-Redeploy the site (push to `main`). Until then, or if Directus is down, the grid
-degrades to neutral placeholder tiles.
+To point at an absolute Directus instead (e.g. a public subdomain), set the
+`VITE_DIRECTUS_URL` build arg on the portfolio Coolify resource and enable CORS
+for that origin in the compose env.
 
 ## API the site calls
 

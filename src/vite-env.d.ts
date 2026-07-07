@@ -1,9 +1,9 @@
 /// <reference types="vite/client" />
 
 interface ImportMetaEnv {
-  /** Base URL of the Directus CMS, e.g. https://cms.darlingdesign.pro. Empty → the
-   *  Selected Work grid falls back to neutral placeholder tiles. Baked at build
-   *  time (Coolify build arg → Dockerfile ENV). */
+  /** Base URL of the Directus CMS. Defaults to the same-origin "/directus" proxy
+   *  when unset (see works.ts); override to point at an absolute Directus. Baked
+   *  at build time (Dockerfile ENV / optional Coolify build arg). */
   readonly VITE_DIRECTUS_URL?: string
 }
 
