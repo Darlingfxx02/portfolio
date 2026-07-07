@@ -8,7 +8,9 @@
 // container over the shared Docker network (see nginx.conf), so no build arg,
 // public CMS subdomain, or CORS is needed in prod. Override with
 // VITE_DIRECTUS_URL only to point at a different/absolute Directus.
-const BASE = (import.meta.env.VITE_DIRECTUS_URL ?? '/directus').replace(/\/+$/, '')
+// `||` (not `??`) so an EMPTY string also falls back — the Dockerfile bakes
+// VITE_DIRECTUS_URL='' when no build arg is set, which `??` would leave as ''.
+const BASE = (import.meta.env.VITE_DIRECTUS_URL || '/directus').replace(/\/+$/, '')
 
 export type Work = {
   id: string
