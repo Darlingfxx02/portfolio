@@ -1,0 +1,59 @@
+# Directus CMS + Postgres for the Selected Work grid.
+# Deploy as a SEPARATE Coolify resource (Docker Compose type) — NOT part of the
+# site's Dockerfile build. Coolify assigns the domain (cms.darlingdesign.pro) to
+# the `directus` service on port 8055 and terminates TLS at its proxy.
+#
+# Set every ${VAR} below in Coolify's Environment Variables tab (see .env.example).
+
+services:
+  database:
+    image: postgis/postgis:16-3.4-alpine
+    restart: unless-stopped
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_DATABASE}
+    healthcheck:
+      test: ['CMD', 'pg_isready', '-U', '${DB_USER}', '-d', '${DB_DATABASE}']
+      interval: 10s
+      timeout: 5s
+      retries: 6
+
+  directus:
+    image: directus/directus:11
+    restart: unless-stopped
+    depends_on:
+      database:
+        condition: service_healthy
+    volumes:
+      - uploads:/directus/uploads
+    ports:
+      - '8055:8055'
+    environment:
+      KEY: ${DIRECTUS_KEY}
+      SECRET: ${DIRECTUS_SECRET}
+
+      ADMIN_EMAIL: ${ADMIN_EMAIL}
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD}
+
+      DB_CLIENT: pg
+      DB_HOST: database
+      DB_PORT: 5432
+      DB_DATABASE: ${DB_DATABASE}
+      DB_USER: ${DB_USER}
+      DB_PASSWORD: ${DB_PASSWORD}
+
+      # Public origin of Directus itself — must match the Coolify domain.
+      PUBLIC_URL: ${PUBLIC_URL}
+
+      # Let the portfolio's browser JS call the /items API cross-origin.
+      CORS_ENABLED: 'true'
+      CORS_ORIGIN: ${CORS_ORIGIN}
+
+      WEBSOCKETS_ENABLED: 'true'
+
+volumes:
+  db-data:
+  uploads:

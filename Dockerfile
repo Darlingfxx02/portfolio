@@ -11,6 +11,11 @@ RUN npm install -g pnpm@10
 COPY package.json pnpm-lock.yaml ./
 RUN pnpm install --frozen-lockfile
 COPY . .
+# Base URL of the Directus CMS, baked into the SPA at build time. Set it as a
+# Coolify build argument; when absent the Selected Work grid shows placeholder
+# tiles instead of CMS images.
+ARG VITE_DIRECTUS_URL
+ENV VITE_DIRECTUS_URL=$VITE_DIRECTUS_URL
 RUN pnpm build
 
 # ---------- runner ----------
