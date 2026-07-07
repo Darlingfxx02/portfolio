@@ -1,4 +1,12 @@
-import { useEffect, useMemo, useRef, useState, type MouseEvent } from 'react'
+import {
+  useEffect,
+  useLayoutEffect,
+  useMemo,
+  useRef,
+  useState,
+  type CSSProperties,
+  type MouseEvent,
+} from 'react'
 import party from 'party-js'
 import styles from './UsageHeatmap.module.css'
 
@@ -238,14 +246,22 @@ export function UsageHeatmap() {
   const [data, setData] = useState<UsagePayload | null>(usageValue)
   const [estimate, setEstimate] = useState<EstimatePayload | null>(estimateValue)
   const [tip, setTip] = useState<{ text: string; x: number; y: number } | null>(null)
-  // Left edge fade+blur, shown only while there's off-screen history to the
-  // left (i.e. the year overflows and we're scrolled away from the start). It
-  // hints "scroll for more" without a scrollbar; on desktop the grid fits, so
-  // there's no overflow and the fade never appears.
+  // Horizontal correction so a tooltip near a screen edge stays on-screen: the
+  // bubble shifts inward while the caret slides back to keep pointing at the
+  // cell. Both zero until the layout effect measures the rendered bubble.
+  const [tipShift, setTipShift] = useState(0)
+  const [tipCaret, setTipCaret] = useState(0)
+  // Edge fade+blur, shown on whichever side has off-screen weeks. It hints
+  // "scroll for more" without a scrollbar. Purely overflow-driven, so it works
+  // on any viewport: a desktop window narrow enough to overflow the 634px grid
+  // gets the same treatment as mobile — left fade when history is hidden to the
+  // left, right fade when recent days are hidden to the right.
   const [leftFade, setLeftFade] = useState(false)
+  const [rightFade, setRightFade] = useState(false)
   const lastPop = useRef(0)
   const scrollRef = useRef<HTMLDivElement>(null)
   const sectionRef = useRef<HTMLElement>(null)
+  const tipRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     let alive = true
@@ -265,19 +281,54 @@ export function UsageHeatmap() {
     // final on the first tick, so a single set lands short and leaves the grid
     // showing the OLDEST weeks. Re-pin across settling signals so it reliably
     // opens on today.
+    // Toggle each edge fade from the current scroll position: left when there
+    // are weeks hidden before the viewport, right when hidden after it.
+    const syncEdges = () => {
+      const max = el.scrollWidth - el.clientWidth
+      setLeftFade(el.scrollLeft > 4)
+      setRightFade(max - el.scrollLeft > 4)
+    }
     const pin = () => {
       el.scrollLeft = el.scrollWidth
-      setLeftFade(el.scrollWidth - el.clientWidth > 4)
+      syncEdges()
     }
     pin()
     const raf = requestAnimationFrame(pin)
     const t = window.setTimeout(pin, 150)
     document.fonts?.ready.then(pin).catch(() => {})
+    // Desktop window resize can flip the grid between fits / overflows without a
+    // remount. Re-sync the fades (respecting the user's scroll, so no re-pin).
+    const ro = new ResizeObserver(syncEdges)
+    ro.observe(el)
     return () => {
       cancelAnimationFrame(raf)
       window.clearTimeout(t)
+      ro.disconnect()
     }
   }, [data])
+
+  // Keep the tooltip inside the viewport. tip.x is the cell centre (section
+  // coords); measure the rendered bubble and, if either edge would clip past
+  // the screen, shift the bubble in and slide the caret out by the opposite
+  // amount so it still points at the cell. Runs before paint → no flash.
+  useLayoutEffect(() => {
+    const el = tipRef.current
+    const host = sectionRef.current
+    if (!tip || !el || !host) return
+    const w = el.offsetWidth
+    const half = w / 2
+    const pad = 8 // min gap from either screen edge
+    const centerVp = host.getBoundingClientRect().left + tip.x
+    const min = pad + half
+    const max = window.innerWidth - pad - half
+    // Bubble wider than the viewport → just centre it.
+    const target = min > max ? window.innerWidth / 2 : Math.min(Math.max(centerVp, min), max)
+    const shift = target - centerVp
+    setTipShift(shift)
+    // Caret follows the cell (−shift) but never past the bubble's rounded ends.
+    const caretPad = 10
+    setTipCaret(Math.min(Math.max(-shift, -(half - caretPad)), half - caretPad))
+  }, [tip])
 
   const grid = useMemo(
     () => (data ? buildGrid(data.days, estimate?.days ?? {}) : null),
@@ -337,10 +388,16 @@ export function UsageHeatmap() {
   return (
     <section id="usage" className={styles.section} ref={sectionRef}>
       <div className={styles.leftFade} data-show={leftFade || undefined} aria-hidden />
+      <div className={styles.rightFade} data-show={rightFade || undefined} aria-hidden />
       <div
         className={styles.scroll}
         ref={scrollRef}
-        onScroll={(e) => setLeftFade(e.currentTarget.scrollLeft > 4)}
+        onScroll={(e) => {
+          const el = e.currentTarget
+          const max = el.scrollWidth - el.clientWidth
+          setLeftFade(el.scrollLeft > 4)
+          setRightFade(max - el.scrollLeft > 4)
+        }}
       >
         <div className={styles.body}>
           <div className={styles.gridWrap}>
@@ -378,8 +435,16 @@ export function UsageHeatmap() {
 
       {tip && (
         <div
+          ref={tipRef}
           className={styles.tooltip}
-          style={{ left: tip.x, top: tip.y }}
+          style={
+            {
+              left: tip.x,
+              top: tip.y,
+              '--shift': `${tipShift}px`,
+              '--caret': `${tipCaret}px`,
+            } as CSSProperties
+          }
           role="tooltip"
         >
           {tip.text}
