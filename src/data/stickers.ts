@@ -27,7 +27,7 @@ export const stickers: Sticker[] = [
   { id: 'device-stack', kind: 'image', src: '/stickers/device-stack.webp', width: 132, rotate: -4, rx: 0.22, ry: 8, shape: 'rounded', alt: '' },
   { id: 'hobby1', kind: 'image', src: '/about/hobby1.webp', width: 138, rotate: 6, rx: 0.34, ry: 130, shape: 'rounded', alt: '' },
   { id: 'hobby2', kind: 'image', src: '/about/hobby2.webp', width: 160, rotate: -4, rx: 0.6, ry: 24, shape: 'rounded', alt: '' },
-  { id: 'self-portrait', kind: 'image', src: '/stickers/self-portrait.webp', width: 146, rotate: -3, rx: 0.18, ry: 205, shape: 'rounded', alt: 'Портрет' },
+  { id: 'self-portrait', kind: 'image', src: '/stickers/self-portrait.webp', width: 146, rotate: -3, rx: 0.18, ry: 205, shape: 'rounded', alt: 'Portrait' },
   { id: 'friends-selfie', kind: 'image', src: '/stickers/friends-selfie.webp', width: 146, rotate: 5, rx: 0.41, ry: 228, shape: 'rounded', alt: '' },
   // Real macOS app icons, extracted from Claude.app / Codex.app — paint last so
   // they sit on top of the photo cluster.

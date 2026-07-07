@@ -32,6 +32,27 @@
   --dock-bg: var(--surface);
   --dock-line: var(--line);
 
+  /* ── Case-study palette ─────────────────────────
+     Ported case pages were authored light (dark text on white). These tokens
+     let them flip with the site theme like everything else. :root holds the
+     DARK values (site default); [data-theme='light'] below restores the
+     original light design pixel-for-pixel. Chrome only — device/app mockups
+     inside the cases keep their own hardcoded colors. */
+  --c-page: #0c0c0e; /* case page background */
+  --c-surface: #17181b; /* raised card / photo mount (was #f3f3f3/#f4f4f4) */
+  --c-surface-2: #1f2024; /* alt surface / chip / soft mount (was #eceff1/#f7f9fb) */
+  --c-text: #e9ecee; /* primary text (was #263238/#01030f) */
+  --c-text-2: #a6b0b8; /* secondary text (was #546e7a) */
+  --c-text-3: #707a82; /* muted text (was #90a4ae/#99a6b2) */
+  --c-border: #2a2c30; /* hairline border / divider (was #eceff1/#e1e5e8) */
+  --c-invert: #202226; /* emphasis panel: CTA / quote (was #222/#263238/#1a1a1a/#333/black) */
+  --c-invert-deep: #08090a; /* deep photo mount (was #020202) */
+  --c-invert-text: #ffffff; /* text on an invert panel */
+  --c-invert-text-2: #b3bcc4; /* muted text on an invert panel (was #99a6b2/#d9e0eb) */
+  --c-indigo: #24234f; /* Zinda brand block (was #1e1d43) */
+  --c-accent: #45c1ff; /* brand blue — kept across themes */
+  --c-warm: #d1571f; /* warm accent (light keeps #b3380a) */
+
   /* ── Typography ─────────────────────────────── */
   --font-sans: 'Geist', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
   /* Body copy — SF Pro on Apple, graceful fallback elsewhere. */
@@ -89,6 +110,22 @@
      the float instead of a visible border. */
   --dock-bg: #ffffff;
   --dock-line: rgba(0, 0, 0, 0.04);
+
+  /* Case-study palette — exact original light design. */
+  --c-page: #ffffff;
+  --c-surface: #f3f3f3;
+  --c-surface-2: #eceff1;
+  --c-text: #263238;
+  --c-text-2: #546e7a;
+  --c-text-3: #90a4ae;
+  --c-border: #eceff1;
+  --c-invert: #222222;
+  --c-invert-deep: #020202;
+  --c-invert-text: #ffffff;
+  --c-invert-text-2: #d9e0eb;
+  --c-indigo: #1e1d43;
+  --c-accent: #45c1ff;
+  --c-warm: #b3380a;
   color-scheme: light;
 }
 

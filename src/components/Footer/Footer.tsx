@@ -1,15 +1,17 @@
 import { footerContent, socials } from '@/data/footer'
+import { useLang, t } from '@/lib/i18n'
 import styles from './Footer.module.css'
 
 export function Footer() {
+  const { lang } = useLang()
   return (
     <footer id="contact" className={styles.section}>
       <div className={styles.eyebrow}>
         <span className={styles.dot} />
-        <span>{footerContent.eyebrow}</span>
+        <span>{t(footerContent.eyebrow, lang)}</span>
       </div>
 
-      <h2 className={styles.title}>{footerContent.title}</h2>
+      <h2 className={styles.title}>{t(footerContent.title, lang)}</h2>
 
       <ul className={styles.socials}>
         {socials.map((s) => (

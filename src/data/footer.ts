@@ -4,6 +4,7 @@ import {
   TelegramLogo,
   type Icon as PhIcon,
 } from '@phosphor-icons/react'
+import type { Loc } from '@/lib/i18n'
 
 export type SocialLink = {
   label: string
@@ -12,8 +13,11 @@ export type SocialLink = {
 }
 
 export const footerContent = {
-  eyebrow: 'Контакты',
-  title: 'Давайте сделаем что-то крутое вместе',
+  eyebrow: { ru: 'Контакты', en: 'Contact' } as Loc,
+  title: {
+    ru: 'Давайте сделаем что-то крутое вместе',
+    en: "Let's make something great together",
+  } as Loc,
 }
 
 // Рыба — реальные ссылки подставлю позже.

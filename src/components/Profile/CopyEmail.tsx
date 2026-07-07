@@ -1,8 +1,10 @@
 import { useRef, useState, type MouseEvent } from 'react'
+import { useLang } from '@/lib/i18n'
 import styles from './Profile.module.css'
 
 /** Email link; click copies it and pops a "Скопировано" toast above the cursor. */
 export function CopyEmail({ email }: { email: string }) {
+  const { lang } = useLang()
   const [toast, setToast] = useState<{ x: number; y: number; k: number } | null>(null)
   const seq = useRef(0)
   const timer = useRef<number | undefined>(undefined)
@@ -19,7 +21,13 @@ export function CopyEmail({ email }: { email: string }) {
 
   return (
     <>
-      <button type="button" className={styles.link} data-sfx onClick={onCopy} title="Скопировать почту">
+      <button
+        type="button"
+        className={styles.link}
+        data-sfx
+        onClick={onCopy}
+        title={lang === 'ru' ? 'Скопировать почту' : 'Copy email'}
+      >
         {email}
       </button>
       {toast && (
@@ -29,7 +37,7 @@ export function CopyEmail({ email }: { email: string }) {
           style={{ left: toast.x, top: toast.y }}
           aria-hidden
         >
-          Скопировано
+          {lang === 'ru' ? 'Скопировано' : 'Copied'}
         </span>
       )}
     </>

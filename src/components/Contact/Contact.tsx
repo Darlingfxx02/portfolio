@@ -1,10 +1,12 @@
 import { useLayoutEffect, useRef, useState, type FormEvent } from 'react'
 import { socials } from '@/data/footer'
 import { contact } from '@/data/contact'
+import { useLang, t } from '@/lib/i18n'
 import styles from './Contact.module.css'
 
 /** #contact route — short warm intro, a mailto-composing form, and socials. */
 export function Contact() {
+  const { lang } = useLang()
   const [name, setName] = useState('')
   const [message, setMessage] = useState('')
   const taRef = useRef<HTMLTextAreaElement>(null)
@@ -23,7 +25,7 @@ export function Contact() {
     const body = name.trim() ? `${message}\n\n— ${name.trim()}` : message
     const url =
       `mailto:${contact.mailto}` +
-      `?subject=${encodeURIComponent(contact.subject)}` +
+      `?subject=${encodeURIComponent(t(contact.subject, lang))}` +
       `&body=${encodeURIComponent(body)}`
     window.location.href = url
   }
@@ -49,7 +51,7 @@ export function Contact() {
         </ul>
 
         <div className={styles.lead}>
-          {contact.lead.map((line) => (
+          {t(contact.lead, lang).map((line) => (
             <p key={line}>{line}</p>
           ))}
         </div>
@@ -60,8 +62,8 @@ export function Contact() {
             type="text"
             value={name}
             onChange={(e) => setName(e.target.value)}
-            placeholder={contact.namePlaceholder}
-            aria-label="Имя"
+            placeholder={t(contact.namePlaceholder, lang)}
+            aria-label={lang === 'ru' ? 'Имя' : 'Name'}
           />
           <textarea
             ref={taRef}
@@ -71,10 +73,10 @@ export function Contact() {
               setMessage(e.target.value)
               autoGrow(e.currentTarget)
             }}
-            placeholder={contact.messagePlaceholder}
+            placeholder={t(contact.messagePlaceholder, lang)}
             rows={4}
             required
-            aria-label="Сообщение"
+            aria-label={lang === 'ru' ? 'Сообщение' : 'Message'}
           />
         </form>
       </section>

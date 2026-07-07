@@ -5,6 +5,7 @@ import {
   loadYouTubeAPI,
   type YTPlayer,
 } from "@/lib/youtube";
+import { useLang } from "@/lib/i18n";
 
 export type VideoPlayerProps = {
   /** 11-символьный id YouTube-видео. */
@@ -23,6 +24,14 @@ const HIDE_DELAY = 2600;
  * Всегда тёмный — это «кинозал», тема не влияет.
  */
 export function VideoPlayer({ videoId, title, onClose }: VideoPlayerProps) {
+  const ru = useLang().lang === "ru";
+  const L = {
+    close: ru ? "Закрыть" : "Close",
+    pause: ru ? "Пауза" : "Pause",
+    play: ru ? "Воспроизвести" : "Play",
+    unmute: ru ? "Включить звук" : "Unmute",
+    mute: ru ? "Выключить звук" : "Mute",
+  };
   const hostRef = useRef<HTMLDivElement>(null);
   const playerRef = useRef<YTPlayer | null>(null);
   const rafRef = useRef<number | null>(null);
@@ -214,7 +223,7 @@ export function VideoPlayer({ videoId, title, onClose }: VideoPlayerProps) {
         {/* Transparent layer: click toggles play/pause. */}
         <button
           type="button"
-          aria-label={playing ? "Пауза" : "Воспроизвести"}
+          aria-label={playing ? L.pause : L.play}
           className="absolute inset-0 cursor-pointer"
           onClick={togglePlay}
         />
@@ -248,7 +257,7 @@ export function VideoPlayer({ videoId, title, onClose }: VideoPlayerProps) {
           <div className="flex items-center gap-4 text-white">
             <button
               type="button"
-              aria-label={playing ? "Пауза" : "Воспроизвести"}
+              aria-label={playing ? L.pause : L.play}
               onClick={togglePlay}
               className="grid place-items-center transition-opacity hover:opacity-70"
             >
@@ -260,7 +269,7 @@ export function VideoPlayer({ videoId, title, onClose }: VideoPlayerProps) {
             </button>
             <button
               type="button"
-              aria-label={muted ? "Включить звук" : "Выключить звук"}
+              aria-label={muted ? L.unmute : L.mute}
               onClick={toggleMute}
               className="grid place-items-center transition-opacity hover:opacity-70"
             >
@@ -285,7 +294,7 @@ export function VideoPlayer({ videoId, title, onClose }: VideoPlayerProps) {
         </span>
         <button
           type="button"
-          aria-label="Закрыть"
+          aria-label={L.close}
           onClick={onClose}
           className="pointer-events-auto grid size-9 place-items-center rounded-full bg-white/10 text-white transition-colors hover:bg-white/20"
         >

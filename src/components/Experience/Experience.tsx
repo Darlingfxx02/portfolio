@@ -1,8 +1,10 @@
 import { experienceHeading, experience } from '@/data/experience'
 import { useCompanyConfig } from '@/lib/personalization'
+import { useLang, t } from '@/lib/i18n'
 import styles from './Experience.module.css'
 
 export function Experience() {
+  const { lang } = useLang()
   const { experienceHighlights } = useCompanyConfig()
   const highlights = experienceHighlights ?? []
   const hasHighlights = highlights.length > 0
@@ -22,7 +24,7 @@ export function Experience() {
             >
               <div className={styles.who}>
                 <p className={styles.company}>{item.company}</p>
-                <p className={styles.role}>{item.category}</p>
+                <p className={styles.role}>{t(item.category, lang)}</p>
               </div>
               <p className={styles.period}>{item.year}</p>
             </article>

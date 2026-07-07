@@ -8,6 +8,7 @@ import { Contact } from '@/components/Contact/Contact'
 import { Cv } from '@/components/Cv/Cv'
 import { DockBar } from '@/components/DockBar/DockBar'
 import { ThemeToggle } from '@/components/ThemeToggle/ThemeToggle'
+import { LangToggle } from '@/components/LangToggle/LangToggle'
 import { ScrollBar } from '@/components/ScrollBar/ScrollBar'
 import { CaseZinda } from '@/components/cases/CaseZinda'
 import { CaseUxart } from '@/components/cases/CaseUxart'
@@ -95,6 +96,7 @@ function App() {
         </div>
       )}
       <DockBar showBack={onWorks || onCase || onContact || onCv} onContact={onContact} />
+      <LangToggle />
       <ThemeToggle />
       <ScrollBar />
     </>

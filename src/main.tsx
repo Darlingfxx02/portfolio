@@ -4,11 +4,14 @@ import './index.css'
 import './tailwind.css'
 import App from './App.tsx'
 import { PersonalizationProvider } from '@/lib/personalization'
+import { LanguageProvider } from '@/lib/i18n'
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <PersonalizationProvider>
-      <App />
-    </PersonalizationProvider>
+    <LanguageProvider>
+      <PersonalizationProvider>
+        <App />
+      </PersonalizationProvider>
+    </LanguageProvider>
   </StrictMode>,
 )

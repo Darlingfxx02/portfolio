@@ -1,6 +1,7 @@
 import { useEffect, useLayoutEffect, useRef, useState, type CSSProperties } from 'react'
 import { ArrowUUpLeft, List, X } from '@phosphor-icons/react'
 import { MiniFolder, sections } from './folders'
+import { useLang, t } from '@/lib/i18n'
 import styles from './DockBar.module.css'
 
 const CTA_HREF = 'https://t.me/darling_dsgn'
@@ -12,6 +13,7 @@ export function DockBar({
   showBack?: boolean
   onContact?: boolean
 }) {
+  const { lang } = useLang()
   const [open, setOpen] = useState(false)
   const rootRef = useRef<HTMLDivElement | null>(null)
 
@@ -86,7 +88,7 @@ export function DockBar({
                 bodyGradient={s.bodyGradient}
                 iconHoverColor={s.iconHoverColor}
               />
-              <span className={styles.folderLabel}>{s.label}</span>
+              <span className={styles.folderLabel}>{t(s.label, lang)}</span>
             </a>
           ))}
         </div>
@@ -97,7 +99,7 @@ export function DockBar({
           <button
             className={styles.back}
             type="button"
-            aria-label="Назад на главную"
+            aria-label={lang === 'ru' ? 'Назад на главную' : 'Back to home'}
             onClick={() => {
               window.location.hash = '#top'
             }}
@@ -127,7 +129,15 @@ export function DockBar({
         <button
           className={styles.burger}
           type="button"
-          aria-label={open ? 'Закрыть меню' : 'Открыть меню'}
+          aria-label={
+            open
+              ? lang === 'ru'
+                ? 'Закрыть меню'
+                : 'Close menu'
+              : lang === 'ru'
+                ? 'Открыть меню'
+                : 'Open menu'
+          }
           aria-expanded={open}
           onClick={() => setOpen((v) => !v)}
         >

@@ -6,12 +6,13 @@ import {
   type Icon as PhIcon,
 } from '@phosphor-icons/react'
 import { useId, type CSSProperties } from 'react'
+import type { Loc } from '@/lib/i18n'
 import styles from './DockBar.module.css'
 
 export type FolderBodyGradient = { from: string; to: string }
 
 export type FolderSection = {
-  label: string
+  label: Loc
   href: string
   Icon: PhIcon
   color: string
@@ -22,10 +23,10 @@ export type FolderSection = {
 }
 
 export const sections: FolderSection[] = [
-  { label: 'Главная', href: '#top', Icon: House, color: '#3b82f6' },
-  { label: 'Работы', href: '#works', Icon: ImagesSquare, color: '#3b82f6' },
-  { label: 'CV', href: '#cv', Icon: ReadCvLogo, color: '#3b82f6' },
-  { label: 'Контакты', href: '#contact', Icon: PaperPlaneTilt, color: '#3b82f6' },
+  { label: { ru: 'Главная', en: 'Home' }, href: '#top', Icon: House, color: '#3b82f6' },
+  { label: { ru: 'Работы', en: 'Work' }, href: '#works', Icon: ImagesSquare, color: '#3b82f6' },
+  { label: { ru: 'CV', en: 'CV' }, href: '#cv', Icon: ReadCvLogo, color: '#3b82f6' },
+  { label: { ru: 'Контакты', en: 'Contact' }, href: '#contact', Icon: PaperPlaneTilt, color: '#3b82f6' },
 ]
 
 const DEFAULT_GRADIENT: FolderBodyGradient = { from: '#b6dcf7', to: '#73b3e3' }

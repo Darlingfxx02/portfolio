@@ -1,7 +1,9 @@
 import type { CaseStudy } from '@/data/cases'
+import { useLang, t } from '@/lib/i18n'
 import styles from './CaseItem.module.css'
 
 export function CaseItem({ study }: { study: CaseStudy }) {
+  const { lang } = useLang()
   const open = () => {
     window.location.hash = `#case/${study.id}`
   }
@@ -20,8 +22,8 @@ export function CaseItem({ study }: { study: CaseStudy }) {
       }}
     >
       <span className={styles.name}>
-        <span className={styles.title}>{study.title}</span>
-        <span className={styles.tag}>{study.category}</span>
+        <span className={styles.title}>{t(study.title, lang)}</span>
+        <span className={styles.tag}>{t(study.category, lang)}</span>
       </span>
       <span className={styles.year}>{study.year}</span>
     </article>

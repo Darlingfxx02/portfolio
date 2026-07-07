@@ -3,6 +3,7 @@ import { profile } from '@/data/profile'
 import { PhotoFan, type FanPhoto } from '@/components/PhotoFan/PhotoFan'
 import { UsageHeatmap } from '@/components/UsageHeatmap/UsageHeatmap'
 import { useCompanyConfig } from '@/lib/personalization'
+import { useLang } from '@/lib/i18n'
 import { LocalTime } from './LocalTime'
 import { CopyEmail } from './CopyEmail'
 import styles from './Profile.module.css'
@@ -27,10 +28,12 @@ function Em({ id, children }: { id: string; children: ReactNode }) {
 const namePhotos: FanPhoto[] = [
   { src: '/about/hobby2.webp', x: 152, y: 44, rotate: 8, w: 188 },
   { src: '/about/hobby1.webp', x: 80, y: 98, rotate: -2, w: 180 },
-  { src: '/stickers/self-portrait.webp', x: 0, y: 64, rotate: -9, w: 188, alt: 'Портрет' },
+  { src: '/stickers/self-portrait.webp', x: 0, y: 64, rotate: -9, w: 188, alt: 'Portrait' },
 ]
 
 export function Profile() {
+  const { lang } = useLang()
+  const ru = lang === 'ru'
   const [revealed, setRevealed] = useState(false)
 
   return (
@@ -65,42 +68,98 @@ export function Profile() {
       </div>
 
       <div className={styles.bio}>
-        <p>
-          Сейчас у меня <LocalTime />. Превращаю размытые бизнес-задачи в продукты,
-          которыми пользуются. Ключевые направления — <Em id="domains">финтех и AI</Em>.
-        </p>
-        <p>
-          Открыт к founding / product ролям — пиши в{' '}
-          <a className={styles.link} href={profile.telegram} target="_blank" rel="noreferrer">
-            Telegram
-          </a>{' '}
-          или на <CopyEmail email={profile.email} />.
-        </p>
-        <p>
-          Сильная сторона — <Em id="product-mind">продуктовое мышление</Em>: пайплайны,
-          диалог с бизнесом и распутывание сложных ситуаций.
-        </p>
-        <p>
-          За продуктовым мышлением стоит ежедневная практика: ритм работы с AI и
-          автоматизация процессов растут с каждым годом. Создаю собственные решения — от{' '}
-          <Em id="claude-skills">
-            <a className={styles.link} href={profile.links.claudeSkills} target="_blank" rel="noreferrer">
-              скиллов
-            </a>
-          </Em>{' '}
-          и плагинов до полноценных сервисов.
-        </p>
+        {ru ? (
+          <p>
+            Сейчас у меня <LocalTime />. Превращаю размытые бизнес-задачи в продукты,
+            которыми пользуются. Ключевые направления — <Em id="domains">финтех и AI</Em>.
+          </p>
+        ) : (
+          <p>
+            Right now it’s <LocalTime /> my time. I turn fuzzy business problems into
+            products people actually use. Core focus — <Em id="domains">fintech and AI</Em>.
+          </p>
+        )}
+        {ru ? (
+          <p>
+            Открыт к founding / product ролям — пиши в{' '}
+            <a className={styles.link} href={profile.telegram} target="_blank" rel="noreferrer">
+              Telegram
+            </a>{' '}
+            или на <CopyEmail email={profile.email} />.
+          </p>
+        ) : (
+          <p>
+            Open to founding / product roles — reach me on{' '}
+            <a className={styles.link} href={profile.telegram} target="_blank" rel="noreferrer">
+              Telegram
+            </a>{' '}
+            or at <CopyEmail email={profile.email} />.
+          </p>
+        )}
+        {ru ? (
+          <p>
+            Сильная сторона — <Em id="product-mind">продуктовое мышление</Em>: пайплайны,
+            диалог с бизнесом и распутывание сложных ситуаций.
+          </p>
+        ) : (
+          <p>
+            My strength is <Em id="product-mind">product thinking</Em>: pipelines, a real
+            dialogue with business, and untangling messy situations.
+          </p>
+        )}
+        {ru ? (
+          <p>
+            За продуктовым мышлением стоит ежедневная практика: ритм работы с AI и
+            автоматизация процессов растут с каждым годом. Создаю собственные решения — от{' '}
+            <Em id="claude-skills">
+              <a className={styles.link} href={profile.links.claudeSkills} target="_blank" rel="noreferrer">
+                скиллов
+              </a>
+            </Em>{' '}
+            и плагинов до полноценных сервисов.
+          </p>
+        ) : (
+          <p>
+            Behind that product thinking is daily practice: my rhythm with AI and process
+            automation grow every year. I build my own tools — from{' '}
+            <Em id="claude-skills">
+              <a className={styles.link} href={profile.links.claudeSkills} target="_blank" rel="noreferrer">
+                skills
+              </a>
+            </Em>{' '}
+            and plugins to full-fledged services.
+          </p>
+        )}
         <UsageHeatmap />
-        <p>
-          <Em id="design-code">Использую AI для оптимизации всех возможных процессов</Em>{' '}
-          без ущерба качества — от ресёрча и прототипов до наглядной аргументации решений.
-        </p>
+        {ru ? (
+          <p>
+            <Em id="design-code">Использую AI для оптимизации всех возможных процессов</Em>{' '}
+            без ущерба качества — от ресёрча и прототипов до наглядной аргументации решений.
+          </p>
+        ) : (
+          <p>
+            <Em id="design-code">I use AI to streamline every process I can</Em> without
+            cutting quality — from research and prototypes to arguing decisions visually.
+          </p>
+        )}
         <p className={styles.explore}>
-          Посмотреть{' '}
-          <a className={styles.link} href="#works">
-            избранные работы
-          </a>
-          .
+          {ru ? (
+            <>
+              Посмотреть{' '}
+              <a className={styles.link} href="#works">
+                избранные работы
+              </a>
+              .
+            </>
+          ) : (
+            <>
+              Take a look at my{' '}
+              <a className={styles.link} href="#works">
+                selected work
+              </a>
+              .
+            </>
+          )}
         </p>
       </div>
     </section>

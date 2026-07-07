@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { useLang } from '@/lib/i18n'
 import styles from './Profile.module.css'
 
 /**
@@ -6,6 +7,7 @@ import styles from './Profile.module.css'
  * of where the page is opened. Toggles 12-hour (am/pm) ↔ 24-hour on click.
  */
 export function LocalTime() {
+  const { lang } = useLang()
   const [h24, setH24] = useState(false)
   const [now, setNow] = useState(() => new Date())
 
@@ -27,7 +29,7 @@ export function LocalTime() {
       className={styles.timeBtn}
       data-sfx
       onClick={() => setH24((v) => !v)}
-      title="Переключить 12/24-часовой формат"
+      title={lang === 'ru' ? 'Переключить 12/24-часовой формат' : 'Toggle 12/24-hour format'}
     >
       {time}
     </button>

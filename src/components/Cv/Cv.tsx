@@ -9,12 +9,23 @@ import {
 } from '@phosphor-icons/react'
 import { cv } from '@/data/cv'
 import { experience } from '@/data/experience'
+import { useLang, t } from '@/lib/i18n'
 import styles from './Cv.module.css'
 
 const CONTACT_ICONS: Record<string, PhIcon> = {
   Email: EnvelopeSimple,
   Telegram: TelegramLogo,
   GitHub: GithubLogo,
+}
+
+const CV_LABELS = {
+  download: { ru: 'Скачать PDF', en: 'Download PDF' },
+  contacts: { ru: 'Контакты', en: 'Contacts' },
+  skills: { ru: 'Навыки', en: 'Skills' },
+  about: { ru: 'О себе', en: 'About' },
+  highlights: { ru: 'Ключевые результаты', en: 'Key results' },
+  experience: { ru: 'Опыт', en: 'Experience' },
+  present: { ru: 'наст. время', en: 'present' },
 }
 
 /**
@@ -29,6 +40,7 @@ const CONTACT_ICONS: Record<string, PhIcon> = {
  * Monochrome by design — the site is strictly black/white.
  */
 export function Cv() {
+  const { lang } = useLang()
   const prevTitle = useRef('')
 
   // Suggest a tidy filename in the browser's Save-as-PDF dialog by swapping
@@ -54,19 +66,19 @@ export function Cv() {
           <div className={styles.headText}>
             <h1 className={styles.name}>{cv.name}</h1>
             <p className={styles.title}>
-              {cv.title} · {cv.focus}
+              {t(cv.title, lang)} · {t(cv.focus, lang)}
             </p>
           </div>
           <button type="button" className={styles.download} onClick={onDownload}>
             <DownloadSimple size={17} weight="bold" />
-            Скачать PDF
+            {t(CV_LABELS.download, lang)}
           </button>
         </header>
 
         <div className={styles.intro}>
           <aside className={styles.side}>
             <section className={styles.block}>
-              <h2 className={styles.blockLabel}>Контакты</h2>
+              <h2 className={styles.blockLabel}>{t(CV_LABELS.contacts, lang)}</h2>
               <ul className={styles.contacts}>
                 {cv.contacts.map((c) => {
                   const Icon = CONTACT_ICONS[c.label] ?? LinkSimple
@@ -83,13 +95,13 @@ export function Cv() {
             </section>
 
             <section className={styles.block}>
-              <h2 className={styles.blockLabel}>Навыки</h2>
+              <h2 className={styles.blockLabel}>{t(CV_LABELS.skills, lang)}</h2>
               <div className={styles.skillGroups}>
-                {cv.skills.map((s) => (
-                  <div key={s.group} className={styles.skillGroup}>
-                    <p className={styles.skillGroupLabel}>{s.group}</p>
+                {cv.skills.map((s, i) => (
+                  <div key={i} className={styles.skillGroup}>
+                    <p className={styles.skillGroupLabel}>{t(s.group, lang)}</p>
                     <div className={styles.chips}>
-                      {s.items.map((item) => (
+                      {t(s.items, lang).map((item) => (
                         <span key={item} className={styles.chip}>
                           {item}
                         </span>
@@ -103,17 +115,17 @@ export function Cv() {
 
           <div className={styles.introMain}>
             <section className={styles.block}>
-              <h2 className={styles.blockLabel}>О себе</h2>
-              <p className={styles.summary}>{cv.summary}</p>
+              <h2 className={styles.blockLabel}>{t(CV_LABELS.about, lang)}</h2>
+              <p className={styles.summary}>{t(cv.summary, lang)}</p>
             </section>
 
             <section className={`${styles.block} ${styles.statsBlock}`}>
-              <h2 className={styles.blockLabel}>Ключевые результаты</h2>
+              <h2 className={styles.blockLabel}>{t(CV_LABELS.highlights, lang)}</h2>
               <div className={styles.stats}>
-                {cv.highlights.map((h) => (
-                  <div key={h.label} className={styles.stat}>
-                    <p className={styles.statValue}>{h.value}</p>
-                    <p className={styles.statLabel}>{h.label}</p>
+                {cv.highlights.map((h, i) => (
+                  <div key={i} className={styles.stat}>
+                    <p className={styles.statValue}>{t(h.value, lang)}</p>
+                    <p className={styles.statLabel}>{t(h.label, lang)}</p>
                   </div>
                 ))}
               </div>
@@ -122,22 +134,25 @@ export function Cv() {
         </div>
 
         <section className={`${styles.block} ${styles.expBlock}`}>
-          <h2 className={styles.blockLabel}>Опыт</h2>
+          <h2 className={styles.blockLabel}>{t(CV_LABELS.experience, lang)}</h2>
           <div className={styles.timeline}>
             {experience.map((item) => {
-              const bullets = cv.achievements[item.id] ?? []
+              const entry = cv.achievements[item.id]
+              const bullets = entry ? t(entry, lang) : []
               return (
                 <article key={item.id} className={styles.entry}>
                   <div className={styles.entryHead}>
                     <p className={styles.company}>{item.company}</p>
                     <p className={styles.period}>
-                      {item.id === 'wmt' ? `${item.year} — наст. время` : item.year}
+                      {item.id === 'wmt'
+                        ? `${item.year} — ${t(CV_LABELS.present, lang)}`
+                        : item.year}
                     </p>
                   </div>
-                  <p className={styles.role}>{item.category}</p>
+                  <p className={styles.role}>{t(item.category, lang)}</p>
                   <p className={styles.desc}>
-                    {item.lead}
-                    {item.text}
+                    {t(item.lead, lang)}
+                    {t(item.text, lang)}
                   </p>
                   {bullets.length > 0 && (
                     <ul className={styles.bullets}>
