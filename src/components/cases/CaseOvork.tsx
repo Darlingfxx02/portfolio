@@ -727,22 +727,22 @@ export function CaseOvork() {
             </p>
             <div className="mt-[40px] flex flex-wrap gap-8 md:gap-[48px] whitespace-nowrap">
               <a
-                href="mailto:timi@example.ru"
+                href="mailto:ermolt2002@gmail.com"
                 className="flex flex-col gap-[8px]"
               >
                 <span className="text-[13px] font-semibold leading-none text-[color:var(--c-invert-text-2)]">
                   {ru ? "Почта" : "Email"}
                 </span>
                 <span className="text-[22px] font-semibold leading-[1.2] text-[color:var(--c-invert-text)]">
-                  timi@example.ru
+                  ermolt2002@gmail.com
                 </span>
               </a>
-              <a href="https://t.me/timi" className="flex flex-col gap-[8px]">
+              <a href="https://t.me/darling_dsgn" className="flex flex-col gap-[8px]">
                 <span className="text-[13px] font-semibold leading-none text-[color:var(--c-invert-text-2)]">
                   {ru ? "Телеграм" : "Telegram"}
                 </span>
                 <span className="text-[22px] font-semibold leading-[1.2] text-[color:var(--c-invert-text)]">
-                  @timi
+                  @darling_dsgn
                 </span>
               </a>
             </div>

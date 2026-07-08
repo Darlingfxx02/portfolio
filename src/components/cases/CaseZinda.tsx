@@ -901,25 +901,25 @@ export function CaseZinda() {
             </p>
             <div className="mt-10 flex flex-wrap items-start gap-8 md:gap-12 whitespace-nowrap">
               <a
-                href="mailto:timi@example.ru"
+                href="mailto:ermolt2002@gmail.com"
                 className="flex flex-col items-start gap-2"
               >
                 <span className="text-[13px] font-semibold leading-none text-[color:var(--c-invert-text-2)]">
                   {ru ? "Почта" : "Email"}
                 </span>
                 <span className="text-[22px] font-semibold leading-[1.2] text-[color:var(--c-invert-text)]">
-                  timi@example.ru
+                  ermolt2002@gmail.com
                 </span>
               </a>
               <a
-                href="https://t.me/timi"
+                href="https://t.me/darling_dsgn"
                 className="flex flex-col items-start gap-2"
               >
                 <span className="text-[13px] font-semibold leading-none text-[color:var(--c-invert-text-2)]">
                   {ru ? "Телеграм" : "Telegram"}
                 </span>
                 <span className="text-[22px] font-semibold leading-[1.2] text-[color:var(--c-invert-text)]">
-                  @timi
+                  @darling_dsgn
                 </span>
               </a>
             </div>
