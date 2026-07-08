@@ -55,7 +55,7 @@ export function Cv() {
 
   const onDownload = () => {
     prevTitle.current = document.title
-    document.title = `${cv.name} — CV`
+    document.title = `${t(cv.name, lang)} — CV`
     window.print()
   }
 
@@ -64,7 +64,7 @@ export function Cv() {
       <article className={`${styles.sheet} cv-sheet`}>
         <header className={styles.head}>
           <div className={styles.headText}>
-            <h1 className={styles.name}>{cv.name}</h1>
+            <h1 className={styles.name}>{t(cv.name, lang)}</h1>
             <p className={styles.title}>
               {t(cv.title, lang)} · {t(cv.focus, lang)}
             </p>

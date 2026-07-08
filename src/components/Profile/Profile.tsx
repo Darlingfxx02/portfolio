@@ -3,7 +3,7 @@ import { profile } from '@/data/profile'
 import { PhotoFan, type FanPhoto } from '@/components/PhotoFan/PhotoFan'
 import { UsageHeatmap } from '@/components/UsageHeatmap/UsageHeatmap'
 import { useCompanyConfig } from '@/lib/personalization'
-import { useLang } from '@/lib/i18n'
+import { useLang, t } from '@/lib/i18n'
 import { LocalTime } from './LocalTime'
 import { CopyEmail } from './CopyEmail'
 import styles from './Profile.module.css'
@@ -51,7 +51,7 @@ export function Profile() {
             onFocus={() => setRevealed(true)}
             onBlur={() => setRevealed(false)}
           >
-            {profile.name}
+            {t(profile.name, lang)}
           </span>
         </p>
         <p className={styles.role}>
