@@ -34,7 +34,9 @@
   top: -0.114%;
   left: 0;
   width: 100%;
-  height: 94.394%;
+  /* Overlap the video's fractional bottom edge so GPU compositing cannot
+     leave a one-pixel seam between the fade and the black background. */
+  height: calc(94.394% + 2px);
   pointer-events: none;
   background: linear-gradient(
     180deg,
@@ -120,9 +122,13 @@
     font-size: 18px;
   }
 
-  .video,
-  .videoGradients {
+  .video {
     top: 0;
     height: 100%;
+  }
+
+  .videoGradients {
+    top: 0;
+    height: calc(100% + 2px);
   }
 }
