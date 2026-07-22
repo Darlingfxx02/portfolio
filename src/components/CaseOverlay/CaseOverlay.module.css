@@ -3,13 +3,14 @@
   z-index: 1000;
   inset: 0;
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: center;
   width: 100%;
   min-height: 100dvh;
-  overflow: hidden;
+  overflow-x: hidden;
+  overflow-y: auto;
   overscroll-behavior: contain;
-  padding: 40px 100px 84px;
+  padding: 88px clamp(20px, 7vw, 120px) 140px;
   background: #000;
   color: #fff;
   font-family: var(--font-sf);
@@ -17,18 +18,18 @@
 }
 
 .cards {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  align-items: start;
-  gap: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 120px;
   width: 100%;
+  max-width: 640px;
 }
 
 .card {
   display: flex;
   min-width: 0;
   flex-direction: column;
-  gap: 20px;
+  gap: 28px;
   color: #fff;
   opacity: 0;
   transform: translateY(24px) scale(0.985);
@@ -39,7 +40,7 @@
 .cover {
   display: block;
   width: 100%;
-  aspect-ratio: 16 / 9;
+  aspect-ratio: 640 / 403;
   overflow: hidden;
   border-radius: 12px;
   background: #acacac;
@@ -51,33 +52,80 @@
   object-fit: cover;
 }
 
-.title {
-  align-self: flex-start;
-  max-width: 100%;
-  overflow: hidden;
-  padding-bottom: 6px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-  color: #fff;
-  font-size: 16px;
-  font-weight: var(--wt-regular);
-  line-height: normal;
-  letter-spacing: -0.04em;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+.copy {
+  display: flex;
+  width: min(100%, 640px);
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 16px;
 }
 
-.details {
+.heading {
   display: flex;
-  flex: none;
   align-items: center;
-  align-self: stretch;
-  justify-content: space-between;
-  gap: 16px;
-  color: rgba(255, 255, 255, 0.4);
-  font-size: 14px;
-  line-height: normal;
-  letter-spacing: -0.04em;
-  white-space: nowrap;
+  gap: 10px;
+}
+
+.marker {
+  position: relative;
+  display: block;
+  width: 20px;
+  height: 20px;
+  flex: none;
+  overflow: hidden;
+  border-radius: 6px;
+  background: linear-gradient(145deg, #6976ff, #1029c4);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.18);
+}
+
+.marker::after {
+  position: absolute;
+  inset: 6px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.92);
+  content: '';
+}
+
+.card[data-case='ovork'] .marker {
+  background: linear-gradient(145deg, #ff705c, #a91531);
+}
+
+.card[data-case='zinda'] .marker {
+  background: linear-gradient(145deg, #a96fff, #5930c8);
+}
+
+.card[data-case='uxart'] .marker {
+  background: linear-gradient(145deg, #f5f5f5, #737373);
+}
+
+.title {
+  color: #fff;
+  font-size: 20px;
+  font-weight: var(--wt-medium);
+  line-height: 1.25;
+  letter-spacing: -0.025em;
+}
+
+.description {
+  color: rgba(255, 255, 255, 0.52);
+  font-size: 17px;
+  line-height: 1.45;
+  letter-spacing: -0.025em;
+}
+
+.openLink {
+  padding-bottom: 3px;
+  border-bottom: 1px solid currentColor;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 16px;
+  line-height: 1.25;
+  letter-spacing: -0.025em;
+  transition: color 160ms ease;
+}
+
+.card:hover .openLink,
+.card:focus-visible .openLink {
+  color: #fff;
 }
 
 @keyframes canvasIn {
@@ -98,24 +146,31 @@
 
 @media (max-width: 900px) {
   .canvas {
-    justify-content: center;
-    padding: 24px 12px 84px;
+    padding: 56px 16px 112px;
   }
 
   .cards {
-    grid-template-columns: repeat(3, minmax(min(82vw, 640px), 1fr));
-    align-items: center;
-    overflow-x: auto;
-    scroll-snap-type: x mandatory;
-    scrollbar-width: none;
-  }
-
-  .cards::-webkit-scrollbar {
-    display: none;
+    gap: 88px;
   }
 
   .card {
-    scroll-snap-align: start;
+    gap: 22px;
+  }
+
+  .copy {
+    gap: 14px;
+  }
+
+  .title {
+    font-size: 18px;
+  }
+
+  .description {
+    font-size: 16px;
+  }
+
+  .openLink {
+    font-size: 15px;
   }
 }
 

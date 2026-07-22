@@ -56,7 +56,8 @@ export function CaseOverlay({ open, onClose }: { open: boolean; onClose: () => v
       <div className={styles.cards} onMouseDown={closeFromCanvas}>
         {latestCases.map((study, index) => {
           const title = t(study.title, lang)
-          const category = t(study.category, lang).split(' · ')[0]
+          const outcome = study.outcome ? t(study.outcome, lang) : ''
+          const openLabel = lang === 'ru' ? 'Открыть кейс' : 'Open Case Study'
 
           return (
             <a
@@ -64,16 +65,13 @@ export function CaseOverlay({ open, onClose }: { open: boolean; onClose: () => v
               className={styles.card}
               href={`#case/${study.id}`}
               style={{ '--i': index } as CSSProperties}
-              aria-label={`${title} — ${category}, ${study.year}`}
+              data-case={study.id}
+              aria-label={`${title} — ${outcome}`}
               onClick={() => {
                 trackEvent('case_opened', { case_id: study.id, target: 'case_overlay' })
                 onClose()
               }}
             >
-              <span className={styles.details}>
-                <span>{category}</span>
-                <span>{study.year}</span>
-              </span>
               <span className={styles.cover}>
                 {study.image && (
                   <img
@@ -85,7 +83,16 @@ export function CaseOverlay({ open, onClose }: { open: boolean; onClose: () => v
                   />
                 )}
               </span>
-              <span className={styles.title}>{title}</span>
+              <span className={styles.copy}>
+                <span className={styles.heading}>
+                  <span className={styles.marker} aria-hidden="true" />
+                  <span className={styles.title}>{title}</span>
+                </span>
+                {outcome && <span className={styles.description}>{outcome}</span>}
+                <span className={styles.openLink}>
+                  {openLabel} <span aria-hidden="true">↗</span>
+                </span>
+              </span>
             </a>
           )
         })}

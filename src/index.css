@@ -43,7 +43,7 @@
   /* ── Case-study palette ─────────────────────────
      Dark chrome for ported case pages. Device/app mockups inside the cases
      keep their own hardcoded colors. */
-  --c-page: #0c0c0e; /* case page background */
+  --c-page: var(--bg); /* match the black portfolio header and homepage */
   --c-surface: #17181b; /* raised card / photo mount (was #f3f3f3/#f4f4f4) */
   --c-surface-2: #1f2024; /* alt surface / chip / soft mount (was #eceff1/#f7f9fb) */
   --c-text: #e9ecee; /* primary text (was #263238/#01030f) */
