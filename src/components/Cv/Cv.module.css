@@ -103,26 +103,18 @@
 /* ── Two-column intro ─────────────────────────────────────────────── */
 .intro {
   display: grid;
-  grid-template-columns: 62mm 1fr;
-  gap: 0;
+  grid-template-columns: 62mm minmax(0, 1fr);
+  gap: 12mm;
   margin-top: var(--s-section);
 }
 
-/* Left column: no fill — just a divider rule between the columns. */
-.side {
-  display: flex;
-  flex-direction: column;
-  gap: var(--s-section);
+.contactsBlock {
   padding-right: 10mm;
   border-right: 1px solid var(--cv-line);
 }
 
-.introMain {
-  display: flex;
-  flex-direction: column;
-  gap: var(--s-section);
+.aboutBlock {
   min-width: 0;
-  padding-left: 12mm;
 }
 
 /* ── One heading system ───────────────────────────────────────────── */
@@ -143,6 +135,12 @@
 
 /* Divider ("отсечка") separating the intro block from the experience. */
 .expBlock {
+  margin-top: var(--s-section);
+  padding-top: var(--s-section);
+  border-top: 1px solid var(--cv-line);
+}
+
+.projectsBlock {
   margin-top: var(--s-section);
   padding-top: var(--s-section);
   border-top: 1px solid var(--cv-line);
@@ -179,10 +177,21 @@
 }
 
 /* ── Sidebar: skills as chip groups ───────────────────────────────── */
+.skillsBlock,
+.statsBlock {
+  margin-top: var(--s-section);
+  padding-top: var(--s-section);
+  border-top: 1px solid var(--cv-line);
+}
+
 .skillGroups {
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: var(--s-group);
+}
+
+.skillGroup {
+  min-width: 0;
 }
 
 /* Level 2 — sub-label inside a section. */
@@ -220,7 +229,7 @@
 /* ── Headline metrics strip ───────────────────────────────────────── */
 .stats {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 12px;
 }
 
@@ -249,51 +258,28 @@
   line-height: 1.35;
 }
 
-/* ── Experience timeline (full width) ─────────────────────────────── */
-.timeline {
-  position: relative;
+/* ── ATS-friendly linear experience entries ───────────────────────────── */
+.entries {
   display: flex;
   flex-direction: column;
-  gap: 20px;
-  padding-left: 20px;
-}
-
-/* The vertical rail. */
-.timeline::before {
-  content: '';
-  position: absolute;
-  left: 4px;
-  top: 6px;
-  bottom: 6px;
-  width: 1px;
-  background: var(--cv-line);
+  gap: 0;
 }
 
 .entry {
-  position: relative;
   break-inside: avoid;
 }
 
-/* Node dot sitting on the rail. */
-.entry::before {
-  content: '';
-  position: absolute;
-  left: -20px;
-  top: 4px;
-  width: 9px;
-  height: 9px;
-  border-radius: 50%;
-  background: var(--bg);
-  border: 2px solid var(--cv-ink);
-  -webkit-print-color-adjust: exact;
-  print-color-adjust: exact;
+.entry + .entry {
+  margin-top: 18px;
+  padding-top: 18px;
+  border-top: 1px solid var(--cv-line);
 }
 
 .entryHead {
   display: flex;
-  justify-content: space-between;
   align-items: baseline;
-  gap: 12px;
+  gap: 10px;
+  min-width: 0;
 }
 
 .company {
@@ -303,23 +289,33 @@
   letter-spacing: var(--tracking);
 }
 
-.period {
-  font-size: 12px;
-  color: var(--cv-dim);
-  font-variant-numeric: tabular-nums;
-  white-space: nowrap;
-}
-
 .role {
-  margin-top: 3px;
   font-size: 12px;
   color: var(--cv-mid);
   font-weight: var(--wt-medium);
 }
 
-.desc {
+.meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 16px;
   margin-top: var(--s-tight);
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+}
+
+.metaRow {
+  display: flex;
+  gap: 5px;
+}
+
+.metaRow dt {
+  color: var(--cv-dim);
+}
+
+.metaRow dd {
   color: var(--cv-strong);
+  font-weight: var(--wt-medium);
 }
 
 /* Quantified achievement bullets. */
@@ -350,11 +346,97 @@
   print-color-adjust: exact;
 }
 
-/* On narrow screens let the sheet scroll horizontally rather than squish. */
+/* On narrow screens the CV keeps the same visual language but reads as a
+   single-column document instead of squeezing the A4 desktop grid. */
 @media (max-width: 840px) {
   .page {
+    align-items: stretch;
+    padding: 72px var(--pad) 150px;
+    overflow-x: hidden;
+  }
+
+  .sheet {
+    width: 100%;
+    min-height: 0;
+    padding: 0;
+    font-size: 14px;
+    line-height: 1.55;
+  }
+
+  .head {
+    flex-direction: column;
     align-items: flex-start;
-    overflow-x: auto;
+    gap: 18px;
+    padding-bottom: 22px;
+  }
+
+  .name {
+    font-size: 30px;
+    line-height: 1.05;
+  }
+
+  .title {
+    max-width: 260px;
+    line-height: 1.45;
+  }
+
+  .download {
+    align-self: flex-start;
+    padding: 10px 15px;
+    font-size: 13px;
+  }
+
+  .intro {
+    display: flex;
+    flex-direction: column;
+    gap: var(--s-section);
+  }
+
+  .contactsBlock {
+    padding-right: 0;
+    padding-bottom: var(--s-section);
+    border-right: 0;
+    border-bottom: 1px solid var(--cv-line);
+  }
+
+  .skillGroups {
+    grid-template-columns: 1fr;
+  }
+
+  .stats {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+  }
+
+  .stat {
+    padding: 12px;
+  }
+
+  .statValue {
+    font-size: 22px;
+  }
+
+  .entryHead {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 3px;
+  }
+
+}
+
+@media (min-width: 380px) and (max-width: 840px) {
+  .contacts {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px 16px;
+  }
+
+  .contacts li {
+    gap: 8px;
+  }
+
+  .chip {
+    padding: 4px 8px;
   }
 }
 
@@ -362,8 +444,20 @@
 @media print {
   .page {
     display: block;
+    position: relative;
+    isolation: isolate;
+    visibility: visible;
     padding: 0;
     min-height: 0;
+    background: #fff;
+  }
+
+  .page::before {
+    content: '';
+    position: fixed;
+    z-index: 0;
+    inset: -20mm;
+    visibility: visible;
     background: #fff;
   }
 
@@ -373,13 +467,16 @@
 
   /* Force real ink-on-paper for the PDF regardless of the on-screen theme. */
   .sheet {
-    position: static;
+    position: relative;
+    z-index: 1;
     width: auto;
     max-width: none;
     min-height: 0;
     margin: 0;
     padding: 0; /* @page margin (index.css) supplies the page margins */
     background: #fff;
+    font-size: 13px;
+    line-height: 1.5;
     --cv-ink: #0b0b0c;
     --cv-strong: rgba(0, 0, 0, 0.82);
     --cv-mid: rgba(0, 0, 0, 0.58);
@@ -388,7 +485,55 @@
     --cv-fill: rgba(0, 0, 0, 0.03);
   }
 
-  .entry::before {
-    background: #fff;
+  .sheet,
+  .sheet * {
+    font-family: Arial, Helvetica, sans-serif;
+  }
+
+  /* A4 is narrower than the screen breakpoint, but the PDF should retain the
+     compact two-column document layout instead of inheriting mobile styles. */
+  .head {
+    flex-direction: row;
+    align-items: center;
+    gap: 16px;
+    padding-bottom: var(--s-section);
+  }
+
+  .intro {
+    display: grid;
+    grid-template-columns: 62mm minmax(0, 1fr);
+    gap: 12mm;
+  }
+
+  .contactsBlock {
+    padding-right: 10mm;
+    padding-bottom: 0;
+    border-right: 1px solid var(--cv-line);
+    border-bottom: 0;
+  }
+
+  .contacts {
+    display: flex;
+    grid-template-columns: none;
+    gap: var(--s-item);
+  }
+
+  .skillGroups {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .stats {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .entryHead {
+    flex-direction: row;
+    align-items: baseline;
+    gap: 12px;
+  }
+
+  .expBlock,
+  .projectsBlock {
+    break-inside: auto;
   }
 }

@@ -1,7 +1,7 @@
 import { useLang } from '@/lib/i18n'
 import styles from './LangToggle.module.css'
 
-/** Top-left EN/RU switch. Mirrors ThemeToggle (top-right) in style. */
+/** Top-left EN/RU switch. */
 export function LangToggle() {
   const { lang, setLang } = useLang()
 

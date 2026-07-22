@@ -1,6 +1,5 @@
 import {
   EnvelopeSimple,
-  LinkedinLogo,
   TelegramLogo,
   type Icon as PhIcon,
 } from '@phosphor-icons/react'
@@ -20,9 +19,10 @@ export const footerContent = {
   } as Loc,
 }
 
-// Рыба — реальные ссылки подставлю позже.
+// Single source of truth for social/contact links (used by Footer + Contact).
+// LinkedIn is omitted until a real profile URL exists — a dead "#" link reads
+// as broken to a hiring manager. Add it back here when the URL is ready.
 export const socials: SocialLink[] = [
   { label: 'Telegram', href: 'https://t.me/darling_dsgn', Icon: TelegramLogo },
-  { label: 'LinkedIn', href: '#', Icon: LinkedinLogo },
-  { label: 'Email', href: 'mailto:hello@darling.design', Icon: EnvelopeSimple },
+  { label: 'Email', href: 'mailto:ermolt2002@gmail.com', Icon: EnvelopeSimple },
 ]

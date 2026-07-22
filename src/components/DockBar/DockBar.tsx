@@ -1,7 +1,7 @@
-import { useEffect, useLayoutEffect, useRef, useState, type CSSProperties } from 'react'
-import { ArrowUUpLeft, List, X } from '@phosphor-icons/react'
-import { MiniFolder, sections } from './folders'
-import { useLang, t } from '@/lib/i18n'
+import { useLayoutEffect, useRef, useState } from 'react'
+import { ArrowUUpLeft } from '@phosphor-icons/react'
+import { useLang } from '@/lib/i18n'
+import { trackEvent } from '@/lib/analytics'
 import styles from './DockBar.module.css'
 
 const CTA_HREF = 'https://t.me/darling_dsgn'
@@ -9,91 +9,60 @@ const CTA_HREF = 'https://t.me/darling_dsgn'
 export function DockBar({
   showBack = false,
   onContact = false,
+  onCaseStudies,
+  caseStudiesOpen = false,
 }: {
   showBack?: boolean
   onContact?: boolean
+  onCaseStudies?: () => void
+  caseStudiesOpen?: boolean
 }) {
   const { lang } = useLang()
-  const [open, setOpen] = useState(false)
-  const rootRef = useRef<HTMLDivElement | null>(null)
 
   // The CTA morphs between "Work with me" and "Send". Keep it a single
   // persistent element and animate its width to the active label so the
   // change is smooth instead of a hard swap.
   const workRef = useRef<HTMLSpanElement>(null)
   const sendRef = useRef<HTMLSpanElement>(null)
+  const casesRef = useRef<HTMLSpanElement>(null)
+  const homeRef = useRef<HTMLSpanElement>(null)
   const [ctaW, setCtaW] = useState<number | undefined>()
 
   useLayoutEffect(() => {
     const measure = () => {
-      const active = onContact ? sendRef.current : workRef.current
+      const active = onContact
+        ? sendRef.current
+        : onCaseStudies
+          ? caseStudiesOpen
+            ? homeRef.current
+            : casesRef.current
+          : workRef.current
       if (active) setCtaW(active.offsetWidth + 44) // + horizontal padding
     }
     measure()
     // Re-measure once webfonts settle so the width matches the real glyphs.
     document.fonts?.ready.then(measure).catch(() => {})
-  }, [onContact])
+  }, [caseStudiesOpen, onCaseStudies, onContact])
 
   const onCta = () => {
+    if (onCaseStudies) {
+      trackEvent(caseStudiesOpen ? 'case_overlay_closed' : 'case_overlay_opened', {
+        target: 'dock_cta',
+      })
+      onCaseStudies()
+      return
+    }
     if (onContact) {
+      trackEvent('contact_form_requested', { target: 'dock_send' })
       ;(document.getElementById('contact-form') as HTMLFormElement | null)?.requestSubmit()
     } else {
+      trackEvent('work_cta_clicked', { target: 'telegram' })
       window.open(CTA_HREF, '_blank', 'noopener,noreferrer')
     }
   }
 
-  useEffect(() => {
-    if (!open) return
-    const onDown = (e: MouseEvent) => {
-      if (!rootRef.current?.contains(e.target as Node)) setOpen(false)
-    }
-    const onKey = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') setOpen(false)
-    }
-    // Defer one tick so the opening click's own mousedown can't close it.
-    const id = window.setTimeout(() => {
-      document.addEventListener('mousedown', onDown)
-    }, 0)
-    document.addEventListener('keydown', onKey)
-    return () => {
-      window.clearTimeout(id)
-      document.removeEventListener('mousedown', onDown)
-      document.removeEventListener('keydown', onKey)
-    }
-  }, [open])
-
   return (
-    <div className={styles.wrap} ref={rootRef}>
-      <div
-        className={styles.panel}
-        role="menu"
-        aria-hidden={!open}
-        data-state={open ? 'open' : 'closed'}
-      >
-        <div className={styles.panelRow}>
-          {sections.map((s, i) => (
-            <a
-              key={s.href}
-              className={styles.folderLink}
-              href={s.href}
-              download={s.download || undefined}
-              tabIndex={open ? 0 : -1}
-              onClick={() => setOpen(false)}
-              style={{ '--i': i } as CSSProperties}
-            >
-              <MiniFolder
-                Icon={s.Icon}
-                color={s.color}
-                size={72}
-                bodyGradient={s.bodyGradient}
-                iconHoverColor={s.iconHoverColor}
-              />
-              <span className={styles.folderLabel}>{t(s.label, lang)}</span>
-            </a>
-          ))}
-        </div>
-      </div>
-
+    <div className={styles.wrap}>
       <div className={styles.dock}>
         {showBack && (
           <button
@@ -101,6 +70,7 @@ export function DockBar({
             type="button"
             aria-label={lang === 'ru' ? 'Назад на главную' : 'Back to home'}
             onClick={() => {
+              trackEvent('back_clicked', { target: 'top' })
               window.location.hash = '#top'
             }}
           >
@@ -112,38 +82,44 @@ export function DockBar({
           type="button"
           style={ctaW ? { width: ctaW } : undefined}
           onClick={onCta}
-          aria-label={onContact ? 'Send' : 'Work with me'}
+          aria-label={
+            onContact
+              ? 'Send'
+              : onCaseStudies
+                ? caseStudiesOpen
+                  ? 'Home'
+                  : 'Case studies'
+                : 'Work with me'
+          }
+          aria-expanded={onCaseStudies ? caseStudiesOpen : undefined}
+          aria-controls={onCaseStudies ? 'case-overlay' : undefined}
         >
           <span
             ref={workRef}
             className={styles.ctaLabel}
-            data-show={!onContact}
-            aria-hidden={onContact}
+            data-show={!onContact && !onCaseStudies}
+            aria-hidden={onContact || Boolean(onCaseStudies)}
           >
             Work with me
           </span>
           <span ref={sendRef} className={styles.ctaLabel} data-show={onContact} aria-hidden={!onContact}>
             Send
           </span>
-        </button>
-        <button
-          className={styles.burger}
-          type="button"
-          aria-label={
-            open
-              ? lang === 'ru'
-                ? 'Закрыть меню'
-                : 'Close menu'
-              : lang === 'ru'
-                ? 'Открыть меню'
-                : 'Open menu'
-          }
-          aria-expanded={open}
-          onClick={() => setOpen((v) => !v)}
-        >
-          <span className={styles.burgerIcon} data-state={open ? 'open' : 'closed'} aria-hidden>
-            <List size={18} weight="bold" className={styles.iconList} />
-            <X size={18} weight="bold" className={styles.iconX} />
+          <span
+            ref={casesRef}
+            className={styles.ctaLabel}
+          data-show={Boolean(onCaseStudies) && !caseStudiesOpen}
+          aria-hidden={!onCaseStudies || caseStudiesOpen}
+          >
+            Case studies
+          </span>
+          <span
+            ref={homeRef}
+            className={styles.ctaLabel}
+            data-show={caseStudiesOpen}
+            aria-hidden={!caseStudiesOpen}
+          >
+            Home
           </span>
         </button>
       </div>

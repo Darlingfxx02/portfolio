@@ -1,23 +1,47 @@
 import type { ReactNode } from "react";
 
 /**
- * Two-column case text row: section heading on the left half, body on the
- * right half (both left-aligned). Stacks to one column on narrow screens.
- * Shared across all case pages so the layout stays consistent.
+ * Shared case text layout. Use the default split layout only when the heading
+ * and body are meant to read as parallel columns; use "stack" or "center" for
+ * narrative sections where long copy needs a readable measure.
  */
 export function Row({
   heading,
   children,
   className = "",
+  bodyClassName = "",
+  headingClassName = "",
+  variant = "split",
 }: {
   heading: ReactNode;
   children: ReactNode;
   className?: string;
+  bodyClassName?: string;
+  headingClassName?: string;
+  variant?: "split" | "stack" | "center";
 }) {
+  if (variant === "center") {
+    return (
+      <div className={`case-row case-row--center ${className}`}>
+        <div className={`case-row__heading ${headingClassName}`}>{heading}</div>
+        <div className={`case-row__body ${bodyClassName}`}>{children}</div>
+      </div>
+    );
+  }
+
+  if (variant === "stack") {
+    return (
+      <div className={`case-row case-row--stack ${className}`}>
+        <div className={`case-row__heading ${headingClassName}`}>{heading}</div>
+        <div className={`case-row__body ${bodyClassName}`}>{children}</div>
+      </div>
+    );
+  }
+
   return (
-    <div className={`grid w-full grid-cols-1 gap-y-4 md:grid-cols-2 md:gap-x-16 ${className}`}>
-      <div>{heading}</div>
-      <div>{children}</div>
+    <div className={`case-row case-row--split ${className}`}>
+      <div className={`case-row__heading ${headingClassName}`}>{heading}</div>
+      <div className={`case-row__body ${bodyClassName}`}>{children}</div>
     </div>
   );
 }

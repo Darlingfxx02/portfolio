@@ -2,6 +2,7 @@ import { useLayoutEffect, useRef, useState, type FormEvent } from 'react'
 import { socials } from '@/data/footer'
 import { contact } from '@/data/contact'
 import { useLang, t } from '@/lib/i18n'
+import { trackEvent } from '@/lib/analytics'
 import styles from './Contact.module.css'
 
 /** #contact route — short warm intro, a mailto-composing form, and socials. */
@@ -22,6 +23,10 @@ export function Contact() {
 
   function onSubmit(e: FormEvent) {
     e.preventDefault()
+    trackEvent('contact_form_submitted', {
+      target: 'mailto',
+      contact_target: 'email',
+    })
     const body = name.trim() ? `${message}\n\n— ${name.trim()}` : message
     const url =
       `mailto:${contact.mailto}` +
@@ -42,6 +47,11 @@ export function Contact() {
                   className={styles.social}
                   href={s.href}
                   {...(external ? { target: '_blank', rel: 'noreferrer' } : {})}
+                  onClick={() =>
+                    trackEvent('contact_social_clicked', {
+                      contact_target: s.label.toLowerCase(),
+                    })
+                  }
                 >
                   {s.label}
                 </a>
@@ -56,7 +66,12 @@ export function Contact() {
           ))}
         </div>
 
-        <form id="contact-form" className={styles.form} onSubmit={onSubmit}>
+        <form
+          id="contact-form"
+          className={styles.form}
+          onSubmit={onSubmit}
+          data-clarity-mask="true"
+        >
           <input
             className={styles.input}
             type="text"

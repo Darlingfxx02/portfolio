@@ -3,7 +3,13 @@ import type { Loc } from '@/lib/i18n'
 export type ExperienceItem = {
   id: string
   company: string
-  year: string
+  kind: 'employment' | 'project'
+  period: {
+    start: string
+    end?: string
+    ongoing?: boolean
+    duration?: Loc
+  }
   category: Loc
   lead: Loc
   text: Loc
@@ -17,7 +23,8 @@ export const experience: ExperienceItem[] = [
   {
     id: 'wmt',
     company: 'WMT Group',
-    year: '2026',
+    kind: 'employment',
+    period: { start: '2026', ongoing: true },
     category: { ru: 'Продуктовый дизайнер · AI', en: 'Product designer · AI' },
     lead: { ru: 'Веду дизайн двух AI-продуктов.', en: 'Leading design on two AI products.' },
     text: {
@@ -28,7 +35,8 @@ export const experience: ExperienceItem[] = [
   {
     id: 'uxart',
     company: 'UXART',
-    year: '2025',
+    kind: 'employment',
+    period: { start: '2025', end: '2025' },
     category: { ru: 'UX/UI-дизайнер', en: 'UX/UI designer' },
     lead: { ru: 'Дизайн-студия из топа рейтинга Ruward.', en: 'A studio ranked among the top on Ruward.' },
     text: {
@@ -37,20 +45,42 @@ export const experience: ExperienceItem[] = [
     },
   },
   {
+    id: 'ovork',
+    company: 'OVork',
+    kind: 'project',
+    period: { start: '2025', end: '2026' },
+    category: { ru: 'Product Designer · mobile fintech', en: 'Product designer · mobile fintech' },
+    lead: { ru: 'Студийный проект для живого финтех-продукта.', en: 'A studio-side project for a live fintech product.' },
+    text: {
+      ru: ' Дорабатывал раздел кошелька под требования ФНС, выплаты и уведомления, с релизами каждые 5–10 дней.',
+      en: ' Updated the wallet section around tax-authority requirements, payouts, and notifications, with releases every 5–10 days.',
+    },
+  },
+  {
     id: 'zinda',
     company: 'Zinda',
-    year: '2025',
+    kind: 'project',
+    period: {
+      start: '2025',
+      end: '2025',
+      duration: { ru: '4 месяца', en: '4 months' },
+    },
     category: { ru: 'Продуктовый дизайнер · финтех', en: 'Product designer · fintech' },
     lead: { ru: 'Финтех-банк для бизнеса.', en: 'A fintech bank for businesses.' },
     text: {
-      ru: ' Забрал проектирование продукта на себя и провёл десктоп и мобильное приложение от концепта до релиза.',
-      en: ' Took product design end to end and carried both the desktop and mobile apps from concept to release.',
+      ru: ' Вёл концептное направление и ключевые UX-решения: multi-account архитектура, MVP-скоуп и handoff в разработку.',
+      en: ' Led the concept direction and key UX decisions: multi-account architecture, MVP scope, and engineering handoff.',
     },
   },
   {
     id: 'combogpt',
     company: 'ComboGPT',
-    year: '2024',
+    kind: 'employment',
+    period: {
+      start: '2024',
+      end: '2024',
+      duration: { ru: 'около 3 месяцев', en: 'about 3 months' },
+    },
     category: { ru: 'Продуктовый дизайнер · контракт', en: 'Product designer · contract' },
     lead: { ru: 'End-to-end дизайн AI-агрегатора с нуля.', en: 'End-to-end design of an AI aggregator from scratch.' },
     text: {

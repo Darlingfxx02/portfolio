@@ -1,5 +1,6 @@
 import { useRef, useState, type MouseEvent } from 'react'
 import { useLang } from '@/lib/i18n'
+import { trackEvent } from '@/lib/analytics'
 import styles from './Profile.module.css'
 
 /** Email link; click copies it and pops a "Скопировано" toast above the cursor. */
@@ -12,6 +13,7 @@ export function CopyEmail({ email }: { email: string }) {
   const onCopy = (e: MouseEvent<HTMLButtonElement>) => {
     const x = e.clientX
     const y = e.clientY
+    trackEvent('email_copied', { target: 'profile' })
     // Fire-and-forget — toast must not wait on (or be aborted by) the clipboard.
     navigator.clipboard?.writeText(email)?.catch(() => {})
     window.clearTimeout(timer.current)

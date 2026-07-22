@@ -1,14 +1,21 @@
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react'
 import styles from './SelectedWork.module.css'
 import { getWorks, peekWorks } from '@/lib/works'
+import { trackEvent } from '@/lib/analytics'
 
-// Fallback pool — neutral fill, only the aspect ratio (height / width) varies.
-// Used until/unless the CMS returns works (VITE_DIRECTUS_URL unset or backend
-// down). Real works carry an image `url`; placeholders don't.
-const RATIOS = [0.7, 0.85, 1, 1.2, 1.35, 1.55, 0.78, 1.1, 0.92, 1.45, 1.05, 0.82]
-
-type PoolItem = { id: string; ratio: number; url?: string }
-const PLACEHOLDER_POOL: PoolItem[] = RATIOS.map((ratio, i) => ({ id: `p${i}`, ratio }))
+// Fallback pool — used until/unless the CMS returns works (VITE_DIRECTUS_URL
+// unset or backend down). Rather than blank neutral tiles (which read as a
+// broken/empty grid), it cycles the real case covers so #works always looks
+// like a gallery, and each tile opens its case. Real CMS works carry an image
+// `url` but no `caseId`, so they render as a plain gallery.
+type PoolItem = { id: string; ratio: number; url?: string; caseId?: string }
+const CASE_FALLBACK: PoolItem[] = [
+  { id: 'uxart', url: '/cases/uxart.webp', ratio: 0.64, caseId: 'uxart' },
+  { id: 'zinda', url: '/cases/zinda.webp', ratio: 0.64, caseId: 'zinda' },
+  { id: 'ovork-1', url: '/cases/ovork-1.webp', ratio: 1.55, caseId: 'ovork' },
+  { id: 'ovork-2', url: '/cases/ovork-2.webp', ratio: 1.55, caseId: 'ovork' },
+  { id: 'ovork-3', url: '/cases/ovork-3.webp', ratio: 1.55, caseId: 'ovork' },
+]
 
 type Tile = PoolItem & { key: string }
 
@@ -27,7 +34,7 @@ export function SelectedWork() {
   // with no fetch flash.
   const [pool, setPool] = useState<PoolItem[]>(() => {
     const w = peekWorks()
-    return w && w.length ? w : PLACEHOLDER_POOL
+    return w && w.length ? w : CASE_FALLBACK
   })
 
   // Pull real works from the CMS; swap the pool in when they arrive.
@@ -43,7 +50,7 @@ export function SelectedWork() {
 
   // Keyed so a pool swap (placeholder → CMS) cleanly remounts the grid: all
   // column/height/batch state resets to a fresh seed, no manual teardown.
-  const key = pool === PLACEHOLDER_POOL ? 'placeholder' : 'cms'
+  const key = pool === CASE_FALLBACK ? 'fallback' : 'cms'
   return (
     <main className={styles.page}>
       <Grid key={key} pool={pool} />
@@ -139,10 +146,45 @@ function Grid({ pool }: { pool: PoolItem[] }) {
 }
 
 function Cell({ tile }: { tile: Tile }) {
+  const open = tile.caseId
+    ? () => {
+        trackEvent('work_tile_opened', { case_id: tile.caseId })
+        window.location.hash = `#case/${tile.caseId}`
+      }
+    : undefined
   return (
-    <div className={styles.tile} style={{ aspectRatio: `1 / ${tile.ratio}` }}>
+    <div
+      className={styles.tile}
+      style={{ aspectRatio: `1 / ${tile.ratio}` }}
+      data-clickable={open ? true : undefined}
+      role={open ? 'link' : undefined}
+      tabIndex={open ? 0 : undefined}
+      aria-label={open ? `Open ${tile.caseId} case study` : undefined}
+      onClick={open}
+      onKeyDown={
+        open
+          ? (e) => {
+              if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault()
+                open()
+              }
+            }
+          : undefined
+      }
+    >
       {tile.url && (
-        <img className={styles.img} src={tile.url} alt="" loading="lazy" decoding="async" />
+        <img
+          className={styles.img}
+          src={tile.url}
+          alt=""
+          loading="lazy"
+          decoding="async"
+          // A broken CMS asset would otherwise leave a torn-image glyph; hide it
+          // so the tile degrades to its neutral fill instead of looking broken.
+          onError={(e) => {
+            e.currentTarget.style.display = 'none'
+          }}
+        />
       )}
     </div>
   )

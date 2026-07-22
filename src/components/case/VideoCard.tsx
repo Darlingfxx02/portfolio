@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { createPortal } from "react-dom";
 import { VideoPlayer } from "./VideoPlayer";
+import { trackEvent } from "@/lib/analytics";
 import { youTubeId } from "@/lib/youtube";
 
 export type VideoCardProps = {
@@ -39,16 +40,19 @@ export function VideoCard({
 }: VideoCardProps) {
   const [open, setOpen] = useState(false);
   const videoId = youTubeId(href);
+  const onOpen = () => {
+    trackEvent(videoId ? "video_opened" : "video_external_opened", {
+      provider: videoId ? "youtube" : "external",
+    });
+    if (videoId) setOpen(true);
+    else window.open(href, "_blank", "noopener,noreferrer");
+  };
 
   return (
     <>
       <button
         type="button"
-        onClick={() =>
-          videoId
-            ? setOpen(true)
-            : window.open(href, "_blank", "noopener,noreferrer")
-        }
+        onClick={onOpen}
         className={`group relative isolate flex w-full cursor-pointer items-center gap-[6px] bg-transparent text-left ${className ?? ""}`}
       >
       {/* Тот же hover-хайлайт, что выезжает за строки кейсов (CaseStudies). */}

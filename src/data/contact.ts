@@ -14,7 +14,7 @@ export const contact = {
     ],
   } as Loc<string[]>,
   // mailto form
-  mailto: 'hello@darling.design',
+  mailto: 'ermolt2002@gmail.com',
   subject: { ru: 'Запрос с сайта darling.design', en: 'Inquiry from darling.design' } as Loc,
   namePlaceholder: { ru: 'Имя или компания', en: 'Name or company' } as Loc,
   messagePlaceholder: { ru: 'Коротко о задаче или предложении', en: 'A few words about the task or offer' } as Loc,

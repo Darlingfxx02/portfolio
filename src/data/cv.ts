@@ -8,68 +8,78 @@ import type { Loc } from '@/lib/i18n'
  * quantified `achievements` per role + headline `highlights` so the document
  * reads well to both humans and résumé-screening models.
  *
- * NOTE: numbers below are a realistic DRAFT — tune any that overstate.
+ * NOTE: keep numbers conservative and backed by visible cases or interview-ready context.
  */
 export const cv = {
   name: profile.name,
+  filename: 'Timothe_Ermolaev_Resume',
   title: { ru: 'Продуктовый дизайнер', en: 'Product designer' } as Loc,
   focus: { ru: 'Финтех и AI', en: 'Fintech and AI' } as Loc,
   summary: {
-    ru: 'Веду продукты от бизнес-задачи до релиза: разбираюсь в продуктовых пайплайнах, нахожу общий язык с бизнесом и распутываю сложные ситуации. Свободно владею современными инструментами и кодом — проверяю гипотезы живыми прототипами, а не макетами.',
-    en: 'I take products from business problem to release: I know product pipelines, speak the language of business, and untangle messy situations. Fluent with modern tools and code — I test hypotheses with live prototypes, not static mockups.',
+    ru: 'Продуктовый дизайнер с 2+ годами опыта в AI- и финтех-продуктах. Веду задачи от бизнес-проблемы и сценариев до прототипа, handoff и итерации после релиза. Использую Figma, код и AI-инструменты, чтобы быстро проверять гипотезы живыми прототипами.',
+    en: 'Product designer with 2+ years in AI and fintech. I take work from business problem and user flows to prototype, handoff, and post-release iteration. I use Figma, code, and AI tools to test hypotheses quickly with live prototypes.',
   } as Loc,
   contacts: [
     { label: 'Email', value: profile.email, href: `mailto:${profile.email}` },
     { label: 'Telegram', value: '@darling_dsgn', href: profile.telegram },
+    { label: 'Portfolio', value: 'darling.design', href: 'https://darling.design/#works' },
     { label: 'GitHub', value: 'Darlingfxx02', href: profile.links.claudeSkills },
   ],
   // Headline metrics — a scannable strip near the top of the CV.
   highlights: [
-    { value: { ru: '4', en: '4' }, label: { ru: 'продукта от концепта до релиза', en: 'products from concept to release' } },
-    { value: { ru: '100+', en: '100+' }, label: { ru: 'спроектированных экранов', en: 'screens designed' } },
-    { value: { ru: '3–4', en: '3–4' }, label: { ru: 'продукта параллельно', en: 'products in parallel' } },
+    { value: { ru: '4', en: '4' }, label: { ru: 'продукта / направления в AI и финтехе', en: 'product tracks across AI and fintech' } },
+    { value: { ru: '~100', en: '~100' }, label: { ru: 'экранов и состояний', en: 'screens and states' } },
+    { value: { ru: '3–4', en: '3–4' }, label: { ru: 'проектных потока параллельно', en: 'project streams in parallel' } },
     { value: { ru: '2+ года', en: '2+ years' }, label: { ru: 'в AI- и финтех-продуктах', en: 'in AI and fintech products' } },
   ] as { value: Loc; label: Loc }[],
   // Quantified achievement bullets per experience id (keys match experience.ts).
   achievements: {
     wmt: {
       ru: [
-        'Полностью отвечаю за дизайн-цикл обоих продуктов — от сценариев до передачи в разработку',
-        'Скорость и визуальное качество макетов потребовали усилить команду ещё одним фронтенд-разработчиком, чтобы успевать их реализовывать',
-        'Сам внедряю и оптимизирую интерфейсные процессы в продуктовых командах',
+        'Веду дизайн-цикл двух AI-продуктов — от сценариев до передачи в разработку',
+        'Помогаю команде быстрее переходить от сценариев к фронтенду через прототипы и понятный handoff',
+        'Настраиваю интерфейсные процессы внутри продуктовых команд',
       ],
       en: [
-        'Own the full design cycle for both products — from flows to developer handoff',
-        'The speed and visual quality of my mockups pushed the team to add another frontend developer just to keep up with shipping them',
-        'Introduce and optimize interface processes inside the product teams myself',
+        'Lead the design cycle for both products — from flows to developer handoff',
+        'Help the team move from scenarios to frontend faster through prototypes and clear handoff',
+        'Set up interface processes inside the product teams',
       ],
     },
     uxart: {
       ru: [
-        'Привлечён в команду как дизайнер с экспертизой в AI-приложениях — вёл внедрение новых AI-инструментов в студии',
-        'Вёл 3–4 продукта параллельно',
-        'Вместо статичных пресейл-макетов — кликабельные vibe-coded концепции продукта (1–2 экрана), доступные по ссылке без скачивания',
-        'Конверсия в контракт на ~30% выше, цикл пресейла — с ~2 недель до 3–4 дней',
+        'Вёл 3–4 проектных потока параллельно',
+        'Заменил статичные пресейл-макеты на кликабельные AI-прототипы, доступные по ссылке',
+        'После ретро и обучения команды следующий пресейл выиграли; формат AI-прототипов закрепился как стандарт студии',
       ],
       en: [
-        'Brought in as a designer with AI-app expertise — led the rollout of new AI tools across the studio',
-        'Ran 3–4 products in parallel',
-        'Replaced static presale mockups with clickable vibe-coded product concepts (1–2 screens), shareable by link with no download',
-        'Contract conversion up ~30%, presale cycle cut from ~2 weeks to 3–4 days',
+        'Ran 3–4 project streams in parallel',
+        'Replaced static presale mockups with clickable AI prototypes shareable by link',
+        'After the retro and team training, the next presale was won; AI prototypes became a studio standard',
+      ],
+    },
+    ovork: {
+      ru: [
+        'Доработал раздел кошелька под требования ФНС, сохранив релизный ритм 5–10 дней',
+        'Пересобрал уведомления в универсальный компонент с тремя режимами; компонент вошёл в дизайн-систему',
+        'По метрикам раздела после релиза: денежные обращения 41% → 19%, первый вывод 71% → 89%',
+      ],
+      en: [
+        'Updated the wallet section for tax-authority requirements while preserving the 5–10 day release cadence',
+        'Rebuilt notifications as one component with three modes; the component entered the design system',
+        'Section metrics after release: money-related tickets 41% → 19%, first-withdrawal conversion 71% → 89%',
       ],
     },
     zinda: {
       ru: [
-        'Провёл десктоп и мобильное приложение финтех-банка от концепта до релиза за ~8 месяцев',
-        'Спроектировал 40+ экранов ключевых банковских сценариев',
-        'Сократил путь открытия счёта с 9 до 5 шагов (−35% времени на сценарий)',
-        'Внедрил дизайн-систему — выпуск новых экранов ускорился на ~30%',
+        'За 4 месяца довёл концепт B2B-банка до handoff в разработку; банк позже релизнули',
+        'Спроектировал ~40 экранов и состояний ключевых банковских сценариев',
+        'Предложил многосчётную архитектуру и вынес кредитные продукты в post-MVP; вместе с дизайн-командой довёл компоненты и edge cases до production-ready уровня',
       ],
       en: [
-        'Carried a fintech bank’s desktop and mobile apps from concept to release in ~8 months',
-        'Designed 40+ screens across the core banking flows',
-        'Shortened account opening from 9 steps to 5 (−35% time on the flow)',
-        'Rolled out a design system — new screens shipped ~30% faster',
+        'Took the B2B-bank concept to engineering handoff in 4 months; the bank shipped later',
+        'Designed ~40 screens and states across the core banking flows',
+        'Proposed the multi-account architecture and moved credit products to post-MVP; worked with the design team to make components and edge cases production-ready',
       ],
     },
     combogpt: {
@@ -77,13 +87,11 @@ export const cv = {
         'End-to-end дизайн AI-агрегатора с нуля: от концепта до публичного релиза за ~3 месяца',
         'Онбординг под неподготовленную аудиторию — активация новых пользователей ~55%',
         'Переключение моделей в один клик снизило отвалы на этапе выбора модели на ~25%',
-        '4 модели (ChatGPT, Claude, Gemini, Grok) в одной подписке без VPN',
       ],
       en: [
         'End-to-end design of an AI aggregator from scratch: concept to public release in ~3 months',
         'Onboarding built for a non-technical audience — new-user activation ~55%',
         'One-click model switching cut drop-off at the model-choice step by ~25%',
-        '4 models (ChatGPT, Claude, Gemini, Grok) in one subscription with no VPN',
       ],
     },
   } as Record<string, Loc<string[]>>,
@@ -107,8 +115,8 @@ export const cv = {
     {
       group: { ru: 'Код', en: 'Code' },
       items: {
-        ru: ['Vibe-coding', 'AI-скиллы'],
-        en: ['Vibe-coding', 'AI skills'],
+        ru: ['Прототипы на коде', 'AI workflows'],
+        en: ['Code prototypes', 'AI workflows'],
       },
     },
   ] as { group: Loc; items: Loc<string[]> }[],

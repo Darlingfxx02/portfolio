@@ -11,13 +11,14 @@
   color: var(--text-dim);
   font-size: 16px;
   font-weight: var(--wt-regular);
-  letter-spacing: var(--tracking);
+  line-height: 1.2;
+  letter-spacing: -0.32px;
 }
 
 .accent {
   width: 46px;
   height: 1px;
-  background: var(--line);
+  background: rgba(255, 255, 255, 0.15);
 }
 
 .list {
@@ -28,45 +29,68 @@
 }
 
 .row {
-  display: flex;
-  align-items: flex-end;
+  display: grid;
+  grid-template-columns: 180px 260px 90px;
+  align-items: center;
   justify-content: space-between;
-  gap: 14px;
   width: 100%;
+  font-size: 16px;
+  font-weight: var(--wt-regular);
+  line-height: 1.2;
+  letter-spacing: -0.32px;
   transition: opacity 0.3s var(--ease);
 }
 
-/* Нерелевантный под выбранную компанию опыт — приглушён. */
 .dim {
   opacity: 0.32;
 }
 
-.who {
+.companyCell {
   display: flex;
-  flex-direction: column;
-  gap: 6px;
+  align-items: flex-end;
+  gap: 12px;
   min-width: 0;
 }
 
+.logo {
+  width: 32px;
+  height: 32px;
+  flex: none;
+  border-radius: 5px;
+  object-fit: contain;
+}
+
 .company {
+  min-width: 0;
   color: var(--text);
-  font-size: 16px;
-  font-weight: var(--wt-regular);
-  letter-spacing: var(--tracking);
+  white-space: nowrap;
 }
 
 .role {
   color: var(--text-dim);
-  font-size: 16px;
-  font-weight: var(--wt-regular);
-  letter-spacing: var(--tracking);
+  white-space: nowrap;
 }
 
 .period {
-  flex-shrink: 0;
   color: var(--text-dim);
-  font-size: 16px;
-  font-weight: var(--wt-regular);
-  letter-spacing: var(--tracking);
+  text-align: right;
   white-space: nowrap;
+}
+
+@media (max-width: 640px) {
+  .row {
+    grid-template-columns: minmax(130px, 1fr) auto;
+    gap: 8px 16px;
+  }
+
+  .role {
+    grid-column: 1 / -1;
+    padding-left: 44px;
+    white-space: normal;
+  }
+
+  .period {
+    grid-column: 2;
+    grid-row: 1;
+  }
 }
