@@ -61,8 +61,8 @@ export const experience: ExperienceItem[] = [
     company: 'Zinda',
     kind: 'project',
     period: {
-      start: '2025',
-      end: '2025',
+      start: '2023',
+      end: '2024',
       duration: { ru: '4 месяца', en: '4 months' },
     },
     category: { ru: 'Продуктовый дизайнер · финтех', en: 'Product designer · fintech' },

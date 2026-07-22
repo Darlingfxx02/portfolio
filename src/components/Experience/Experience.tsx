@@ -28,7 +28,7 @@ const featuredExperience: FeaturedExperience[] = [
     id: 'zinda',
     company: 'Zinda Bank',
     role: 'Founding Продуктовый дизайнер',
-    period: '2025',
+    period: '2023 — 2024',
     logo: '/company-favicons/zinda.svg',
   },
 ]
