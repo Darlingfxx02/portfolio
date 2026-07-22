@@ -16,8 +16,8 @@ export const cv = {
   title: { ru: 'Продуктовый дизайнер', en: 'Product designer' } as Loc,
   focus: { ru: 'Финтех и AI', en: 'Fintech and AI' } as Loc,
   summary: {
-    ru: 'Продуктовый дизайнер с 2+ годами опыта в AI- и финтех-продуктах. Веду задачи от бизнес-проблемы и сценариев до прототипа, handoff и итерации после релиза. Использую Figma, код и AI-инструменты, чтобы быстро проверять гипотезы живыми прототипами.',
-    en: 'Product designer with 2+ years in AI and fintech. I take work from business problem and user flows to prototype, handoff, and post-release iteration. I use Figma, code, and AI tools to test hypotheses quickly with live prototypes.',
+    ru: 'Продуктовый дизайнер с 3+ годами опыта в AI- и финтех-продуктах. Веду задачи от бизнес-проблемы и сценариев до прототипа, handoff и итерации после релиза. Использую Figma, код и AI-инструменты, чтобы быстро проверять гипотезы живыми прототипами.',
+    en: 'Product designer with 3+ years in AI and fintech. I take work from business problem and user flows to prototype, handoff, and post-release iteration. I use Figma, code, and AI tools to test hypotheses quickly with live prototypes.',
   } as Loc,
   contacts: [
     { label: 'Email', value: profile.email, href: `mailto:${profile.email}` },
@@ -30,7 +30,7 @@ export const cv = {
     { value: { ru: '4', en: '4' }, label: { ru: 'продукта / направления в AI и финтехе', en: 'product tracks across AI and fintech' } },
     { value: { ru: '~100', en: '~100' }, label: { ru: 'экранов и состояний', en: 'screens and states' } },
     { value: { ru: '3–4', en: '3–4' }, label: { ru: 'проектных потока параллельно', en: 'project streams in parallel' } },
-    { value: { ru: '2+ года', en: '2+ years' }, label: { ru: 'в AI- и финтех-продуктах', en: 'in AI and fintech products' } },
+    { value: { ru: '3+ года', en: '3+ years' }, label: { ru: 'в AI- и финтех-продуктах', en: 'in AI and fintech products' } },
   ] as { value: Loc; label: Loc }[],
   // Quantified achievement bullets per experience id (keys match experience.ts).
   achievements: {
