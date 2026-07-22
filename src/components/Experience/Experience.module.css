@@ -47,7 +47,7 @@
 
 .companyCell {
   display: flex;
-  align-items: flex-end;
+  align-items: center;
   gap: 12px;
   min-width: 0;
 }
@@ -56,7 +56,10 @@
   width: 32px;
   height: 32px;
   flex: none;
-  border-radius: 5px;
+  box-sizing: border-box;
+  padding: 7px;
+  border-radius: 8px;
+  background: #fff;
   object-fit: contain;
 }
 

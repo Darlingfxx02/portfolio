@@ -6,6 +6,7 @@ type FeaturedExperience = {
   company: string
   role: string
   period: string
+  logo: string
 }
 
 const featuredExperience: FeaturedExperience[] = [
@@ -14,18 +15,21 @@ const featuredExperience: FeaturedExperience[] = [
     company: 'WMT Group',
     role: 'Founding Продуктовый дизайнер',
     period: '2024-2026',
+    logo: '/company-favicons/wmt.svg',
   },
   {
     id: 'uxart',
     company: 'UXART',
     role: 'Senior Продуктовый дизайнер',
     period: '2025',
+    logo: '/company-favicons/uxart.ico',
   },
   {
     id: 'zinda',
     company: 'Zinda Bank',
     role: 'Founding Продуктовый дизайнер',
     period: '2023-2024',
+    logo: '/company-favicons/zinda.svg',
   },
 ]
 
@@ -49,7 +53,7 @@ export function Experience() {
               <div className={styles.companyCell}>
                 <img
                   className={styles.logo}
-                  src="/stickers/codex-icon.webp"
+                  src={item.logo}
                   alt=""
                   aria-hidden
                 />
