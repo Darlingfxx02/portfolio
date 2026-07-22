@@ -85,6 +85,11 @@
   text-align: center;
 }
 
+.introText {
+  max-width: 100%;
+  text-wrap: balance;
+}
+
 .tokenLine {
   display: flex;
   justify-content: center;
@@ -119,7 +124,20 @@
     height: auto;
     min-height: 115px;
     gap: 20px;
-    font-size: 18px;
+    font-size: 17px;
+    line-height: 1.35;
+    letter-spacing: 0;
+  }
+
+  .introText {
+    width: 100%;
+    max-width: none;
+    padding-inline: 2px;
+    text-wrap: pretty;
+  }
+
+  .desktopBreak {
+    display: none;
   }
 
   .video {
@@ -130,5 +148,17 @@
   .videoGradients {
     top: 0;
     height: calc(100% + 2px);
+  }
+}
+
+@media (max-width: 420px) {
+  .intro {
+    font-size: 16px;
+  }
+}
+
+@media (max-width: 360px) {
+  .intro {
+    font-size: 15px;
   }
 }

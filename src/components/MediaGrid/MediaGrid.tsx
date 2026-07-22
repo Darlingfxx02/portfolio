@@ -29,7 +29,7 @@ const slots: MediaSlot[] = [
     size: 'standard',
   },
   {
-    src: '/media-grid/zinda-three-phones.png?v=20260722-1',
+    src: '/media-grid/owork-three-phones.png?v=20260722-2',
     alt: 'Three OWork mobile screens: shifts, profile, and wallet',
     size: 'widePhones',
     wide: true,

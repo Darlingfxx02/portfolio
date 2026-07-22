@@ -82,18 +82,48 @@
 
 @media (max-width: 640px) {
   .row {
-    grid-template-columns: minmax(130px, 1fr) auto;
-    gap: 8px 16px;
+    grid-template-columns: 32px minmax(0, 1fr) auto;
+    grid-template-rows: auto auto;
+    column-gap: 12px;
+    row-gap: 4px;
+    align-items: center;
+  }
+
+  .companyCell {
+    display: contents;
+  }
+
+  .logo {
+    grid-column: 1;
+    grid-row: 1 / 3;
+    align-self: center;
+  }
+
+  .company {
+    grid-column: 2;
+    grid-row: 1;
   }
 
   .role {
-    grid-column: 1 / -1;
-    padding-left: 44px;
+    grid-column: 2;
+    grid-row: 2;
+    font-size: 14px;
     white-space: normal;
   }
 
   .period {
-    grid-column: 2;
-    grid-row: 1;
+    grid-column: 3;
+    grid-row: 1 / 3;
+    align-self: center;
+  }
+}
+
+@media (max-width: 380px) {
+  .row {
+    column-gap: 10px;
+  }
+
+  .period {
+    font-size: 14px;
   }
 }

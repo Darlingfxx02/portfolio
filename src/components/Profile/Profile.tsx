@@ -24,10 +24,10 @@ export function Profile() {
           <p className={styles.age}>24 y.o.</p>
         </div>
         <div className={styles.description}>
-          <p>
+          <p className={styles.introText}>
             Помогаю бизнесам организовывать порядок в дизайне
-            <br />
-            и деливери в сложных ситуациях. Рисую кнопки и жгу
+            <br className={styles.desktopBreak} />
+            {' '}и деливери в сложных ситуациях. Рисую кнопки и жгу
           </p>
           <p className={styles.tokenLine}>
             <span>токены</span>
