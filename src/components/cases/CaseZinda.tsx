@@ -7,7 +7,6 @@ export function CaseZinda() {
   return (
     <CaseNarrative
       pageClassName="zinda-page"
-      brand="Тимофей Ермолаев"
       title={
         ru
           ? "Как мы провели первый цифровой банк Таджикистана через четыре итерации согласования."

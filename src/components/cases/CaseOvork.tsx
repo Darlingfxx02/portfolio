@@ -7,7 +7,6 @@ export function CaseOvork() {
   return (
     <CaseNarrative
       pageClassName="ovork-page"
-      brand="Тимофей Ермолаев"
       title={
         ru
           ? "Как ОВорк перешёл от управления сменами к полному финансовому циклу."

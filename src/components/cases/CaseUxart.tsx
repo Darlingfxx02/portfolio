@@ -7,7 +7,6 @@ export function CaseUxart() {
   return (
     <CaseNarrative
       pageClassName="uxart-page"
-      brand="Тимофей Ермолаев"
       title={
         ru
           ? "Как AI стал частью операционной модели дизайн-студии UXART."

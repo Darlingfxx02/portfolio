@@ -91,6 +91,7 @@ function App() {
 
   return (
     <>
+      {(onHome || onCase) && <PortfolioHeader onNavigate={closeCaseOverlay} />}
       {onCase ? (
         <CaseView />
       ) : onContact ? (
@@ -101,7 +102,6 @@ function App() {
         <Cv />
       ) : (
         <div id="top" className={styles.page}>
-          <PortfolioHeader />
           <div className={styles.introStack}>
             <Profile />
             <UsageHeatmap />
@@ -116,7 +116,7 @@ function App() {
         onCaseStudies={onHome ? toggleCaseOverlay : undefined}
         caseStudiesOpen={caseOverlayOpen}
       />
-      {(onWorks || onCase || onContact || onCv) && (
+      {(onWorks || onContact || onCv) && (
         <>
           <LangToggle />
           <HeaderTools onCv={onCv} />

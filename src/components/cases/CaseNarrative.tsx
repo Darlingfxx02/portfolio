@@ -26,7 +26,6 @@ export type NarrativeSection = {
 
 export function CaseNarrative({
   pageClassName,
-  brand,
   title,
   intro,
   tags,
@@ -35,7 +34,6 @@ export function CaseNarrative({
   nextCase,
 }: {
   pageClassName: string;
-  brand: string;
   title: string;
   intro: string;
   tags: string[];
@@ -47,15 +45,6 @@ export function CaseNarrative({
 
   return (
     <div className={`case-narrative-page ${pageClassName}`}>
-      <header className="case-narrative-topbar">
-        <a href="#top" className="case-narrative-topbar__back">
-          ← <span>{ru ? "Назад" : "Back"}</span>
-        </a>
-        <a href="#top" className="case-narrative-topbar__name">
-          {brand}
-        </a>
-      </header>
-
       <main className="case-narrative-main">
         <section className="case-narrative-intro">
           <h1 className="case-narrative-intro__title">{title}</h1>

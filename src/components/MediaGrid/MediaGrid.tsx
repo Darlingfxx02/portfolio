@@ -1,8 +1,8 @@
 import styles from './MediaGrid.module.css'
 
 type MediaSlot = {
-  src?: string
-  alt?: string
+  src: string
+  alt: string
   size: 'standard' | 'tall' | 'short' | 'widePhones' | 'wide620'
   wide?: boolean
 }
@@ -66,24 +66,17 @@ const slots: MediaSlot[] = [
     size: 'wide620',
     wide: true,
   },
-  { size: 'standard' },
-  { size: 'standard' },
-  { size: 'short' },
-  { size: 'short' },
-  { size: 'short' },
-  { size: 'short' },
 ]
 
 export function MediaGrid() {
   return (
     <section className={styles.grid} aria-label="Selected media">
-      {slots.map((slot, index) => (
+      {slots.map((slot) => (
         <div
-          key={slot.src ?? `placeholder-${index}`}
+          key={slot.src}
           className={`${styles.slot} ${styles[slot.size]} ${slot.wide ? styles.wide : ''}`}
-          aria-hidden={slot.src ? undefined : true}
         >
-          {slot.src && <img src={slot.src} alt={slot.alt ?? ''} draggable={false} />}
+          <img src={slot.src} alt={slot.alt} draggable={false} />
         </div>
       ))}
     </section>

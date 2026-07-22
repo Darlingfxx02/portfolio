@@ -11,7 +11,7 @@ function moscowTime(now: Date) {
   }).format(now)
 }
 
-export function PortfolioHeader() {
+export function PortfolioHeader({ onNavigate }: { onNavigate?: () => void }) {
   const [now, setNow] = useState(() => new Date())
 
   useEffect(() => {
@@ -22,11 +22,11 @@ export function PortfolioHeader() {
   return (
     <header className={styles.header}>
       <nav className={styles.group} aria-label="Profile links">
-        <a href={profile.telegram} target="_blank" rel="noreferrer">
+        <a href={profile.telegram} target="_blank" rel="noreferrer" onClick={onNavigate}>
           Telegram
         </a>
-        <a href="#contact">Contacts</a>
-        <a href="#cv">CV</a>
+        <a href="#contact" onClick={onNavigate}>Contacts</a>
+        <a href="#cv" onClick={onNavigate}>CV</a>
       </nav>
       <nav className={styles.group} aria-label="Portfolio details">
         <span>Moscow {moscowTime(now)}</span>
