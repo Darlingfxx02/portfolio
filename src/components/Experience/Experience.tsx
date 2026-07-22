@@ -14,7 +14,7 @@ const featuredExperience: FeaturedExperience[] = [
     id: 'wmt',
     company: 'WMT Group',
     role: 'Founding Продуктовый дизайнер',
-    period: '2024-2026',
+    period: '2026 — наст. время',
     logo: '/company-favicons/wmt.svg',
   },
   {
@@ -28,7 +28,7 @@ const featuredExperience: FeaturedExperience[] = [
     id: 'zinda',
     company: 'Zinda Bank',
     role: 'Founding Продуктовый дизайнер',
-    period: '2023-2024',
+    period: '2025',
     logo: '/company-favicons/zinda.svg',
   },
 ]
