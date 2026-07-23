@@ -1,58 +1,47 @@
 import { useEffect, useRef } from 'react'
 import {
+  ArrowUpRight,
+  Briefcase,
   DownloadSimple,
-  EnvelopeSimple,
-  TelegramLogo,
-  GithubLogo,
-  LinkSimple,
-  type Icon as PhIcon,
+  MapPin,
 } from '@phosphor-icons/react'
 import { cv } from '@/data/cv'
-import { experience } from '@/data/experience'
+import { experience, type ExperienceItem } from '@/data/experience'
 import { useLang, t } from '@/lib/i18n'
 import styles from './Cv.module.css'
 
-const CONTACT_ICONS: Record<string, PhIcon> = {
-  Email: EnvelopeSimple,
-  Telegram: TelegramLogo,
-  GitHub: GithubLogo,
+const COMPANY_LOGOS: Record<string, string> = {
+  wmt: '/company-favicons/wmt.svg',
+  uxart: '/company-favicons/uxart.ico',
+  zinda: '/company-favicons/zinda.svg',
 }
 
 const CV_LABELS = {
   download: { ru: 'Скачать PDF', en: 'Download PDF' },
   contacts: { ru: 'Контакты', en: 'Contacts' },
+  projects: { ru: 'Клиентские проекты в UXART', en: 'Client projects at UXART' },
   skills: { ru: 'Навыки', en: 'Skills' },
-  about: { ru: 'О себе', en: 'About' },
-  highlights: { ru: 'Ключевые результаты', en: 'Key results' },
-  experience: { ru: 'Опыт работы и контракты', en: 'Employment and contracts' },
-  projects: { ru: 'Ключевые проекты', en: 'Selected projects' },
-  workPeriod: { ru: 'Период работы', en: 'Employment period' },
-  projectPeriod: { ru: 'Период проекта', en: 'Project period' },
-  duration: { ru: 'Продолжительность', en: 'Duration' },
-  present: { ru: 'настоящее время', en: 'present' },
+  present: { ru: 'Настоящее время', en: 'Present' },
 }
 
 const cvText = (value: string) => value.replace(/[‐‑‒–—−]/g, '-')
 
-/**
- * CV page. The on-screen A4 sheet IS the deliverable: a print stylesheet
- * (index.css + this module's @media print) isolates `.cv-sheet` and prints it
- * across A4 pages, so "Скачать PDF" → window.print() → Save as PDF yields a
- * multi-page copy of the sheet.
- *
- * Layout: header → contacts/summary intro → full-width skills → results
- * strip → linear employment entries → selected projects. The PDF keeps
- * company, role, period, duration, and results in ATS-friendly reading order.
- * Monochrome by design — the site is strictly black/white.
- */
+const entryTags = (category: string) =>
+  category
+    .split(/[·,]/)
+    .map((item) => item.trim())
+    .filter(Boolean)
+
 export function Cv() {
   const { lang } = useLang()
   const prevTitle = useRef('')
-  const employment = experience.filter((item) => item.kind === 'employment')
-  const projects = experience.filter((item) => item.kind === 'project')
+  const employment = experience.filter(
+    (item) => item.kind === 'employment' && !item.parentId,
+  )
+  const studioProjects = ['combogpt', 'ovork', 'zinda']
+    .map((id) => experience.find((item) => item.id === id))
+    .filter((item): item is ExperienceItem => Boolean(item))
 
-  // Suggest a tidy filename in the browser's Save-as-PDF dialog by swapping
-  // the document title for the duration of the print, then restoring it.
   useEffect(() => {
     const onAfter = () => {
       if (prevTitle.current) document.title = prevTitle.current
@@ -67,136 +56,200 @@ export function Cv() {
     window.print()
   }
 
-  const renderEntries = (
-    items: typeof experience,
-    periodLabel: { ru: string; en: string },
-  ) => (
-    <div className={styles.entries}>
-      {items.map((item) => {
-        const entry = cv.achievements[item.id]
-        const bullets = entry ? t(entry, lang) : []
-        return (
-          <article key={item.id} className={styles.entry}>
-            <div className={styles.entryHead}>
-              <h3 className={styles.company}>{item.company}</h3>
-              <p className={styles.role}>{t(item.category, lang)}</p>
-            </div>
-
-            <dl className={styles.meta}>
-              <div className={styles.metaRow}>
-                <dt>{t(periodLabel, lang)}:</dt>
-                <dd>
-                  <time dateTime={item.period.start}>{item.period.start}</time>
-                  {item.period.ongoing ? (
-                    <> - {t(CV_LABELS.present, lang)}</>
-                  ) : item.period.end && item.period.end !== item.period.start ? (
-                    <>
-                      {' - '}
-                      <time dateTime={item.period.end}>{item.period.end}</time>
-                    </>
-                  ) : null}
-                </dd>
-              </div>
-              {item.period.duration && (
-                <div className={styles.metaRow}>
-                  <dt>{t(CV_LABELS.duration, lang)}:</dt>
-                  <dd>{t(item.period.duration, lang)}</dd>
-                </div>
-              )}
-            </dl>
-
-            {bullets.length > 0 && (
-              <ul className={styles.bullets}>
-                {bullets.map((bullet) => (
-                  <li key={bullet}>{cvText(bullet)}</li>
-                ))}
-              </ul>
-            )}
-          </article>
-        )
-      })}
-    </div>
+  const renderPeriod = (item: ExperienceItem) => (
+    <p className={styles.period}>
+      <Briefcase size={14} weight="regular" aria-hidden="true" />
+      <time dateTime={item.period.start}>{item.period.start}</time>
+      {' - '}
+      {item.period.ongoing ? (
+        t(CV_LABELS.present, lang)
+      ) : (
+        <time dateTime={item.period.end}>{item.period.end}</time>
+      )}
+      {item.period.duration && <span> · {t(item.period.duration, lang)}</span>}
+    </p>
   )
+
+  const renderStudioProjects = () => (
+    <section className={styles.studioProjects}>
+      <h4 className={styles.studioProjectsTitle}>
+        {t(CV_LABELS.projects, lang)}
+      </h4>
+
+      <div className={styles.projectList}>
+        {studioProjects.map((item) => {
+          const bullets = cv.achievements[item.id]
+            ? t(cv.achievements[item.id], lang)
+            : []
+          const tags = entryTags(t(item.category, lang))
+          const logo = COMPANY_LOGOS[item.id]
+
+          return (
+            <article key={item.id} className={styles.project}>
+              <header className={styles.projectHead}>
+                <div>
+                  <h5 className={styles.projectName}>{item.company}</h5>
+                  <p className={styles.projectRole}>{t(item.category, lang)}</p>
+                </div>
+                {logo && (
+                  <img
+                    className={styles.projectLogo}
+                    src={logo}
+                    alt=""
+                    aria-hidden="true"
+                  />
+                )}
+              </header>
+
+              <div className={styles.projectTags}>
+                {tags.map((tag) => (
+                  <span key={tag}>{tag}</span>
+                ))}
+              </div>
+
+              <p className={styles.projectSummary}>
+                <strong>{t(item.lead, lang)}</strong>
+                {t(item.text, lang)}
+              </p>
+
+              {bullets.length > 0 && (
+                <ul className={styles.projectResults}>
+                  {bullets.map((bullet) => (
+                    <li key={bullet}>{cvText(bullet)}</li>
+                  ))}
+                </ul>
+              )}
+            </article>
+          )
+        })}
+      </div>
+    </section>
+  )
+
+  const renderEmployment = (item: ExperienceItem) => {
+    const bullets = cv.achievements[item.id]
+      ? t(cv.achievements[item.id], lang)
+      : []
+    const tags = entryTags(t(item.category, lang))
+    const logo = COMPANY_LOGOS[item.id]
+
+    return (
+      <article key={item.id} className={styles.job}>
+        <header className={styles.jobHead}>
+          <div>
+            <h3 className={styles.company}>{item.company}</h3>
+            <p className={styles.role}>{t(item.category, lang)}</p>
+            {renderPeriod(item)}
+          </div>
+          {logo && (
+            <img
+              className={styles.companyLogo}
+              src={logo}
+              alt=""
+              aria-hidden="true"
+            />
+          )}
+        </header>
+
+        <div className={styles.tags}>
+          {tags.map((tag) => (
+            <span key={tag}>{tag}</span>
+          ))}
+        </div>
+
+        <div className={styles.jobBody}>
+          <p>
+            <strong>{t(item.lead, lang)}</strong>
+            {t(item.text, lang)}
+          </p>
+        </div>
+
+        {bullets.length > 0 && (
+          <div className={styles.jobBody}>
+            <h4>{lang === 'ru' ? 'Ключевые результаты:' : 'Key results:'}</h4>
+            <ul className={styles.bullets}>
+              {bullets.map((bullet) => (
+                <li key={bullet}>{cvText(bullet)}</li>
+              ))}
+            </ul>
+          </div>
+        )}
+
+        {item.id === 'uxart' && renderStudioProjects()}
+      </article>
+    )
+  }
 
   return (
     <main className={styles.page}>
-      <article className={`${styles.sheet} cv-sheet`}>
-        <header className={styles.head}>
-          <div className={styles.headText}>
-            <h1 className={styles.name}>{t(cv.name, lang)}</h1>
-            <p className={styles.title}>
-              {t(cv.title, lang)} · {t(cv.focus, lang)}
-            </p>
-          </div>
-          <button type="button" className={styles.download} onClick={onDownload}>
-            <DownloadSimple size={17} weight="bold" />
-            {t(CV_LABELS.download, lang)}
-          </button>
-        </header>
+      <div className={styles.toolbar}>
+        <button type="button" className={styles.download} onClick={onDownload}>
+          <DownloadSimple size={17} weight="bold" />
+          {t(CV_LABELS.download, lang)}
+        </button>
+      </div>
 
-        <div className={styles.intro}>
-          <section className={`${styles.block} ${styles.contactsBlock}`}>
-            <h2 className={styles.blockLabel}>{t(CV_LABELS.contacts, lang)}</h2>
-            <ul className={styles.contacts}>
-              {cv.contacts.map((c) => {
-                const Icon = CONTACT_ICONS[c.label] ?? LinkSimple
-                return (
-                  <li key={c.label}>
-                    <Icon size={15} weight="fill" className={styles.contactIcon} />
-                    <a href={c.href} target="_blank" rel="noreferrer">
-                      {c.value}
+      <article className={`${styles.sheet} cv-sheet`}>
+        <div className={styles.documentGrid}>
+          <div className={styles.mainColumn}>
+            <header className={styles.identity}>
+              <h1 className={styles.name}>{t(cv.name, lang)}</h1>
+              <p className={styles.position}>
+                <MapPin size={18} weight="fill" aria-hidden="true" />
+                {t(cv.title, lang)} · {t(cv.focus, lang)}
+              </p>
+            </header>
+
+            <section className={styles.summaryCard}>
+              <p>{t(cv.summary, lang)}</p>
+              <a href="https://darling.design/#works">
+                {lang === 'ru' ? 'Портфолио' : 'Portfolio'}: darling.design
+                <ArrowUpRight size={14} weight="bold" aria-hidden="true" />
+              </a>
+            </section>
+
+            <div className={styles.jobs}>{employment.map(renderEmployment)}</div>
+
+            <section className={styles.skillsSection}>
+              <h2>{t(CV_LABELS.skills, lang)}</h2>
+              <div className={styles.skillGroups}>
+                {cv.skills.map((skill) => (
+                  <div key={t(skill.group, lang)} className={styles.skillGroup}>
+                    <h3>{t(skill.group, lang)}</h3>
+                    <ul>
+                      {t(skill.items, lang).map((item) => (
+                        <li key={item}>{item}</li>
+                      ))}
+                    </ul>
+                  </div>
+                ))}
+              </div>
+            </section>
+          </div>
+
+          <aside className={styles.sidebar}>
+            <img
+              className={styles.portrait}
+              src="/stickers/self-portrait.webp"
+              alt={t(cv.name, lang)}
+            />
+
+            <section className={styles.sideSection}>
+              <h2>{t(CV_LABELS.contacts, lang)}</h2>
+              <ul className={styles.contacts}>
+                {cv.contacts.map((contact) => (
+                  <li key={contact.label}>
+                    <span>{contact.label}</span>
+                    <a href={contact.href} target="_blank" rel="noreferrer">
+                      {contact.value}
                     </a>
                   </li>
-                )
-              })}
-            </ul>
-          </section>
+                ))}
+              </ul>
+            </section>
 
-          <section className={`${styles.block} ${styles.aboutBlock}`}>
-            <h2 className={styles.blockLabel}>{t(CV_LABELS.about, lang)}</h2>
-            <p className={styles.summary}>{t(cv.summary, lang)}</p>
-          </section>
+          </aside>
         </div>
-
-        <section className={`${styles.block} ${styles.skillsBlock}`}>
-          <h2 className={styles.blockLabel}>{t(CV_LABELS.skills, lang)}</h2>
-          <div className={styles.skillGroups}>
-            {cv.skills.map((s, i) => (
-              <div key={i} className={styles.skillGroup}>
-                <p className={styles.skillGroupLabel}>{t(s.group, lang)}</p>
-                <div className={styles.chips}>
-                  {t(s.items, lang).map((item) => (
-                    <span key={item} className={styles.chip}>
-                      {item}
-                    </span>
-                  ))}
-                </div>
-              </div>
-            ))}
-          </div>
-        </section>
-
-        <section className={`${styles.block} ${styles.statsBlock}`}>
-          <h2 className={styles.blockLabel}>{t(CV_LABELS.highlights, lang)}</h2>
-          <div className={styles.stats}>
-            {cv.highlights.map((h, i) => (
-              <div key={i} className={styles.stat}>
-                <p className={styles.statValue}>{cvText(t(h.value, lang))}</p>
-                <p className={styles.statLabel}>{t(h.label, lang)}</p>
-              </div>
-            ))}
-          </div>
-        </section>
-
-        <section className={`${styles.block} ${styles.expBlock}`}>
-          <h2 className={styles.blockLabel}>{t(CV_LABELS.experience, lang)}</h2>
-          {renderEntries(employment, CV_LABELS.workPeriod)}
-        </section>
-
-        <section className={`${styles.block} ${styles.projectsBlock}`}>
-          <h2 className={styles.blockLabel}>{t(CV_LABELS.projects, lang)}</h2>
-          {renderEntries(projects, CV_LABELS.projectPeriod)}
-        </section>
       </article>
     </main>
   )

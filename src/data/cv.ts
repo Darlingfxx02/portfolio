@@ -16,8 +16,8 @@ export const cv = {
   title: { ru: 'Продуктовый дизайнер', en: 'Product designer' } as Loc,
   focus: { ru: 'Финтех и AI', en: 'Fintech and AI' } as Loc,
   summary: {
-    ru: 'Продуктовый дизайнер с 3+ годами опыта в AI- и финтех-продуктах. Веду задачи от бизнес-проблемы и сценариев до прототипа, handoff и итерации после релиза. Использую Figma, код и AI-инструменты, чтобы быстро проверять гипотезы живыми прототипами.',
-    en: 'Product designer with 3+ years in AI and fintech. I take work from business problem and user flows to prototype, handoff, and post-release iteration. I use Figma, code, and AI tools to test hypotheses quickly with live prototypes.',
+    ru: 'Продуктовый дизайнер с опытом более 3 лет. Сейчас работаю в продуктовой команде WMT AI и отвечаю за дизайн двух AI-продуктов — от бизнес-задачи и сценариев до прототипа, handoff и итераций после релиза. До этого полтора года работал в дизайн-студии: вёл несколько клиентских проектов параллельно, быстро погружался в новые домены и доводил решения до передачи в разработку.',
+    en: 'Product designer with 3+ years of experience. I currently work in-house at WMT AI, leading design for two AI products — from business problem and user flows to prototype, handoff, and post-release iteration. Before that, I spent a year and a half at a design studio, running several client projects in parallel, quickly learning new domains, and taking solutions through developer handoff.',
   } as Loc,
   contacts: [
     { label: 'Email', value: profile.email, href: `mailto:${profile.email}` },

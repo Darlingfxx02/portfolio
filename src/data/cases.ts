@@ -28,7 +28,7 @@ export const cases: CaseStudy[] = [
       en: 'From shift management to transparent accruals, deductions, and payouts inside the product.',
     },
     device: 'phone',
-    image: '/cases/case-cover-ovork.png?v=20260722-1',
+    image: '/cases/case-cover-ovork.avif?v=20260723-1',
     images: ['/cases/ovork-1.webp', '/cases/ovork-2.webp', '/cases/ovork-3.webp'],
   },
   {
@@ -40,7 +40,7 @@ export const cases: CaseStudy[] = [
       ru: 'Четыре итерации согласования и один MVP для трёх конкурирующих видений продукта.',
       en: 'Four alignment rounds and one MVP across three competing product visions.',
     },
-    image: '/cases/case-cover-zinda.png?v=20260722-1',
+    image: '/cases/case-cover-zinda.avif?v=20260723-1',
     device: 'laptop',
   },
   {
@@ -52,7 +52,7 @@ export const cases: CaseStudy[] = [
       ru: 'Аудит процессов, генератор КП, AI-пресейлы и единый фреймворк автоматизации.',
       en: 'Process audit, proposal generator, AI presales, and one automation framework.',
     },
-    image: '/cases/case-cover-uxart.png?v=20260722-1',
+    image: '/cases/case-cover-uxart.avif?v=20260723-1',
     device: 'laptop',
   },
   {

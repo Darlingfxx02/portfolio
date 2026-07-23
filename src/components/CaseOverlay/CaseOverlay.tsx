@@ -79,6 +79,8 @@ export function CaseOverlay({ open, onClose }: { open: boolean; onClose: () => v
                     alt=""
                     width={640}
                     height={360}
+                    loading="lazy"
+                    decoding="async"
                     draggable={false}
                   />
                 )}

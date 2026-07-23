@@ -12,24 +12,17 @@ type FeaturedExperience = {
 const featuredExperience: FeaturedExperience[] = [
   {
     id: 'wmt',
-    company: 'WMT Group',
-    role: 'Founding Продуктовый дизайнер',
+    company: 'WMT AI',
+    role: 'Продуктовый дизайнер · AI',
     period: '2026 — наст. время',
     logo: '/company-favicons/wmt.svg',
   },
   {
     id: 'uxart',
     company: 'UXART',
-    role: 'Senior Продуктовый дизайнер',
-    period: '2025',
+    role: 'UX/UI-дизайнер',
+    period: '2024 — 2025 · 1,5 года',
     logo: '/company-favicons/uxart.ico',
-  },
-  {
-    id: 'zinda',
-    company: 'Zinda Bank',
-    role: 'Founding Продуктовый дизайнер',
-    period: '2023 — 2024',
-    logo: '/company-favicons/zinda.svg',
   },
 ]
 

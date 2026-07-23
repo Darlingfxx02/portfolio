@@ -1,32 +1,64 @@
-/* ── Page shell (site-themed bg around the paper sheet) ───────────── */
+@font-face {
+  font-family: 'Inter CV';
+  src: url('/fonts/Inter-Regular.ttf') format('truetype');
+  font-style: normal;
+  font-weight: 400;
+  font-display: block;
+}
+
+@font-face {
+  font-family: 'Inter CV';
+  src: url('/fonts/Inter-SemiBold.ttf') format('truetype');
+  font-style: normal;
+  font-weight: 600;
+  font-display: block;
+}
+
+@font-face {
+  font-family: 'Inter CV';
+  src: url('/fonts/Inter-ExtraBold.ttf') format('truetype');
+  font-style: normal;
+  font-weight: 800;
+  font-display: block;
+}
+
 .page {
-  position: relative;
+  --cv-paper: #fff;
+  --cv-sidebar: #f0f2f8;
+  --cv-ink: #101216;
+  --cv-muted: #858692;
+  --cv-line: #d7d8de;
+  --cv-tag: #ededf0;
+  --cv-accent: #ff626a;
+  --cv-lilac: #f2e9ff;
+  --cv-blue: #e5edff;
+
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 18px;
-  width: 100%;
   min-height: 100vh;
-  padding: 40px var(--pad) 140px;
-  /* Theme-aware: matches the sheet so the document lies flat on the page
-     (seamless in light AND dark) — no floating-card edge. */
-  background: var(--bg);
+  padding: 40px var(--pad) 150px;
+  background: #0b0b0c;
 }
 
-/* Download CTA lives in the sheet header (right of the name); hidden in print. */
+.toolbar {
+  display: flex;
+  justify-content: flex-end;
+  width: min(100%, 1044px);
+  margin-bottom: 14px;
+}
+
 .download {
   display: inline-flex;
-  flex: none;
   align-items: center;
   gap: 8px;
   padding: 11px 18px;
   border-radius: 999px;
-  background: var(--text);
-  color: var(--bg);
-  font-family: var(--font-sf);
+  background: #fff;
+  color: #111;
+  font-family: 'Inter CV', Inter, sans-serif;
   font-size: 14px;
-  font-weight: var(--wt-medium);
-  letter-spacing: var(--tracking-body);
+  font-weight: 600;
   box-shadow: var(--shadow-dock);
   transition: transform 0.2s var(--ease);
 }
@@ -35,505 +67,525 @@
   transform: translateY(-1px);
 }
 
-.download:active {
-  transform: translateY(0);
-}
-
-/* ── The A4 sheet — always paper-white, prints 1:1 ────────────────── */
 .sheet {
-  /* On screen the document follows the site theme (maps onto the global
-     tokens) so it lies seamlessly on the page in light AND dark. Print forces
-     real ink-on-paper — see @media print at the bottom. */
-  --cv-ink: var(--text);
-  --cv-strong: var(--text-strong);
-  --cv-mid: var(--text-mid);
-  --cv-dim: var(--text-dim);
-  --cv-line: var(--line);
-  --cv-fill: color-mix(in srgb, var(--text) 3%, transparent);
-
-  /* One spacing scale drives the whole document — no ad-hoc values.
-     section: gap between major blocks · label: heading → its content ·
-     item: list rows · tight: chips / bullet rows. */
-  --s-section: 24px;
-  --s-group: 16px;
-  --s-label: 12px;
-  --s-item: 10px;
-  --s-tight: 6px;
-
-  width: 210mm;
-  min-height: 297mm;
-  max-width: 100%;
-  padding: 16mm;
-  background: var(--bg);
+  width: min(100%, 1044px);
+  min-height: 3402px;
+  overflow: hidden;
+  background: var(--cv-paper);
   color: var(--cv-ink);
-  font-family: var(--font-sf);
-  font-size: 13px; /* body baseline */
-  line-height: 1.5;
+  font-family: 'Inter CV', Inter, Arial, sans-serif;
+  font-size: 18.67px;
+  font-weight: 400;
+  line-height: 1.43;
+  box-shadow: 0 24px 80px rgba(0, 0, 0, 0.28);
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
 }
 
-/* ── Header band ──────────────────────────────────────────────────── */
-.head {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 16px;
-  padding-bottom: var(--s-section);
-  border-bottom: 1px solid var(--cv-line);
+.documentGrid {
+  display: grid;
+  grid-template-columns: 561fr 222fr;
+  min-height: 3402px;
 }
 
-.headText {
+.mainColumn {
+  min-width: 0;
+  padding: 50.67px 64px 58px;
+}
+
+.identity {
   min-width: 0;
 }
 
 .name {
-  font-family: var(--font-sans);
-  font-size: 28px;
-  font-weight: var(--wt-strong);
-  letter-spacing: var(--tracking);
-  line-height: 1.1;
+  font-size: 32px;
+  font-weight: 800;
+  letter-spacing: 0;
+  line-height: 1;
 }
 
-.title {
-  margin-top: 6px;
-  font-size: 14px;
-  color: var(--cv-mid);
-  letter-spacing: var(--tracking-body);
+.position {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 18.67px;
+  color: var(--cv-muted);
+  font-size: 21.33px;
+  line-height: 1;
 }
 
-/* ── Two-column intro ─────────────────────────────────────────────── */
-.intro {
-  display: grid;
-  grid-template-columns: 62mm minmax(0, 1fr);
-  gap: 12mm;
-  margin-top: var(--s-section);
+.position svg {
+  flex: none;
+  color: var(--cv-accent);
 }
 
-.contactsBlock {
-  padding-right: 10mm;
-  border-right: 1px solid var(--cv-line);
+.summaryCard {
+  margin-top: 17.33px;
+  padding: 26.67px;
+  border-radius: 18.67px;
+  background: linear-gradient(
+    90deg,
+    var(--cv-lilac) 0%,
+    var(--cv-lilac) 35.5%,
+    var(--cv-blue) 35.5%,
+    var(--cv-blue) 100%
+  );
+  font-size: 18.67px;
+  line-height: 1.43;
 }
 
-.aboutBlock {
-  min-width: 0;
+.summaryCard a {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  margin-top: 10.67px;
+  color: #006ee6;
+  text-decoration: underline;
+  text-underline-offset: 3px;
 }
 
-/* ── One heading system ───────────────────────────────────────────── */
-/* Level 1 — section label: small, uppercase, dim. Used by every section. */
-.blockLabel {
-  font-family: var(--font-sans);
-  font-size: 11px;
-  font-weight: var(--wt-strong);
-  letter-spacing: 0.09em;
-  text-transform: uppercase;
-  color: var(--cv-dim);
-  margin-bottom: var(--s-label);
+.jobs {
+  margin-top: 57.33px;
 }
 
-.block {
+.job {
   break-inside: avoid;
 }
 
-/* Divider ("отсечка") separating the intro block from the experience. */
-.expBlock {
-  margin-top: var(--s-section);
-  padding-top: var(--s-section);
+.job + .job {
+  margin-top: 42.67px;
+  padding-top: 40px;
   border-top: 1px solid var(--cv-line);
 }
 
-.projectsBlock {
-  margin-top: var(--s-section);
-  padding-top: var(--s-section);
-  border-top: 1px solid var(--cv-line);
-}
-
-/* ── Sidebar: contacts ────────────────────────────────────────────── */
-.contacts {
+.jobHead {
   display: flex;
-  flex-direction: column;
-  gap: var(--s-item);
-  list-style: none;
+  justify-content: space-between;
+  gap: 24px;
 }
 
-.contacts li {
+.company {
+  font-size: 21.33px;
+  font-weight: 600;
+  line-height: 1;
+}
+
+.role {
+  margin-top: 9.33px;
+  font-size: 18.67px;
+  line-height: 1;
+}
+
+.period {
   display: flex;
   align-items: center;
-  gap: 9px;
-  min-width: 0;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin-top: 17.33px;
+  color: var(--cv-muted);
+  font-size: 16px;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
 }
 
-.contactIcon {
+.companyLogo,
+.projectLogo {
   flex: none;
+  width: 54px;
+  height: 54px;
+  padding: 7px;
+  border-radius: 14px;
+  background: var(--cv-tag);
+  object-fit: contain;
+}
+
+.tags,
+.projectTags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 24px;
+}
+
+.tags span,
+.projectTags span {
+  padding: 6px 11px;
+  border-radius: 7px;
+  background: var(--cv-tag);
+  font-size: 16px;
+  line-height: 1;
+}
+
+.jobBody {
+  margin-top: 28px;
+}
+
+.jobBody + .jobBody {
+  margin-top: 22px;
+}
+
+.jobBody h4 {
+  margin-bottom: 8px;
+  font-size: 18.67px;
+  font-weight: 600;
+}
+
+.jobBody p {
+  color: #202227;
+}
+
+.jobBody strong,
+.projectSummary strong {
   color: var(--cv-ink);
+  font-weight: 600;
 }
 
-.contacts a {
-  color: var(--cv-strong);
-  font-weight: var(--wt-medium);
-  overflow-wrap: anywhere;
+.bullets,
+.projectResults {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  padding-left: 22px;
+  list-style: disc;
 }
 
-.contacts a:hover {
-  color: var(--cv-ink);
+.bullets li,
+.projectResults li {
+  padding-left: 1px;
 }
 
-/* ── Sidebar: skills as chip groups ───────────────────────────────── */
-.skillsBlock,
-.statsBlock {
-  margin-top: var(--s-section);
-  padding-top: var(--s-section);
+.studioProjects {
+  margin-top: 30px;
+  padding-left: 18px;
+  border-left: 2px solid #cfd1d9;
+}
+
+.studioProjectsTitle {
+  font-size: 18.67px;
+  font-weight: 600;
+}
+
+.projectList {
+  margin-top: 22px;
+}
+
+.project {
+  break-inside: avoid;
+}
+
+.project + .project {
+  margin-top: 26px;
+  padding-top: 24px;
   border-top: 1px solid var(--cv-line);
+}
+
+.projectHead {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.projectName {
+  font-size: 21.33px;
+  font-weight: 600;
+  line-height: 1;
+}
+
+.projectRole {
+  margin-top: 7px;
+  color: var(--cv-muted);
+  font-size: 16px;
+  line-height: 1.2;
+}
+
+.projectTags {
+  margin-top: 15px;
+}
+
+.projectTags span {
+  font-size: 14px;
+}
+
+.projectSummary {
+  margin-top: 18px;
+  color: #202227;
+}
+
+.projectResults {
+  margin-top: 14px;
+}
+
+.skillsSection {
+  margin-top: 42.67px;
+  padding-top: 40px;
+  border-top: 1px solid var(--cv-line);
+}
+
+.skillsSection > h2 {
+  font-size: 21.33px;
+  font-weight: 600;
 }
 
 .skillGroups {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: var(--s-group);
+  gap: 24px;
+  margin-top: 24px;
 }
 
-.skillGroup {
-  min-width: 0;
+.skillGroup h3 {
+  margin-bottom: 10px;
+  font-size: 16px;
+  font-weight: 600;
 }
 
-/* Level 2 — sub-label inside a section. */
-.skillGroupLabel {
-  font-size: 12px;
-  font-weight: var(--wt-strong);
-  color: var(--cv-ink);
-  margin-bottom: 8px;
-  letter-spacing: var(--tracking);
-}
-
-.chips {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--s-tight);
-}
-
-.chip {
-  display: inline-flex;
-  padding: 4px 10px;
-  border-radius: 999px;
-  background: var(--cv-fill);
-  font-size: 11px;
-  color: var(--cv-strong);
-  letter-spacing: var(--tracking-body);
-  -webkit-print-color-adjust: exact;
-  print-color-adjust: exact;
-}
-
-/* ── Intro main: summary ──────────────────────────────────────────── */
-.summary {
-  color: var(--cv-strong);
-}
-
-/* ── Headline metrics strip ───────────────────────────────────────── */
-.stats {
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 12px;
-}
-
-/* Each metric sits in a soft-filled card. */
-.stat {
-  padding: 14px;
-  border-radius: 12px;
-  background: var(--cv-fill);
-  -webkit-print-color-adjust: exact;
-  print-color-adjust: exact;
-}
-
-.statValue {
-  font-family: var(--font-sans);
-  font-size: 24px;
-  font-weight: var(--wt-strong);
-  letter-spacing: var(--tracking);
-  color: var(--cv-ink);
-  line-height: 1;
-}
-
-.statLabel {
-  margin-top: 6px;
-  font-size: 12px;
-  color: var(--cv-mid);
-  line-height: 1.35;
-}
-
-/* ── ATS-friendly linear experience entries ───────────────────────────── */
-.entries {
+.skillGroup ul {
   display: flex;
   flex-direction: column;
-  gap: 0;
+  gap: 6px;
+  padding-left: 17px;
+  font-size: 16px;
+  list-style: disc;
 }
 
-.entry {
-  break-inside: avoid;
-}
-
-.entry + .entry {
-  margin-top: 18px;
-  padding-top: 18px;
-  border-top: 1px solid var(--cv-line);
-}
-
-.entryHead {
+.sidebar {
   display: flex;
-  align-items: baseline;
-  gap: 10px;
+  flex-direction: column;
   min-width: 0;
+  padding: 50.67px 34.67px 42px 33.33px;
+  background: var(--cv-sidebar);
 }
 
-.company {
-  font-size: 15px;
-  font-weight: var(--wt-strong);
-  color: var(--cv-ink);
-  letter-spacing: var(--tracking);
+.portrait {
+  width: 132px;
+  height: 177.33px;
+  border-radius: 40px;
+  background: #dfe0e6;
+  object-fit: cover;
+  object-position: 50% 14%;
 }
 
-.role {
-  font-size: 12px;
-  color: var(--cv-mid);
-  font-weight: var(--wt-medium);
+.sideSection {
+  margin-top: 54.67px;
 }
 
-.meta {
+.sideSection h2 {
+  margin-bottom: 21.33px;
+  color: var(--cv-muted);
+  font-size: 16px;
+  font-weight: 400;
+}
+
+.contacts {
   display: flex;
-  flex-wrap: wrap;
-  gap: 4px 16px;
-  margin-top: var(--s-tight);
-  font-size: 12px;
-  font-variant-numeric: tabular-nums;
-}
-
-.metaRow {
-  display: flex;
-  gap: 5px;
-}
-
-.metaRow dt {
-  color: var(--cv-dim);
-}
-
-.metaRow dd {
-  color: var(--cv-strong);
-  font-weight: var(--wt-medium);
-}
-
-/* Quantified achievement bullets. */
-.bullets {
+  flex-direction: column;
+  gap: 24px;
   list-style: none;
-  margin-top: var(--s-item);
-  display: flex;
-  flex-direction: column;
-  gap: var(--s-tight);
 }
 
-.bullets li {
-  position: relative;
-  padding-left: 16px;
-  color: var(--cv-strong);
+.contacts li {
+  min-width: 0;
 }
 
-.bullets li::before {
-  content: '';
-  position: absolute;
-  left: 3px;
-  top: 8px;
-  width: 4px;
-  height: 4px;
-  border-radius: 50%;
-  background: var(--cv-ink);
-  -webkit-print-color-adjust: exact;
-  print-color-adjust: exact;
+.contacts span {
+  display: block;
+  color: var(--cv-muted);
+  font-size: 16px;
 }
 
-/* On narrow screens the CV keeps the same visual language but reads as a
-   single-column document instead of squeezing the A4 desktop grid. */
+.contacts a {
+  display: inline-block;
+  max-width: 100%;
+  margin-top: 6px;
+  color: var(--cv-ink);
+  font-size: 17.33px;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  overflow-wrap: anywhere;
+}
+
 @media (max-width: 840px) {
   .page {
-    align-items: stretch;
-    padding: 72px var(--pad) 150px;
-    overflow-x: hidden;
+    padding: 72px 0 150px;
+  }
+
+  .toolbar {
+    width: auto;
+    margin: 0 var(--pad) 14px;
   }
 
   .sheet {
     width: 100%;
     min-height: 0;
-    padding: 0;
-    font-size: 14px;
-    line-height: 1.55;
+    font-size: 16px;
+    box-shadow: none;
   }
 
-  .head {
+  .documentGrid {
+    display: flex;
     flex-direction: column;
-    align-items: flex-start;
-    gap: 18px;
-    padding-bottom: 22px;
+    min-height: 0;
+  }
+
+  .mainColumn {
+    padding: 36px var(--pad) 60px;
   }
 
   .name {
-    font-size: 30px;
-    line-height: 1.05;
+    font-size: 32px;
   }
 
-  .title {
-    max-width: 260px;
-    line-height: 1.45;
+  .position {
+    align-items: flex-start;
+    font-size: 17px;
+    line-height: 1.35;
   }
 
-  .download {
-    align-self: flex-start;
-    padding: 10px 15px;
-    font-size: 13px;
+  .summaryCard {
+    padding: 20px;
+    font-size: 16px;
   }
 
-  .intro {
-    display: flex;
-    flex-direction: column;
-    gap: var(--s-section);
+  .jobs {
+    margin-top: 42px;
   }
 
-  .contactsBlock {
-    padding-right: 0;
-    padding-bottom: var(--s-section);
-    border-right: 0;
-    border-bottom: 1px solid var(--cv-line);
+  .company,
+  .projectName,
+  .skillsSection > h2 {
+    font-size: 20px;
+  }
+
+  .role,
+  .jobBody h4,
+  .studioProjectsTitle {
+    font-size: 16px;
+  }
+
+  .jobBody {
+    margin-top: 22px;
+  }
+
+  .studioProjects {
+    padding-left: 14px;
   }
 
   .skillGroups {
     grid-template-columns: 1fr;
   }
 
-  .stats {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 10px;
-  }
-
-  .stat {
-    padding: 12px;
-  }
-
-  .statValue {
-    font-size: 22px;
-  }
-
-  .entryHead {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 3px;
-  }
-
-}
-
-@media (min-width: 380px) and (max-width: 840px) {
-  .contacts {
+  .sidebar {
     display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 8px 16px;
+    grid-template-columns: 120px minmax(0, 1fr);
+    gap: 34px 24px;
+    padding: 36px var(--pad) 70px;
   }
 
-  .contacts li {
-    gap: 8px;
+  .portrait {
+    width: 120px;
+    height: 142px;
+    border-radius: 32px;
   }
 
-  .chip {
-    padding: 4px 8px;
+  .sideSection {
+    margin-top: 0;
   }
+
 }
 
-/* ── Print: lay the sheet out as static flow so it paginates to A4 ── */
+@media (max-width: 430px) {
+  .sidebar {
+    grid-template-columns: 1fr;
+  }
+
+}
+
 @media print {
   .page {
     display: block;
-    position: relative;
-    isolation: isolate;
-    visibility: visible;
+    width: 276mm;
+    min-height: 900mm;
     padding: 0;
-    min-height: 0;
     background: #fff;
   }
 
-  .page::before {
-    content: '';
-    position: fixed;
-    z-index: 0;
-    inset: -20mm;
-    visibility: visible;
-    background: #fff;
-  }
-
-  .download {
+  .toolbar {
     display: none;
   }
 
-  /* Force real ink-on-paper for the PDF regardless of the on-screen theme. */
   .sheet {
-    position: relative;
-    z-index: 1;
-    width: auto;
-    max-width: none;
-    min-height: 0;
-    margin: 0;
-    padding: 0; /* @page margin (index.css) supplies the page margins */
-    background: #fff;
-    font-size: 13px;
-    line-height: 1.5;
-    --cv-ink: #0b0b0c;
-    --cv-strong: rgba(0, 0, 0, 0.82);
-    --cv-mid: rgba(0, 0, 0, 0.58);
-    --cv-dim: rgba(0, 0, 0, 0.42);
-    --cv-line: rgba(0, 0, 0, 0.12);
-    --cv-fill: rgba(0, 0, 0, 0.03);
+    width: 276mm;
+    height: 900mm;
+    min-height: 900mm;
+    overflow: hidden;
+    box-shadow: none;
+    font-size: 14pt;
   }
 
-  .sheet,
-  .sheet * {
-    font-family: Arial, Helvetica, sans-serif;
-  }
-
-  /* A4 is narrower than the screen breakpoint, but the PDF should retain the
-     compact two-column document layout instead of inheriting mobile styles. */
-  .head {
-    flex-direction: row;
-    align-items: center;
-    gap: 16px;
-    padding-bottom: var(--s-section);
-  }
-
-  .intro {
+  .documentGrid {
     display: grid;
-    grid-template-columns: 62mm minmax(0, 1fr);
-    gap: 12mm;
+    grid-template-columns: 561fr 222fr;
+    min-height: 900mm;
   }
 
-  .contactsBlock {
-    padding-right: 10mm;
-    padding-bottom: 0;
-    border-right: 1px solid var(--cv-line);
-    border-bottom: 0;
+  .mainColumn {
+    padding: 38pt 48pt 43.5pt;
   }
 
-  .contacts {
+  .name {
+    font-size: 24pt;
+  }
+
+  .position {
+    margin-top: 14pt;
+    font-size: 16pt;
+  }
+
+  .summaryCard {
+    margin-top: 13pt;
+    padding: 20pt;
+    border-radius: 14pt;
+    font-size: 14pt;
+  }
+
+  .jobs {
+    margin-top: 43pt;
+  }
+
+  .company,
+  .projectName,
+  .skillsSection > h2 {
+    font-size: 16pt;
+  }
+
+  .role,
+  .jobBody h4,
+  .studioProjectsTitle {
+    font-size: 14pt;
+  }
+
+  .period,
+  .tags span {
+    font-size: 12pt;
+  }
+
+  .sidebar {
     display: flex;
-    grid-template-columns: none;
-    gap: var(--s-item);
+    padding: 38pt 26pt 31.5pt 25pt;
   }
 
-  .skillGroups {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+  .portrait {
+    width: 99pt;
+    height: 133pt;
+    border-radius: 30pt;
   }
 
-  .stats {
-    grid-template-columns: repeat(4, minmax(0, 1fr));
+  .sideSection h2,
+  .contacts span {
+    font-size: 12pt;
   }
 
-  .entryHead {
-    flex-direction: row;
-    align-items: baseline;
-    gap: 12px;
-  }
-
-  .expBlock,
-  .projectsBlock {
-    break-inside: auto;
+  .contacts a {
+    font-size: 13pt;
   }
 }

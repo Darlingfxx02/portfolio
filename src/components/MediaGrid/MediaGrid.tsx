@@ -24,8 +24,18 @@ const slots: MediaSlot[] = [
     size: 'standard',
   },
   {
+    src: '/media-grid/life-log-phone.png?v=20260722-1',
+    alt: 'Personal life log mobile app with visual collections',
+    size: 'standard',
+  },
+  {
     src: '/media-grid/rag-input.png?v=20260722-1',
     alt: 'AI input with connected models',
+    size: 'standard',
+  },
+  {
+    src: '/media-grid/zinda-onboarding.png?v=20260722-1',
+    alt: 'Zinda onboarding screen',
     size: 'standard',
   },
   {
@@ -35,13 +45,13 @@ const slots: MediaSlot[] = [
     wide: true,
   },
   {
-    src: '/media-grid/zinda-onboarding.png?v=20260722-1',
-    alt: 'Zinda onboarding screen',
+    src: '/media-grid/chat-attachments.png?v=20260722-1',
+    alt: 'AI chat with attached files and images',
     size: 'standard',
   },
   {
-    src: '/media-grid/chat-attachments.png?v=20260722-1',
-    alt: 'AI chat with attached files and images',
+    src: '/media-grid/caffeine-tracker-phone.png?v=20260722-1',
+    alt: 'Daily caffeine tracker mobile app',
     size: 'standard',
   },
   {

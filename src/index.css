@@ -1622,14 +1622,11 @@ h3 {
   }
 }
 
-/* ── Print: isolate the CV sheet so it prints 1:1 as an A4 PDF ─────── */
+/* ── Print: isolate the CV sheet and match the primary tall CV template ── */
 @media print {
-  /* 16mm page margin == the on-screen sheet's 16mm padding, so the printed
-     content area (178mm) matches the screen 1:1. The sheet itself flows as
-     static (Cv.module.css) so tall content paginates across A4 pages. */
   @page {
-    size: A4;
-    margin: 16mm;
+    size: 276mm 900mm;
+    margin: 0;
   }
 
   html,
@@ -1652,7 +1649,6 @@ h3 {
   .cv-sheet {
     border-radius: 0 !important;
     box-shadow: none !important;
-    /* Keep the paper white and any subtle ink tints exact in print. */
     -webkit-print-color-adjust: exact;
     print-color-adjust: exact;
   }

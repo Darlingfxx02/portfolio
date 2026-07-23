@@ -4,6 +4,7 @@ export type ExperienceItem = {
   id: string
   company: string
   kind: 'employment' | 'project'
+  parentId?: string
   period: {
     start: string
     end?: string
@@ -22,7 +23,7 @@ export const experienceHeading = {
 export const experience: ExperienceItem[] = [
   {
     id: 'wmt',
-    company: 'WMT Group',
+    company: 'WMT AI',
     kind: 'employment',
     period: { start: '2026', ongoing: true },
     category: { ru: 'Продуктовый дизайнер · AI', en: 'Product designer · AI' },
@@ -36,7 +37,11 @@ export const experience: ExperienceItem[] = [
     id: 'uxart',
     company: 'UXART',
     kind: 'employment',
-    period: { start: '2025', end: '2025' },
+    period: {
+      start: '2024',
+      end: '2025',
+      duration: { ru: '1,5 года', en: '1.5 years' },
+    },
     category: { ru: 'UX/UI-дизайнер', en: 'UX/UI designer' },
     lead: { ru: 'Дизайн-студия из топа рейтинга Ruward.', en: 'A studio ranked among the top on Ruward.' },
     text: {
@@ -48,6 +53,7 @@ export const experience: ExperienceItem[] = [
     id: 'ovork',
     company: 'OVork',
     kind: 'project',
+    parentId: 'uxart',
     period: { start: '2025', end: '2026' },
     category: { ru: 'Product Designer · mobile fintech', en: 'Product designer · mobile fintech' },
     lead: { ru: 'Студийный проект для живого финтех-продукта.', en: 'A studio-side project for a live fintech product.' },
@@ -60,6 +66,7 @@ export const experience: ExperienceItem[] = [
     id: 'zinda',
     company: 'Zinda',
     kind: 'project',
+    parentId: 'uxart',
     period: {
       start: '2023',
       end: '2024',
@@ -75,7 +82,8 @@ export const experience: ExperienceItem[] = [
   {
     id: 'combogpt',
     company: 'ComboGPT',
-    kind: 'employment',
+    kind: 'project',
+    parentId: 'uxart',
     period: {
       start: '2024',
       end: '2024',
