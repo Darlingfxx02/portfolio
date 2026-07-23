@@ -19,6 +19,11 @@ const slots: MediaSlot[] = [
     size: 'standard',
   },
   {
+    src: '/media-grid/agentic-flows-chat.png?v=20260723-1',
+    alt: 'Agentic flows in chat UI element demo',
+    size: 'standard',
+  },
+  {
     src: '/media-grid/weather.png?v=20260722-1',
     alt: 'New York weather widget',
     size: 'standard',
