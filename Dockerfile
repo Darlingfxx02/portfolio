@@ -1,9 +1,10 @@
-# Emergency offline production image.
-#
-# The Coolify host currently cannot reach Docker Hub or mirror.gcr.io. Reuse
-# the locally cached image of the last healthy portfolio release (it already
-# contains nginx plus nginx.conf) and replace only the prebuilt static files.
-# Once registry access is restored, return to the normal multi-stage build.
-FROM c13rpk2ur1auqxemoctj77vp:bfd2d44cb76b38797053fe01cb78fb4d965c018b
+# Serve the committed Vite build without requiring a Node image during deploy.
+# GHCR is used because the Coolify host cannot reliably reach Docker Hub.
+# Pin the multi-arch manifest so production builds stay reproducible.
+FROM ghcr.io/nginx/nginx-unprivileged:1.29.4-alpine@sha256:a6c4f61f456b85b8fdf7ec7ab28cc3e299440e6fb4a9dea520e5fd8fd440025e
 
-COPY dist /usr/share/nginx/html
+COPY --chown=101:101 nginx.conf /etc/nginx/conf.d/default.conf
+COPY --chown=101:101 dist /usr/share/nginx/html
+
+EXPOSE 3000
+CMD ["nginx", "-g", "daemon off;"]
