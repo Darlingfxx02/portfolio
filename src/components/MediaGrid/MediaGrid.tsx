@@ -24,11 +24,6 @@ const slots: MediaSlot[] = [
     size: 'standard',
   },
   {
-    src: '/media-grid/weather.png?v=20260722-1',
-    alt: 'New York weather widget',
-    size: 'standard',
-  },
-  {
     src: '/media-grid/life-log-phone.png?v=20260722-1',
     alt: 'Personal life log mobile app with visual collections',
     size: 'standard',
