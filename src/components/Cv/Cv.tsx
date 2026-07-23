@@ -288,7 +288,7 @@ export function Cv() {
               />
               <img
                 className={`${styles.portrait} ${styles.portraitPrint}`}
-                src="/cv/portrait-print.png"
+                src="/cv/portrait-print-v2.png"
                 alt=""
                 aria-hidden="true"
               />
