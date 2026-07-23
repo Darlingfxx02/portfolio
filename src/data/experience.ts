@@ -25,12 +25,12 @@ export const experience: ExperienceItem[] = [
     id: 'wmt',
     company: 'WMT AI',
     kind: 'employment',
-    period: { start: '2026', ongoing: true },
+    period: { start: '2025', ongoing: true },
     category: { ru: 'Продуктовый дизайнер · AI', en: 'Product designer · AI' },
     lead: { ru: 'Веду дизайн двух AI-продуктов.', en: 'Leading design on two AI products.' },
     text: {
-      ru: ' Relevanter (подбор персонала) и Nier Key (доступ к зарубежным нейросетям без VPN) — от сценариев до передачи в разработку.',
-      en: ' Relevanter (recruiting) and Nier Key (access to foreign AI models without a VPN) — from flows to developer handoff.',
+      ru: ' Relevanter (подбор персонала) и НейроКлюч (Корпоративный доступ к зарубежным нейросетям без потери ПНД) — от сценариев до передачи в разработку.',
+      en: ' Relevanter (recruiting) and NeuroKey (corporate access to international AI models without compromising personal data) — from flows to developer handoff.',
     },
   },
   {
@@ -38,7 +38,7 @@ export const experience: ExperienceItem[] = [
     company: 'UXART',
     kind: 'employment',
     period: {
-      start: '2024',
+      start: '2023',
       end: '2025',
       duration: { ru: '1,5 года', en: '1.5 years' },
     },

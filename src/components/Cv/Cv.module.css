@@ -24,15 +24,16 @@
 
 .page {
   --cv-paper: #fff;
-  --cv-sidebar: #f0f2f8;
+  --cv-sidebar: #f0f3f8;
   --cv-ink: #101216;
   --cv-body: #202227;
   --cv-muted: #858692;
   --cv-line: #d7d8de;
   --cv-tag: #ededf0;
   --cv-accent: #ff626a;
-  --cv-lilac: #f2e9ff;
-  --cv-blue: #e5edff;
+  --cv-gradient-start: #f1f2ff;
+  --cv-gradient-mid: #fff6f6;
+  --cv-gradient-end: #fff9f3;
   --cv-link: #006ee6;
   --cv-canvas: #e8e9ed;
   --cv-control: #fff;
@@ -56,8 +57,9 @@
   --cv-muted: #9296a1;
   --cv-line: #30323a;
   --cv-tag: #26282f;
-  --cv-lilac: #292234;
-  --cv-blue: #1f293d;
+  --cv-gradient-start: #252638;
+  --cv-gradient-mid: #30262a;
+  --cv-gradient-end: #342c25;
   --cv-link: #74a9ff;
   --cv-canvas: #08090b;
   --cv-control: #23252b;
@@ -156,9 +158,10 @@
   line-height: 1;
 }
 
-.position svg {
+.position img {
   flex: none;
-  color: var(--cv-accent);
+  width: 32px;
+  height: 32px;
 }
 
 .summaryCard {
@@ -167,10 +170,9 @@
   border-radius: 18.67px;
   background: linear-gradient(
     90deg,
-    var(--cv-lilac) 0%,
-    var(--cv-lilac) 35.5%,
-    var(--cv-blue) 35.5%,
-    var(--cv-blue) 100%
+    var(--cv-gradient-start) 0%,
+    var(--cv-gradient-mid) 50%,
+    var(--cv-gradient-end) 100%
   );
   font-size: 18.67px;
   line-height: 1.43;
@@ -184,6 +186,11 @@
   color: var(--cv-link);
   text-decoration: underline;
   text-underline-offset: 3px;
+}
+
+.summaryCard a img {
+  width: 14px;
+  height: 14px;
 }
 
 .jobs {
@@ -230,6 +237,12 @@
   font-variant-numeric: tabular-nums;
 }
 
+.period img {
+  flex: none;
+  width: 20px;
+  height: 20px;
+}
+
 .companyLogo,
 .projectLogo {
   flex: none;
@@ -239,6 +252,11 @@
   border-radius: 14px;
   background: var(--cv-tag);
   object-fit: contain;
+}
+
+.wmtLogo {
+  padding: 10px;
+  background: #f5f5f5;
 }
 
 .tags,
@@ -400,10 +418,10 @@
 }
 
 .portraitFrame {
-  width: 132px;
-  height: 132px;
+  width: 160px;
+  height: 160px;
   overflow: hidden;
-  border-radius: 40px;
+  border-radius: 48.485px;
   background: var(--cv-portrait);
 }
 
@@ -565,14 +583,15 @@
   .page,
   .page[data-theme='dark'] {
     --cv-paper: #fff;
-    --cv-sidebar: #f0f2f8;
+    --cv-sidebar: #f0f3f8;
     --cv-ink: #101216;
     --cv-body: #202227;
     --cv-muted: #858692;
     --cv-line: #d7d8de;
     --cv-tag: #ededf0;
-    --cv-lilac: #f2e9ff;
-    --cv-blue: #e5edff;
+    --cv-gradient-start: #f1f2ff;
+    --cv-gradient-mid: #fff6f6;
+    --cv-gradient-end: #fff9f3;
     --cv-link: #006ee6;
     --cv-portrait: #dfe0e6;
 
@@ -638,6 +657,11 @@
     font-size: 14pt;
   }
 
+  .skillGroups {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 18pt;
+  }
+
   .period,
   .tags span {
     font-size: 12pt;
@@ -649,9 +673,9 @@
   }
 
   .portraitFrame {
-    width: 99pt;
-    height: 99pt;
-    border-radius: 30pt;
+    width: 120pt;
+    height: 120pt;
+    border-radius: 36.36pt;
     background: var(--cv-portrait);
   }
 

@@ -1,9 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import {
-  ArrowUpRight,
-  Briefcase,
   DownloadSimple,
-  MapPin,
   Moon,
   Sun,
 } from '@phosphor-icons/react'
@@ -80,7 +77,7 @@ export function Cv() {
 
   const renderPeriod = (item: ExperienceItem) => (
     <p className={styles.period}>
-      <Briefcase size={14} weight="regular" aria-hidden="true" />
+      <img src="/cv/icon-briefcase.svg" alt="" aria-hidden="true" />
       <time dateTime={item.period.start}>{item.period.start}</time>
       {' - '}
       {item.period.ongoing ? (
@@ -115,7 +112,9 @@ export function Cv() {
                 </div>
                 {logo && (
                   <img
-                    className={styles.projectLogo}
+                    className={`${styles.projectLogo} ${
+                      item.id === 'wmt' ? styles.wmtLogo : ''
+                    }`}
                     src={logo}
                     alt=""
                     aria-hidden="true"
@@ -165,7 +164,9 @@ export function Cv() {
           </div>
           {logo && (
             <img
-              className={styles.companyLogo}
+              className={`${styles.companyLogo} ${
+                item.id === 'wmt' ? styles.wmtLogo : ''
+              }`}
               src={logo}
               alt=""
               aria-hidden="true"
@@ -239,7 +240,7 @@ export function Cv() {
             <header className={styles.identity}>
               <h1 className={styles.name}>{t(cv.name, lang)}</h1>
               <p className={styles.position}>
-                <MapPin size={18} weight="fill" aria-hidden="true" />
+                <img src="/cv/icon-location.svg" alt="" aria-hidden="true" />
                 {t(cv.title, lang)} · {t(cv.focus, lang)}
               </p>
             </header>
@@ -248,7 +249,7 @@ export function Cv() {
               <p>{t(cv.summary, lang)}</p>
               <a href="https://darling.design/#works">
                 {lang === 'ru' ? 'Портфолио' : 'Portfolio'}: darling.design
-                <ArrowUpRight size={14} weight="bold" aria-hidden="true" />
+                <img src="/cv/icon-external.svg" alt="" aria-hidden="true" />
               </a>
             </section>
 
