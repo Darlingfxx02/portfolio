@@ -6,7 +6,6 @@ import { Experience } from '@/components/Experience/Experience'
 import { MediaGrid } from '@/components/MediaGrid/MediaGrid'
 import { SelectedWork } from '@/components/SelectedWork/SelectedWork'
 import { Contact } from '@/components/Contact/Contact'
-import { Cv } from '@/components/Cv/Cv'
 import { DockBar } from '@/components/DockBar/DockBar'
 import { HeaderTools } from '@/components/HeaderTools/HeaderTools'
 import { LangToggle } from '@/components/LangToggle/LangToggle'
@@ -55,11 +54,10 @@ function App() {
   const [caseOverlayOpen, setCaseOverlayOpen] = useState(false)
   const onWorks = hash === '#works'
   const onContact = hash === '#contact'
-  const onCv = hash === '#cv'
   const caseId = hash.startsWith('#case/') ? hash.slice('#case/'.length) : ''
   const CaseView = CASES[caseId]
   const onCase = !!CaseView
-  const onHome = !onWorks && !onContact && !onCv && !onCase
+  const onHome = !onWorks && !onContact && !onCase
   const toggleCaseOverlay = useCallback(() => setCaseOverlayOpen((open) => !open), [])
   const closeCaseOverlay = useCallback(() => setCaseOverlayOpen(false), [])
 
@@ -98,8 +96,6 @@ function App() {
         <Contact />
       ) : onWorks ? (
         <SelectedWork />
-      ) : onCv ? (
-        <Cv />
       ) : (
         <div id="top" className={styles.page}>
           <div className={styles.introStack}>
@@ -111,15 +107,15 @@ function App() {
         </div>
       )}
       <DockBar
-        showBack={onWorks || onCase || onContact || onCv}
+        showBack={onWorks || onCase || onContact}
         onContact={onContact}
         onCaseStudies={onHome ? toggleCaseOverlay : undefined}
         caseStudiesOpen={caseOverlayOpen}
       />
-      {(onWorks || onContact || onCv) && (
+      {(onWorks || onContact) && (
         <>
           <LangToggle />
-          <HeaderTools onCv={onCv} />
+          <HeaderTools />
         </>
       )}
       <CaseOverlay open={caseOverlayOpen} onClose={closeCaseOverlay} />

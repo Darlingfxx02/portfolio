@@ -401,7 +401,7 @@
 
 .portraitFrame {
   width: 132px;
-  height: 177.33px;
+  height: 132px;
   overflow: hidden;
   border-radius: 40px;
   background: var(--cv-portrait);
@@ -546,7 +546,7 @@
 
   .portraitFrame {
     width: 120px;
-    height: 142px;
+    height: 120px;
     border-radius: 32px;
   }
 
@@ -650,7 +650,7 @@
 
   .portraitFrame {
     width: 99pt;
-    height: 133pt;
+    height: 99pt;
     border-radius: 30pt;
     background: var(--cv-portrait);
   }

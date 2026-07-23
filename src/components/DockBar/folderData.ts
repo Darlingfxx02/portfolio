@@ -28,7 +28,13 @@ export const sections: FolderSection[] = [
     Icon: ImagesSquare,
     color: '#3b82f6',
   },
-  { label: { ru: 'CV', en: 'CV' }, href: '#cv', Icon: ReadCvLogo, color: '#3b82f6' },
+  {
+    label: { ru: 'CV', en: 'CV' },
+    href: '/cv/Timothe_Ermolaev_Resume.pdf',
+    Icon: ReadCvLogo,
+    color: '#3b82f6',
+    download: true,
+  },
   {
     label: { ru: 'Контакты', en: 'Contact' },
     href: '#contact',

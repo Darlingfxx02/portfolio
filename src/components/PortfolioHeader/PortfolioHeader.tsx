@@ -2,6 +2,8 @@ import { useEffect, useState } from 'react'
 import { profile } from '@/data/profile'
 import styles from './PortfolioHeader.module.css'
 
+const CV_URL = '/cv/Timothe_Ermolaev_Resume.pdf'
+
 function moscowTime(now: Date) {
   return new Intl.DateTimeFormat('en-GB', {
     timeZone: 'Europe/Moscow',
@@ -25,8 +27,16 @@ export function PortfolioHeader({ onNavigate }: { onNavigate?: () => void }) {
         <a href={profile.telegram} target="_blank" rel="noreferrer" onClick={onNavigate}>
           Telegram
         </a>
-        <a href="#contact" onClick={onNavigate}>Contacts</a>
-        <a href="#cv" onClick={onNavigate}>CV</a>
+        <a href="#contact" onClick={onNavigate}>
+          Contacts
+        </a>
+        <a
+          href={CV_URL}
+          download="Timothe_Ermolaev_Resume.pdf"
+          onClick={onNavigate}
+        >
+          CV
+        </a>
       </nav>
       <nav className={styles.group} aria-label="Portfolio details">
         <span>Moscow {moscowTime(now)}</span>
