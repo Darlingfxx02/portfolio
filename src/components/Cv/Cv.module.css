@@ -26,44 +26,83 @@
   --cv-paper: #fff;
   --cv-sidebar: #f0f2f8;
   --cv-ink: #101216;
+  --cv-body: #202227;
   --cv-muted: #858692;
   --cv-line: #d7d8de;
   --cv-tag: #ededf0;
   --cv-accent: #ff626a;
   --cv-lilac: #f2e9ff;
   --cv-blue: #e5edff;
+  --cv-link: #006ee6;
+  --cv-canvas: #e8e9ed;
+  --cv-control: #fff;
+  --cv-control-ink: #111;
+  --cv-portrait: #dfe0e6;
 
   display: flex;
   flex-direction: column;
   align-items: center;
   min-height: 100vh;
   padding: 40px var(--pad) 150px;
-  background: #0b0b0c;
+  background: var(--cv-canvas);
+  transition: background-color 0.3s ease;
+}
+
+.page[data-theme='dark'] {
+  --cv-paper: #111216;
+  --cv-sidebar: #1a1c22;
+  --cv-ink: #f4f5f7;
+  --cv-body: #d9dbe0;
+  --cv-muted: #9296a1;
+  --cv-line: #30323a;
+  --cv-tag: #26282f;
+  --cv-lilac: #292234;
+  --cv-blue: #1f293d;
+  --cv-link: #74a9ff;
+  --cv-canvas: #08090b;
+  --cv-control: #23252b;
+  --cv-control-ink: #f4f5f7;
+  --cv-portrait: #24262c;
 }
 
 .toolbar {
   display: flex;
   justify-content: flex-end;
+  gap: 8px;
   width: min(100%, 1044px);
   margin-bottom: 14px;
 }
 
-.download {
+.download,
+.themeToggle {
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 8px;
+  height: 40px;
   padding: 11px 18px;
+  border: 0;
   border-radius: 999px;
-  background: #fff;
-  color: #111;
+  background: var(--cv-control);
+  color: var(--cv-control-ink);
   font-family: 'Inter CV', Inter, sans-serif;
   font-size: 14px;
   font-weight: 600;
   box-shadow: var(--shadow-dock);
-  transition: transform 0.2s var(--ease);
+  cursor: pointer;
+  transition:
+    transform 0.2s var(--ease),
+    background-color 0.3s ease,
+    color 0.3s ease;
 }
 
-.download:hover {
+.themeToggle {
+  width: 40px;
+  padding: 0;
+}
+
+.download:hover,
+.themeToggle:hover {
   transform: translateY(-1px);
 }
 
@@ -78,6 +117,9 @@
   font-weight: 400;
   line-height: 1.43;
   box-shadow: 0 24px 80px rgba(0, 0, 0, 0.28);
+  transition:
+    background-color 0.3s ease,
+    color 0.3s ease;
   -webkit-print-color-adjust: exact;
   print-color-adjust: exact;
 }
@@ -139,7 +181,7 @@
   align-items: center;
   gap: 5px;
   margin-top: 10.67px;
-  color: #006ee6;
+  color: var(--cv-link);
   text-decoration: underline;
   text-underline-offset: 3px;
 }
@@ -231,7 +273,7 @@
 }
 
 .jobBody p {
-  color: #202227;
+  color: var(--cv-body);
 }
 
 .jobBody strong,
@@ -308,7 +350,7 @@
 
 .projectSummary {
   margin-top: 18px;
-  color: #202227;
+  color: var(--cv-body);
 }
 
 .projectResults {
@@ -354,15 +396,36 @@
   min-width: 0;
   padding: 50.67px 34.67px 42px 33.33px;
   background: var(--cv-sidebar);
+  transition: background-color 0.3s ease;
+}
+
+.portraitFrame {
+  width: 132px;
+  height: 177.33px;
+  overflow: hidden;
+  border-radius: 40px;
+  background: var(--cv-portrait);
 }
 
 .portrait {
-  width: 132px;
-  height: 177.33px;
-  border-radius: 40px;
-  background: #dfe0e6;
+  display: block;
+  width: 100%;
+  height: 100%;
   object-fit: cover;
-  object-position: 50% 14%;
+  object-position: 50% 50%;
+}
+
+.portraitDark,
+.portraitPrint {
+  display: none;
+}
+
+.page[data-theme='dark'] .portraitLight {
+  display: none;
+}
+
+.page[data-theme='dark'] .portraitDark {
+  display: block;
 }
 
 .sideSection {
@@ -481,7 +544,7 @@
     padding: 36px var(--pad) 70px;
   }
 
-  .portrait {
+  .portraitFrame {
     width: 120px;
     height: 142px;
     border-radius: 32px;
@@ -490,18 +553,29 @@
   .sideSection {
     margin-top: 0;
   }
-
 }
 
 @media (max-width: 430px) {
   .sidebar {
     grid-template-columns: 1fr;
   }
-
 }
 
 @media print {
-  .page {
+  .page,
+  .page[data-theme='dark'] {
+    --cv-paper: #fff;
+    --cv-sidebar: #f0f2f8;
+    --cv-ink: #101216;
+    --cv-body: #202227;
+    --cv-muted: #858692;
+    --cv-line: #d7d8de;
+    --cv-tag: #ededf0;
+    --cv-lilac: #f2e9ff;
+    --cv-blue: #e5edff;
+    --cv-link: #006ee6;
+    --cv-portrait: #dfe0e6;
+
     display: block;
     width: 276mm;
     min-height: 900mm;
@@ -574,10 +648,24 @@
     padding: 38pt 26pt 31.5pt 25pt;
   }
 
-  .portrait {
+  .portraitFrame {
     width: 99pt;
     height: 133pt;
     border-radius: 30pt;
+    background: var(--cv-portrait);
+  }
+
+  .portraitLight,
+  .portraitDark,
+  .page[data-theme='dark'] .portraitDark {
+    display: none;
+  }
+
+  .portraitPrint,
+  .page[data-theme='dark'] .portraitPrint {
+    display: block;
+    object-fit: cover;
+    object-position: 50% 50%;
   }
 
   .sideSection h2,

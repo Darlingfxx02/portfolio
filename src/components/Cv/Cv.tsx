@@ -1,9 +1,11 @@
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import {
   ArrowUpRight,
   Briefcase,
   DownloadSimple,
   MapPin,
+  Moon,
+  Sun,
 } from '@phosphor-icons/react'
 import { cv } from '@/data/cv'
 import { experience, type ExperienceItem } from '@/data/experience'
@@ -19,12 +21,27 @@ const COMPANY_LOGOS: Record<string, string> = {
 const CV_LABELS = {
   download: { ru: 'Скачать PDF', en: 'Download PDF' },
   contacts: { ru: 'Контакты', en: 'Contacts' },
-  projects: { ru: 'Клиентские проекты в UXART', en: 'Client projects at UXART' },
+  projects: {
+    ru: 'Клиентские проекты в UXART',
+    en: 'Client projects at UXART',
+  },
   skills: { ru: 'Навыки', en: 'Skills' },
   present: { ru: 'Настоящее время', en: 'Present' },
 }
 
 const cvText = (value: string) => value.replace(/[‐‑‒–—−]/g, '-')
+type CvTheme = 'light' | 'dark'
+
+const getInitialTheme = (): CvTheme => {
+  if (typeof window === 'undefined') return 'dark'
+
+  const saved = window.localStorage.getItem('cv-theme')
+  if (saved === 'light' || saved === 'dark') return saved
+
+  return window.matchMedia('(prefers-color-scheme: light)').matches
+    ? 'light'
+    : 'dark'
+}
 
 const entryTags = (category: string) =>
   category
@@ -34,6 +51,7 @@ const entryTags = (category: string) =>
 
 export function Cv() {
   const { lang } = useLang()
+  const [theme, setTheme] = useState<CvTheme>(getInitialTheme)
   const prevTitle = useRef('')
   const employment = experience.filter(
     (item) => item.kind === 'employment' && !item.parentId,
@@ -49,6 +67,10 @@ export function Cv() {
     window.addEventListener('afterprint', onAfter)
     return () => window.removeEventListener('afterprint', onAfter)
   }, [])
+
+  useEffect(() => {
+    window.localStorage.setItem('cv-theme', theme)
+  }, [theme])
 
   const onDownload = () => {
     prevTitle.current = document.title
@@ -181,8 +203,30 @@ export function Cv() {
   }
 
   return (
-    <main className={styles.page}>
+    <main className={styles.page} data-theme={theme}>
       <div className={styles.toolbar}>
+        <button
+          type="button"
+          className={styles.themeToggle}
+          onClick={() =>
+            setTheme((value) => (value === 'dark' ? 'light' : 'dark'))
+          }
+          aria-label={
+            theme === 'dark'
+              ? lang === 'ru'
+                ? 'Включить светлую тему'
+                : 'Switch to light theme'
+              : lang === 'ru'
+                ? 'Включить тёмную тему'
+                : 'Switch to dark theme'
+          }
+        >
+          {theme === 'dark' ? (
+            <Sun size={17} weight="bold" aria-hidden="true" />
+          ) : (
+            <Moon size={17} weight="bold" aria-hidden="true" />
+          )}
+        </button>
         <button type="button" className={styles.download} onClick={onDownload}>
           <DownloadSimple size={17} weight="bold" />
           {t(CV_LABELS.download, lang)}
@@ -208,7 +252,9 @@ export function Cv() {
               </a>
             </section>
 
-            <div className={styles.jobs}>{employment.map(renderEmployment)}</div>
+            <div className={styles.jobs}>
+              {employment.map(renderEmployment)}
+            </div>
 
             <section className={styles.skillsSection}>
               <h2>{t(CV_LABELS.skills, lang)}</h2>
@@ -228,11 +274,25 @@ export function Cv() {
           </div>
 
           <aside className={styles.sidebar}>
-            <img
-              className={styles.portrait}
-              src="/stickers/self-portrait.webp"
-              alt={t(cv.name, lang)}
-            />
+            <div className={styles.portraitFrame}>
+              <img
+                className={`${styles.portrait} ${styles.portraitLight}`}
+                src="/cv/portrait-light.png"
+                alt={t(cv.name, lang)}
+              />
+              <img
+                className={`${styles.portrait} ${styles.portraitDark}`}
+                src="/cv/portrait-dark.png"
+                alt=""
+                aria-hidden="true"
+              />
+              <img
+                className={`${styles.portrait} ${styles.portraitPrint}`}
+                src="/cv/portrait-print.png"
+                alt=""
+                aria-hidden="true"
+              />
+            </div>
 
             <section className={styles.sideSection}>
               <h2>{t(CV_LABELS.contacts, lang)}</h2>
@@ -247,7 +307,6 @@ export function Cv() {
                 ))}
               </ul>
             </section>
-
           </aside>
         </div>
       </article>
