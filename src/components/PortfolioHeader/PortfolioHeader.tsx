@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { profile } from '@/data/profile'
 import styles from './PortfolioHeader.module.css'
 
-const CV_URL = '/cv/Timothe_Ermolaev_Resume.pdf'
+const CV_URL = '/cv/Timothe_Ermolaev_Resume.pdf?v=07a07a0d'
 
 function moscowTime(now: Date) {
   return new Intl.DateTimeFormat('en-GB', {
