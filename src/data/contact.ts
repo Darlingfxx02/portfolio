@@ -1,4 +1,5 @@
 import type { Loc } from '@/lib/i18n'
+import { profile } from './profile'
 
 /** Contacts page — concise, professional copy + the mailto form config. */
 export const contact = {
@@ -14,7 +15,7 @@ export const contact = {
     ],
   } as Loc<string[]>,
   // mailto form
-  mailto: 'ermolt2002@gmail.com',
+  mailto: profile.email,
   subject: { ru: 'Запрос с сайта darling.design', en: 'Inquiry from darling.design' } as Loc,
   namePlaceholder: { ru: 'Имя или компания', en: 'Name or company' } as Loc,
   messagePlaceholder: { ru: 'Коротко о задаче или предложении', en: 'A few words about the task or offer' } as Loc,

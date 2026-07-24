@@ -1,10 +1,11 @@
 import { useLayoutEffect, useRef, useState } from 'react'
 import { ArrowUUpLeft } from '@phosphor-icons/react'
+import { profile } from '@/data/profile'
 import { useLang } from '@/lib/i18n'
 import { trackEvent } from '@/lib/analytics'
 import styles from './DockBar.module.css'
 
-const CTA_HREF = 'https://t.me/darling_dsgn'
+const CTA_HREF = profile.telegram
 
 export function DockBar({
   showBack = false,

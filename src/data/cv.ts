@@ -21,7 +21,7 @@ export const cv = {
   } as Loc,
   contacts: [
     { label: 'Email', value: profile.email, href: `mailto:${profile.email}` },
-    { label: 'Telegram', value: '@darling_dsgn', href: profile.telegram },
+    { label: 'Telegram', value: profile.telegramHandle, href: profile.telegram },
     { label: 'Portfolio', value: 'darling.design', href: 'https://darling.design/#works' },
     { label: 'GitHub', value: 'Darlingfxx02', href: profile.links.claudeSkills },
   ],

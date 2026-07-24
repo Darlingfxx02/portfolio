@@ -9,8 +9,8 @@ export function CaseOvork() {
       pageClassName="ovork-page"
       title={
         ru
-          ? "Как ОВорк перешёл от управления сменами к полному финансовому циклу."
-          : "How OVork evolved from shift management into a full financial cycle."
+          ? "Финансовый цикл"
+          : "Full financial cycle"
       }
       intro={
         ru
@@ -140,7 +140,6 @@ export function CaseOvork() {
                   { value: "+20%", label: "Возврат после смены", detail: "оценка роста post-shift retention" },
                   { value: "−45%", label: "Поиск статуса", detail: "оценка времени на понимание выплаты" },
                 ],
-                note: "Метрики — реалистичные ориентиры эффекта для портфолио, а не результат отдельного контролируемого эксперимента. Перед публичным использованием их следует сверять с продуктовой аналитикой.",
                 media: [
                   { src: "/ovork/notif-4.webp", alt: "Финальная система финансовых уведомлений ОВорк" },
                   { src: "/ovork/annul-3.webp", alt: "Финальный сценарий удержания ОВорк" },
@@ -262,7 +261,6 @@ export function CaseOvork() {
                   { value: "+20%", label: "Post-shift return", detail: "estimated retention increase" },
                   { value: "−45%", label: "Status lookup", detail: "estimated time to understand a payout" },
                 ],
-                note: "These metrics are realistic portfolio effect estimates rather than a controlled experiment. They should be checked against product analytics before external publication.",
                 media: [
                   { src: "/ovork/notif-4.webp", alt: "Final OVork financial notification system" },
                   { src: "/ovork/annul-3.webp", alt: "Final OVork deduction journey" },
