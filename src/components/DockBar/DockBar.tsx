@@ -54,19 +54,13 @@ export function DockBar({
           className={styles.cta}
           type="button"
           onClick={onCta}
-          aria-label={
-            onContact
-              ? lang === 'ru'
-                ? 'Отправить'
-                : 'Send'
-              : onCaseStudies
-                ? lang === 'ru'
-                  ? 'Кейсы'
-                  : 'Case studies'
-                : lang === 'ru'
-                  ? 'Связаться'
+            aria-label={
+              onContact
+                ? 'Send'
+                : onCaseStudies
+                  ? 'Case studies'
                   : 'Work with me'
-          }
+            }
           aria-controls={onCaseStudies ? 'works' : undefined}
         >
           <span
@@ -74,17 +68,17 @@ export function DockBar({
             data-show={!onContact && !onCaseStudies}
             aria-hidden={onContact || Boolean(onCaseStudies)}
           >
-            {lang === 'ru' ? 'Связаться' : 'Work with me'}
+              Work with me
           </span>
           <span className={styles.ctaLabel} data-show={onContact} aria-hidden={!onContact}>
-            {lang === 'ru' ? 'Отправить' : 'Send'}
+              Send
           </span>
           <span
             className={styles.ctaLabel}
             data-show={Boolean(onCaseStudies)}
             aria-hidden={!onCaseStudies}
           >
-            {lang === 'ru' ? 'Кейсы' : 'Case studies'}
+              Case studies
           </span>
         </button>
       </div>
