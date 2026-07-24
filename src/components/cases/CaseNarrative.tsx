@@ -50,9 +50,9 @@ export function CaseNarrative({
         <section className="case-narrative-intro">
           <h1 className="case-narrative-intro__title">{title}</h1>
           <p className="case-narrative-intro__body">
-            If you’d like to learn more, please{" "}
+            {ru ? "Хотите узнать больше — " : "If you’d like to learn more, please "}
             <a href={profile.telegram} target="_blank" rel="noreferrer">
-              get in touch.
+              {ru ? "напишите мне." : "get in touch."}
             </a>
           </p>
         </section>

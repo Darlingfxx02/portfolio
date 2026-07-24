@@ -193,7 +193,15 @@ export function SelectedWork() {
                     : project.year ?? study?.year
                   const unavailable = !study || Boolean(study.disabled)
                   const chipLabel =
-                    project.status ?? (study?.disabled ? 'NDA' : 'Open')
+                    project.status === 'Soon'
+                      ? lang === 'ru'
+                        ? 'Скоро'
+                        : 'Soon'
+                      : project.status ?? (study?.disabled
+                          ? 'NDA'
+                          : lang === 'ru'
+                            ? 'Открыть'
+                            : 'Open')
                   const content = (
                     <>
                       <span className={styles.workTitle}>
