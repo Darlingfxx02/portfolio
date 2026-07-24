@@ -9,8 +9,8 @@ export function CaseZinda() {
       pageClassName="zinda-page"
       title={
         ru
-          ? "Как мы провели первый цифровой банк Таджикистана через четыре итерации согласования."
-          : "Launching Tajikistan’s first digital bank through four rounds of stakeholder alignment."
+          ? "Цифровой B2B-банк"
+          : "Digital B2B bank"
       }
       intro={
         ru
@@ -123,7 +123,6 @@ export function CaseZinda() {
                   { value: "100%", label: "Ключевые сценарии", detail: "покрытие банковского контура MVP" },
                   { value: "+20%", label: "Эффективность команды", detail: "оценка скорости производства после разделения ролей" },
                 ],
-                note: "Процентные значения — рабочая оценка эффекта по проектным циклам; они не основаны на отдельном A/B-тесте и должны читаться вместе с указанным baseline.",
                 media: [
                   { src: "/zinda/macbook-1.webp", alt: "Финальный интерфейс Zinda на desktop" },
                   { src: "/zinda/main-screen-phone.webp", alt: "Финальный интерфейс Zinda на mobile" },
@@ -229,7 +228,6 @@ export function CaseZinda() {
                   { value: "100%", label: "Core journeys", detail: "coverage of the MVP banking scope" },
                   { value: "+20%", label: "Team efficiency", detail: "estimated production gain after role split" },
                 ],
-                note: "Percentage values are directional project estimates rather than the result of a dedicated A/B test; they should be read together with the stated baseline.",
                 media: [
                   { src: "/zinda/macbook-1.webp", alt: "Final Zinda desktop interface" },
                   { src: "/zinda/main-screen-phone.webp", alt: "Final Zinda mobile interface" },

@@ -34,7 +34,7 @@ export const cases: CaseStudy[] = [
   {
     id: 'zinda',
     title: { ru: 'Zinda. Первый цифровой банк Таджикистана', en: 'Zinda. Tajikistan’s first digital bank' },
-    year: '2025',
+    year: '2023 — 2024',
     category: { ru: 'Финтех · B2B', en: 'Fintech · B2B' },
     outcome: {
       ru: 'Четыре итерации согласования и один MVP для трёх конкурирующих видений продукта.',
@@ -45,7 +45,10 @@ export const cases: CaseStudy[] = [
   },
   {
     id: 'uxart',
-    title: { ru: 'UXART. AI-трансформация студии', en: 'UXART. Studio-wide AI transformation' },
+    title: {
+      ru: 'UXART. AI-прототипы как стандарт студии',
+      en: 'UXART. AI prototypes as a studio standard',
+    },
     year: '2025',
     category: { ru: 'Change · Процессы', en: 'Change · Process' },
     outcome: {

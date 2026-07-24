@@ -9,8 +9,8 @@ export function CaseUxart() {
       pageClassName="uxart-page"
       title={
         ru
-          ? "Как AI стал частью операционной модели дизайн-студии UXART."
-          : "How AI became part of UXART’s operating model."
+          ? "AI-трансформация студии"
+          : "AI studio transformation"
       }
       intro={
         ru
@@ -150,7 +150,6 @@ export function CaseUxart() {
                   { value: "−50%", label: "Рутинная документация", detail: "оценка времени на повторяемые материалы" },
                   { value: "60%+", label: "Рутина пресейла", detail: "доля автоматизированных повторяемых действий" },
                 ],
-                note: "Проценты показывают рабочую оценку эффекта по внутренним циклам студии. Для строгой атрибуции нужен единый baseline по количеству КП, когорте лидов и периоду наблюдения.",
               },
               {
                 code: "+",
@@ -278,7 +277,6 @@ export function CaseUxart() {
                   { value: "−50%", label: "Routine documentation", detail: "estimated time on repeated materials" },
                   { value: "60%+", label: "Presale routine", detail: "share of repeatable actions automated" },
                 ],
-                note: "Percentages are working estimates based on internal studio cycles. Strict attribution requires one baseline for proposal volume, lead cohorts, and observation period.",
               },
               {
                 code: "+",
