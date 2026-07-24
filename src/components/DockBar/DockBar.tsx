@@ -1,4 +1,3 @@
-import { useLayoutEffect, useRef, useState } from 'react'
 import { ArrowUUpLeft } from '@phosphor-icons/react'
 import { profile } from '@/data/profile'
 import { useLang } from '@/lib/i18n'
@@ -17,28 +16,6 @@ export function DockBar({
   onCaseStudies?: () => void
 }) {
   const { lang } = useLang()
-
-  // The CTA morphs between "Work with me" and "Send". Keep it a single
-  // persistent element and animate its width to the active label so the
-  // change is smooth instead of a hard swap.
-  const workRef = useRef<HTMLSpanElement>(null)
-  const sendRef = useRef<HTMLSpanElement>(null)
-  const casesRef = useRef<HTMLSpanElement>(null)
-  const [ctaW, setCtaW] = useState<number | undefined>()
-
-  useLayoutEffect(() => {
-    const measure = () => {
-      const active = onContact
-        ? sendRef.current
-        : onCaseStudies
-          ? casesRef.current
-          : workRef.current
-      if (active) setCtaW(active.offsetWidth + 44) // + horizontal padding
-    }
-    measure()
-    // Re-measure once webfonts settle so the width matches the real glyphs.
-    document.fonts?.ready.then(measure).catch(() => {})
-  }, [onCaseStudies, onContact])
 
   const onCta = () => {
     if (onCaseStudies) {
@@ -76,7 +53,6 @@ export function DockBar({
         <button
           className={styles.cta}
           type="button"
-          style={ctaW ? { width: ctaW } : undefined}
           onClick={onCta}
           aria-label={
             onContact
@@ -88,18 +64,16 @@ export function DockBar({
           aria-controls={onCaseStudies ? 'works' : undefined}
         >
           <span
-            ref={workRef}
             className={styles.ctaLabel}
             data-show={!onContact && !onCaseStudies}
             aria-hidden={onContact || Boolean(onCaseStudies)}
           >
             Work with me
           </span>
-          <span ref={sendRef} className={styles.ctaLabel} data-show={onContact} aria-hidden={!onContact}>
+          <span className={styles.ctaLabel} data-show={onContact} aria-hidden={!onContact}>
             Send
           </span>
           <span
-            ref={casesRef}
             className={styles.ctaLabel}
             data-show={Boolean(onCaseStudies)}
             aria-hidden={!onCaseStudies}
