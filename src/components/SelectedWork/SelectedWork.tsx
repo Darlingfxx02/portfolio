@@ -24,7 +24,7 @@ const jobs: Array<{
   {
     id: 'wmt',
     experienceId: 'wmt',
-    logo: '/company-favicons/wmt.svg',
+    logo: '/company-favicons/wmt-current.png',
     role: {
       ru: 'Продуктовый дизайнер',
       en: 'Product designer',
@@ -53,7 +53,7 @@ const jobs: Array<{
   {
     id: 'uxart',
     experienceId: 'uxart',
-    logo: '/company-favicons/uxart.ico',
+    logo: '/company-favicons/uxart-current.png',
     projects: [
       {
         id: 'ovork',
