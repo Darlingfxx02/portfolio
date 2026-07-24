@@ -11,12 +11,10 @@ export function DockBar({
   showBack = false,
   onContact = false,
   onCaseStudies,
-  caseStudiesOpen = false,
 }: {
   showBack?: boolean
   onContact?: boolean
   onCaseStudies?: () => void
-  caseStudiesOpen?: boolean
 }) {
   const { lang } = useLang()
 
@@ -26,7 +24,6 @@ export function DockBar({
   const workRef = useRef<HTMLSpanElement>(null)
   const sendRef = useRef<HTMLSpanElement>(null)
   const casesRef = useRef<HTMLSpanElement>(null)
-  const homeRef = useRef<HTMLSpanElement>(null)
   const [ctaW, setCtaW] = useState<number | undefined>()
 
   useLayoutEffect(() => {
@@ -34,20 +31,18 @@ export function DockBar({
       const active = onContact
         ? sendRef.current
         : onCaseStudies
-          ? caseStudiesOpen
-            ? homeRef.current
-            : casesRef.current
+          ? casesRef.current
           : workRef.current
       if (active) setCtaW(active.offsetWidth + 44) // + horizontal padding
     }
     measure()
     // Re-measure once webfonts settle so the width matches the real glyphs.
     document.fonts?.ready.then(measure).catch(() => {})
-  }, [caseStudiesOpen, onCaseStudies, onContact])
+  }, [onCaseStudies, onContact])
 
   const onCta = () => {
     if (onCaseStudies) {
-      trackEvent(caseStudiesOpen ? 'case_overlay_closed' : 'case_overlay_opened', {
+      trackEvent('case_studies_opened', {
         target: 'dock_cta',
       })
       onCaseStudies()
@@ -87,13 +82,10 @@ export function DockBar({
             onContact
               ? 'Send'
               : onCaseStudies
-                ? caseStudiesOpen
-                  ? 'Home'
-                  : 'Case studies'
+                ? 'Case studies'
                 : 'Work with me'
           }
-          aria-expanded={onCaseStudies ? caseStudiesOpen : undefined}
-          aria-controls={onCaseStudies ? 'case-overlay' : undefined}
+          aria-controls={onCaseStudies ? 'works' : undefined}
         >
           <span
             ref={workRef}
@@ -109,18 +101,10 @@ export function DockBar({
           <span
             ref={casesRef}
             className={styles.ctaLabel}
-          data-show={Boolean(onCaseStudies) && !caseStudiesOpen}
-          aria-hidden={!onCaseStudies || caseStudiesOpen}
+            data-show={Boolean(onCaseStudies)}
+            aria-hidden={!onCaseStudies}
           >
             Case studies
-          </span>
-          <span
-            ref={homeRef}
-            className={styles.ctaLabel}
-            data-show={caseStudiesOpen}
-            aria-hidden={!caseStudiesOpen}
-          >
-            Home
           </span>
         </button>
       </div>

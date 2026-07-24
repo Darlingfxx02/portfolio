@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useLayoutEffect, useState, type ComponentType } from 'react'
+import { useEffect, useLayoutEffect, useState, type ComponentType } from 'react'
 import { Profile } from '@/components/Profile/Profile'
 import { UsageHeatmap } from '@/components/UsageHeatmap/UsageHeatmap'
 import { PortfolioHeader } from '@/components/PortfolioHeader/PortfolioHeader'
@@ -13,7 +13,6 @@ import { ScrollBar } from '@/components/ScrollBar/ScrollBar'
 import { CaseZinda } from '@/components/cases/CaseZinda'
 import { CaseUxart } from '@/components/cases/CaseUxart'
 import { CaseOvork } from '@/components/cases/CaseOvork'
-import { CaseOverlay } from '@/components/CaseOverlay/CaseOverlay'
 import { initSfx } from '@/lib/sound'
 import { initAnalytics, trackEvent } from '@/lib/analytics'
 import styles from './App.module.css'
@@ -51,15 +50,12 @@ function scrollImmediatelyTo(hash: string) {
 
 function App() {
   const hash = useHash()
-  const [caseOverlayOpen, setCaseOverlayOpen] = useState(false)
   const onWorks = hash === '#works'
   const onContact = hash === '#contact'
   const caseId = hash.startsWith('#case/') ? hash.slice('#case/'.length) : ''
   const CaseView = CASES[caseId]
   const onCase = !!CaseView
   const onHome = !onWorks && !onContact && !onCase
-  const toggleCaseOverlay = useCallback(() => setCaseOverlayOpen((open) => !open), [])
-  const closeCaseOverlay = useCallback(() => setCaseOverlayOpen(false), [])
 
   useEffect(() => {
     initSfx()
@@ -89,7 +85,7 @@ function App() {
 
   return (
     <>
-      {(onHome || onCase) && <PortfolioHeader onNavigate={closeCaseOverlay} />}
+      {(onHome || onCase) && <PortfolioHeader />}
       {onCase ? (
         <CaseView />
       ) : onContact ? (
@@ -109,8 +105,13 @@ function App() {
       <DockBar
         showBack={onWorks || onCase || onContact}
         onContact={onContact}
-        onCaseStudies={onHome ? toggleCaseOverlay : undefined}
-        caseStudiesOpen={caseOverlayOpen}
+        onCaseStudies={
+          onHome
+            ? () => {
+                window.location.hash = '#works'
+              }
+            : undefined
+        }
       />
       {(onWorks || onContact) && (
         <>
@@ -118,7 +119,6 @@ function App() {
           <HeaderTools />
         </>
       )}
-      <CaseOverlay open={caseOverlayOpen} onClose={closeCaseOverlay} />
       <ScrollBar />
     </>
   )

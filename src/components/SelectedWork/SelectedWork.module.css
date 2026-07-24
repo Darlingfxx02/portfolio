@@ -1,62 +1,210 @@
 .page {
   width: 100%;
-  min-height: 100vh;
-  padding: 8px;
+  min-height: 100svh;
+  padding: 96px var(--pad) 160px;
   background: var(--bg);
+  font-family: var(--font-sf);
 }
 
-/* ── Full-width 2-column bento ──────────── */
-.cols {
-  display: flex;
-  gap: 8px;
-  width: 100%;
-}
-
-.col {
+.jobList {
   display: flex;
   flex-direction: column;
-  gap: 8px;
-  flex: 1 1 0;
+  gap: 48px;
+  width: 100%;
+  max-width: 640px;
+  margin: 0 auto;
+}
+
+.job {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.jobHeader {
+  display: grid;
+  grid-template-columns: 32px minmax(0, 1fr) auto;
+  grid-template-rows: auto auto;
+  column-gap: 12px;
+  row-gap: 4px;
+  align-items: center;
+  width: 100%;
+  font-size: 16px;
+  line-height: 1.2;
+  letter-spacing: -0.32px;
+}
+
+.jobCompany {
+  display: contents;
+}
+
+.jobLogo {
+  grid-column: 1;
+  grid-row: 1 / 3;
+  width: 32px;
+  height: 32px;
+  box-sizing: border-box;
+  padding: 7px;
+  border-radius: 8px;
+  background: #fff;
+  object-fit: contain;
+}
+
+.jobCompany p {
+  grid-column: 2;
+  grid-row: 1;
+  min-width: 0;
+  color: var(--text);
+}
+
+.jobRole,
+.jobPeriod {
+  color: var(--text-dim);
+}
+
+.jobRole {
+  grid-column: 2;
+  grid-row: 2;
   min-width: 0;
 }
 
-.tile {
-  width: 100%;
-  border-radius: 24px;
-  background: var(--fill);
-  overflow: hidden;
+.jobPeriod {
+  grid-column: 3;
+  grid-row: 1 / 3;
+  text-align: right;
+  white-space: nowrap;
 }
 
-.tile[data-clickable] {
-  cursor: pointer;
+.jobProjects {
+  --rail-y: 0px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-left: 16px;
+  padding-left: 28px;
+  border-left: 1px solid var(--line);
+}
+
+.jobProjects::before {
+  position: absolute;
+  z-index: 2;
+  top: var(--rail-y);
+  left: -2px;
+  width: 3px;
+  height: 28px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.88);
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.26);
+  content: '';
+  pointer-events: none;
+  opacity: 0;
+  transform: translateY(-50%);
   transition:
-    transform 0.35s cubic-bezier(0.22, 1, 0.36, 1),
-    opacity 0.35s ease;
+    top 220ms var(--ease),
+    opacity 120ms ease;
 }
 
-.tile[data-clickable] .img {
-  transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+.jobProjects[data-rail-active]::before {
+  opacity: 1;
 }
 
-@media (hover: hover) {
-  .tile[data-clickable]:hover .img {
-    transform: scale(1.04);
+.workItem {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: 100%;
+  padding: 8px 0;
+  color: var(--text);
+}
+
+.workItem[data-disabled] {
+  cursor: default;
+}
+
+.workItem[data-disabled] .workTitle,
+.workItem[data-disabled] .workMeta {
+  opacity: 0.34;
+}
+
+.workTitle {
+  min-width: 0;
+  max-width: 100%;
+  font-size: 15px;
+  font-weight: var(--wt-regular);
+  line-height: 1.5;
+  letter-spacing: 0;
+  text-wrap: balance;
+}
+
+.workMeta {
+  color: var(--text-dim);
+  font-size: 15px;
+  line-height: 1.5;
+  letter-spacing: 0;
+}
+
+.hoverChip {
+  position: absolute;
+  z-index: 5;
+  top: var(--chip-y, 50%);
+  left: var(--chip-x, 50%);
+  display: inline-flex;
+  align-items: center;
+  padding: 0 6px;
+  border-radius: 5px;
+  background: #2a2a2a;
+  color: #fff;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.35);
+  font-size: 15px;
+  font-weight: var(--wt-strong);
+  line-height: 1.5;
+  letter-spacing: 0;
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  transform: translate(12px, -50%) scale(0.92);
+  transform-origin: 0 50%;
+  transition:
+    opacity 120ms ease,
+    transform 160ms var(--ease);
+}
+
+.workItem[data-chip-visible] .hoverChip {
+  opacity: 1;
+  transform: translate(12px, -50%) scale(1);
+}
+
+@media (max-width: 720px) {
+  .page {
+    padding-top: 72px;
+    padding-bottom: 120px;
+  }
+
+  .jobRole,
+  .jobPeriod {
+    font-size: 14px;
+  }
+
+  .jobProjects {
+    margin-left: 16px;
+    padding-left: 28px;
   }
 }
 
-.tile[data-clickable]:focus-visible {
-  outline: 2px solid var(--accent, currentColor);
-  outline-offset: 3px;
-}
+@media (max-width: 430px) {
+  .jobHeader {
+    grid-template-columns: 32px minmax(0, 1fr) auto;
+    column-gap: 10px;
+  }
 
-.img {
-  display: block;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
+  .jobPeriod {
+    max-width: 112px;
+    white-space: normal;
+  }
 
-.sentinel {
-  width: 100%;
-  height: 1px;
+  .jobProjects {
+    padding-left: 22px;
+  }
 }
