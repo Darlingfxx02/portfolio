@@ -15,14 +15,14 @@ const featuredExperience: FeaturedExperience[] = [
     company: 'WMT AI',
     role: 'Продуктовый дизайнер · AI',
     period: '2025 — наст. время',
-    logo: '/company-favicons/wmt-current.png',
+    logo: '/company-favicons/wmt-current.svg',
   },
   {
     id: 'uxart',
     company: 'UXART',
     role: 'UX/UI-дизайнер',
     period: '2023 — 2025 · 1,5 года',
-    logo: '/company-favicons/uxart-current.png',
+    logo: '/company-favicons/uxart-current.svg',
   },
 ]
 
