@@ -5,8 +5,8 @@ import { useLang, t } from '@/lib/i18n'
 import { trackEvent } from '@/lib/analytics'
 import styles from './Contact.module.css'
 
-/** #contact route — short warm intro, a mailto-composing form, and socials. */
-export function Contact() {
+/** Contact panel — short warm intro, a mailto-composing form, and socials. */
+export function Contact({ embedded = false }: { embedded?: boolean }) {
   const { lang } = useLang()
   const [name, setName] = useState('')
   const [message, setMessage] = useState('')
@@ -36,7 +36,7 @@ export function Contact() {
   }
 
   return (
-    <main className={styles.page}>
+    <section className={`${styles.page} ${embedded ? styles.embedded : ''}`}>
       <section className={styles.inner}>
         <ul className={styles.socials}>
           {socials.map((s) => {
@@ -95,6 +95,6 @@ export function Contact() {
           />
         </form>
       </section>
-    </main>
+    </section>
   )
 }

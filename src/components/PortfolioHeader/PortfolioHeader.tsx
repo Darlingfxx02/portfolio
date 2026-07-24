@@ -27,7 +27,7 @@ export function PortfolioHeader({ onNavigate }: { onNavigate?: () => void }) {
         <a href={profile.telegram} target="_blank" rel="noreferrer" onClick={onNavigate}>
           Telegram
         </a>
-        <a href="#contact" onClick={onNavigate}>
+        <a href="#about" onClick={onNavigate}>
           Contacts
         </a>
         <a

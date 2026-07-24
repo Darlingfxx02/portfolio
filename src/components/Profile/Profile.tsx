@@ -2,7 +2,7 @@ import styles from './Profile.module.css'
 
 export function Profile() {
   return (
-    <section id="about" className={styles.section}>
+    <section className={styles.section}>
       <div className={styles.hero} aria-label="Portrait video">
         <video
           className={styles.video}

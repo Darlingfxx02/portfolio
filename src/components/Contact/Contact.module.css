@@ -7,6 +7,15 @@
   background: var(--bg);
 }
 
+.embedded {
+  min-height: 0;
+  padding: 0 32px 160px;
+}
+
+.embedded .inner {
+  max-width: 608px;
+}
+
 .inner {
   display: flex;
   flex-direction: column;
@@ -105,4 +114,10 @@
 .social:hover {
   color: var(--text);
   text-decoration-color: var(--text-faint);
+}
+
+@media (max-width: 720px) {
+  .embedded {
+    padding-bottom: 120px;
+  }
 }

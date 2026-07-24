@@ -1,0 +1,338 @@
+.section {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.navWrap {
+  width: 100%;
+  padding: 0 var(--pad);
+}
+
+.nav {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  width: 100%;
+  max-width: 640px;
+  margin: 0 auto;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.nav::-webkit-scrollbar {
+  display: none;
+}
+
+.tab {
+  position: relative;
+  flex: none;
+  padding: 0 0 4px;
+  color: var(--text-dim);
+  font-family: var(--font-sf);
+  font-size: 15px;
+  font-weight: var(--wt-regular);
+  line-height: 1.5;
+  letter-spacing: 0;
+  transition: color 180ms ease;
+}
+
+.tab::after {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  height: 2px;
+  background: var(--text);
+  content: '';
+  opacity: 0;
+  transform: scaleX(0.45);
+  transform-origin: 0 50%;
+  transition:
+    opacity 180ms ease,
+    transform 260ms var(--ease);
+}
+
+.tab:hover {
+  color: var(--text-mid);
+}
+
+.tab[data-active] {
+  color: var(--text);
+}
+
+.tab[data-active]::after {
+  opacity: 1;
+  transform: scaleX(1);
+}
+
+.panel {
+  position: relative;
+  width: 100%;
+  /* Keep enough document height for every tab so swapping a short panel in
+     cannot make the browser clamp scrollY and visibly move the page. */
+  min-height: 100svh;
+  padding-top: 40px;
+  animation: panelIn 360ms var(--ease) both;
+  outline: none;
+}
+
+.workGroup {
+  display: flex;
+  flex-direction: column;
+  width: calc(100% - 2 * var(--pad));
+  max-width: 640px;
+  margin: 0 auto;
+  padding-bottom: 160px;
+}
+
+.jobList {
+  display: flex;
+  flex-direction: column;
+  gap: 48px;
+}
+
+.job {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.jobHeader {
+  display: grid;
+  grid-template-columns: 32px minmax(0, 1fr) auto;
+  grid-template-rows: auto auto;
+  column-gap: 12px;
+  row-gap: 4px;
+  align-items: center;
+  width: 100%;
+  font-size: 16px;
+  line-height: 1.2;
+  letter-spacing: -0.32px;
+}
+
+.jobCompany {
+  display: contents;
+}
+
+.jobLogo {
+  grid-column: 1;
+  grid-row: 1 / 3;
+  width: 32px;
+  height: 32px;
+  flex: none;
+  box-sizing: border-box;
+  padding: 7px;
+  border-radius: 8px;
+  background: #fff;
+  object-fit: contain;
+}
+
+.jobCompany p {
+  grid-column: 2;
+  grid-row: 1;
+}
+
+.jobRole,
+.jobPeriod {
+  color: var(--text-dim);
+}
+
+.jobRole {
+  grid-column: 2;
+  grid-row: 2;
+}
+
+.jobPeriod {
+  grid-column: 3;
+  grid-row: 1 / 3;
+  text-align: right;
+  white-space: nowrap;
+}
+
+.jobProjects {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-left: 44px;
+  padding-left: 16px;
+  border-left: 1px solid var(--line);
+}
+
+.workItem {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+  width: 100%;
+  padding: 8px 0;
+  color: var(--text);
+}
+
+.workItem[data-disabled] {
+  cursor: default;
+}
+
+.workItem[data-disabled] .workTitleRow,
+.workItem[data-disabled] .workMeta {
+  opacity: 0.34;
+}
+
+.workTitleRow {
+  display: flex;
+  align-items: center;
+  align-self: flex-start;
+  max-width: 100%;
+}
+
+.workTitle {
+  display: inline;
+  min-width: 0;
+  border-bottom: 2px solid var(--line);
+  font-family: var(--font-sf);
+  font-size: 15px;
+  font-weight: var(--wt-regular);
+  line-height: 1.5;
+  letter-spacing: 0;
+  text-wrap: balance;
+  transition: border-color 180ms ease;
+}
+
+.hoverChip {
+  position: absolute;
+  z-index: 5;
+  top: var(--chip-y, 50%);
+  left: var(--chip-x, 50%);
+  display: inline-flex;
+  align-items: center;
+  padding: 0 6px;
+  border-radius: 5px;
+  background: #2a2a2a;
+  color: #fff;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.35);
+  font-size: 15px;
+  font-weight: var(--wt-strong);
+  line-height: 1.5;
+  letter-spacing: 0;
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  transform: translate(12px, -50%) scale(0.92);
+  transform-origin: 0 50%;
+  transition:
+    opacity 120ms ease,
+    transform 160ms var(--ease);
+}
+
+.workItem[data-chip-visible] .hoverChip {
+  opacity: 1;
+  transform: translate(12px, -50%) scale(1);
+}
+
+a.workItem:hover .workTitle,
+a.workItem:focus-visible .workTitle {
+  border-color: var(--text);
+}
+
+.workMeta {
+  color: var(--text-dim);
+  font-family: var(--font-sf);
+  font-size: 15px;
+  line-height: 1.5;
+  letter-spacing: 0;
+}
+
+.about {
+  display: flex;
+  flex-direction: column;
+  gap: 48px;
+  width: calc(100% - 2 * var(--pad));
+  max-width: 640px;
+  margin: 0 auto;
+  padding-bottom: 160px;
+  font-family: var(--font-sf);
+  font-size: 15px;
+  line-height: 1.5;
+}
+
+.aboutCopy {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  max-width: 608px;
+}
+
+.connect {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.connectLabel {
+  color: var(--text-dim);
+}
+
+.connectList {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 16px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.connectLink {
+  border-bottom: 2px solid var(--line);
+  transition: border-color 180ms ease;
+}
+
+.connectLink:hover,
+.connectLink:focus-visible {
+  border-color: var(--text);
+}
+
+@keyframes panelIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 720px) {
+  .panel {
+    padding-top: 40px;
+  }
+
+  .workGroup {
+    padding-bottom: 120px;
+  }
+
+  .jobRole {
+    font-size: 14px;
+  }
+
+  .jobPeriod {
+    font-size: 14px;
+  }
+
+  .jobProjects {
+    margin-left: 16px;
+    padding-left: 16px;
+  }
+
+  .about {
+    padding-bottom: 120px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .panel {
+    animation: none;
+  }
+}

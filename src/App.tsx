@@ -2,18 +2,15 @@ import { useCallback, useEffect, useLayoutEffect, useState, type ComponentType }
 import { Profile } from '@/components/Profile/Profile'
 import { UsageHeatmap } from '@/components/UsageHeatmap/UsageHeatmap'
 import { PortfolioHeader } from '@/components/PortfolioHeader/PortfolioHeader'
-import { Experience } from '@/components/Experience/Experience'
-import { MediaGrid } from '@/components/MediaGrid/MediaGrid'
-import { SelectedWork } from '@/components/SelectedWork/SelectedWork'
-import { Contact } from '@/components/Contact/Contact'
+import {
+  PortfolioTabs,
+  type PortfolioTab,
+} from '@/components/PortfolioTabs/PortfolioTabs'
 import { DockBar } from '@/components/DockBar/DockBar'
-import { HeaderTools } from '@/components/HeaderTools/HeaderTools'
-import { LangToggle } from '@/components/LangToggle/LangToggle'
 import { ScrollBar } from '@/components/ScrollBar/ScrollBar'
 import { CaseZinda } from '@/components/cases/CaseZinda'
 import { CaseUxart } from '@/components/cases/CaseUxart'
 import { CaseOvork } from '@/components/cases/CaseOvork'
-import { CaseOverlay } from '@/components/CaseOverlay/CaseOverlay'
 import { initSfx } from '@/lib/sound'
 import { initAnalytics, trackEvent } from '@/lib/analytics'
 import styles from './App.module.css'
@@ -37,6 +34,10 @@ function useHash() {
 }
 
 function scrollImmediatelyTo(hash: string) {
+  // Tabs swap content in place. Their URL hashes are state only and must never
+  // reposition the page like traditional document anchors.
+  if (['#work', '#works', '#explorations', '#about', '#contact'].includes(hash)) return
+
   const root = document.documentElement
   const previousScrollBehavior = root.style.scrollBehavior
   root.style.scrollBehavior = 'auto'
@@ -51,15 +52,21 @@ function scrollImmediatelyTo(hash: string) {
 
 function App() {
   const hash = useHash()
-  const [caseOverlayOpen, setCaseOverlayOpen] = useState(false)
-  const onWorks = hash === '#works'
-  const onContact = hash === '#contact'
   const caseId = hash.startsWith('#case/') ? hash.slice('#case/'.length) : ''
   const CaseView = CASES[caseId]
   const onCase = !!CaseView
-  const onHome = !onWorks && !onContact && !onCase
-  const toggleCaseOverlay = useCallback(() => setCaseOverlayOpen((open) => !open), [])
-  const closeCaseOverlay = useCallback(() => setCaseOverlayOpen(false), [])
+  const activeTab: PortfolioTab =
+    hash === '#explorations'
+      ? 'explorations'
+      : hash === '#about' || hash === '#contact'
+        ? 'about'
+        : 'work'
+
+  const showTab = useCallback((tab: PortfolioTab) => {
+    const nextHash = `#${tab}`
+    if (window.location.hash === nextHash) return
+    window.location.hash = nextHash
+  }, [])
 
   useEffect(() => {
     initSfx()
@@ -89,36 +96,22 @@ function App() {
 
   return (
     <>
-      {(onHome || onCase) && <PortfolioHeader onNavigate={closeCaseOverlay} />}
+      <PortfolioHeader />
       {onCase ? (
         <CaseView />
-      ) : onContact ? (
-        <Contact />
-      ) : onWorks ? (
-        <SelectedWork />
       ) : (
         <div id="top" className={styles.page}>
           <div className={styles.introStack}>
             <Profile />
             <UsageHeatmap />
-            <Experience />
           </div>
-          <MediaGrid />
+          <PortfolioTabs activeTab={activeTab} onTabChange={showTab} />
         </div>
       )}
       <DockBar
-        showBack={onWorks || onCase || onContact}
-        onContact={onContact}
-        onCaseStudies={onHome ? toggleCaseOverlay : undefined}
-        caseStudiesOpen={caseOverlayOpen}
+        showBack={onCase}
+        onContact={onCase ? undefined : () => showTab('about')}
       />
-      {(onWorks || onContact) && (
-        <>
-          <LangToggle />
-          <HeaderTools />
-        </>
-      )}
-      <CaseOverlay open={caseOverlayOpen} onClose={closeCaseOverlay} />
       <ScrollBar />
     </>
   )

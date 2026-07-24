@@ -32,7 +32,7 @@ export function Experience() {
   const hasHighlights = highlights.length > 0
 
   return (
-    <section id="experience" className={styles.section}>
+    <section className={styles.section}>
       <p className={styles.label}>Work experience</p>
       <span className={styles.accent} />
       <div className={styles.list}>
