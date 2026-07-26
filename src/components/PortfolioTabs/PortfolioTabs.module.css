@@ -270,26 +270,43 @@
   --photo-height: 210px;
   --photo-gap: 12px;
   --photo-loop-distance: 800px;
+  --photo-stage-overscan: 168px;
   --carousel-content-width: min(640px, calc(100vw - 2 * var(--pad)));
   --carousel-effect-width: min(100vw, 840px);
   --edge-effect-width: max(
     12px,
     calc((var(--carousel-effect-width) - var(--carousel-content-width)) / 2)
   );
+  --edge-darkening-width: min(
+    180px,
+    calc(var(--edge-effect-width) + 64px)
+  );
   position: relative;
   width: 100vw;
   height: var(--photo-height);
   max-width: 840px;
   margin-left: 50%;
-  overflow: hidden;
   transform: translateX(-50%);
 }
 
 .photoStage {
   position: absolute;
-  inset: -64px 0;
+  inset: calc(-1 * var(--photo-stage-overscan)) 0;
   isolation: isolate;
   overflow: hidden;
+}
+
+.photoGlowRail {
+  position: absolute;
+  z-index: 0;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  opacity: 0.42;
+}
+
+.photoGlowRail .photoTrack {
+  filter: blur(56px) saturate(135%);
 }
 
 .photoSharpRail {
@@ -409,7 +426,7 @@
   z-index: 3;
   top: 0;
   bottom: 0;
-  width: var(--edge-effect-width);
+  width: var(--edge-darkening-width);
   content: '';
   pointer-events: none;
 }
@@ -442,7 +459,7 @@
 
 .photoTrack {
   position: relative;
-  top: 64px;
+  top: var(--photo-stage-overscan);
   left: 0;
   display: flex;
   gap: var(--photo-gap);

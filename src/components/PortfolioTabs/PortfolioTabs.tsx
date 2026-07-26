@@ -83,6 +83,9 @@ function AboutPhotoCarousel() {
       aria-label="Фотографии"
     >
       <div className={styles.photoStage}>
+        <div className={styles.photoGlowRail} aria-hidden>
+          <PhotoTrack decorative />
+        </div>
         <div className={styles.photoSharpRail}>
           <PhotoTrack />
         </div>
