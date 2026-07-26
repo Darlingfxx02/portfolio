@@ -221,7 +221,7 @@ export function CaseZindaMobile() {
                       index === 0 ? " case-narrative-media--mobile-comparison" : ""
                     }`,
             }))}
-      nextCase={{ href: "#case/ovork", label: "OVork" }}
+      nextCase={{ href: "#case/uxart", label: "UXART" }}
     />
   );
 }

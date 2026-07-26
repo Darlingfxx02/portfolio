@@ -22,11 +22,12 @@ import { CaseZindaMobile } from '@/components/cases/CaseZindaMobile'
 import { CaseUxart } from '@/components/cases/CaseUxart'
 import { CaseOvork } from '@/components/cases/CaseOvork'
 import { Cv } from '@/components/Cv/Cv'
+import { cases } from '@/data/cases'
 import { initSfx, tabTick } from '@/lib/sound'
 import { initAnalytics, trackEvent } from '@/lib/analytics'
 import styles from './App.module.css'
 
-const CASES: Record<string, ComponentType> = {
+const CASE_COMPONENTS: Record<string, ComponentType> = {
   zinda: CaseZinda,
   'zinda-system': CaseZindaSystem,
   'zinda-mobile': CaseZindaMobile,
@@ -106,7 +107,8 @@ function scrollImmediatelyTo(hash: string, arrival: SectionArrival = 'saved') {
 function App() {
   const hash = useHash()
   const caseId = hash.startsWith('#case/') ? hash.slice('#case/'.length) : ''
-  const CaseView = CASES[caseId]
+  const caseStudy = cases.find((study) => study.id === caseId)
+  const CaseView = caseStudy?.disabled ? undefined : CASE_COMPONENTS[caseId]
   const onCase = !!CaseView
   const onCv = hash === '#cv'
   const activeTab = tabFromHash(hash)
