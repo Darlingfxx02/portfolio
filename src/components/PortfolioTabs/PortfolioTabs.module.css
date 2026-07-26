@@ -523,10 +523,29 @@
   }
 }
 
+@keyframes revealJobHeaderMobile {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
 @media (max-width: 720px) {
   .panel {
     min-height: calc(100svh - 64px);
     padding-top: 48px;
+  }
+
+  /* Mobile Safari can keep SVG children rasterized inside a completed
+     filter/scale animation. Fade job headers without creating that bitmap
+     layer, then release the animation fill so the logos render as vectors. */
+  .jobHeader.revealBlock {
+    animation-name: revealJobHeaderMobile;
+    animation-duration: 180ms;
+    animation-timing-function: ease-out;
+    animation-fill-mode: backwards;
   }
 
   .workGroup {
