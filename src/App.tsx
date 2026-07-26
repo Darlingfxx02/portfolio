@@ -35,7 +35,7 @@ const CASES: Record<string, ComponentType> = {
 }
 
 const SECTION_ORDER: PortfolioTab[] = ['home', 'explorations', 'work', 'about']
-const TOUCH_SECTION_DISTANCE = 96
+const TOUCH_SECTION_DISTANCE = 160
 type SectionScrollDirection = 'forward' | 'backward'
 type SectionArrival = 'top' | 'bottom' | 'saved'
 
