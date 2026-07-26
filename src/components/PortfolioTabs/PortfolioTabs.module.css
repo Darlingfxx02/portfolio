@@ -270,17 +270,19 @@
   --photo-height: 210px;
   --photo-gap: 12px;
   --photo-loop-distance: 800px;
-  --carousel-content-width: min(608px, calc(100vw - 2 * var(--pad)));
-  --carousel-side-space: max(
-    0px,
-    calc((100vw - var(--carousel-content-width)) / 2)
+  --carousel-content-width: min(640px, calc(100vw - 2 * var(--pad)));
+  --carousel-effect-width: min(100vw, 840px);
+  --edge-effect-width: max(
+    12px,
+    calc((var(--carousel-effect-width) - var(--carousel-content-width)) / 2)
   );
-  --edge-effect-width: max(12px, calc(var(--carousel-side-space) - 96px));
   position: relative;
   width: 100vw;
   height: var(--photo-height);
-  max-width: none;
-  margin-left: calc(50% - 50vw);
+  max-width: 840px;
+  margin-left: 50%;
+  overflow: hidden;
+  transform: translateX(-50%);
 }
 
 .photoStage {
