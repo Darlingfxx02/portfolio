@@ -55,7 +55,7 @@
   height: 115px;
   color: var(--text-dim);
   font-family: var(--font-sf);
-  font-size: 20px;
+  font-size: 18px;
   font-weight: var(--wt-regular);
   line-height: 1.3;
   letter-spacing: 0.14px;
@@ -116,15 +116,16 @@
 @media (max-width: 560px) {
   .section {
     height: auto;
-    min-height: 621px;
-    padding-top: 69px;
+    min-height: 0;
+    justify-content: flex-start;
+    padding-top: 24px;
   }
 
   .intro {
     height: auto;
     min-height: 115px;
     gap: 20px;
-    font-size: 17px;
+    font-size: 16px;
     line-height: 1.35;
     letter-spacing: 0;
   }
@@ -153,12 +154,12 @@
 
 @media (max-width: 420px) {
   .intro {
-    font-size: 16px;
+    font-size: 15px;
   }
 }
 
 @media (max-width: 360px) {
   .intro {
-    font-size: 15px;
+    font-size: 14px;
   }
 }

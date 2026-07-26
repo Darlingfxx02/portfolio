@@ -54,11 +54,11 @@ export function DockBar({
           <button
             className={styles.back}
             type="button"
-            aria-label={lang === 'ru' ? 'Назад на главную' : 'Back to home'}
+            aria-label={lang === 'ru' ? 'Назад к кейсам' : 'Back to cases'}
             onClick={() => {
-              trackEvent('back_clicked', { target: 'top' })
+              trackEvent('back_clicked', { target: 'work' })
               if (onBack) onBack()
-              else window.location.hash = '#home'
+              else window.location.hash = '#work'
             }}
           >
             <ArrowUUpLeft size={18} weight="bold" />

@@ -37,6 +37,8 @@
   font-weight: var(--wt-regular);
   line-height: 1.5;
   letter-spacing: 0;
+  user-select: none;
+  -webkit-user-select: none;
   transition: color 180ms ease;
 }
 

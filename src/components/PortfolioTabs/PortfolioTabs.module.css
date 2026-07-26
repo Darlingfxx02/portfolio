@@ -257,6 +257,8 @@
 
 .connectLink {
   border-bottom: 2px solid var(--line);
+  user-select: none;
+  -webkit-user-select: none;
   transition: border-color 180ms ease;
 }
 
@@ -302,7 +304,7 @@
   inset: 0;
   overflow: hidden;
   pointer-events: none;
-  opacity: 0.42;
+  opacity: 0.34;
 }
 
 .photoGlowRail .photoTrack {

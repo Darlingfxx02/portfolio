@@ -65,7 +65,7 @@ export function CaseNarrative({
         ))}
 
         <footer className="case-narrative-footer">
-          <a href="#home">{ru ? "На главную" : "Home"}</a>
+          <a href="#work">{ru ? "К кейсам" : "All cases"}</a>
           {nextCase && (
             <a
               className="case-narrative-footer__next"

@@ -235,6 +235,8 @@
   font-weight: var(--wt-medium);
   letter-spacing: var(--tracking);
   white-space: nowrap;
+  user-select: none;
+  -webkit-user-select: none;
   overflow: hidden;
   box-shadow: var(--shadow-dock);
   transition:

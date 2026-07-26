@@ -231,8 +231,8 @@ function App() {
         )}
         <DockBar
           showBack={onCase}
-          onBack={onCase ? () => showTab('home') : undefined}
-          onContact={onCase ? undefined : () => showTab('about')}
+          onBack={onCase ? () => showTab('work') : undefined}
+          onContact={() => showTab('about')}
         />
         <ScrollBar />
       </>
