@@ -1,4 +1,4 @@
-/* Top-right CV link. Mirrors LangToggle (top-left). */
+/* Top-right CV link. */
 .tools {
   position: fixed;
   top: clamp(14px, 2vw, 20px);

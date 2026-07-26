@@ -16,12 +16,13 @@
     />
     <title>darling design</title>
     <script>
-      // Apply the saved language before paint to avoid a flash.
+      // This domain serves the Russian portfolio only. Remove the legacy
+      // preference so visitors who previously selected EN cannot get stuck
+      // on the English version.
+      document.documentElement.lang = 'ru'
       try {
-        document.documentElement.lang = localStorage.getItem('lang') || 'ru'
-      } catch (e) {
-        document.documentElement.lang = 'ru'
-      }
+        localStorage.removeItem('lang')
+      } catch (e) {}
     </script>
   </head>
   <body>

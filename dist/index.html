@@ -16,15 +16,16 @@
     />
     <title>darling design</title>
     <script>
-      // Apply the saved language before paint to avoid a flash.
+      // This domain serves the Russian portfolio only. Remove the legacy
+      // preference so visitors who previously selected EN cannot get stuck
+      // on the English version.
+      document.documentElement.lang = 'ru'
       try {
-        document.documentElement.lang = localStorage.getItem('lang') || 'ru'
-      } catch (e) {
-        document.documentElement.lang = 'ru'
-      }
+        localStorage.removeItem('lang')
+      } catch (e) {}
     </script>
-    <script type="module" crossorigin src="/assets/index-DvGktpBq.js"></script>
-    <link rel="stylesheet" crossorigin href="/assets/index-VoL3r6QX.css">
+    <script type="module" crossorigin src="/assets/index-DXGjJVpJ.js"></script>
+    <link rel="stylesheet" crossorigin href="/assets/index-_xhNGHmv.css">
   </head>
   <body>
     <div id="root"></div>
