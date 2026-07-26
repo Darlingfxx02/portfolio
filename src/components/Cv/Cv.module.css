@@ -178,23 +178,42 @@
   line-height: 1.43;
 }
 
-.summaryCard a {
-  display: inline-flex;
-  align-items: center;
-  gap: 5px;
-  margin-top: 10.67px;
-  color: var(--cv-link);
-  text-decoration: underline;
-  text-underline-offset: 3px;
+.contactRow {
+  margin-top: 18px;
 }
 
-.summaryCard a img {
-  width: 14px;
-  height: 14px;
+.contactList {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 16px;
+  list-style: none;
+}
+
+.contactList li {
+  min-width: 0;
+}
+
+.contactList span {
+  display: block;
+  color: var(--cv-muted);
+  font-size: 12px;
+  line-height: 1.2;
+}
+
+.contactList a {
+  display: inline-block;
+  max-width: 100%;
+  margin-top: 4px;
+  color: var(--cv-muted);
+  font-size: 13.5px;
+  line-height: 1.25;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  overflow-wrap: anywhere;
 }
 
 .jobs {
-  margin-top: 57.33px;
+  margin-top: 46px;
 }
 
 .job {
@@ -254,9 +273,9 @@
   object-fit: contain;
 }
 
-.wmtLogo {
-  padding: 10px;
-  background: #f5f5f5;
+.currentBrandLogo {
+  padding: 0;
+  background: transparent;
 }
 
 .tags,
@@ -446,45 +465,6 @@
   display: block;
 }
 
-.sideSection {
-  margin-top: 54.67px;
-}
-
-.sideSection h2 {
-  margin-bottom: 21.33px;
-  color: var(--cv-muted);
-  font-size: 16px;
-  font-weight: 400;
-}
-
-.contacts {
-  display: flex;
-  flex-direction: column;
-  gap: 24px;
-  list-style: none;
-}
-
-.contacts li {
-  min-width: 0;
-}
-
-.contacts span {
-  display: block;
-  color: var(--cv-muted);
-  font-size: 16px;
-}
-
-.contacts a {
-  display: inline-block;
-  max-width: 100%;
-  margin-top: 6px;
-  color: var(--cv-ink);
-  font-size: 17.33px;
-  text-decoration: underline;
-  text-underline-offset: 3px;
-  overflow-wrap: anywhere;
-}
-
 @media (max-width: 840px) {
   .page {
     padding: 72px 0 150px;
@@ -525,6 +505,11 @@
   .summaryCard {
     padding: 20px;
     font-size: 16px;
+  }
+
+  .contactList {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px 20px;
   }
 
   .jobs {
@@ -568,9 +553,6 @@
     border-radius: 32px;
   }
 
-  .sideSection {
-    margin-top: 0;
-  }
 }
 
 @media (max-width: 430px) {
@@ -659,8 +641,27 @@
     font-size: 9.2pt;
   }
 
+  .contactRow {
+    margin-top: 4mm;
+  }
+
+  .contactList {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 4mm;
+  }
+
+  .contactList span {
+    font-size: 7pt;
+  }
+
+  .contactList a {
+    margin-top: 0.8mm;
+    font-size: 8.2pt;
+    white-space: nowrap;
+  }
+
   .jobs {
-    margin-top: 9mm;
+    margin-top: 7mm;
   }
 
   .company,
@@ -708,6 +709,11 @@
     height: 10mm;
     padding: 1.5mm;
     border-radius: 2.5mm;
+  }
+
+  .currentBrandLogo {
+    padding: 0;
+    background: transparent;
   }
 
   .tags,
@@ -793,14 +799,18 @@
     position: absolute;
     top: 12mm;
     right: 12mm;
-    display: block;
+    display: flex;
+    align-items: flex-end;
     width: 62mm;
     padding: 0;
     background: transparent;
   }
 
   .portraitFrame {
-    display: none;
+    display: block;
+    width: 50mm;
+    height: 50mm;
+    border-radius: 13mm;
   }
 
   .portraitLight,
@@ -814,28 +824,6 @@
     display: block;
     object-fit: cover;
     object-position: 50% 50%;
-  }
-
-  .sideSection h2,
-  .contacts span {
-    font-size: 7.5pt;
-  }
-
-  .contacts a {
-    margin-top: 1mm;
-    font-size: 8.5pt;
-  }
-
-  .sideSection {
-    margin-top: 0;
-  }
-
-  .sideSection h2 {
-    margin-bottom: 3mm;
-  }
-
-  .contacts {
-    gap: 3mm;
   }
 
 }

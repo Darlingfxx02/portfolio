@@ -3,10 +3,12 @@ import type { PortfolioTab } from '@/components/PortfolioTabs/PortfolioTabs'
 import { t, useLang, type Loc } from '@/lib/i18n'
 import styles from './PortfolioHeader.module.css'
 
+type TransitionDirection = 'forward' | 'backward'
+
 const tabs: { id: PortfolioTab; label: Loc }[] = [
   { id: 'home', label: { ru: 'Главная', en: 'Home' } },
-  { id: 'work', label: { ru: 'Работы', en: 'Work' } },
-  { id: 'explorations', label: { ru: 'Эксперименты', en: 'Explorations' } },
+  { id: 'explorations', label: { ru: 'Работы', en: 'Explorations' } },
+  { id: 'work', label: { ru: 'Кейсы', en: 'Work' } },
   { id: 'about', label: { ru: 'Обо мне', en: 'About' } },
 ]
 
@@ -14,11 +16,13 @@ export function PortfolioHeader({
   activeTab,
   pendingTab,
   transitionProgress = 0,
+  transitionDirection,
   onTabChange,
 }: {
   activeTab: PortfolioTab
   pendingTab?: PortfolioTab
   transitionProgress?: number
+  transitionDirection?: TransitionDirection
   onTabChange: (tab: PortfolioTab) => void
 }) {
   const { lang } = useLang()
@@ -45,10 +49,13 @@ export function PortfolioHeader({
         className={styles.nav}
         role="tablist"
         aria-label={lang === 'ru' ? 'Разделы портфолио' : 'Portfolio sections'}
+        data-transition-direction={transitionDirection}
       >
         {tabs.map((tab, index) => {
           const selected = activeTab === tab.id
           const pending = !selected && pendingTab === tab.id && transitionProgress > 0
+          const transitionTarget =
+            !selected && pendingTab === tab.id ? transitionDirection : undefined
           return (
             <button
               key={tab.id}
@@ -62,9 +69,9 @@ export function PortfolioHeader({
               aria-controls={`panel-${tab.id}`}
               aria-selected={selected}
               tabIndex={selected ? 0 : -1}
-              data-sfx-click="off"
               data-active={selected || undefined}
               data-pending={pending || undefined}
+              data-transition-target={transitionTarget}
               style={
                 pending
                   ? ({

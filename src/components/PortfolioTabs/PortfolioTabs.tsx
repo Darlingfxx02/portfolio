@@ -12,21 +12,86 @@ export type PortfolioContentTab = Exclude<PortfolioTab, 'home'>
 
 const aboutCopy = {
   ru: [
-    'Я продуктовый дизайнер из Москвы. Сейчас работаю в WMT AI над корпоративными AI-продуктами; до этого — в UXART, OVork и Zinda.',
-    'Мне нравится превращать сложные сценарии в понятные интерфейсы: разбираться в продукте, быстро проверять идеи прототипами и доводить решения до релиза.',
-    'Особенно интересуюсь AI-инструментами, дизайн-системами и тем, как дизайнеры могут быстрее собирать работающие продукты.',
+    'Я занимаюсь дизайном с 16 лет. Начинал с 3D и геймдева: моделировал, собирал сцены и постепенно пришёл к интерфейсам и продуктам.',
+    'Интерес к AI появился у меня ещё в начале нынешнего бума — вместе с первыми моделями для генерации изображений. Сначала много экспериментировал с визуалом, а затем начал применять модели в прототипах и продуктовых сценариях.',
+    'Сейчас активно работаю с кодовыми моделями: собираю с ними интерфейсы, автоматизирую рутину и быстрее проверяю идеи. Мне интересно находить задачи, где AI не просто выглядит эффектно, а действительно усиливает дизайнера и помогает довести продукт до работающего состояния.',
   ],
   en: [
-    'I am a product designer based in Moscow. I currently work on enterprise AI products at WMT AI; previously, I worked with UXART, OVork, and Zinda.',
-    'I enjoy turning complex flows into clear interfaces: understanding the product, testing ideas quickly with prototypes, and carrying solutions through to release.',
-    'I am especially interested in AI tools, design systems, and helping designers build working products faster.',
+    'I have been designing since I was 16. I started with 3D and game development—modeling, building scenes, and gradually finding my way into interfaces and products.',
+    'I have been exploring AI since the very beginning of its current wave, back when the first image-generation models appeared. I started with visual experiments, then began applying models to prototypes and product workflows.',
+    'Today I work extensively with coding models to build interfaces, automate routine work, and test ideas faster. I am interested in finding areas where AI does more than create an impressive demo—where it genuinely augments designers and helps turn an idea into a working product.',
   ],
 }
 
-const CV_URL = '/cv/Timothe_Ermolaev_Resume.pdf?v=20260726-3'
+const CV_URL = '/cv/Timothe_Ermolaev_Resume.pdf?v=20260726-7'
+
+const aboutPhotos = [
+  {
+    src: '/stickers/self-portrait.webp',
+    alt: 'Тимофей в зеркале',
+  },
+  {
+    src: '/about/hobby1.webp',
+    alt: 'Сноуборды на подъёмнике',
+  },
+  {
+    src: '/stickers/device-stack.webp',
+    alt: 'Ноутбук и телефон',
+  },
+  {
+    src: '/about/hobby2.webp',
+    alt: 'Стол для пинг-понга',
+  },
+  {
+    src: '/stickers/friends-selfie.webp',
+    alt: 'Тимофей с другом',
+  },
+]
 
 function revealStyle(index: number) {
   return { '--reveal-index': index } as CSSProperties
+}
+
+function PhotoTrack({ decorative = false }: { decorative?: boolean }) {
+  return (
+    <div className={styles.photoTrack} aria-hidden={decorative || undefined}>
+      {[0, 1, 2, 3, 4].map((copy) => (
+        <div
+          key={copy}
+          className={styles.photoGroup}
+          aria-hidden={decorative || copy > 0 || undefined}
+        >
+          {aboutPhotos.map((photo) => (
+            <figure key={photo.src} className={styles.photoCard}>
+              <img
+                src={photo.src}
+                alt={!decorative && copy === 0 ? photo.alt : ''}
+                draggable={false}
+              />
+            </figure>
+          ))}
+        </div>
+      ))}
+    </div>
+  )
+}
+
+function AboutPhotoCarousel() {
+  return (
+    <section
+      className={styles.photoCarousel}
+      aria-label="Фотографии"
+    >
+      <div className={styles.photoStage}>
+        <div className={styles.photoSharpRail}>
+          <PhotoTrack />
+        </div>
+        <div className={styles.photoBlurRail} aria-hidden>
+          <PhotoTrack decorative />
+        </div>
+      </div>
+    </section>
+  )
 }
 
 function positionHoverChip(event: PointerEvent<HTMLElement>) {
@@ -103,7 +168,7 @@ const workExperienceGroups: Array<{
   {
     id: 'uxart',
     experienceId: 'uxart',
-    logo: '/company-favicons/uxart-current.svg',
+    logo: '/company-favicons/uxart-current.svg?v=20260726-2',
     projects: [
       {
         id: 'ovork',
@@ -217,45 +282,49 @@ function About() {
   ]
 
   return (
-    <div className={styles.about}>
-      <div className={styles.aboutCopy}>
-        {aboutCopy[lang].map((paragraph, index) => (
-          <p
-            key={paragraph}
-            className={styles.revealBlock}
-            style={revealStyle(index)}
-          >
-            {paragraph}
-          </p>
-        ))}
-      </div>
+    <>
+      <div className={styles.about}>
+        <AboutPhotoCarousel />
 
-      <div
-        className={`${styles.connect} ${styles.revealBlock}`}
-        style={revealStyle(aboutCopy[lang].length)}
-      >
-        <p className={styles.connectLabel}>Connect</p>
-        <ul className={styles.connectList}>
-          {links.map((link) => (
-            <li key={link.label}>
-              <a
-                className={styles.connectLink}
-                href={link.href}
-                {...(link.external ? { target: '_blank', rel: 'noreferrer' } : {})}
-                {...(link.download ? { download: link.download } : {})}
-                onClick={() =>
-                  trackEvent('contact_social_clicked', {
-                    contact_target: link.label.toLowerCase(),
-                  })
-                }
-              >
-                {link.label}
-              </a>
-            </li>
+        <div
+          className={`${styles.connect} ${styles.revealBlock}`}
+          style={revealStyle(1)}
+        >
+          <p className={styles.connectLabel}>Connect</p>
+          <ul className={styles.connectList}>
+            {links.map((link) => (
+              <li key={link.label}>
+                <a
+                  className={styles.connectLink}
+                  href={link.href}
+                  {...(link.external ? { target: '_blank', rel: 'noreferrer' } : {})}
+                  {...(link.download ? { download: link.download } : {})}
+                  onClick={() =>
+                    trackEvent('contact_social_clicked', {
+                      contact_target: link.label.toLowerCase(),
+                    })
+                  }
+                >
+                  {link.label}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        <div className={styles.aboutCopy}>
+          {aboutCopy[lang].map((paragraph, index) => (
+            <p
+              key={paragraph}
+              className={styles.revealBlock}
+              style={revealStyle(index + 2)}
+            >
+              {paragraph}
+            </p>
           ))}
-        </ul>
+        </div>
       </div>
-    </div>
+    </>
   )
 }
 

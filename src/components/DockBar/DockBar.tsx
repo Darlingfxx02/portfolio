@@ -9,9 +9,11 @@ const CTA_HREF = profile.telegram
 
 export function DockBar({
   showBack = false,
+  onBack,
   onContact,
 }: {
   showBack?: boolean
+  onBack?: () => void
   onContact?: () => void
 }) {
   const { lang } = useLang()
@@ -55,7 +57,8 @@ export function DockBar({
             aria-label={lang === 'ru' ? 'Назад на главную' : 'Back to home'}
             onClick={() => {
               trackEvent('back_clicked', { target: 'top' })
-              window.location.hash = '#top'
+              if (onBack) onBack()
+              else window.location.hash = '#home'
             }}
           >
             <ArrowUUpLeft size={18} weight="bold" />

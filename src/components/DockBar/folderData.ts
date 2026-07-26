@@ -23,14 +23,14 @@ export type FolderSection = {
 export const sections: FolderSection[] = [
   { label: { ru: 'Главная', en: 'Home' }, href: '#top', Icon: House, color: '#3b82f6' },
   {
-    label: { ru: 'Работы', en: 'Work' },
+    label: { ru: 'Кейсы', en: 'Work' },
     href: '#works',
     Icon: ImagesSquare,
     color: '#3b82f6',
   },
   {
     label: { ru: 'CV', en: 'CV' },
-    href: '/cv/Timothe_Ermolaev_Resume.pdf?v=20260726-3',
+    href: '/cv/Timothe_Ermolaev_Resume.pdf?v=20260726-7',
     Icon: ReadCvLogo,
     color: '#3b82f6',
     download: true,

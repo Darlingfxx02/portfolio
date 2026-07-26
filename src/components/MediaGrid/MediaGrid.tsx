@@ -248,6 +248,7 @@ export function MediaGrid() {
             style={{ '--reveal-index': index } as CSSProperties}
             aria-label={`Expand preview: ${slot.alt}`}
             aria-haspopup="dialog"
+            onPointerOver={(event) => event.stopPropagation()}
             onClick={(event) => openCard(index, event)}
           >
             <img src={slot.src} alt={slot.alt} draggable={false} />

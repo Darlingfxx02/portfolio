@@ -10,8 +10,8 @@ import { useLang, t } from '@/lib/i18n'
 import styles from './Cv.module.css'
 
 const COMPANY_LOGOS: Record<string, string> = {
-  wmt: '/company-favicons/wmt.svg',
-  uxart: '/company-favicons/uxart.ico',
+  wmt: '/company-favicons/wmt-current.svg',
+  uxart: '/company-favicons/uxart-current.svg?v=20260726-2',
   zinda: '/company-favicons/zinda.svg',
 }
 
@@ -121,7 +121,9 @@ export function Cv() {
                 {logo && (
                   <img
                     className={`${styles.projectLogo} ${
-                      item.id === 'wmt' ? styles.wmtLogo : ''
+                      item.id === 'wmt' || item.id === 'uxart'
+                        ? styles.currentBrandLogo
+                        : ''
                     }`}
                     src={logo}
                     alt=""
@@ -173,7 +175,9 @@ export function Cv() {
           {logo && (
             <img
               className={`${styles.companyLogo} ${
-                item.id === 'wmt' ? styles.wmtLogo : ''
+                item.id === 'wmt' || item.id === 'uxart'
+                  ? styles.currentBrandLogo
+                  : ''
               }`}
               src={logo}
               alt=""
@@ -255,10 +259,22 @@ export function Cv() {
 
             <section className={styles.summaryCard}>
               <p>{t(cv.summary, lang)}</p>
-              <a href="https://darling.design/#works">
-                {lang === 'ru' ? 'Портфолио' : 'Portfolio'}: darling.design
-                <img src="/cv/icon-external.svg" alt="" aria-hidden="true" />
-              </a>
+            </section>
+
+            <section
+              className={styles.contactRow}
+              aria-label={t(CV_LABELS.contacts, lang)}
+            >
+              <ul className={styles.contactList}>
+                {cv.contacts.map((contact) => (
+                  <li key={contact.label}>
+                    <span>{contact.label}</span>
+                    <a href={contact.href} target="_blank" rel="noreferrer">
+                      {contact.value}
+                    </a>
+                  </li>
+                ))}
+              </ul>
             </section>
 
             <div className={styles.jobs}>
@@ -302,20 +318,6 @@ export function Cv() {
                 aria-hidden="true"
               />
             </div>
-
-            <section className={styles.sideSection}>
-              <h2>{t(CV_LABELS.contacts, lang)}</h2>
-              <ul className={styles.contacts}>
-                {cv.contacts.map((contact) => (
-                  <li key={contact.label}>
-                    <span>{contact.label}</span>
-                    <a href={contact.href} target="_blank" rel="noreferrer">
-                      {contact.value}
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            </section>
           </aside>
         </div>
       </article>

@@ -210,6 +210,8 @@
 }
 
 .about {
+  position: relative;
+  isolation: isolate;
   display: flex;
   flex-direction: column;
   gap: 48px;
@@ -232,7 +234,10 @@
 .connect {
   display: flex;
   flex-direction: column;
+  align-items: center;
   gap: 16px;
+  width: 100%;
+  max-width: 608px;
 }
 
 .connectLabel {
@@ -241,9 +246,10 @@
 
 .connectList {
   display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 16px;
+  flex-flow: row wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 12px 24px;
   margin: 0;
   padding: 0;
   list-style: none;
@@ -257,6 +263,219 @@
 .connectLink:hover,
 .connectLink:focus-visible {
   border-color: var(--text);
+}
+
+.photoCarousel {
+  --photo-width: 148px;
+  --photo-height: 210px;
+  --photo-gap: 12px;
+  --photo-loop-distance: 800px;
+  --carousel-content-width: min(608px, calc(100vw - 2 * var(--pad)));
+  --carousel-side-space: max(
+    0px,
+    calc((100vw - var(--carousel-content-width)) / 2)
+  );
+  --edge-effect-width: max(12px, calc(var(--carousel-side-space) - 96px));
+  position: relative;
+  width: 100vw;
+  height: var(--photo-height);
+  max-width: none;
+  margin-left: calc(50% - 50vw);
+}
+
+.photoStage {
+  position: absolute;
+  inset: -64px 0;
+  isolation: isolate;
+  overflow: hidden;
+}
+
+.photoSharpRail {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  mask-image: linear-gradient(
+    90deg,
+    transparent 0,
+    transparent calc(var(--edge-effect-width) - 72px),
+    rgba(0, 0, 0, 0.06) calc(var(--edge-effect-width) - 56px),
+    rgba(0, 0, 0, 0.22) calc(var(--edge-effect-width) - 40px),
+    rgba(0, 0, 0, 0.5) calc(var(--edge-effect-width) - 20px),
+    rgba(0, 0, 0, 0.78) var(--edge-effect-width),
+    rgba(0, 0, 0, 0.94) calc(var(--edge-effect-width) + 16px),
+    #000 calc(var(--edge-effect-width) + 32px),
+    #000 calc(100% - var(--edge-effect-width) - 32px),
+    rgba(0, 0, 0, 0.94) calc(100% - var(--edge-effect-width) - 16px),
+    rgba(0, 0, 0, 0.78) calc(100% - var(--edge-effect-width)),
+    rgba(0, 0, 0, 0.5) calc(100% - var(--edge-effect-width) + 20px),
+    rgba(0, 0, 0, 0.22) calc(100% - var(--edge-effect-width) + 40px),
+    rgba(0, 0, 0, 0.06) calc(100% - var(--edge-effect-width) + 56px),
+    transparent calc(100% - var(--edge-effect-width) + 72px),
+    transparent 100%
+  );
+  -webkit-mask-image: linear-gradient(
+    90deg,
+    transparent 0,
+    transparent calc(var(--edge-effect-width) - 72px),
+    rgba(0, 0, 0, 0.06) calc(var(--edge-effect-width) - 56px),
+    rgba(0, 0, 0, 0.22) calc(var(--edge-effect-width) - 40px),
+    rgba(0, 0, 0, 0.5) calc(var(--edge-effect-width) - 20px),
+    rgba(0, 0, 0, 0.78) var(--edge-effect-width),
+    rgba(0, 0, 0, 0.94) calc(var(--edge-effect-width) + 16px),
+    #000 calc(var(--edge-effect-width) + 32px),
+    #000 calc(100% - var(--edge-effect-width) - 32px),
+    rgba(0, 0, 0, 0.94) calc(100% - var(--edge-effect-width) - 16px),
+    rgba(0, 0, 0, 0.78) calc(100% - var(--edge-effect-width)),
+    rgba(0, 0, 0, 0.5) calc(100% - var(--edge-effect-width) + 20px),
+    rgba(0, 0, 0, 0.22) calc(100% - var(--edge-effect-width) + 40px),
+    rgba(0, 0, 0, 0.06) calc(100% - var(--edge-effect-width) + 56px),
+    transparent calc(100% - var(--edge-effect-width) + 72px),
+    transparent 100%
+  );
+}
+
+.photoBlurRail {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  mask-image:
+    linear-gradient(
+      180deg,
+      transparent 0,
+      #000 52px,
+      #000 calc(100% - 52px),
+      transparent 100%
+    ),
+    linear-gradient(
+      90deg,
+      #000 0,
+      #000 calc(var(--edge-effect-width) - 72px),
+      rgba(0, 0, 0, 0.94) calc(var(--edge-effect-width) - 56px),
+      rgba(0, 0, 0, 0.78) calc(var(--edge-effect-width) - 40px),
+      rgba(0, 0, 0, 0.5) calc(var(--edge-effect-width) - 20px),
+      rgba(0, 0, 0, 0.22) var(--edge-effect-width),
+      rgba(0, 0, 0, 0.06) calc(var(--edge-effect-width) + 16px),
+      transparent calc(var(--edge-effect-width) + 32px),
+      transparent calc(100% - var(--edge-effect-width) - 32px),
+      rgba(0, 0, 0, 0.06) calc(100% - var(--edge-effect-width) - 16px),
+      rgba(0, 0, 0, 0.22) calc(100% - var(--edge-effect-width)),
+      rgba(0, 0, 0, 0.5) calc(100% - var(--edge-effect-width) + 20px),
+      rgba(0, 0, 0, 0.78) calc(100% - var(--edge-effect-width) + 40px),
+      rgba(0, 0, 0, 0.94) calc(100% - var(--edge-effect-width) + 56px),
+      #000 calc(100% - var(--edge-effect-width) + 72px),
+      #000 100%
+    );
+  mask-composite: intersect;
+  -webkit-mask-image:
+    linear-gradient(
+      180deg,
+      transparent 0,
+      #000 52px,
+      #000 calc(100% - 52px),
+      transparent 100%
+    ),
+    linear-gradient(
+      90deg,
+      #000 0,
+      #000 calc(var(--edge-effect-width) - 72px),
+      rgba(0, 0, 0, 0.94) calc(var(--edge-effect-width) - 56px),
+      rgba(0, 0, 0, 0.78) calc(var(--edge-effect-width) - 40px),
+      rgba(0, 0, 0, 0.5) calc(var(--edge-effect-width) - 20px),
+      rgba(0, 0, 0, 0.22) var(--edge-effect-width),
+      rgba(0, 0, 0, 0.06) calc(var(--edge-effect-width) + 16px),
+      transparent calc(var(--edge-effect-width) + 32px),
+      transparent calc(100% - var(--edge-effect-width) - 32px),
+      rgba(0, 0, 0, 0.06) calc(100% - var(--edge-effect-width) - 16px),
+      rgba(0, 0, 0, 0.22) calc(100% - var(--edge-effect-width)),
+      rgba(0, 0, 0, 0.5) calc(100% - var(--edge-effect-width) + 20px),
+      rgba(0, 0, 0, 0.78) calc(100% - var(--edge-effect-width) + 40px),
+      rgba(0, 0, 0, 0.94) calc(100% - var(--edge-effect-width) + 56px),
+      #000 calc(100% - var(--edge-effect-width) + 72px),
+      #000 100%
+    );
+  -webkit-mask-composite: source-in;
+}
+
+.photoBlurRail .photoTrack {
+  filter: blur(28px) saturate(108%);
+}
+
+.photoStage::before,
+.photoStage::after {
+  position: absolute;
+  z-index: 3;
+  top: 0;
+  bottom: 0;
+  width: var(--edge-effect-width);
+  content: '';
+  pointer-events: none;
+}
+
+.photoStage::before {
+  left: 0;
+  background: linear-gradient(
+    90deg,
+    var(--bg) 0%,
+    rgba(0, 0, 0, 0.78) 18%,
+    rgba(0, 0, 0, 0.48) 42%,
+    rgba(0, 0, 0, 0.22) 66%,
+    rgba(0, 0, 0, 0.07) 84%,
+    transparent 100%
+  );
+}
+
+.photoStage::after {
+  right: 0;
+  background: linear-gradient(
+    270deg,
+    var(--bg) 0%,
+    rgba(0, 0, 0, 0.78) 18%,
+    rgba(0, 0, 0, 0.48) 42%,
+    rgba(0, 0, 0, 0.22) 66%,
+    rgba(0, 0, 0, 0.07) 84%,
+    transparent 100%
+  );
+}
+
+.photoTrack {
+  position: relative;
+  top: 64px;
+  left: 0;
+  display: flex;
+  gap: var(--photo-gap);
+  width: max-content;
+  animation: photoCarouselScroll 46s linear infinite;
+  will-change: transform;
+}
+
+.photoGroup {
+  display: flex;
+  flex: none;
+  gap: var(--photo-gap);
+}
+
+.photoCard {
+  flex: 0 0 var(--photo-width);
+  width: var(--photo-width);
+  height: var(--photo-height);
+  margin: 0;
+  overflow: hidden;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.photoCard img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+@keyframes photoCarouselScroll {
+  to {
+    transform: translateX(calc(-1 * var(--photo-loop-distance)));
+  }
 }
 
 @keyframes panelIn {
@@ -314,6 +533,10 @@
 @media (prefers-reduced-motion: reduce) {
   .panel,
   .revealBlock {
+    animation: none;
+  }
+
+  .photoTrack {
     animation: none;
   }
 }

@@ -244,20 +244,6 @@ h3 {
     .zinda-system-page,
     .zinda-mobile-page
   )
-  .case-narrative-intro__title {
-  max-width: 900px;
-  font-size: clamp(34px, 5vw, 56px);
-  font-weight: 560;
-  letter-spacing: -0.05em;
-  line-height: 0.98;
-  text-wrap: balance;
-}
-
-.case-narrative-page:is(
-    .zinda-formation-page,
-    .zinda-system-page,
-    .zinda-mobile-page
-  )
   .case-narrative-hero {
   margin-top: 64px;
 }
@@ -1584,16 +1570,6 @@ h3 {
 
   .case-narrative-intro__title {
     font-size: 20px;
-  }
-
-  .case-narrative-page:is(
-      .zinda-formation-page,
-      .zinda-system-page,
-      .zinda-mobile-page
-    )
-    .case-narrative-intro__title {
-    font-size: clamp(30px, 10vw, 44px);
-    line-height: 1;
   }
 
   .case-narrative-intro__body,

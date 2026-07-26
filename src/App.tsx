@@ -34,7 +34,11 @@ const CASES: Record<string, ComponentType> = {
   ovork: CaseOvork,
 }
 
-const SECTION_ORDER: PortfolioTab[] = ['home', 'work', 'explorations', 'about']
+const SECTION_ORDER: PortfolioTab[] = ['home', 'explorations', 'work', 'about']
+type SectionScrollDirection = 'forward' | 'backward'
+type SectionArrival = 'top' | 'bottom' | 'saved'
+
+const SCROLL_STORAGE_PREFIX = 'darling-live:scroll:'
 
 function useHash() {
   const [hash, setHash] = useState(() =>
@@ -48,24 +52,54 @@ function useHash() {
   return hash
 }
 
-function scrollImmediatelyTo(hash: string) {
-  const root = document.documentElement
-  const previousScrollBehavior = root.style.scrollBehavior
-  root.style.scrollBehavior = 'auto'
-
-  const id = hash.replace('#', '')
-  const target = id && id !== 'top' ? document.getElementById(id) : null
-  if (target) target.scrollIntoView()
-  else window.scrollTo(0, 0)
-
-  root.style.scrollBehavior = previousScrollBehavior
-}
-
 function tabFromHash(hash: string): PortfolioTab {
   if (hash === '#work' || hash === '#works') return 'work'
   if (hash === '#explorations') return 'explorations'
   if (hash === '#about' || hash === '#contact') return 'about'
   return 'home'
+}
+
+function scrollStorageKey(hash: string) {
+  const route =
+    hash === '#cv' || hash.startsWith('#case/') ? hash : `#${tabFromHash(hash)}`
+  return `${SCROLL_STORAGE_PREFIX}${route}`
+}
+
+function saveScrollPosition(hash: string, position = window.scrollY) {
+  try {
+    window.localStorage.setItem(scrollStorageKey(hash), String(Math.max(0, position)))
+  } catch {
+    // Browsers may disable localStorage; navigation still works without memory.
+  }
+}
+
+function savedScrollPosition(hash: string) {
+  try {
+    const stored = Number(window.localStorage.getItem(scrollStorageKey(hash)))
+    return Number.isFinite(stored) ? Math.max(0, stored) : 0
+  } catch {
+    return 0
+  }
+}
+
+function scrollImmediatelyTo(hash: string, arrival: SectionArrival = 'saved') {
+  const root = document.documentElement
+  const previousScrollBehavior = root.style.scrollBehavior
+  const maxScroll = Math.max(0, root.scrollHeight - window.innerHeight)
+  const target =
+    arrival === 'bottom'
+      ? maxScroll
+      : arrival === 'saved'
+        ? Math.min(savedScrollPosition(hash), maxScroll)
+        : 0
+
+  root.style.scrollBehavior = 'auto'
+  window.scrollTo(0, target)
+
+  // Keep smooth scrolling disabled until the browser has applied the jump.
+  window.requestAnimationFrame(() => {
+    root.style.scrollBehavior = previousScrollBehavior
+  })
 }
 
 function App() {
@@ -77,26 +111,38 @@ function App() {
   const activeTab = tabFromHash(hash)
   const activeTabIndex = SECTION_ORDER.indexOf(activeTab)
   const nextTab = SECTION_ORDER[(activeTabIndex + 1) % SECTION_ORDER.length]
+  const previousTab =
+    SECTION_ORDER[(activeTabIndex - 1 + SECTION_ORDER.length) % SECTION_ORDER.length]
+  const sectionArrivalRef = useRef<SectionArrival>('saved')
 
-  const showTab = useCallback((tab: PortfolioTab) => {
+  const showTab = useCallback((tab: PortfolioTab, arrival: SectionArrival = 'saved') => {
     const nextHash = `#${tab}`
+    saveScrollPosition(window.location.hash)
+    sectionArrivalRef.current = arrival
     if (window.location.hash === nextHash) {
-      scrollImmediatelyTo(nextHash)
+      scrollImmediatelyTo(nextHash, arrival)
+      sectionArrivalRef.current = 'saved'
       return
     }
     tabTick()
     window.location.hash = nextHash
   }, [])
 
-  const advanceSection = useCallback(() => {
-    showTab(nextTab)
-  }, [nextTab, showTab])
+  const navigateSection = useCallback(
+    (direction: SectionScrollDirection) => {
+      if (direction === 'forward') showTab(nextTab, 'top')
+      else showTab(previousTab, 'bottom')
+    },
+    [nextTab, previousTab, showTab],
+  )
 
-  const sectionTransitionProgress = useCyclicSectionScroll({
+  const sectionTransition = useCyclicSectionScroll({
     activeTab,
     disabled: onCase,
-    onAdvance: advanceSection,
+    onNavigate: navigateSection,
   })
+  const pendingTab =
+    sectionTransition.direction === 'backward' ? previousTab : nextTab
 
   useEffect(() => {
     initSfx()
@@ -111,10 +157,32 @@ function App() {
     }
   }, [])
 
-  // Every section is a full screen in the cycle, so selecting the next one
-  // starts it from the top rather than inheriting the previous screen's scroll.
+  // Manual navigation restores the remembered position. Cyclic edge navigation
+  // overrides it with the top/bottom edge that the gesture crossed.
   useLayoutEffect(() => {
-    scrollImmediatelyTo(hash)
+    scrollImmediatelyTo(hash, sectionArrivalRef.current)
+    sectionArrivalRef.current = 'saved'
+  }, [hash])
+
+  useLayoutEffect(() => {
+    let latestPosition = window.scrollY
+    let saveFrame: number | null = null
+
+    const persist = () => {
+      saveFrame = null
+      saveScrollPosition(hash, latestPosition)
+    }
+    const onScroll = () => {
+      latestPosition = window.scrollY
+      if (saveFrame === null) saveFrame = window.requestAnimationFrame(persist)
+    }
+
+    window.addEventListener('scroll', onScroll, { passive: true })
+    return () => {
+      window.removeEventListener('scroll', onScroll)
+      if (saveFrame !== null) window.cancelAnimationFrame(saveFrame)
+      saveScrollPosition(hash, latestPosition)
+    }
   }, [hash])
 
   useEffect(() => {
@@ -130,8 +198,9 @@ function App() {
       <>
         <PortfolioHeader
           activeTab={onCase ? 'work' : activeTab}
-          pendingTab={onCase ? undefined : nextTab}
-          transitionProgress={onCase ? 0 : sectionTransitionProgress}
+          pendingTab={onCase ? undefined : pendingTab}
+          transitionProgress={onCase ? 0 : sectionTransition.progress}
+          transitionDirection={onCase ? undefined : sectionTransition.direction}
           onTabChange={showTab}
         />
         {onCase ? (
@@ -157,6 +226,7 @@ function App() {
         )}
         <DockBar
           showBack={onCase}
+          onBack={onCase ? () => showTab('home') : undefined}
           onContact={onCase ? undefined : () => showTab('about')}
         />
         <ScrollBar />
@@ -168,13 +238,14 @@ function App() {
 function useCyclicSectionScroll({
   activeTab,
   disabled,
-  onAdvance,
+  onNavigate,
 }: {
   activeTab: PortfolioTab
   disabled: boolean
-  onAdvance: () => void
+  onNavigate: (direction: SectionScrollDirection) => void
 }) {
   const [progress, setProgress] = useState(0)
+  const [direction, setDirection] = useState<SectionScrollDirection>()
   const lockedRef = useRef(false)
   const unlockTimerRef = useRef<number | null>(null)
 
@@ -188,7 +259,6 @@ function useCyclicSectionScroll({
   )
 
   useEffect(() => {
-    setProgress(0)
     if (disabled) return
 
     let wheelTravel = 0
@@ -197,10 +267,12 @@ function useCyclicSectionScroll({
     let idleTimer: number | null = null
     let touchStartY: number | null = null
     let touchStartedAt = 0
+    let gestureDirection: SectionScrollDirection | null = null
 
     const atBottom = () =>
       window.scrollY + window.innerHeight >=
       document.documentElement.scrollHeight - 2
+    const atTop = () => window.scrollY <= 2
 
     const clearIdleTimer = () => {
       if (idleTimer !== null) {
@@ -216,6 +288,7 @@ function useCyclicSectionScroll({
       gestureStartedAt = 0
       touchStartY = null
       touchStartedAt = 0
+      gestureDirection = null
       setProgress(0)
     }
 
@@ -224,11 +297,12 @@ function useCyclicSectionScroll({
       idleTimer = window.setTimeout(resetGesture, 650)
     }
 
-    const advance = () => {
+    const navigate = (nextDirection: SectionScrollDirection) => {
       if (lockedRef.current) return
       lockedRef.current = true
       resetGesture()
-      onAdvance()
+      setDirection(nextDirection)
+      onNavigate(nextDirection)
       if (unlockTimerRef.current) window.clearTimeout(unlockTimerRef.current)
       unlockTimerRef.current = window.setTimeout(() => {
         lockedRef.current = false
@@ -236,9 +310,18 @@ function useCyclicSectionScroll({
       }, 1100)
     }
 
-    const updateWheelProgress = (delta: number, now: number) => {
+    const updateWheelProgress = (
+      delta: number,
+      now: number,
+      nextDirection: SectionScrollDirection,
+    ) => {
+      if (gestureDirection !== nextDirection) {
+        resetGesture()
+        gestureDirection = nextDirection
+        setDirection(nextDirection)
+      }
       if (!gestureStartedAt) gestureStartedAt = now
-      wheelTravel += Math.min(Math.max(delta, 0), 44)
+      wheelTravel += Math.min(Math.abs(delta), 44)
 
       const distanceProgress = Math.min(wheelTravel / 360, 1)
       const timeProgress = Math.min((now - gestureStartedAt + 80) / 650, 1)
@@ -246,32 +329,39 @@ function useCyclicSectionScroll({
 
       setProgress(nextProgress)
       scheduleGestureReset()
-      if (distanceProgress >= 1 && timeProgress >= 1) advance()
+      if (distanceProgress >= 1 && timeProgress >= 1) navigate(nextDirection)
     }
 
     const onWheel = (event: WheelEvent) => {
       if (lockedRef.current) {
-        if (event.deltaY > 0) event.preventDefault()
+        if (event.deltaY !== 0) event.preventDefault()
         return
       }
 
-      if (event.deltaY <= 0 || !atBottom()) {
+      const nextDirection =
+        event.deltaY > 0 && atBottom()
+          ? 'forward'
+          : event.deltaY < 0 && atTop()
+            ? 'backward'
+            : null
+
+      if (!nextDirection) {
         resetGesture()
         return
       }
 
-      // The extra gesture belongs to section navigation, not to the next
-      // section's scroll position.
+      // The extra gesture belongs to section navigation, not to either
+      // section's native scroll position.
       event.preventDefault()
 
       const now = performance.now()
       if (lastWheelAt && now - lastWheelAt > 650) resetGesture()
       lastWheelAt = now
-      updateWheelProgress(event.deltaY, now)
+      updateWheelProgress(event.deltaY, now, nextDirection)
     }
 
     const onTouchStart = (event: TouchEvent) => {
-      if (!atBottom() || lockedRef.current) {
+      if ((!atBottom() && !atTop()) || lockedRef.current) {
         touchStartY = null
         return
       }
@@ -285,19 +375,29 @@ function useCyclicSectionScroll({
         return
       }
 
-      if (touchStartY === null || !atBottom()) return
+      if (touchStartY === null) return
       const currentY = event.touches[0]?.clientY
       if (currentY === undefined) return
 
       const distance = touchStartY - currentY
-      if (distance <= 0) return
+      const nextDirection =
+        distance > 0 && atBottom()
+          ? 'forward'
+          : distance < 0 && atTop()
+            ? 'backward'
+            : null
+      if (!nextDirection) return
       event.preventDefault()
 
+      if (gestureDirection !== nextDirection) {
+        gestureDirection = nextDirection
+        setDirection(nextDirection)
+      }
       const now = performance.now()
-      const distanceProgress = Math.min(distance / 240, 1)
+      const distanceProgress = Math.min(Math.abs(distance) / 240, 1)
       const timeProgress = Math.min((now - touchStartedAt + 60) / 420, 1)
       setProgress(Math.min(distanceProgress, timeProgress))
-      if (distanceProgress >= 1 && timeProgress >= 1) advance()
+      if (distanceProgress >= 1 && timeProgress >= 1) navigate(nextDirection)
     }
 
     const onTouchEnd = () => {
@@ -305,19 +405,32 @@ function useCyclicSectionScroll({
     }
 
     const onKeyDown = (event: KeyboardEvent) => {
-      if (!['ArrowDown', 'PageDown', ' '].includes(event.key)) return
+      const nextDirection =
+        ['ArrowDown', 'PageDown'].includes(event.key) ||
+        (event.key === ' ' && !event.shiftKey)
+          ? 'forward'
+          : ['ArrowUp', 'PageUp'].includes(event.key) ||
+              (event.key === ' ' && event.shiftKey)
+            ? 'backward'
+            : null
+      if (!nextDirection) return
       if (lockedRef.current) {
         event.preventDefault()
         return
       }
-      if (!atBottom()) return
+      if (
+        (nextDirection === 'forward' && !atBottom()) ||
+        (nextDirection === 'backward' && !atTop())
+      ) {
+        return
+      }
 
       event.preventDefault()
 
       const now = performance.now()
       if (lastWheelAt && now - lastWheelAt > 650) resetGesture()
       lastWheelAt = now
-      updateWheelProgress(52, now)
+      updateWheelProgress(52, now, nextDirection)
     }
 
     window.addEventListener('wheel', onWheel, { passive: false })
@@ -334,9 +447,9 @@ function useCyclicSectionScroll({
       window.removeEventListener('touchend', onTouchEnd)
       window.removeEventListener('keydown', onKeyDown)
     }
-  }, [activeTab, disabled, onAdvance])
+  }, [activeTab, disabled, onNavigate])
 
-  return progress
+  return { progress, direction }
 }
 
 export default App

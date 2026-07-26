@@ -10,9 +10,9 @@ import styles from './StickerBoard.module.css'
 
 type Pos = { x: number; y: number; w?: number }
 
-// v2: reset saved drags — v1 stored absolute positions from an older seed layout
-// that piled stickers up in one corner once the scatter changed.
-const STORAGE_KEY = 'sticker-positions-v2'
+// The board now lives inside the About panel instead of the old full homepage.
+// Reset absolute positions saved against that previous page coordinate system.
+const STORAGE_KEY = 'about-sticker-positions-v3'
 
 function loadSaved(): Record<string, Pos> {
   try {
@@ -114,7 +114,7 @@ export function StickerBoard({ anchorId = 'playground' }: { anchorId?: string })
       document.removeEventListener('load', place, true)
       ro.disconnect()
     }
-  }, [anchorId, seed.length])
+  }, [anchorId])
 
   function onPointerDown(e: RPointerEvent<HTMLDivElement>, id: string) {
     const layer = layerRef.current

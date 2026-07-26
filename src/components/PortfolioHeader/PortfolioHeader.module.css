@@ -69,6 +69,15 @@
   transform: scaleX(1);
 }
 
+/* The outgoing underline follows the direction of section travel. */
+.nav[data-transition-direction='forward'] .tab::after {
+  transform-origin: 100% 50%;
+}
+
+.nav[data-transition-direction='backward'] .tab::after {
+  transform-origin: 0 50%;
+}
+
 .tab[data-pending] {
   color: var(--text-mid);
 }
@@ -79,6 +88,20 @@
   transition:
     opacity 100ms ease,
     transform 80ms linear;
+}
+
+.nav[data-transition-direction='forward'] .tab[data-transition-target]::after {
+  transform-origin: 0 50%;
+}
+
+.nav[data-transition-direction='backward'] .tab[data-transition-target]::after {
+  transform-origin: 100% 50%;
+}
+
+/* Keep a cancelled partial underline anchored to its original side. */
+.tab[data-transition-target]:not([data-pending])::after {
+  opacity: 0;
+  transform: scaleX(0);
 }
 
 @media (max-width: 720px) {
