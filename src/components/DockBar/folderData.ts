@@ -30,7 +30,7 @@ export const sections: FolderSection[] = [
   },
   {
     label: { ru: 'CV', en: 'CV' },
-    href: '/cv/Timothe_Ermolaev_Resume.pdf?v=07a07a0d',
+    href: '/cv/Timothe_Ermolaev_Resume.pdf?v=20260726-3',
     Icon: ReadCvLogo,
     color: '#3b82f6',
     download: true,

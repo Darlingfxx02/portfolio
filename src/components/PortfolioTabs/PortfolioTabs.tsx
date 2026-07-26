@@ -1,18 +1,14 @@
-import { useRef, type KeyboardEvent, type PointerEvent } from 'react'
+import type { CSSProperties, PointerEvent } from 'react'
 import { cases } from '@/data/cases'
+import { experience } from '@/data/experience'
 import { useLang, t } from '@/lib/i18n'
 import { trackEvent } from '@/lib/analytics'
 import { profile } from '@/data/profile'
 import { MediaGrid } from '@/components/MediaGrid/MediaGrid'
 import styles from './PortfolioTabs.module.css'
 
-export type PortfolioTab = 'work' | 'explorations' | 'about'
-
-const tabs: { id: PortfolioTab; label: string }[] = [
-  { id: 'work', label: 'Work' },
-  { id: 'explorations', label: 'Explorations' },
-  { id: 'about', label: 'About' },
-]
+export type PortfolioTab = 'home' | 'work' | 'explorations' | 'about'
+export type PortfolioContentTab = Exclude<PortfolioTab, 'home'>
 
 const aboutCopy = {
   ru: [
@@ -27,7 +23,11 @@ const aboutCopy = {
   ],
 }
 
-const CV_URL = '/cv/Timothe_Ermolaev_Resume.pdf?v=07a07a0d'
+const CV_URL = '/cv/Timothe_Ermolaev_Resume.pdf?v=20260726-3'
+
+function revealStyle(index: number) {
+  return { '--reveal-index': index } as CSSProperties
+}
 
 function positionHoverChip(event: PointerEvent<HTMLElement>) {
   const item = event.currentTarget
@@ -35,10 +35,24 @@ function positionHoverChip(event: PointerEvent<HTMLElement>) {
   item.style.setProperty('--chip-x', `${event.clientX - rect.left}px`)
   item.style.setProperty('--chip-y', `${event.clientY - rect.top}px`)
   item.dataset.chipVisible = 'true'
+
+  const rail = item.closest<HTMLElement>('[data-work-rail]')
+  if (rail) {
+    const railRect = rail.getBoundingClientRect()
+    rail.style.setProperty(
+      '--rail-y',
+      `${rect.top - railRect.top + rect.height / 2}px`,
+    )
+    rail.dataset.railActive = 'true'
+  }
 }
 
 function hideHoverChip(event: PointerEvent<HTMLElement>) {
   delete event.currentTarget.dataset.chipVisible
+}
+
+function hideRailIndicator(event: PointerEvent<HTMLDivElement>) {
+  delete event.currentTarget.dataset.railActive
 }
 
 type WorkProject = {
@@ -46,31 +60,26 @@ type WorkProject = {
   title?: { ru: string; en: string }
   year?: string
   caseId?: string
+  experienceId?: string
+  status?: 'NDA' | 'Soon'
 }
 
 const workExperienceGroups: Array<{
   id: string
-  company: string
-  role: { ru: string; en: string }
-  period: { ru: string; en: string }
+  experienceId: string
   logo: string
+  role?: { ru: string; en: string }
   projects: WorkProject[]
 }> = [
   {
     id: 'wmt',
-    company: 'WMT AI',
-    role: { ru: 'Продуктовый дизайнер · AI', en: 'Product designer · AI' },
-    period: { ru: '2025 — наст. время', en: '2025 — present' },
-    logo: '/company-favicons/wmt.svg',
+    experienceId: 'wmt',
+    logo: '/company-favicons/wmt-current.svg',
+    role: {
+      ru: 'Продуктовый дизайнер',
+      en: 'Product designer',
+    },
     projects: [
-      {
-        id: 'neurokey',
-        title: {
-          ru: 'НейроКлюч. Корпоративная AI-платформа',
-          en: 'NeuroKey. Enterprise AI platform',
-        },
-        year: '2025 —',
-      },
       {
         id: 'relevanter',
         title: {
@@ -78,91 +87,123 @@ const workExperienceGroups: Array<{
           en: 'Relevanter. AI recruiting',
         },
         year: '2025 —',
+        status: 'NDA',
+      },
+      {
+        id: 'neurokey',
+        title: {
+          ru: 'НейроКлюч. Корпоративный доступ к AI-моделям',
+          en: 'NeuroKey. Enterprise access to AI models',
+        },
+        year: '2025 —',
+        status: 'NDA',
       },
     ],
   },
   {
     id: 'uxart',
-    company: 'UXART',
-    role: { ru: 'UX/UI-дизайнер', en: 'UX/UI designer' },
-    period: { ru: '2023 — 2025 · 1,5 года', en: '2023 — 2025 · 1.5 years' },
-    logo: '/company-favicons/uxart.ico',
+    experienceId: 'uxart',
+    logo: '/company-favicons/uxart-current.svg',
     projects: [
-      { id: 'ovork', caseId: 'ovork' },
-      { id: 'zinda', caseId: 'zinda' },
-      { id: 'uxart-ai', caseId: 'uxart' },
-      { id: 'rcon', caseId: 'rcon' },
+      {
+        id: 'ovork',
+        caseId: 'ovork',
+        experienceId: 'ovork',
+        title: {
+          ru: 'ОВорк. Кошелёк, выплаты и ФНС',
+          en: 'OVork. Wallet, payouts, and tax requirements',
+        },
+      },
+      {
+        id: 'uxart-ai',
+        caseId: 'uxart',
+        title: {
+          ru: 'UXART. AI-прототипы как стандарт студии',
+          en: 'UXART. AI prototypes as a studio standard',
+        },
+        year: '2025',
+      },
+      {
+        id: 'combogpt',
+        experienceId: 'combogpt',
+        title: {
+          ru: 'ComboGPT. AI-агрегатор 0→1',
+          en: 'ComboGPT. AI aggregator 0→1',
+        },
+        status: 'Soon',
+      },
+      {
+        id: 'zinda-mobile',
+        caseId: 'zinda-mobile',
+        experienceId: 'zinda',
+        year: '2024',
+        title: {
+          ru: 'Zinda. Мобильное приложение — самостоятельное направление',
+          en: 'Zinda Mobile. An independently led direction',
+        },
+      },
+      {
+        id: 'zinda-system',
+        caseId: 'zinda-system',
+        experienceId: 'zinda',
+        year: '2023 — 2024',
+        title: {
+          ru: 'Zinda. Дизайн-система банка',
+          en: 'Zinda. The bank design system',
+        },
+      },
+      {
+        id: 'zinda',
+        caseId: 'zinda',
+        experienceId: 'zinda',
+        year: '2023',
+        title: {
+          ru: 'Zinda. Как мы собирали банк',
+          en: 'Zinda. How we built the bank',
+        },
+      },
     ],
   },
 ]
 
+const experienceById = new Map(experience.map((item) => [item.id, item]))
+
+function formatExperiencePeriod(
+  experienceId: string,
+  lang: 'ru' | 'en',
+  includeDuration = true,
+) {
+  const item = experienceById.get(experienceId)
+  if (!item) return ''
+
+  const { start, end, ongoing, duration } = item.period
+  const endLabel = ongoing ? (lang === 'ru' ? 'наст. время' : 'present') : end
+  const years = endLabel
+    ? start === endLabel
+      ? start
+      : `${start} — ${endLabel}`
+    : start
+  return includeDuration && duration ? `${years} · ${t(duration, lang)}` : years
+}
+
 export function PortfolioTabs({
   activeTab,
-  onTabChange,
 }: {
-  activeTab: PortfolioTab
-  onTabChange: (tab: PortfolioTab) => void
+  activeTab: PortfolioContentTab
 }) {
-  const tabRefs = useRef<Array<HTMLButtonElement | null>>([])
-
-  const onTabKeyDown = (event: KeyboardEvent<HTMLButtonElement>, index: number) => {
-    if (!['ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(event.key)) return
-    event.preventDefault()
-
-    let nextIndex = index
-    if (event.key === 'ArrowLeft') nextIndex = (index - 1 + tabs.length) % tabs.length
-    if (event.key === 'ArrowRight') nextIndex = (index + 1) % tabs.length
-    if (event.key === 'Home') nextIndex = 0
-    if (event.key === 'End') nextIndex = tabs.length - 1
-
-    const nextTab = tabs[nextIndex]
-    onTabChange(nextTab.id)
-    window.requestAnimationFrame(() => tabRefs.current[nextIndex]?.focus())
-  }
-
   return (
-    <section className={styles.section} aria-label="Portfolio">
-      <div className={styles.navWrap}>
-        <div className={styles.nav} role="tablist" aria-label="Portfolio sections">
-          {tabs.map((tab, index) => {
-            const selected = activeTab === tab.id
-            return (
-              <button
-                key={tab.id}
-                ref={(node) => {
-                  tabRefs.current[index] = node
-                }}
-                className={styles.tab}
-                type="button"
-                role="tab"
-                id={`tab-${tab.id}`}
-                aria-controls={`panel-${tab.id}`}
-                aria-selected={selected}
-                tabIndex={selected ? 0 : -1}
-                data-active={selected || undefined}
-                onClick={() => onTabChange(tab.id)}
-                onKeyDown={(event) => onTabKeyDown(event, index)}
-              >
-                {tab.label}
-              </button>
-            )
-          })}
-        </div>
-      </div>
-
+    <main className={styles.section} aria-label="Портфолио">
       <div
-        key={activeTab}
         id={`panel-${activeTab}`}
         className={styles.panel}
         role="tabpanel"
         aria-labelledby={`tab-${activeTab}`}
-        tabIndex={0}
       >
         {activeTab === 'work' && <WorkList />}
         {activeTab === 'explorations' && <MediaGrid />}
         {activeTab === 'about' && <About />}
       </div>
-    </section>
+    </main>
   )
 }
 
@@ -178,12 +219,21 @@ function About() {
   return (
     <div className={styles.about}>
       <div className={styles.aboutCopy}>
-        {aboutCopy[lang].map((paragraph) => (
-          <p key={paragraph}>{paragraph}</p>
+        {aboutCopy[lang].map((paragraph, index) => (
+          <p
+            key={paragraph}
+            className={styles.revealBlock}
+            style={revealStyle(index)}
+          >
+            {paragraph}
+          </p>
         ))}
       </div>
 
-      <div className={styles.connect}>
+      <div
+        className={`${styles.connect} ${styles.revealBlock}`}
+        style={revealStyle(aboutCopy[lang].length)}
+      >
         <p className={styles.connectLabel}>Connect</p>
         <ul className={styles.connectList}>
           {links.map((link) => (
@@ -215,29 +265,61 @@ function WorkList() {
   return (
     <div className={styles.workGroup}>
       <div className={styles.jobList}>
-        {workExperienceGroups.map((job) => (
+        {workExperienceGroups.map((job, jobIndex) => (
           <section key={job.id} className={styles.job}>
-            <div className={styles.jobHeader}>
+            <div
+              className={`${styles.jobHeader} ${styles.revealBlock}`}
+              style={revealStyle(jobIndex * 2)}
+            >
               <div className={styles.jobCompany}>
-                <img className={styles.jobLogo} src={job.logo} alt="" aria-hidden />
-                <p>{job.company}</p>
+                <img
+                  className={styles.jobLogo}
+                  src={job.logo}
+                  alt=""
+                  aria-hidden
+                  data-brand={job.id}
+                />
+                <p>{experienceById.get(job.experienceId)?.company ?? job.id}</p>
               </div>
-              <p className={styles.jobRole}>{t(job.role, lang)}</p>
-              <p className={styles.jobPeriod}>{t(job.period, lang)}</p>
+              <p className={styles.jobRole}>
+                {job.role
+                  ? t(job.role, lang)
+                  : experienceById.get(job.experienceId)
+                  ? t(experienceById.get(job.experienceId)!.category, lang)
+                  : ''}
+              </p>
+              <p className={styles.jobPeriod}>
+                {formatExperiencePeriod(job.experienceId, lang)}
+              </p>
             </div>
 
-            <div className={styles.jobProjects}>
+            <div
+              className={`${styles.jobProjects} ${styles.revealBlock}`}
+              style={revealStyle(jobIndex * 2 + 1)}
+              data-work-rail
+              onPointerLeave={hideRailIndicator}
+            >
               {job.projects.map((project) => {
                 const study = project.caseId
                   ? cases.find((candidate) => candidate.id === project.caseId)
                   : undefined
-                const title = study
-                  ? t(study.title, lang)
-                  : project.title
-                    ? t(project.title, lang)
+                const title = project.title
+                  ? t(project.title, lang)
+                  : study
+                    ? t(study.title, lang)
                     : project.id
-                const year = study?.year ?? project.year
-                const underNda = !study || Boolean(study.disabled)
+                const year =
+                  project.year ??
+                  (project.experienceId
+                    ? formatExperiencePeriod(project.experienceId, lang, false)
+                    : study?.year)
+                const unavailable = !study || Boolean(study.disabled)
+                const chipLabel =
+                  project.status === 'Soon'
+                    ? 'Скоро'
+                    : project.status === 'NDA' || study?.disabled
+                      ? 'NDA'
+                      : 'Открыть'
                 const content = (
                   <>
                     <span className={styles.workTitleRow}>
@@ -247,12 +329,12 @@ function WorkList() {
                       <span className={styles.workMeta}>{year}</span>
                     )}
                     <span className={styles.hoverChip} aria-hidden>
-                      {underNda ? 'NDA' : 'Open'}
+                      {chipLabel}
                     </span>
                   </>
                 )
 
-                if (!study || study.disabled) {
+                if (unavailable) {
                   return (
                     <div
                       key={project.id}

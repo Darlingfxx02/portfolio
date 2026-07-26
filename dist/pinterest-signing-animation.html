@@ -1,0 +1,660 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Signing interaction — coded recreation</title>
+  <style>
+    :root {
+      color-scheme: light;
+      font-family: Inter, ui-rounded, "SF Pro Rounded", "SF Pro Display", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: #fbfbfb;
+      color: #202025;
+    }
+
+    * { box-sizing: border-box; }
+
+    html, body {
+      width: 100%;
+      min-height: 100%;
+      margin: 0;
+      overflow: hidden;
+      background: #fbfbfb;
+    }
+
+    body {
+      display: grid;
+      min-height: 100svh;
+      place-items: center;
+    }
+
+    button {
+      margin: 0;
+      border: 0;
+      font: inherit;
+      color: inherit;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .stage {
+      position: relative;
+      width: min(100vw, 100svh, 720px);
+      aspect-ratio: 1;
+      overflow: hidden;
+      container-type: size;
+      isolation: isolate;
+      background: #fbfbfb;
+      user-select: none;
+    }
+
+    .pill {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 1.7cqw;
+      height: 13.35cqw;
+      border-radius: 7cqw;
+      background: #f5f5f7;
+      font-size: 3.92cqw;
+      font-weight: 650;
+      letter-spacing: -0.14cqw;
+      white-space: nowrap;
+      cursor: pointer;
+    }
+
+    .signature-mark {
+      width: 5.45cqw;
+      height: 5.45cqw;
+      flex: 0 0 auto;
+    }
+
+    .primary-pill {
+      position: absolute;
+      z-index: 5;
+      left: 29.05cqw;
+      top: 43.35cqh;
+      width: 41.9cqw;
+      transform-origin: center;
+      overflow: hidden;
+      will-change: left, top, width, color, background-color, transform;
+    }
+
+    .primary-content {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 1.7cqw;
+      will-change: opacity;
+      pointer-events: none;
+    }
+
+    .primary-label {
+      display: inline-flex;
+      white-space: pre;
+    }
+
+    .primary-letter {
+      display: inline-block;
+      will-change: opacity, filter, transform;
+    }
+
+    .primary-content[data-content="finish"],
+    .primary-content[data-content="done"] { opacity: 0; }
+
+    .panel {
+      position: absolute;
+      z-index: 2;
+      left: 20.35cqw;
+      top: 11.9cqh;
+      width: 59.3cqw;
+      height: 76.25cqh;
+      overflow: hidden;
+      border: 0.43cqw dashed #e4e4e7;
+      border-radius: 8.05cqw;
+      background: rgba(255, 255, 255, 0.38);
+      transform-origin: center;
+      will-change: opacity, transform, filter;
+    }
+
+    .panel-header {
+      position: absolute;
+      inset: 0;
+      height: 17.2cqh;
+      color: #929297;
+      pointer-events: none;
+    }
+
+    .reset, .close {
+      position: absolute;
+      top: 5.6cqh;
+      display: grid;
+      width: 7cqw;
+      height: 7cqw;
+      padding: 0;
+      place-items: center;
+      background: transparent;
+      pointer-events: auto;
+      cursor: pointer;
+    }
+
+    .reset { left: 3.45cqw; }
+    .close { right: 3.3cqw; }
+
+    .reset svg { width: 5.45cqw; height: 5.45cqw; }
+    .close svg { width: 5.15cqw; height: 5.15cqw; }
+
+    .title {
+      position: absolute;
+      top: 6.35cqh;
+      left: 50%;
+      translate: -50% 0;
+      font-size: 3.75cqw;
+      font-weight: 590;
+      letter-spacing: -0.11cqw;
+    }
+
+    .drawing {
+      position: absolute;
+      inset: 0;
+      overflow: visible;
+      pointer-events: none;
+    }
+
+    .signature-path {
+      fill: none;
+      stroke: #202025;
+      stroke-width: 4.35;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      stroke-dasharray: 1;
+      stroke-dashoffset: 1;
+      vector-effect: non-scaling-stroke;
+      will-change: stroke-dashoffset, opacity;
+    }
+
+    .pen {
+      position: absolute;
+      z-index: 4;
+      width: 5.65cqw;
+      height: 5.65cqw;
+      opacity: 0;
+      transform: translate(-50%, -50%);
+      filter: drop-shadow(0 0.18cqw 0.18cqw rgba(0, 0, 0, 0.08));
+      will-change: left, top, opacity, transform;
+      pointer-events: none;
+    }
+
+    .done-cluster {
+      position: absolute;
+      z-index: 4;
+      left: 66.15cqw;
+      top: 43.35cqh;
+      opacity: 0;
+      transform-origin: center;
+      will-change: opacity, transform, filter;
+      pointer-events: none;
+    }
+
+    .check {
+      display: grid;
+      width: 5.4cqw;
+      height: 5.4cqw;
+      flex: 0 0 auto;
+      place-items: center;
+      border-radius: 50%;
+      background: white;
+    }
+
+    .check svg { width: 3.2cqw; height: 3.2cqw; }
+
+    .edit {
+      display: grid;
+      width: 13.1cqw;
+      height: 13.1cqw;
+      flex: 0 0 auto;
+      padding: 0;
+      place-items: center;
+      border-radius: 50%;
+      background: #f5f5f7;
+      pointer-events: auto;
+      cursor: pointer;
+    }
+
+    .edit svg { width: 5.6cqw; height: 5.6cqw; }
+
+    .cursor {
+      position: absolute;
+      z-index: 10;
+      left: 0;
+      top: 0;
+      width: 5.2cqw;
+      height: 6.4cqw;
+      transform: translate3d(55.2cqw, 61.3cqh, 0);
+      transform-origin: 28% 22%;
+      filter: drop-shadow(0.28cqw 0.35cqw 0 rgba(0, 0, 0, 0.17));
+      pointer-events: none;
+      will-change: opacity, transform;
+    }
+
+    .cursor path:first-child {
+      fill: #050505;
+      stroke: white;
+      stroke-width: 2.4;
+      stroke-linejoin: round;
+    }
+
+    .cursor path:last-child {
+      fill: white;
+      stroke: #050505;
+      stroke-width: 1.7;
+      stroke-linejoin: round;
+    }
+
+    .paused-hint {
+      position: absolute;
+      z-index: 20;
+      right: 2.2cqw;
+      bottom: 2.2cqh;
+      padding: 1.1cqw 1.7cqw;
+      border: 0.14cqw solid #ececef;
+      border-radius: 2cqw;
+      opacity: 0;
+      background: rgba(255,255,255,.82);
+      color: #77777d;
+      font-size: 1.65cqw;
+      transition: opacity .2s ease;
+      pointer-events: none;
+      backdrop-filter: blur(12px);
+    }
+
+    .stage[data-manual="true"] .paused-hint { opacity: 1; }
+
+    @media (prefers-reduced-motion: reduce) {
+      .paused-hint { display: none; }
+    }
+  </style>
+</head>
+<body>
+  <main class="stage" aria-label="Animated signing interaction" tabindex="0">
+    <section class="panel" aria-label="Signature panel">
+      <header class="panel-header">
+        <button class="reset" type="button" aria-label="Clear signature">
+          <svg viewBox="0 0 40 40" aria-hidden="true">
+            <path d="M29.6 11.4A13.8 13.8 0 1 0 33.2 24" fill="none" stroke="currentColor" stroke-width="4.6" stroke-linecap="round"/>
+            <path d="m27.6 5.4.9 8-8 .8" fill="none" stroke="currentColor" stroke-width="4.6" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+        <span class="title">Sign</span>
+        <button class="close" type="button" aria-label="Close signing panel">
+          <svg viewBox="0 0 40 40" aria-hidden="true">
+            <circle cx="20" cy="20" r="17" fill="#aaaab0"/>
+            <path d="m14.3 14.3 11.4 11.4m0-11.4L14.3 25.7" fill="none" stroke="white" stroke-width="3.8" stroke-linecap="round"/>
+          </svg>
+        </button>
+      </header>
+
+      <svg class="drawing" viewBox="0 0 426 550" aria-hidden="true">
+        <path class="signature-path" pathLength="1" d="M88 292 C91 263 94 228 98 200 C100 189 104 192 109 205 L136 286"/>
+        <path class="signature-path" pathLength="1" d="M91 256 C108 250 123 248 139 252"/>
+        <path class="signature-path" pathLength="1" d="M138 274 C148 269 155 259 155 242 C155 229 150 227 146 242 C142 258 147 269 158 269 C169 269 179 260 185 249"/>
+        <path class="signature-path" pathLength="1" d="M176 259 C183 245 194 240 199 248 C202 256 195 262 181 263 C185 275 198 275 210 267"/>
+        <path class="signature-path" pathLength="1" d="M208 267 C220 253 227 238 231 223 C234 209 232 204 231 215 C229 238 231 255 240 263 C251 271 264 267 275 257"/>
+        <path class="signature-path" pathLength="1" d="M240 262 C251 251 263 237 270 223 C274 213 274 208 273 219 C272 240 277 257 292 261 C306 264 319 261 331 257"/>
+        <path class="signature-path" pathLength="1" d="M177 311 C222 295 270 281 330 274"/>
+      </svg>
+
+      <svg class="pen" viewBox="0 0 42 42" aria-hidden="true">
+        <path d="M8 29.5 27.9 9.6l6.3 6.3-19.9 19.9L6 37.4z" fill="#050507"/>
+        <path d="m27.9 9.6 2.7-2.7a3.1 3.1 0 0 1 4.4 0l.1.1a3.1 3.1 0 0 1 0 4.4l-2.7 2.7z" fill="#050507"/>
+        <path d="m25.7 11.8 6.3 6.3" stroke="white" stroke-width="2.2"/>
+      </svg>
+
+    </section>
+
+    <button class="pill primary-pill" type="button" aria-label="Start signing">
+      <span class="primary-content" data-content="start">
+        <svg class="signature-mark" viewBox="0 0 40 40" aria-hidden="true">
+          <path d="M5.5 25.5c4.3-12.8 5.7-12.8 5.2 1.8-.2 5.8 2.5 7.3 5.8 2.3l4.6-6.8" fill="none" stroke="currentColor" stroke-width="5.2" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="m24.3 17.9 5.8-5.8 5.1 5.1-5.8 5.8-7.2 2.1z" fill="currentColor"/>
+          <path d="m29 13.2 2.1-2.1c1.2-1.2 3-1.2 4.2 0l1 1c1.2 1.2 1.2 3 0 4.2l-2.1 2.1z" fill="currentColor"/>
+        </svg>
+        <span class="primary-label">Start Signing</span>
+      </span>
+      <span class="primary-content" data-content="finish">
+        <svg class="signature-mark" viewBox="0 0 40 40" aria-hidden="true">
+          <path d="M5.5 25.5c4.3-12.8 5.7-12.8 5.2 1.8-.2 5.8 2.5 7.3 5.8 2.3l4.6-6.8" fill="none" stroke="currentColor" stroke-width="5.2" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="m24.3 17.9 5.8-5.8 5.1 5.1-5.8 5.8-7.2 2.1z" fill="currentColor"/>
+          <path d="m29 13.2 2.1-2.1c1.2-1.2 3-1.2 4.2 0l1 1c1.2 1.2 1.2 3 0 4.2l-2.1 2.1z" fill="currentColor"/>
+        </svg>
+        <span class="primary-label">Finish Signing</span>
+      </span>
+      <span class="primary-content" data-content="done">
+        <span class="check">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6.5 12.5 3.5 3.4 7.7-8" fill="none" stroke="#202023" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </span>
+        <span class="primary-label">Signing Done</span>
+      </span>
+    </button>
+
+    <div class="done-cluster">
+      <button class="edit" type="button" aria-label="Edit signature">
+        <svg viewBox="0 0 42 42" aria-hidden="true">
+          <path d="M8 29.5 27.9 9.6l6.3 6.3-19.9 19.9L6 37.4z" fill="#202025"/>
+          <path d="m27.9 9.6 2.7-2.7a3.1 3.1 0 0 1 4.4 0l.1.1a3.1 3.1 0 0 1 0 4.4l-2.7 2.7z" fill="#202025"/>
+        </svg>
+      </button>
+    </div>
+
+    <svg class="cursor" viewBox="0 0 34 44" aria-hidden="true">
+      <path d="M4 3.5v30.4l7.8-7.1 5.6 13.1 6.4-2.8-5.7-13H29z"/>
+      <path d="m13.3 25.6 4.6-2 5.9 13.5-6.4 2.8z"/>
+    </svg>
+
+    <span class="paused-hint">Space — replay</span>
+  </main>
+
+  <script>
+    (() => {
+      const LOOP_MS = 11424.218;
+      const FRAME_MS = 1000 / (60000 / 1001);
+      const stage = document.querySelector('.stage');
+      const primary = document.querySelector('.primary-pill');
+      const primaryContents = {
+        start: document.querySelector('[data-content="start"]'),
+        finish: document.querySelector('[data-content="finish"]'),
+        done: document.querySelector('[data-content="done"]')
+      };
+      const primaryLetters = {};
+      for (const [name, content] of Object.entries(primaryContents)) {
+        const label = content.querySelector('.primary-label');
+        const letters = [...label.textContent];
+        label.textContent = '';
+        primaryLetters[name] = letters.map(character => {
+          const letter = document.createElement('span');
+          letter.className = 'primary-letter';
+          letter.textContent = character === ' ' ? '\u00a0' : character;
+          label.append(letter);
+          return letter;
+        });
+      }
+      const panel = document.querySelector('.panel');
+      const panelHeader = document.querySelector('.panel-header');
+      const signaturePaths = [...document.querySelectorAll('.signature-path')];
+      const pen = document.querySelector('.pen');
+      const done = document.querySelector('.done-cluster');
+      const cursor = document.querySelector('.cursor');
+      const reset = document.querySelector('.reset');
+      const close = document.querySelector('.close');
+      const edit = document.querySelector('.edit');
+
+      const clamp = (n, min = 0, max = 1) => Math.min(max, Math.max(min, n));
+      const smooth = n => {
+        n = clamp(n);
+        return n * n * (3 - 2 * n);
+      };
+      const mix = (a, b, n) => a + (b - a) * n;
+      const spring = n => {
+        n = clamp(n);
+        if (n === 0 || n === 1) return n;
+        const easeOut = 1 - Math.pow(1 - n, 3);
+        const overshoot = Math.sin(Math.PI * n) * .016;
+        return clamp(easeOut + overshoot, 0, 1.014);
+      };
+
+      const primaryStates = {
+        start: { x: 209, y: 312, w: 302, tone: 245 },
+        finish: { x: 164, y: 521, w: 392, tone: 245 },
+        done: { x: 151, y: 312, w: 302, tone: 32 }
+      };
+
+      const transition = (from, to, raw) => ({ from, to, raw: clamp(raw), eased: spring(raw) });
+
+      const primaryTransitionAt = time => {
+        if (time < 540) return transition('start', 'start', 1);
+        if (time < 1050) return transition('start', 'finish', (time - 540) / 510);
+        if (time < 5230) return transition('finish', 'finish', 1);
+        if (time < 5830) return transition('finish', 'done', (time - 5230) / 600);
+        if (time < 6970) return transition('done', 'done', 1);
+        if (time < 7480) return transition('done', 'finish', (time - 6970) / 510);
+        if (time < 9920) return transition('finish', 'finish', 1);
+        if (time < 10450) return transition('finish', 'start', (time - 9920) / 530);
+        return transition('start', 'start', 1);
+      };
+
+      const renderPrimary = (movement, clicking = false) => {
+        const a = primaryStates[movement.from];
+        const b = primaryStates[movement.to];
+        const p = movement.eased;
+        const tone = Math.round(mix(a.tone, b.tone, clamp(movement.raw)));
+        primary.style.left = `${mix(a.x, b.x, p) / 7.2}cqw`;
+        primary.style.top = `${mix(a.y, b.y, p) / 7.2}cqh`;
+        primary.style.width = `${mix(a.w, b.w, p) / 7.2}cqw`;
+        primary.style.backgroundColor = `rgb(${tone} ${tone} ${Math.min(247, tone + 2)})`;
+        primary.style.color = tone < 100 ? '#fff' : '#202025';
+        primary.style.transform = `scale(${clicking ? .965 : 1})`;
+
+        for (const [name, element] of Object.entries(primaryContents)) {
+          const active = name === movement.from || name === movement.to;
+          element.style.opacity = active ? '1' : '0';
+
+          const icon = element.querySelector('.signature-mark, .check');
+          let iconOpacity = 0;
+          let iconBlur = 0;
+          if (movement.from === movement.to) {
+            iconOpacity = name === movement.to ? 1 : 0;
+          } else if (name === movement.from) {
+            const out = smooth((movement.raw - .14) / .28);
+            iconOpacity = 1 - out;
+            iconBlur = out * 5;
+          } else if (name === movement.to) {
+            const into = smooth((movement.raw - .5) / .28);
+            iconOpacity = into;
+            iconBlur = (1 - into) * 5;
+          }
+          icon.style.opacity = String(iconOpacity);
+          icon.style.filter = `blur(${iconBlur / 7.2}cqw)`;
+
+          const letters = primaryLetters[name];
+          letters.forEach((letter, index) => {
+            let opacity = 0;
+            let blur = 0;
+            let translateY = 0;
+            if (movement.from === movement.to) {
+              opacity = name === movement.to ? 1 : 0;
+            } else if (name === movement.from) {
+              const stagger = letters.length > 1 ? index / (letters.length - 1) * .2 : 0;
+              const out = smooth((movement.raw - stagger) / .3);
+              opacity = 1 - out;
+              blur = out * 6;
+              translateY = -out * 9;
+            } else if (name === movement.to) {
+              const stagger = letters.length > 1 ? index / (letters.length - 1) * .2 : 0;
+              const into = smooth((movement.raw - .43 - stagger) / .34);
+              opacity = into;
+              blur = (1 - into) * 6;
+              translateY = (1 - into) * 9;
+            }
+            letter.style.opacity = String(opacity);
+            letter.style.filter = `blur(${blur / 7.2}cqw)`;
+            letter.style.transform = `translateY(${translateY}%)`;
+          });
+        }
+        primary.setAttribute('aria-label', movement.raw < .5 ? movement.from : movement.to);
+      };
+
+      const penPoints = [
+        [105, 280], [98, 200], [136, 286], [92, 256], [139, 252],
+        [155, 242], [146, 267], [185, 249], [181, 263], [210, 267],
+        [231, 214], [240, 263], [273, 219], [292, 261], [331, 257],
+        [177, 311], [330, 274], [365, 296]
+      ];
+
+      const pointOnPolyline = progress => {
+        const lengths = [];
+        let total = 0;
+        for (let i = 1; i < penPoints.length; i += 1) {
+          const [ax, ay] = penPoints[i - 1];
+          const [bx, by] = penPoints[i];
+          const length = Math.hypot(bx - ax, by - ay);
+          lengths.push(length);
+          total += length;
+        }
+        let distance = clamp(progress) * total;
+        for (let i = 0; i < lengths.length; i += 1) {
+          if (distance <= lengths[i]) {
+            const [ax, ay] = penPoints[i];
+            const [bx, by] = penPoints[i + 1];
+            const part = distance / lengths[i];
+            return [mix(ax, bx, part), mix(ay, by, part), Math.atan2(by - ay, bx - ax) * 180 / Math.PI];
+          }
+          distance -= lengths[i];
+        }
+        return [365, 336, 0];
+      };
+
+      const cursorFrames = [
+        [0, 398, 440, 1], [300, 398, 440, 1], [535, 365, 389, 1],
+        [1320, 365, 389, 1], [1470, 365, 389, 0], [4780, 475, 440, 0],
+        [5050, 384, 552, 1], [5350, 384, 552, 1], [5660, 615, 575, 1],
+        [6500, 615, 575, 1], [6970, 553, 385, 1], [7260, 553, 385, 1],
+        [7540, 553, 385, 0], [8420, 468, 330, 0], [8750, 198, 151, 1],
+        [9180, 198, 151, 1], [9340, 198, 151, 0], [9580, 350, 430, 0],
+        [9730, 383, 553, 1], [10050, 410, 553, 1], [10330, 640, 575, 1],
+        [LOOP_MS, 640, 575, 1]
+      ];
+
+      const sampleCursor = time => {
+        for (let i = 1; i < cursorFrames.length; i += 1) {
+          const a = cursorFrames[i - 1];
+          const b = cursorFrames[i];
+          if (time <= b[0]) {
+            const progress = smooth((time - a[0]) / (b[0] - a[0]));
+            return [mix(a[1], b[1], progress), mix(a[2], b[2], progress), mix(a[3], b[3], progress)];
+          }
+        }
+        return cursorFrames.at(-1).slice(1);
+      };
+
+      const isClicking = time => [585, 5260, 7080, 8860, 9950].some(click => Math.abs(time - click) < 85);
+
+      const render = time => {
+        const openA = clamp(spring((time - 540) / 510)) * (1 - clamp(spring((time - 5230) / 600)));
+        const openB = clamp(spring((time - 6970) / 510)) * (1 - clamp(spring((time - 9920) / 530)));
+        const panelOpen = Math.max(openA, openB);
+
+        const scaleX = mix(0.704, 1, panelOpen);
+        const scaleY = mix(0.175, 1, panelOpen);
+        panel.style.opacity = String(smooth(panelOpen * 1.35));
+        panel.style.transform = `scale(${scaleX}, ${scaleY})`;
+        panel.style.filter = panelOpen < .55 ? `blur(${mix(.48, 0, panelOpen / .55)}cqw)` : 'none';
+        panel.style.pointerEvents = panelOpen > .97 ? 'auto' : 'none';
+
+        const contentOpacity = smooth((panelOpen - .32) / .5);
+        panelHeader.style.opacity = String(contentOpacity);
+        const movement = primaryTransitionAt(time);
+        renderPrimary(movement, isClicking(time));
+
+        const doneIn = smooth((time - 5520) / 310);
+        const doneOut = 1 - smooth((time - 6970) / 360);
+        const doneOpacity = clamp(doneIn * doneOut);
+        done.style.opacity = String(doneOpacity);
+        done.style.transform = `translateX(${mix(-2.2, 0, smooth(doneOpacity))}cqw) scale(${mix(.72, 1, smooth(doneOpacity))})`;
+        done.style.filter = doneOpacity < .75 ? `blur(${mix(.5, 0, doneOpacity)}cqw)` : 'none';
+        done.style.pointerEvents = doneOpacity > .98 ? 'auto' : 'none';
+
+        const drawProgress = smooth((time - 1430) / 3300);
+        const resetProgress = smooth((time - 8750) / 260);
+        signaturePaths.forEach((path, index) => {
+          const segmentStart = index / signaturePaths.length;
+          const segmentProgress = smooth((drawProgress - segmentStart) / (.19));
+          path.style.strokeDashoffset = String(1 - segmentProgress);
+          path.style.opacity = String((1 - resetProgress) * contentOpacity);
+        });
+
+        if (time >= 1370 && time <= 4890) {
+          const progress = smooth((time - 1430) / 3300);
+          const [x, y, angle] = pointOnPolyline(progress);
+          pen.style.left = `${x / 426 * 100}%`;
+          pen.style.top = `${y / 550 * 100}%`;
+          pen.style.opacity = String(smooth((time - 1370) / 120) * (1 - smooth((time - 4700) / 190)));
+          pen.style.transform = `translate(-50%, -50%) rotate(${clamp(angle, -18, 18) * .12}deg)`;
+        } else if (time >= 9250 && time <= 9660) {
+          const drift = smooth((time - 9250) / 410);
+          pen.style.left = `${mix(46, 51, drift)}%`;
+          pen.style.top = `${mix(61, 63, drift)}%`;
+          pen.style.opacity = String(smooth((time - 9250) / 120) * (1 - smooth((time - 9510) / 150)));
+          pen.style.transform = 'translate(-50%, -50%)';
+        } else {
+          pen.style.opacity = '0';
+        }
+
+        const [cursorX, cursorY, cursorOpacity] = sampleCursor(time);
+        const cursorScale = isClicking(time) ? .84 : 1;
+        cursor.style.opacity = String(cursorOpacity);
+        cursor.style.transform = `translate3d(${cursorX / 7.2}cqw, ${cursorY / 7.2}cqh, 0) scale(${cursorScale})`;
+
+        stage.dataset.frame = String(Math.floor(time / FRAME_MS));
+        stage.dataset.primary = movement.raw < .5 ? movement.from : movement.to;
+      };
+
+      let auto = !matchMedia('(prefers-reduced-motion: reduce)').matches;
+      let startTime = performance.now();
+
+      const tick = now => {
+        if (auto) {
+          const raw = (now - startTime) % LOOP_MS;
+          const frameTime = Math.floor(raw / FRAME_MS) * FRAME_MS;
+          render(frameTime);
+        }
+        requestAnimationFrame(tick);
+      };
+
+      const setManual = (state, signed = false) => {
+        auto = false;
+        stage.dataset.manual = 'true';
+        const primaryState = state === 'panel' ? 'finish' : state;
+        renderPrimary(transition(primaryState, primaryState, 1));
+        panel.style.opacity = state === 'panel' ? '1' : '0';
+        panel.style.transform = 'translate3d(0,0,0) scale(1)';
+        panel.style.filter = 'none';
+        panel.style.pointerEvents = state === 'panel' ? 'auto' : 'none';
+        panelHeader.style.opacity = '1';
+        done.style.opacity = state === 'done' ? '1' : '0';
+        done.style.transform = 'scale(1)';
+        done.style.filter = 'none';
+        done.style.pointerEvents = state === 'done' ? 'auto' : 'none';
+        signaturePaths.forEach(path => {
+          path.style.strokeDashoffset = signed ? '0' : '1';
+          path.style.opacity = signed ? '1' : '0';
+        });
+        pen.style.opacity = '0';
+        cursor.style.opacity = '0';
+        stage.dataset.signed = String(signed);
+        stage.dataset.primary = primaryState;
+      };
+
+      primary.addEventListener('click', () => {
+        if (stage.dataset.primary === 'start') setManual('panel', false);
+        else if (stage.dataset.primary === 'finish') setManual(stage.dataset.signed === 'true' ? 'done' : 'start', false);
+      });
+      edit.addEventListener('click', () => setManual('panel', true));
+      reset.addEventListener('click', () => setManual('panel', false));
+      close.addEventListener('click', () => setManual('start', false));
+
+      stage.addEventListener('keydown', event => {
+        if (event.code !== 'Space') return;
+        event.preventDefault();
+        auto = true;
+        stage.dataset.manual = 'false';
+        stage.dataset.signed = 'false';
+        startTime = performance.now();
+      });
+
+      render(auto ? 0 : 4800);
+      requestAnimationFrame(tick);
+    })();
+  </script>
+</body>
+</html>

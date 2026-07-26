@@ -1,46 +1,84 @@
-import { useEffect, useState } from 'react'
-import { profile } from '@/data/profile'
+import { useRef, type CSSProperties, type KeyboardEvent } from 'react'
+import type { PortfolioTab } from '@/components/PortfolioTabs/PortfolioTabs'
+import { t, useLang, type Loc } from '@/lib/i18n'
 import styles from './PortfolioHeader.module.css'
 
-const CV_URL = '/cv/Timothe_Ermolaev_Resume.pdf?v=07a07a0d'
+const tabs: { id: PortfolioTab; label: Loc }[] = [
+  { id: 'home', label: { ru: 'Главная', en: 'Home' } },
+  { id: 'work', label: { ru: 'Работы', en: 'Work' } },
+  { id: 'explorations', label: { ru: 'Эксперименты', en: 'Explorations' } },
+  { id: 'about', label: { ru: 'Обо мне', en: 'About' } },
+]
 
-function moscowTime(now: Date) {
-  return new Intl.DateTimeFormat('en-GB', {
-    timeZone: 'Europe/Moscow',
-    hour: '2-digit',
-    minute: '2-digit',
-    hourCycle: 'h23',
-  }).format(now)
-}
+export function PortfolioHeader({
+  activeTab,
+  pendingTab,
+  transitionProgress = 0,
+  onTabChange,
+}: {
+  activeTab: PortfolioTab
+  pendingTab?: PortfolioTab
+  transitionProgress?: number
+  onTabChange: (tab: PortfolioTab) => void
+}) {
+  const { lang } = useLang()
+  const tabRefs = useRef<Array<HTMLButtonElement | null>>([])
 
-export function PortfolioHeader({ onNavigate }: { onNavigate?: () => void }) {
-  const [now, setNow] = useState(() => new Date())
+  const onTabKeyDown = (event: KeyboardEvent<HTMLButtonElement>, index: number) => {
+    if (!['ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(event.key)) return
+    event.preventDefault()
 
-  useEffect(() => {
-    const id = window.setInterval(() => setNow(new Date()), 30_000)
-    return () => window.clearInterval(id)
-  }, [])
+    let nextIndex = index
+    if (event.key === 'ArrowLeft') nextIndex = (index - 1 + tabs.length) % tabs.length
+    if (event.key === 'ArrowRight') nextIndex = (index + 1) % tabs.length
+    if (event.key === 'Home') nextIndex = 0
+    if (event.key === 'End') nextIndex = tabs.length - 1
+
+    const nextTab = tabs[nextIndex]
+    onTabChange(nextTab.id)
+    window.requestAnimationFrame(() => tabRefs.current[nextIndex]?.focus())
+  }
 
   return (
     <header className={styles.header}>
-      <nav className={styles.group} aria-label="Profile links">
-        <a href={profile.telegram} target="_blank" rel="noreferrer" onClick={onNavigate}>
-          Telegram
-        </a>
-        <a href="#about" onClick={onNavigate}>
-          Contacts
-        </a>
-        <a
-          href={CV_URL}
-          download="Timothe_Ermolaev_Resume.pdf"
-          onClick={onNavigate}
-        >
-          CV
-        </a>
-      </nav>
-      <nav className={styles.group} aria-label="Portfolio details">
-        <span>Moscow {moscowTime(now)}</span>
-        <span>24 y.o.</span>
+      <nav
+        className={styles.nav}
+        role="tablist"
+        aria-label={lang === 'ru' ? 'Разделы портфолио' : 'Portfolio sections'}
+      >
+        {tabs.map((tab, index) => {
+          const selected = activeTab === tab.id
+          const pending = !selected && pendingTab === tab.id && transitionProgress > 0
+          return (
+            <button
+              key={tab.id}
+              id={`tab-${tab.id}`}
+              ref={(node) => {
+                tabRefs.current[index] = node
+              }}
+              className={styles.tab}
+              type="button"
+              role="tab"
+              aria-controls={`panel-${tab.id}`}
+              aria-selected={selected}
+              tabIndex={selected ? 0 : -1}
+              data-sfx-click="off"
+              data-active={selected || undefined}
+              data-pending={pending || undefined}
+              style={
+                pending
+                  ? ({
+                      '--tab-progress': transitionProgress,
+                    } as CSSProperties)
+                  : undefined
+              }
+              onClick={() => onTabChange(tab.id)}
+              onKeyDown={(event) => onTabKeyDown(event, index)}
+            >
+              {t(tab.label, lang)}
+            </button>
+          )
+        })}
       </nav>
     </header>
   )

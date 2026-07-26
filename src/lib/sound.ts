@@ -94,6 +94,15 @@ export function tick() {
   play(c, HOVER)
 }
 
+/** Subtle section-change feedback: soft audio plus a tiny mobile haptic. */
+export function tabTick() {
+  if (reduceMotion()) return
+  tick()
+  if (typeof navigator !== 'undefined' && 'vibrate' in navigator) {
+    navigator.vibrate(8)
+  }
+}
+
 /** Click ping — same palette, a touch lower + louder. */
 export function click() {
   if (reduceMotion()) return
@@ -123,6 +132,7 @@ export function initSfx() {
     }
   })
   document.addEventListener('click', (e) => {
-    if ((e.target as Element | null)?.closest(SFX_SELECTOR)) click()
+    const el = (e.target as Element | null)?.closest(SFX_SELECTOR)
+    if (el && el.getAttribute('data-sfx-click') !== 'off') click()
   })
 }

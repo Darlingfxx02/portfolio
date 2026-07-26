@@ -16,8 +16,8 @@ export const cv = {
   title: { ru: 'Продуктовый дизайнер', en: 'Product designer' } as Loc,
   focus: { ru: 'Финтех и AI', en: 'Fintech and AI' } as Loc,
   summary: {
-    ru: 'Продуктовый дизайнер с опытом более 3 лет. Сейчас работаю в продуктовой команде WMT AI и отвечаю за дизайн двух AI-продуктов — от бизнес-задачи и сценариев до прототипа, handoff и итераций после релиза. До этого полтора года работал в дизайн-студии: вёл несколько клиентских проектов параллельно, быстро погружался в новые домены и доводил решения до передачи в разработку.',
-    en: 'Product designer with 3+ years of experience. I currently work in-house at WMT AI, leading design for two AI products — from business problem and user flows to prototype, handoff, and post-release iteration. Before that, I spent a year and a half at a design studio, running several client projects in parallel, quickly learning new domains, and taking solutions through developer handoff.',
+    ru: 'Продуктовый дизайнер с опытом более 3 лет. Сейчас работаю в продуктовой команде WMT AI и отвечаю за дизайн двух AI-продуктов: от бизнес-задачи и сценариев до прототипа, handoff и итераций после релиза. До этого полтора года работал в дизайн-студии: вёл несколько клиентских проектов параллельно, быстро погружался в новые домены и доводил решения до передачи в разработку.',
+    en: 'Product designer with 3+ years of experience. I currently work in-house at WMT AI, leading design for two AI products from business problem and user flows to prototype, handoff, and post-release iteration. Before that, I spent a year and a half at a design studio, running several client projects in parallel, quickly learning new domains, and taking solutions through developer handoff.',
   } as Loc,
   contacts: [
     { label: 'Email', value: profile.email, href: `mailto:${profile.email}` },
@@ -27,23 +27,23 @@ export const cv = {
   ],
   // Headline metrics — a scannable strip near the top of the CV.
   highlights: [
-    { value: { ru: '4', en: '4' }, label: { ru: 'продукта / направления в AI и финтехе', en: 'product tracks across AI and fintech' } },
-    { value: { ru: '~100', en: '~100' }, label: { ru: 'экранов и состояний', en: 'screens and states' } },
-    { value: { ru: '3–4', en: '3–4' }, label: { ru: 'проектных потока параллельно', en: 'project streams in parallel' } },
-    { value: { ru: '3+ года', en: '3+ years' }, label: { ru: 'в AI- и финтех-продуктах', en: 'in AI and fintech products' } },
+    { value: { ru: '2', en: '2' }, label: { ru: 'AI-продукта в текущей роли', en: 'AI products in my current role' } },
+    { value: { ru: '2', en: '2' }, label: { ru: 'публичных финтех-кейса', en: 'public fintech case studies' } },
+    { value: { ru: '3-4', en: '3-4' }, label: { ru: 'проектных потока параллельно', en: 'project streams in parallel' } },
+    { value: { ru: '3+ года', en: '3+ years' }, label: { ru: 'в продуктовом дизайне', en: 'in product design' } },
   ] as { value: Loc; label: Loc }[],
   // Quantified achievement bullets per experience id (keys match experience.ts).
   achievements: {
     wmt: {
       ru: [
-        'Веду дизайн-цикл двух AI-продуктов — от сценариев до передачи в разработку',
-        'Помогаю команде быстрее переходить от сценариев к фронтенду через прототипы и понятный handoff',
-        'Настраиваю интерфейсные процессы внутри продуктовых команд',
+        'Довёл ключевые сценарии двух AI-продуктов от бизнес-задачи до реализации и итераций после релиза',
+        'Перевёл раннее обсуждение сценариев в интерактивные прототипы на коде, чтобы продукт и разработка проверяли логику до фронтенда',
+        'Объединил требования, состояния и handoff в повторяемый дизайн-цикл для обеих продуктовых команд',
       ],
       en: [
-        'Lead the design cycle for both products — from flows to developer handoff',
-        'Help the team move from scenarios to frontend faster through prototypes and clear handoff',
-        'Set up interface processes inside the product teams',
+        'Took key journeys across two AI products from business problem to implementation and post-release iteration',
+        'Turned early flow discussions into interactive code prototypes so product and engineering could validate logic before frontend work',
+        'Unified requirements, state coverage, and handoff into a repeatable design cycle for both product teams',
       ],
     },
     uxart: {
@@ -60,38 +60,38 @@ export const cv = {
     },
     ovork: {
       ru: [
-        'Доработал раздел кошелька под требования ФНС, сохранив релизный ритм 5–10 дней',
+        'Доработал раздел кошелька под требования ФНС, сохранив релизный ритм 5-10 дней',
         'Пересобрал уведомления в универсальный компонент с тремя режимами; компонент вошёл в дизайн-систему',
-        'По метрикам раздела после релиза: денежные обращения 41% → 19%, первый вывод 71% → 89%',
+        'Внутренний before/after серии релизов: денежные обращения снизились с 41% до 19%, успешный первый вывод вырос с 71% до 89% (не A/B)',
       ],
       en: [
-        'Updated the wallet section for tax-authority requirements while preserving the 5–10 day release cadence',
+        'Updated the wallet section for tax-authority requirements while preserving the 5-10 day release cadence',
         'Rebuilt notifications as one component with three modes; the component entered the design system',
-        'Section metrics after release: money-related tickets 41% → 19%, first-withdrawal conversion 71% → 89%',
+        'Internal before/after around the release series: money-related contacts fell from 41% to 19%, successful first withdrawal rose from 71% to 89% (not an A/B test)',
       ],
     },
     zinda: {
       ru: [
-        'За 4 месяца довёл концепт B2B-банка до handoff в разработку; банк позже релизнули',
-        'Спроектировал ~40 экранов и состояний ключевых банковских сценариев',
-        'Предложил многосчётную архитектуру и вынес кредитные продукты в post-MVP; вместе с дизайн-командой довёл компоненты и edge cases до production-ready уровня',
+        'После 3 отклонённых концепций помог свести участников к одной продуктовой основе; за 4 месяца направление дошло до handoff, банк позже вышел',
+        'Сформировал multi-account архитектуру для 4 ключевых зон и сократил MVP, вынеся кредитные продукты в post-MVP',
+        'Самостоятельно довёл мобильное направление от аудита веб-сценариев до прототипов и спецификаций; production delivery завершали командой',
       ],
       en: [
-        'Took the B2B-bank concept to engineering handoff in 4 months; the bank shipped later',
-        'Designed ~40 screens and states across the core banking flows',
-        'Proposed the multi-account architecture and moved credit products to post-MVP; worked with the design team to make components and edge cases production-ready',
+        'After 3 rejected concepts, helped align stakeholders around one product foundation; the direction reached handoff in 4 months and the bank later shipped',
+        'Defined a multi-account architecture across 4 core areas and narrowed the MVP by moving lending to post-MVP',
+        'Independently took the mobile direction from desktop-flow audit to prototypes and specifications; production delivery was collaborative',
       ],
     },
     combogpt: {
       ru: [
-        'End-to-end дизайн AI-агрегатора с нуля: от концепта до публичного релиза за ~3 месяца',
-        'Онбординг под неподготовленную аудиторию — активация новых пользователей ~55%',
-        'Переключение моделей в один клик снизило отвалы на этапе выбора модели на ~25%',
+        'End-to-end дизайн AI-агрегатора с нуля: от концепта до публичного релиза примерно за 3 месяца',
+        'Спроектировал онбординг для неподготовленной аудитории и переключение моделей в один клик',
+        'Довёл ключевые сценарии от концепта и прототипа до handoff и публичного релиза',
       ],
       en: [
-        'End-to-end design of an AI aggregator from scratch: concept to public release in ~3 months',
-        'Onboarding built for a non-technical audience — new-user activation ~55%',
-        'One-click model switching cut drop-off at the model-choice step by ~25%',
+        'End-to-end design of an AI aggregator from scratch: concept to public release in about 3 months',
+        'Designed onboarding for a non-technical audience and one-click model switching',
+        'Took the core journeys from concept and prototype through handoff and public release',
       ],
     },
   } as Record<string, Loc<string[]>>,

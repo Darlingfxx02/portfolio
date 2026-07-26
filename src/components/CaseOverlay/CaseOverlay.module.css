@@ -90,7 +90,7 @@
   background: linear-gradient(145deg, #ff705c, #a91531);
 }
 
-.card[data-case='zinda'] .marker {
+.card[data-case^='zinda'] .marker {
   background: linear-gradient(145deg, #a96fff, #5930c8);
 }
 

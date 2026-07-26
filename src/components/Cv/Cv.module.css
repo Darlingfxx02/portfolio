@@ -580,6 +580,11 @@
 }
 
 @media print {
+  @page {
+    size: A4;
+    margin: 0;
+  }
+
   .page,
   .page[data-theme='dark'] {
     --cv-paper: #fff;
@@ -596,8 +601,9 @@
     --cv-portrait: #dfe0e6;
 
     display: block;
-    width: 276mm;
-    min-height: 900mm;
+    position: relative;
+    width: 210mm;
+    min-height: 297mm;
     padding: 0;
     background: #fff;
   }
@@ -607,76 +613,194 @@
   }
 
   .sheet {
-    width: 276mm;
-    height: 900mm;
-    min-height: 900mm;
-    overflow: hidden;
+    position: relative;
+    width: 210mm;
+    height: auto;
+    min-height: 297mm;
+    overflow: visible;
     box-shadow: none;
-    font-size: 14pt;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 9.2pt;
+    line-height: 1.38;
   }
 
   .documentGrid {
-    display: grid;
-    grid-template-columns: 561fr 222fr;
-    min-height: 900mm;
+    display: block;
+    min-height: 0;
   }
 
   .mainColumn {
-    padding: 38pt 48pt 43.5pt;
+    padding: 12mm;
+  }
+
+  .identity,
+  .summaryCard {
+    max-width: 116mm;
   }
 
   .name {
-    font-size: 24pt;
+    font-size: 22pt;
   }
 
   .position {
-    margin-top: 14pt;
-    font-size: 16pt;
+    margin-top: 4mm;
+    font-size: 11pt;
+  }
+
+  .position img {
+    width: 5mm;
+    height: 5mm;
   }
 
   .summaryCard {
-    margin-top: 13pt;
-    padding: 20pt;
-    border-radius: 14pt;
-    font-size: 14pt;
+    margin-top: 4mm;
+    padding: 5mm;
+    border-radius: 4mm;
+    font-size: 9.2pt;
   }
 
   .jobs {
-    margin-top: 43pt;
+    margin-top: 9mm;
   }
 
   .company,
   .projectName,
   .skillsSection > h2 {
-    font-size: 16pt;
+    font-size: 12pt;
   }
 
   .role,
   .jobBody h4,
   .studioProjectsTitle {
-    font-size: 14pt;
+    font-size: 9.5pt;
+  }
+
+  .job {
+    break-inside: auto;
+  }
+
+  .job + .job {
+    margin-top: 7mm;
+    padding-top: 6mm;
+  }
+
+  .jobBody {
+    margin-top: 4mm;
+  }
+
+  .jobBody + .jobBody {
+    margin-top: 3mm;
+  }
+
+  .jobBody h4 {
+    margin-bottom: 1.5mm;
+  }
+
+  .bullets,
+  .projectResults {
+    gap: 1mm;
+    padding-left: 5mm;
+  }
+
+  .companyLogo,
+  .projectLogo {
+    width: 10mm;
+    height: 10mm;
+    padding: 1.5mm;
+    border-radius: 2.5mm;
+  }
+
+  .tags,
+  .projectTags {
+    gap: 1.5mm;
+    margin-top: 4mm;
+  }
+
+  .tags span,
+  .projectTags span {
+    padding: 1.2mm 2mm;
+    border-radius: 1.5mm;
+    font-size: 8pt;
+  }
+
+  .studioProjects {
+    break-before: page;
+    margin-top: 0;
+    padding-top: 12mm;
+    padding-left: 0;
+    border-left: 0;
+  }
+
+  .projectList {
+    margin-top: 4mm;
+  }
+
+  .project + .project {
+    margin-top: 5mm;
+    padding-top: 5mm;
+  }
+
+  .projectRole {
+    margin-top: 1.5mm;
+    font-size: 8.5pt;
+  }
+
+  .projectSummary {
+    margin-top: 3mm;
+  }
+
+  .projectResults {
+    margin-top: 2.5mm;
+  }
+
+  .skillsSection {
+    margin-top: 7mm;
+    padding-top: 6mm;
   }
 
   .skillGroups {
     grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 18pt;
+    gap: 6mm;
+    margin-top: 4mm;
+  }
+
+  .skillGroup h3 {
+    margin-bottom: 1.5mm;
+    font-size: 8.5pt;
+  }
+
+  .skillGroup ul {
+    gap: 1mm;
+    padding-left: 4mm;
+    font-size: 8.5pt;
   }
 
   .period,
   .tags span {
-    font-size: 12pt;
+    font-size: 8pt;
+  }
+
+  .period {
+    margin-top: 3mm;
+  }
+
+  .period img {
+    width: 4mm;
+    height: 4mm;
   }
 
   .sidebar {
-    display: flex;
-    padding: 38pt 26pt 31.5pt 25pt;
+    position: absolute;
+    top: 12mm;
+    right: 12mm;
+    display: block;
+    width: 62mm;
+    padding: 0;
+    background: transparent;
   }
 
   .portraitFrame {
-    width: 120pt;
-    height: 120pt;
-    border-radius: 36.36pt;
-    background: var(--cv-portrait);
+    display: none;
   }
 
   .portraitLight,
@@ -694,10 +818,24 @@
 
   .sideSection h2,
   .contacts span {
-    font-size: 12pt;
+    font-size: 7.5pt;
   }
 
   .contacts a {
-    font-size: 13pt;
+    margin-top: 1mm;
+    font-size: 8.5pt;
   }
+
+  .sideSection {
+    margin-top: 0;
+  }
+
+  .sideSection h2 {
+    margin-bottom: 3mm;
+  }
+
+  .contacts {
+    gap: 3mm;
+  }
+
 }

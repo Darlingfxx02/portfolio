@@ -1,247 +1,239 @@
-import { useLang } from "@/lib/i18n";
 import { CaseNarrative } from "./CaseNarrative";
+import { useLang } from "@/lib/i18n";
+
+const formationIllustrations = [
+  [
+    { src: "/zinda/tone-1.webp", alt: "Первое выразительное направление" },
+    { src: "/zinda/tone-2.webp", alt: "Более спокойное направление" },
+  ],
+  [
+    { src: "/zinda/concept.webp", alt: "Тёмная концепция продукта" },
+    { src: "/zinda/main-screen.webp", alt: "Спокойное направление после компромисса" },
+  ],
+  [
+    { src: "/zinda/process-tasks-focus.jpg", alt: "Артефакт распределения задач и нагрузки" },
+    { src: "/zinda/process-call-focus.jpg", alt: "Заметки после созвона" },
+  ],
+  [
+    { src: "/zinda/payments-desktop-list.png", alt: "Развитый интерфейс веб-банка" },
+    { src: "/zinda/system-token-rules.png", alt: "Правила токенов, связывающие продуктовые разделы" },
+  ],
+  [
+    { src: "/zinda/process-brief-focus.jpg", alt: "Требования и продуктовый бриф" },
+    { src: "/zinda/system-buttons-focus.png", alt: "Компонентная архитектура позднего этапа проекта" },
+  ],
+  [
+    { src: "/zinda/main-screen-phone.webp", alt: "Экран мобильной концепции" },
+    { src: "/zinda/phone-screen.webp", alt: "Экран мобильной версии для разработки" },
+  ],
+  [
+    { src: "/zinda/hero-laptop.webp", alt: "Продукт Zinda в контексте" },
+    { src: "/zinda/macbook-1.webp", alt: "Финальный макет веб-версии" },
+  ],
+];
 
 export function CaseZinda() {
-  const ru = useLang().lang === "ru";
+  const { lang } = useLang();
+  const ru = lang === "ru";
 
   return (
     <CaseNarrative
-      pageClassName="zinda-page"
+      pageClassName="zinda-page zinda-formation-page"
       title={
         ru
-          ? "Цифровой B2B-банк"
-          : "Digital B2B bank"
+          ? "Zinda. От трёх отклонённых концепций к архитектуре B2B-банка"
+          : "Zinda. From three rejected concepts to a B2B banking architecture"
       }
       intro={
         ru
-          ? "Я присоединился после трёх отклонённых концепций, стабилизировал дизайн-процесс и помог свести в один продукт три конкурирующих видения: банка, брендинговой студии и продуктовой команды. За шесть месяцев мы довели MVP для web и mobile до передачи в разработку."
-          : "I joined after three rejected concepts, stabilized the design process, and helped align three competing visions: the bank, the branding studio, and the product team. Within six months, we took the web and mobile MVP to engineering handoff."
+          ? "Я присоединился после трёх отклонённых концепций. За четыре месяца мы согласовали направление и передали банк в разработку; продукт позже вышел. Моя зона: multi-account архитектура, MVP-скоуп, ключевые UX-решения и самостоятельное ведение мобильного направления. Детальные состояния и production delivery были командной работой."
+          : "I joined after three concepts had been rejected. In four months, we aligned the direction and handed the bank to engineering; the product later shipped. My scope covered the multi-account architecture, MVP scope, key UX decisions, and independent ownership of the mobile direction. Detailed states and production delivery were collaborative."
       }
       tags={
         ru
-          ? ["Senior Product Design", "Fintech · B2B", "Web + Mobile", "6 месяцев"]
-          : ["Senior Product Design", "Fintech · B2B", "Web + Mobile", "6 months"]
+          ? ["Продуктовый дизайн", "Финтех · B2B", "Multi-account IA", "2023–2024"]
+          : ["Product Design", "Fintech · B2B", "Multi-account IA", "2023–2024"]
       }
       hero={
         <img
-          src="/zinda/hero-laptop.webp"
-          alt={ru ? "Интерфейс цифрового банка Zinda" : "Zinda digital banking interface"}
+          src="/zinda/focus-main-desktop.png"
+          alt={ru ? "Главный экран веб-банка Zinda" : "Zinda desktop bank home screen"}
         />
       }
-      sections={
-        ru
+      sections={(ru
           ? [
               {
-                code: "S",
-                label: "Situation",
-                body: "Проект находился почти на стадии чистого листа. До моего прихода команда подготовила три визуальные концепции, но ни одну не удалось согласовать. У заказчика не было сформированного образа цифрового продукта, а сложная схема подрядчиков добавляла ещё один слой неопределённости: наша продуктовая команда работала через брендинговую студию.",
+                code: "01",
+                label: "Банк без общего образа",
+                body: "К моему приходу команда уже подготовила три концепции, но ни одну не согласовали. Банку был нужен практичный B2B-инструмент, брендинговой студии — выразительный флагман, продуктовой команде — понятная и реализуемая система. Проблема была не в недостатке красивых вариантов: у участников не было общего ответа, каким должен быть банк.",
                 bullets: [
-                  "Банк ожидал рабочий B2B-инструмент для предпринимателей и бухгалтеров.",
-                  "Брендинговой студии был нужен выразительный флагманский кейс.",
-                  "Продуктовой команде предстояло сохранить понятный ежедневный UX и выполнить юридические требования Таджикистана.",
-                  "Дедлайн MVP — шесть месяцев.",
+                  "Три отклонённых визуальных направления.",
+                  "Три конкурирующих представления о продукте.",
+                  "Юридические ограничения и сложная схема подрядчиков.",
+                  "Необходимость одновременно сформировать продукт и способ работы над ним.",
                 ],
                 media: [
-                  { src: "/zinda/three-variants.webp", alt: "Итерации визуальной концепции Zinda" },
-                  { src: "/zinda/concept.webp", alt: "Концепция цифрового банка Zinda" },
+                  { src: "/zinda/three-variants.webp", alt: "Три отклонённые концепции Zinda" },
                 ],
-                mediaClassName: "case-narrative-media--split",
               },
               {
-                code: "T",
-                label: "Task",
-                body: "Формально меня пригласили резко поднять качество UI. На практике зона ответственности быстро стала шире: требовалось перезапустить дизайн-процесс, определить продуктовую концепцию, спроектировать банковские сценарии и провести их через согласование до MVP.",
+                code: "02",
+                label: "Конфликт и компромисс",
+                body: "Мы спорили с заказчиком — иногда жёстко. Банк и брендинговая студия хотели более яркий презентационный продукт, а мы защищали спокойный рабочий интерфейс для предпринимателей и бухгалтеров. Вместо спора о вкусе я учился приносить сценарии, конкурентные примеры и риски реализации.",
                 support: [
                   {
-                    title: "Моя роль",
-                    body: "Я отвечал за концепцию приложения, ключевые UX- и архитектурные решения, презентацию дизайна на встречах с заказчиком и синхронизацию команды. Дизайнеры детализировали состояния экранов и развивали дизайн-систему.",
+                    title: "Что защищали",
+                    body: "Архитектуру счетов, понятность ежедневных операций и решения, которые влияли на успешность сценария.",
                   },
                   {
-                    title: "Продуктовая задача",
-                    body: "Нужно было упростить открытие счёта и карты в условиях глубокой бюрократизации, не нарушая обязательные юридические шаги, а затем собрать рабочую основу для будущих кредитных и финансовых сервисов.",
+                    title: "Где договаривались",
+                    body: "Визуальный тон оставался зоной компромисса. Часть яркости вошла в финальное направление, чтобы сохранить доверие участников и движение проекта.",
                   },
                 ],
               },
               {
-                code: "A1",
-                label: "Research & framing",
-                body: "Мы начали с анализа российского финтех-рынка как наиболее зрелого и близкого по контексту. Сравнили ключевые B2B-паттерны, онбординг, работу со счетами и плотность ежедневных интерфейсов, затем отфильтровали решения через локальные юридические ограничения.",
-                bullets: [
-                  "Сформулировали продукт как ежедневный рабочий инструмент, а не витрину бренда.",
-                  "Сначала закрепили логику основных сценариев, затем визуальный язык.",
-                  "Кредитные продукты вынесли за пределы MVP, сохранив фокус на базовом банковском контуре.",
-                ],
-                media: [
-                  { src: "/zinda/research-1.webp", alt: "Анализ конкурентов для Zinda" },
-                  { src: "/zinda/research-2.webp", alt: "Синтез продуктового исследования Zinda" },
-                ],
-                mediaClassName: "case-narrative-media--split",
-              },
-              {
-                code: "A2",
-                label: "Team & ownership",
-                body: "Я разделил концептуальную работу и производство экранов. После замены одного из дизайнеров мы усилили команду специалистом по дизайн-системам: я держал архитектуру, визуальное направление и коммуникацию со стейкхолдерами, команда — состояния, компоненты и системную детализацию.",
+                code: "03",
+                label: "Команду пришлось пересобрать",
+                body: "По мере роста банка исходная структура перестала выдерживать масштаб. Мы меняли специалистов, заново распределяли ответственность и разделили концептуальную работу, производство экранов и развитие дизайн-системы. Не всем ролям подошёл новый уровень автономности, поэтому команду усилили нужной экспертизой.",
                 support: [
                   {
-                    title: "Почему это сработало",
-                    body: "Решения перестали расползаться между параллельными итерациями. У каждой части появился владелец, а обсуждения с заказчиком опирались на одну согласованную концепцию.",
+                    title: "Результат перестройки",
+                    body: "У продуктовых блоков появились владельцы, параллельные версии перестали расходиться, а обсуждения с заказчиком начали опираться на одну архитектуру.",
                   },
                 ],
-                media: [
-                  { src: "/zinda/concept-bento-laptop.webp", alt: "Концепция Zinda на desktop" },
-                  { src: "/zinda/concept-bento-channels.webp", alt: "Продуктовые сценарии Zinda" },
-                ],
-                mediaClassName: "case-narrative-media--split",
               },
               {
-                code: "A3",
-                label: "Stakeholder alignment",
-                body: "Главный спор шёл вокруг визуального характера продукта. Мы последовательно объясняли, почему яркий и пёстрый интерфейс плохо подходит бухгалтеру, который работает с банком каждый день по несколько часов. Вместо спора о вкусе я приносил сценарии использования, конкурентные примеры и ограничения платформы.",
+                code: "04",
+                label: "Архитектура и MVP",
+                body: "Я предложил multi-account модель: компания сохраняет контекст, счета остаются равноправными рабочими объектами, а операции открываются из выбранного счёта без лишней вложенности. Чтобы первая версия не распалась на слишком широкий набор обещаний, кредитные продукты вынесли в post-MVP и сфокусировали handoff на базовом банковском контуре.",
+              },
+              {
+                code: "05",
+                label: "Что изменилось в продукте",
+                body: "Проект вышел из цикла отклонённых концепций: у команды появилась одна согласованная основа, четыре ключевые зоны сложились в общую multi-account архитектуру, а первая версия перестала размываться кредитными сценариями. За четыре месяца направление дошло до handoff; банк позже вышел.",
                 support: [
                   {
-                    title: "Четыре итерации",
-                    body: "Каждый раунд не просто менял оформление: мы отделяли защищаемую UX-логику от субъективных визуальных предпочтений. Так удалось сохранить более спокойную основу, не остановив проект в бесконечном согласовании.",
+                    title: "Результат для MVP",
+                    body: "Кредитные продукты перенесли в post-MVP, а handoff сфокусировали на базовом банковском контуре: главной, платежах, профиле и чате.",
                   },
                   {
-                    title: "Осознанный компромисс",
-                    body: "Часть пестроты всё же попала в финальное направление ради брендинговой выразительности. Я до сих пор считаю этот слой избыточным для ежедневного B2B-сервиса, но компромисс позволил сохранить доверие участников и довести MVP до релиза.",
+                    title: "Результат для моей роли",
+                    body: "После работы над общей концепцией я самостоятельно повёл мобильное направление от аудита веб-сценариев до прототипов и спецификаций.",
                   },
                 ],
-                media: [
-                  { src: "/zinda/tone-1.webp", alt: "Первая версия визуального тона Zinda" },
-                  { src: "/zinda/tone-2.webp", alt: "Более сдержанная версия визуального тона Zinda" },
-                ],
-                mediaClassName: "case-narrative-media--split",
-              },
-              {
-                code: "R",
-                label: "Result",
-                body: "За шесть месяцев мы подготовили web- и mobile-MVP и передали продукт в дальнейшую разработку. После этого банк продолжил развиваться в сторону кредитных и денежных сервисов, а заказчик приглашал меня остаться в команде.",
                 metrics: [
-                  { value: "6 мес.", label: "MVP", detail: "от перезапуска концепции до handoff" },
-                  { value: "−30%", label: "Цикл согласования", detail: "оценка после перестройки коммуникации" },
-                  { value: "100%", label: "Ключевые сценарии", detail: "покрытие банковского контура MVP" },
-                  { value: "+20%", label: "Эффективность команды", detail: "оценка скорости производства после разделения ролей" },
+                  { value: "3 → 1", label: "Продуктовая основа", detail: "Три отклонённые концепции свели в одно согласованное направление." },
+                  { value: "4", label: "Ключевые зоны", detail: "Главная, платежи, профиль и чат." },
+                  { value: "2", label: "Платформы", detail: "Веб-продукт и мобильное приложение." },
+                  { value: "≈ 40", label: "Экраны и состояния", detail: "Масштаб ключевых банковских сценариев в проекте; решения и детализация распределялись внутри команды." },
                 ],
-                media: [
-                  { src: "/zinda/macbook-1.webp", alt: "Финальный интерфейс Zinda на desktop" },
-                  { src: "/zinda/main-screen-phone.webp", alt: "Финальный интерфейс Zinda на mobile" },
-                ],
-                mediaClassName: "case-narrative-media--split",
+              },
+              {
+                code: "06",
+                label: "Мобильное приложение как следующая ответственность",
+                body: "Перенос банка на мобильные устройства стал моментом, когда моя роль окончательно изменилась. Я уже не детализировал чужую концепцию, а самостоятельно определял приоритеты, адаптировал веб-логику и собирал направление до передачи в разработку. Этой работе посвящён отдельный кейс.",
               },
               {
                 code: "+",
-                label: "Reflection",
-                body: "Главный урок — экспертность сама по себе не гарантирует доверия. Сильное решение приходится переводить на язык сценариев, бизнеса и рисков, иногда несколько раз. Сейчас я бы ещё до первой детальной концепции провёл совместный продуктовый воркшоп с банком и брендинговой студией: это раньше отделило бы измеримые задачи от субъективных ожиданий.",
+                label: "Результат и рефлексия",
+                body: "Zinda не была линейным проектом, поэтому результат здесь не маскируется выдуманной продуктовой метрикой. Доказательства — вышедший банк, handoff за четыре месяца, единая архитектура четырёх зон, сокращённый MVP и отдельное мобильное направление, которое я довёл самостоятельно. Проект стал моим переходом от дизайнера интерфейсов к продуктовому специалисту, который выдерживает неопределённость и отвечает за направление целиком.",
+                metrics: [
+                  { value: "3 → 1", label: "Визуальное направление", detail: "Три отклонённые концепции свели в одну согласованную продуктовую основу." },
+                  { value: "4 месяца", label: "До handoff", detail: "Период от нового концептного направления до передачи в разработку." },
+                  { value: "4", label: "Зоны в одной архитектуре", detail: "Главная, платежи, профиль и чат развивались как части одного банка." },
+                  { value: "1 направление", label: "Самостоятельное ведение", detail: "Мобильная версия — от аудита веб-сценариев до спецификаций для разработки." },
+                ],
               },
             ]
           : [
               {
-                code: "S",
-                label: "Situation",
-                body: "The project was still close to a blank slate. Before I joined, the team had produced three visual concepts and failed to get any approved. The client had no defined vision for the digital product, while the contractor setup added another layer of ambiguity: our product team worked through a branding studio.",
+                code: "01",
+                label: "A bank without a shared vision",
+                body: "By the time I joined, the team had produced three concepts and failed to align any of them. The bank needed a practical B2B tool, the branding studio wanted an expressive flagship, and the product team needed a clear and buildable system. The problem was not a lack of attractive options — there was no shared answer to what the bank should be.",
                 bullets: [
-                  "The bank expected a practical B2B tool for business owners and accountants.",
-                  "The branding studio wanted an expressive flagship case.",
-                  "The product team had to preserve a clear daily UX and meet Tajikistan’s legal requirements.",
-                  "The MVP deadline was six months.",
+                  "Three rejected visual directions.",
+                  "Three competing ideas of the product.",
+                  "Legal constraints and a layered contractor setup.",
+                  "A need to shape both the product and the way the team worked.",
                 ],
                 media: [
-                  { src: "/zinda/three-variants.webp", alt: "Zinda visual concept iterations" },
-                  { src: "/zinda/concept.webp", alt: "Zinda digital banking concept" },
+                  { src: "/zinda/three-variants.webp", alt: "Three rejected Zinda concepts" },
                 ],
-                mediaClassName: "case-narrative-media--split",
               },
               {
-                code: "T",
-                label: "Task",
-                body: "I was formally invited to raise the UI quality. In practice, the scope quickly became broader: restart the design process, define the product concept, design the banking journeys, and take them through alignment to MVP.",
+                code: "02",
+                label: "Conflict and compromise",
+                body: "We argued with the client — sometimes intensely. The bank and branding studio wanted a brighter, more presentational product, while we defended a calmer daily tool for entrepreneurs and accountants. I learned to move the discussion away from taste and toward usage scenarios, competitive evidence, and delivery risks.",
                 support: [
                   {
-                    title: "My role",
-                    body: "I owned the app concept, key UX and architectural decisions, design presentations with the client, and team alignment. Other designers detailed screen states and developed the design system.",
+                    title: "What we defended",
+                    body: "The account architecture, clarity of daily operations, and decisions affecting task completion.",
                   },
                   {
-                    title: "Product challenge",
-                    body: "We had to simplify account and card opening within a deeply bureaucratic environment, while keeping every mandatory legal step and creating a foundation for future credit and financial services.",
+                    title: "Where we compromised",
+                    body: "The visual tone remained negotiable. Some intensity entered the final direction to preserve trust and keep the project moving.",
                   },
                 ],
               },
               {
-                code: "A1",
-                label: "Research & framing",
-                body: "We started with the Russian fintech market as the closest mature benchmark. We compared core B2B patterns, onboarding, account management, and information density, then filtered them through local legal constraints.",
-                bullets: [
-                  "Framed the product as a daily work tool rather than a brand showcase.",
-                  "Locked the logic of core journeys before the visual language.",
-                  "Moved credit products outside the MVP to protect the core banking scope.",
-                ],
-                media: [
-                  { src: "/zinda/research-1.webp", alt: "Zinda competitor research" },
-                  { src: "/zinda/research-2.webp", alt: "Zinda research synthesis" },
-                ],
-                mediaClassName: "case-narrative-media--split",
-              },
-              {
-                code: "A2",
-                label: "Team & ownership",
-                body: "I separated concept work from screen production. After replacing one designer, we strengthened the team with a design-systems specialist: I held architecture, visual direction, and stakeholder communication; the team owned states, components, and systematic detailing.",
+                code: "03",
+                label: "Rebuilding the team",
+                body: "As the bank grew, the original team structure stopped matching the scale. We changed specialists, redistributed ownership, and separated concept work, screen production, and design-system development. Not every role fit the new level of autonomy, so we brought in the expertise the product needed.",
                 support: [
                   {
-                    title: "Why it worked",
-                    body: "Decisions stopped drifting across parallel iterations. Every part had an owner, and client discussions were grounded in one shared concept.",
+                    title: "What changed",
+                    body: "Product areas gained owners, parallel versions stopped drifting, and client discussions became grounded in one architecture.",
                   },
                 ],
-                media: [
-                  { src: "/zinda/concept-bento-laptop.webp", alt: "Zinda desktop concept" },
-                  { src: "/zinda/concept-bento-channels.webp", alt: "Zinda product journeys" },
-                ],
-                mediaClassName: "case-narrative-media--split",
               },
               {
-                code: "A3",
-                label: "Stakeholder alignment",
-                body: "The main conflict was the product’s visual character. We repeatedly explained why a bright, saturated interface was a poor fit for accountants spending hours in it every day. Instead of debating taste, I brought usage scenarios, competitor evidence, and platform constraints.",
+                code: "04",
+                label: "Architecture and MVP",
+                body: "I proposed a multi-account model: the company preserves context, accounts remain equal working objects, and operations start from the selected account without unnecessary nesting. To keep the first version from fragmenting into too many promises, lending moved to post-MVP and the handoff focused on the core banking scope.",
+              },
+              {
+                code: "05",
+                label: "What changed in the product",
+                body: "The project moved beyond a cycle of rejected concepts: the team gained one aligned foundation, four core areas became one multi-account architecture, and lending stopped diluting the first release. The direction reached handoff in four months, and the bank later shipped.",
                 support: [
                   {
-                    title: "Four iterations",
-                    body: "Each round did more than change styling: we separated defensible UX logic from subjective visual preferences. This preserved a calmer foundation without trapping the project in endless approval loops.",
+                    title: "Outcome for the MVP",
+                    body: "Lending moved to post-MVP while handoff focused on the core banking scope: home, payments, profile, and chat.",
                   },
                   {
-                    title: "A conscious trade-off",
-                    body: "Some visual intensity still reached the final direction to support the branding ambition. I still consider it excessive for a daily B2B service, but accepting part of it protected stakeholder trust and kept the MVP moving.",
+                    title: "Outcome for my role",
+                    body: "After contributing to the shared concept, I independently led mobile from the desktop-flow audit to prototypes and specifications.",
                   },
                 ],
-                media: [
-                  { src: "/zinda/tone-1.webp", alt: "First Zinda visual tone" },
-                  { src: "/zinda/tone-2.webp", alt: "Calmer Zinda visual tone" },
-                ],
-                mediaClassName: "case-narrative-media--split",
-              },
-              {
-                code: "R",
-                label: "Result",
-                body: "Within six months, we prepared the web and mobile MVP and handed it into further development. The bank continued expanding toward credit and financial services, and the client invited me to stay with the team.",
                 metrics: [
-                  { value: "6 mo.", label: "MVP", detail: "from concept reset to handoff" },
-                  { value: "−30%", label: "Approval cycle", detail: "estimated after communication reset" },
-                  { value: "100%", label: "Core journeys", detail: "coverage of the MVP banking scope" },
-                  { value: "+20%", label: "Team efficiency", detail: "estimated production gain after role split" },
+                  { value: "3 → 1", label: "Product foundation", detail: "Three rejected concepts converged into one aligned direction." },
+                  { value: "4", label: "Core areas", detail: "Home, payments, profile, and chat." },
+                  { value: "2", label: "Platforms", detail: "Desktop product and mobile application." },
+                  { value: "≈ 40", label: "Screens and states", detail: "Scale of the core banking journeys; decisions and detailed production were distributed across the team." },
                 ],
-                media: [
-                  { src: "/zinda/macbook-1.webp", alt: "Final Zinda desktop interface" },
-                  { src: "/zinda/main-screen-phone.webp", alt: "Final Zinda mobile interface" },
-                ],
-                mediaClassName: "case-narrative-media--split",
+              },
+              {
+                code: "06",
+                label: "Mobile as the next responsibility",
+                body: "Moving the bank to mobile marked the final shift in my role. I was no longer detailing somebody else's concept: I set priorities, adapted the desktop logic, and carried the direction toward handoff. That work became a separate case.",
               },
               {
                 code: "+",
-                label: "Reflection",
-                body: "The main lesson was that expertise alone does not create trust. Strong decisions must be translated into user scenarios, business outcomes, and risks — sometimes more than once. Today I would run a joint product workshop with the bank and branding studio before the first high-fidelity concept, separating measurable tasks from subjective expectations much earlier.",
+                label: "Outcome and reflection",
+                body: "Zinda was not a linear project, so its outcome is not dressed up with an invented product metric. The evidence is a shipped bank, handoff in four months, one architecture across four areas, a focused MVP, and a mobile direction I took forward independently. The project marked my transition from interface designer to a product specialist able to hold uncertainty and own a direction.",
+                metrics: [
+                  { value: "3 → 1", label: "Visual direction", detail: "Three rejected concepts converged into one aligned product foundation." },
+                  { value: "4 months", label: "To handoff", detail: "From the new concept direction to engineering handoff." },
+                  { value: "4", label: "Areas in one architecture", detail: "Home, payments, profile, and chat evolved as one bank." },
+                  { value: "1 direction", label: "Independent ownership", detail: "Mobile from desktop-flow audit to engineering specifications." },
+                ],
               },
-            ]
-      }
-      nextCase={{ href: "#case/ovork", label: "ОВорк" }}
+            ]).map((section, index) => ({
+              ...section,
+              media: formationIllustrations[index],
+              mediaClassName: "case-narrative-media--compact",
+            }))}
+      nextCase={{ href: "#case/zinda-system", label: ru ? "Дизайн-система" : "Design system" }}
     />
   );
 }

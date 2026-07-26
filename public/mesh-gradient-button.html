@@ -1,0 +1,1098 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Mesh Gradient Button</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Geologica:wght@600&display=swap" rel="stylesheet" />
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html, body {
+    height: 100%;
+  }
+
+  body {
+    display: grid;
+    place-items: center;
+    background: var(--page);
+    font-family: 'Geologica', system-ui, sans-serif;
+    transition: background 0.3s ease;
+
+    /* Dark palette: page bg is the card bg slightly lightened */
+    --page: #323b48;
+    --card: #272f3a;
+    --card-border: rgba(217, 217, 217, 0.15);
+    --field: #1c222a;
+    --label-c: #a7adba;
+    --field-text: #868f9b;
+    --title-c: #a7adba;
+    --sub-c: #a7adba;
+    --seg-bg: rgba(255, 255, 255, 0.07);
+    /* Pale desaturated haze from the palette */
+    --glow-c: color-mix(in srgb, color-mix(in srgb, var(--g1) 40%, #6b6f7a) 14%, transparent);
+
+    /* Palette: base bg, mesh gradient heads (+ hue-shift variants), glow */
+    --base: #592af5;
+    --g1: #bb18fb; --g1-a: #d63bff; --g1-b: #9a12e6;
+    --g2: #a04fd7; --g2-a: #8a5cf0;
+    --glow: #281957;
+  }
+
+  body[data-palette="ocean"] {
+    --base: #2456f5;
+    --g1: #1fd1ff; --g1-a: #55e0ff; --g1-b: #0fa8e6;
+    --g2: #4fa9d7; --g2-a: #5c8ef0;
+    --glow: #14295c;
+  }
+
+  body[data-palette="sunset"] {
+    --base: #ec4e33;
+    --g1: #fb9018; --g1-a: #ffb545; --g1-b: #f56d0d;
+    --g2: #d75f4f; --g2-a: #f0885c;
+    --glow: #571c19;
+  }
+
+  body[data-palette="emerald"] {
+    --base: #0ea56e;
+    --g1: #2df5b2; --g1-a: #63ffc9; --g1-b: #0fd694;
+    --g2: #4fd7a8; --g2-a: #5cf0b8;
+    --glow: #123f2e;
+  }
+
+  body[data-palette="graphite"] {
+    --base: #4a4d59;
+    --g1: #a7b0cc; --g1-a: #c3cade; --g1-b: #8f98b8;
+    --g2: #7d84a0; --g2-a: #949cba;
+    --glow: #101118;
+  }
+
+  body[data-palette="black"] {
+    --base: #000000;
+    --g1: #3f3f4a; --g1-a: #555562; --g1-b: #2c2c34;
+    --g2: #33333c; --g2-a: #44444f;
+    --glow: #17171d;
+  }
+
+  /* Inverted: white base, dark bands, black stars, dark text/icon */
+  body[data-palette="white"] {
+    --base: #ffffff;
+    --g1: #c9c9d6; --g1-a: #d9d9e4; --g1-b: #b8b8c8;
+    --g2: #d5d5e0; --g2-a: #c5c5d4;
+    --glow: #3c3c46;
+    --tail: #26262e;
+    --mist: #1a1a22;
+    --ink: #16161c;
+    --star: #000000;
+    --rim: #000000;
+  }
+
+  .stage {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 36px;
+  }
+
+  .btn-row {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    cursor: pointer;
+  }
+
+  .btn-row input[type="radio"] {
+    width: 18px;
+    height: 18px;
+    accent-color: var(--base);
+    cursor: pointer;
+  }
+
+  .cta-slot { display: contents; }
+
+  /* Ghost buttons: gradient-filled text, one per style, no canvas glow */
+  .ghost-mesh {
+    font: inherit;
+    font-weight: 600;
+    font-size: 14px;
+    line-height: 24px;
+    padding: 10px 14px;
+    border: 0;
+    background: none;
+    cursor: pointer;
+    color: transparent;
+    -webkit-background-clip: text;
+    background-clip: text;
+    transition: filter 0.2s ease;
+  }
+
+  .ghost-mesh:hover { filter: brightness(1.2); }
+
+  /* styles 1 & 2: svg text-mask over live content */
+  .gm-1, .gm-2 {
+    padding: 0;
+    line-height: 0;
+  }
+
+
+  /* style 3: diagonal gradient across the whole text, TL -> BR */
+  .gm-3 {
+    background-image: linear-gradient(135deg, var(--g1) 0%, var(--base) 100%);
+  }
+
+
+  /* Inside the card the glow ::before must stack above the card bg;
+     compact glow stack so it hugs the button and never reaches the inputs */
+  .cta-slot .glow-wrap { isolation: isolate; }
+
+  .cta-slot .glow-wrap::before,
+  .cta-slot .glow-wrap:hover::before {
+    box-shadow:
+      0 0 12.963px var(--glow-c),
+      0 0 25.926px var(--glow-c),
+      0 0 45px var(--glow-c);
+  }
+
+  .palette-bar {
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 14px;
+  }
+
+  .palette-bar button {
+    font: inherit;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+    background: none;
+    border: 0;
+    cursor: pointer;
+    color: rgba(248, 250, 252, 0.55);
+    font-size: 10px;
+    line-height: 1;
+  }
+
+  .palette-bar .swatch {
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--c1), var(--c2) 60%, #fff 130%);
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.15);
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+  }
+
+  .palette-bar button:hover .swatch {
+    transform: scale(1.12);
+  }
+
+  .palette-bar button.active {
+    color: #f8fafc;
+  }
+
+  .palette-bar button.active .swatch {
+    box-shadow:
+      inset 0 0 0 1px rgba(255, 255, 255, 0.2),
+      0 0 0 2px var(--page),
+      0 0 0 4px var(--title-c);
+  }
+
+  /* Segmented tab: buttons preview <-> UI block */
+  .seg-tabs {
+    position: fixed;
+    top: 64px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 4px;
+    padding: 4px;
+    border-radius: 10px;
+    background: var(--seg-bg);
+  }
+
+  .seg-tabs button {
+    font: inherit;
+    font-size: 12px;
+    font-weight: 600;
+    line-height: 1;
+    padding: 7px 14px;
+    border: 0;
+    border-radius: 7px;
+    background: none;
+    color: var(--sub-c);
+    cursor: pointer;
+    transition: background 0.2s ease, color 0.2s ease;
+  }
+
+  .seg-tabs button.active {
+    background: var(--card);
+    color: var(--title-c);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
+  }
+
+  /* View switching */
+  body[data-view="ui"] .stage, body[data-view="ui2"] .stage { display: none; }
+  body:not([data-view="ui"]) .ui-stage { display: none; }
+  body:not([data-view="ui2"]) .ui2-stage { display: none; }
+
+  /* UI block 2: search bar (Hirify) */
+  .ui2-stage {
+    width: min(920px, calc(100vw - 48px));
+    background: var(--card);
+    border-radius: 20px;
+    padding: 20px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08), 0 4px 12px rgba(0, 0, 0, 0.04);
+    transition: background 0.3s ease;
+    overflow: hidden;
+  }
+
+  .search-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .search-input {
+    flex: 1;
+    min-width: 0;
+    height: 40px;
+    padding: 0 16px;
+    border: 0;
+    border-radius: 6px;
+    background: var(--field);
+    font: inherit;
+    font-weight: 500;
+    font-size: 14px;
+    color: var(--field-text);
+    transition: background 0.3s ease;
+  }
+
+  .search-input::placeholder { color: var(--field-text); }
+
+  .search-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    height: 40px;
+    padding: 0 16px;
+    border: 0;
+    border-radius: 8px;
+    background: linear-gradient(90deg, #fde047, #facc15);
+    font: inherit;
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 24px;
+    color: #1c222a;
+    cursor: pointer;
+  }
+
+  .search-btn svg { stroke: #1c222a; }
+
+  .search-meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-top: 4px;
+  }
+
+  .search-meta-right {
+    display: flex;
+    align-items: center;
+  }
+
+  .ai-slot { display: contents; }
+
+  /* AI search ghost: cropped to the glyph area so row spacing matches Figma */
+  .ai-slot .ghost-mesh { padding: 0; line-height: 0; }
+  .ai-slot .gm-3 { padding: 8px 12px; line-height: 20px; }
+
+  /* UI block (Container "Мэтч & Сопровод", Hirify.me) */
+  .ui-stage {
+    width: min(864px, calc(100vw - 48px));
+    background: var(--card);
+    border-bottom: 1px solid var(--card-border);
+    border-radius: 20px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08), 0 4px 12px rgba(0, 0, 0, 0.04);
+    padding: 20px 20px 21px;
+    transition: background 0.3s ease;
+    overflow: hidden;
+  }
+
+  .ui-stage .fld-label {
+    display: block;
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 20px;
+    color: var(--label-c);
+    padding-bottom: 8px;
+  }
+
+  .ui-stage .req { color: #ef4444; }
+
+  .ui-stage .fld {
+    width: 100%;
+    background: var(--field);
+    border: 0;
+    border-radius: 8px;
+    padding: 12px;
+    font: inherit;
+    font-weight: 400;
+    font-size: 16px;
+    color: var(--field-text);
+    transition: background 0.3s ease;
+  }
+
+  .ui-stage input.fld { height: 48px; }
+
+  .ui-stage textarea.fld {
+    height: 128px;
+    line-height: 24px;
+    resize: none;
+  }
+
+  .ui-stage .fld::placeholder { color: var(--field-text); }
+  .ui-stage .fld:focus { outline: 2px solid color-mix(in srgb, var(--base) 60%, transparent); }
+
+  .ui-stage .row-2 { padding-top: 12px; }
+
+  .ui-stage .cta-row {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 16px;
+    padding-top: 24px;
+  }
+
+  .ui-stage .cta-row h3 {
+    font-weight: 700;
+    font-size: 18px;
+    line-height: 28px;
+    color: var(--title-c);
+  }
+
+  .ui-stage .cta-row .sub {
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 22.75px;
+    color: var(--sub-c);
+  }
+
+  .ui-stage .cta-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .ghost-btn {
+    font: inherit;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 12px;
+    border: 0;
+    border-radius: 6px;
+    background: none;
+    font-size: 14px;
+    line-height: 20px;
+    color: var(--field-text);
+    cursor: pointer;
+    white-space: nowrap;
+  }
+
+  .ghost-btn:hover { background: var(--seg-bg); }
+  .ghost-btn svg { stroke: var(--field-text); }
+
+  /* Mesh button inside the card: native size so the effect stays intact */
+  .mesh-btn--cta {
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.12);
+  }
+
+  .mesh-btn {
+    font: inherit;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    width: 152px;
+    height: 52px;
+    border: 0.5px solid rgba(0, 0, 0, 0.12);
+    border-radius: 8px;
+    background: var(--base);
+    overflow: hidden;
+    cursor: pointer;
+    isolation: isolate;
+    transition: transform 0.25s ease, background 0.4s ease;
+  }
+
+  /* Glow lives on the wrapper's ::before at z-index -1, so every button
+     renders above every other button's cast light */
+  .glow-wrap {
+    position: relative;
+  }
+
+  .glow-wrap::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 8px;
+    box-shadow:
+      0 0 12.963px var(--glow-c),
+      0 0 25.926px var(--glow-c),
+      0 0 90.74px var(--glow-c),
+      0 0 181.479px var(--glow-c),
+      0 0 250px var(--glow-c),
+      0 0 250px var(--glow-c);
+    z-index: -1;
+    pointer-events: none;
+    transition: box-shadow 0.25s ease;
+  }
+
+  .glow-wrap:hover::before {
+    box-shadow:
+      0 0 12.963px var(--glow-c),
+      0 0 25.926px var(--glow-c),
+      0 0 90.74px var(--glow-c),
+      0 0 181.479px var(--glow-c),
+      0 0 250px var(--glow-c),
+      0 0 250px var(--glow-c),
+      0 0 40px color-mix(in srgb, var(--g2) 40%, transparent);
+  }
+
+  /* Inner shadow overlay: sits above the mesh, hugs the bottom edge */
+  .mesh-btn::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    box-shadow: inset 0 -2px 0 0 rgba(0, 0, 0, 0.25);
+    pointer-events: none;
+    z-index: 2;
+  }
+
+  .mesh-btn:hover {
+    transform: translateY(-1px);
+  }
+
+  .mesh-btn:active {
+    transform: translateY(0) scale(0.98);
+  }
+
+  .mesh-btn .mesh {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+  }
+
+  /* Animated mesh blobs: each drifts around its Figma placement.
+     transform-box makes transform-origin the blob's own center. */
+  .blob {
+    transform-box: fill-box;
+    transform-origin: center;
+    will-change: transform;
+  }
+
+  .blob-1 { animation: drift-1 9s ease-in-out infinite alternate; }
+  .blob-2 { animation: drift-2 7s ease-in-out infinite alternate; }
+  .blob-3 { animation: drift-3 11s ease-in-out infinite alternate; }
+  .blob-4 { animation: drift-4 8s ease-in-out infinite alternate; }
+  .blob-5 { animation: drift-5 11s ease-in-out infinite alternate; }
+  .blob-6 { animation: drift-6 9s ease-in-out infinite alternate; }
+  .blob-7 { animation: drift-7 13s ease-in-out infinite alternate; }
+
+  @keyframes drift-1 {
+    0%   { transform: translate(0, 0) rotate(0deg) scale(1); }
+    50%  { transform: translate(9px, -4px) rotate(3deg) scale(1.06); }
+    100% { transform: translate(-7px, 3px) rotate(-4deg) scale(0.96); }
+  }
+
+  @keyframes drift-2 {
+    0%   { transform: translate(0, 0) rotate(0deg) scale(1); }
+    50%  { transform: translate(-10px, 6px) rotate(9deg) scale(1.1); }
+    100% { transform: translate(7px, -5px) rotate(-7deg) scale(0.94); }
+  }
+
+  @keyframes drift-3 {
+    0%   { transform: translate(0, 0) rotate(0deg); }
+    50%  { transform: translate(11px, 4px) rotate(-5deg); }
+    100% { transform: translate(-9px, -3px) rotate(4deg); }
+  }
+
+  @keyframes drift-4 {
+    0%   { transform: translate(0, 0) rotate(0deg) scale(1); }
+    50%  { transform: translate(-6px, -6px) rotate(12deg) scale(1.08); }
+    100% { transform: translate(5px, 5px) rotate(-10deg) scale(0.95); }
+  }
+
+  /* Soft-button blobs: bigger, slower, no hard boundary */
+  @keyframes drift-5 {
+    0%   { transform: translate(0, 0) scale(1); }
+    50%  { transform: translate(7px, -3px) scale(1.05); }
+    100% { transform: translate(-6px, 2px) scale(0.97); }
+  }
+
+  @keyframes drift-6 {
+    0%   { transform: translate(0, 0) scale(1); }
+    50%  { transform: translate(-8px, -2px) scale(1.08); }
+    100% { transform: translate(6px, 2px) scale(0.95); }
+  }
+
+  @keyframes drift-7 {
+    0%   { transform: translate(0, 0) scale(1); }
+    50%  { transform: translate(9px, 4px) scale(1.06); }
+    100% { transform: translate(-7px, -3px) scale(0.96); }
+  }
+
+  /* The gradients themselves breathe too — stop-color is animatable via CSS.
+     Vars re-resolve every frame, so palette switches recolor the running animation. */
+  .stop-magenta { stop-color: var(--g1); animation: hue-magenta 12s ease-in-out infinite; }
+  .stop-violet  { stop-color: var(--g2); animation: hue-violet 10s ease-in-out infinite; }
+
+  /* Gradient tails and misty overlay blobs: white by default, dark on inverted palettes */
+  .stop-tail { stop-color: var(--tail, #ffffff); }
+  .fill-mist { fill: var(--mist, #ffffff); }
+
+  /* Glass variant: black shell, one static progressive-gradient sheen.
+     Sheen tint follows the palette (light mix of --g1). */
+  .mesh-btn--glass {
+    background: var(--base);
+  }
+
+  .mesh-btn--glass::after {
+    box-shadow: inset 0 2px 0 0 var(--edge, rgba(255, 255, 255, 0.09));
+  }
+
+  .mesh-btn--glass .label {
+    text-shadow: 0 1px 1px rgba(0, 0, 0, 0.18);
+  }
+
+  .stop-sheen  { stop-color: var(--sheen, color-mix(in srgb, var(--g1) 55%, #fff)); }
+  .stroke-sheen { stroke: var(--sheen, color-mix(in srgb, var(--g1) 55%, #fff)); }
+
+  body[data-palette="white"] .mesh-btn--glass {
+    background: #fff;
+    --edge: rgba(0, 0, 0, 0.12);
+    --sheen: #16161c;
+  }
+
+  @keyframes hue-magenta {
+    0%, 100% { stop-color: var(--g1); }
+    45%      { stop-color: var(--g1-a); }
+    70%      { stop-color: var(--g1-b); }
+  }
+
+  @keyframes hue-violet {
+    0%, 100% { stop-color: var(--g2); }
+    50%      { stop-color: var(--g2-a); }
+  }
+
+  .mesh-btn .label {
+    position: relative;
+    z-index: 1;
+    font-weight: 600;
+    font-size: 14px;
+    line-height: 24px;
+    font-variation-settings: 'CRSV' 0, 'SHRP' 0;
+    color: var(--ink, #f8fafc);
+    white-space: nowrap;
+  }
+
+  .mesh-btn .icon use {
+    fill: var(--ink, #ffffff);
+  }
+
+  /* Temporary: plain solid fill instead of the glassy inner-glow treatment */
+  .mesh-btn .icon g { filter: none; }
+  .mesh-btn .icon use { fill-opacity: 1; }
+  .mesh-btn .icon .ghost { display: none; }
+
+  /* Icon rim (inner glow) color follows the palette */
+  .rim-flood {
+    flood-color: var(--rim, #ffffff);
+  }
+
+  .mesh-btn .icon {
+    position: relative;
+    flex: none;
+    width: 16px;
+    height: 16px;
+    z-index: 1;
+    overflow: visible;
+  }
+
+  .icon .ghost {
+    transform-box: fill-box;
+    transform-origin: center;
+    transform: rotate(7.93deg);
+    animation: twinkle 4s ease-in-out infinite;
+  }
+
+  @keyframes twinkle {
+    0%, 100% { opacity: 0.2; }
+    50%      { opacity: 0.32; }
+  }
+
+  /* Soft-mesh secondary tint (button 2 and its ghost) */
+  .fill-g2 {
+    fill: var(--g2);
+  }
+
+  /* Stars: tiny, faint, with a lifecycle — each lives a short slice of its
+     cycle, staggered phases make new ones appear as others fade out */
+  .star {
+    fill: var(--star, #fff);
+    opacity: 0;
+    animation: star-life var(--tw, 8s) ease-in-out infinite;
+    animation-delay: var(--td, 0s);
+  }
+
+  @keyframes star-life {
+    0%, 55%, 100%  { opacity: 0; }
+    12%, 40%       { opacity: var(--so, 0.45); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .blob, .stop-magenta, .stop-violet, .icon .ghost, .star {
+      animation: none;
+    }
+  }
+</style>
+</head>
+<body>
+
+<!-- Global defs: always-rendered so clones and hidden views resolve url(#...) refs -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="grad-magenta" x1="35.1" y1="72.1" x2="251.1" y2="72.1" gradientUnits="userSpaceOnUse">
+      <stop class="stop-magenta" stop-color="#BB18FB" />
+      <stop class="stop-tail" offset="1" stop-color="white" />
+    </linearGradient>
+    <linearGradient id="grad-violet" x1="60.6977" y1="-8.27503" x2="60.6977" y2="54.7019" gradientUnits="userSpaceOnUse">
+      <stop class="stop-violet" stop-color="#A04FD7" />
+      <stop class="stop-tail" offset="1" stop-color="white" />
+    </linearGradient>
+    <linearGradient id="grad-soft" x1="76" y1="28" x2="76" y2="88" gradientUnits="userSpaceOnUse">
+      <stop class="stop-magenta" stop-color="#BB18FB" />
+      <stop class="stop-tail" offset="1" stop-color="white" />
+    </linearGradient>
+    <linearGradient id="grad-glass" x1="43.5227" y1="72.1899" x2="183.124" y2="81.3881" gradientUnits="userSpaceOnUse">
+      <stop class="stop-sheen" stop-color="white" />
+      <stop class="stop-sheen" offset="1" stop-color="white" stop-opacity="0.34" />
+    </linearGradient>
+    <filter id="blur-lg" x="-60%" y="-60%" width="220%" height="220%" color-interpolation-filters="sRGB">
+      <feGaussianBlur stdDeviation="6" />
+    </filter>
+    <filter id="blur-md" x="-60%" y="-60%" width="220%" height="220%" color-interpolation-filters="sRGB">
+      <feGaussianBlur stdDeviation="3.45" />
+    </filter>
+    <filter id="blur-sm" x="-60%" y="-60%" width="220%" height="220%" color-interpolation-filters="sRGB">
+      <feGaussianBlur stdDeviation="1.95" />
+    </filter>
+    <filter id="blur-soft" x="-80%" y="-80%" width="260%" height="260%" color-interpolation-filters="sRGB">
+      <feGaussianBlur stdDeviation="10" />
+    </filter>
+    <filter id="blur-softer" x="-80%" y="-80%" width="260%" height="260%" color-interpolation-filters="sRGB">
+      <feGaussianBlur stdDeviation="13" />
+    </filter>
+    <filter id="blur-glass" x="-60%" y="-60%" width="220%" height="220%" color-interpolation-filters="sRGB">
+      <feGaussianBlur stdDeviation="4.825" />
+    </filter>
+    <path id="blob-soft" d="M128.218 20.8641C128.218 44.999 101.261 64.5642 68.0089 64.5642C34.7564 64.5642 7.8 44.999 7.8 20.8641C7.8 -3.27081 40.7773 13.4258 74.0297 13.4258C107.282 13.4258 128.218 -3.27081 128.218 20.8641Z" />
+    <filter id="icon-glow" x="0" y="0" width="16" height="16" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+      <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha" />
+      <feOffset />
+      <feGaussianBlur stdDeviation="0.95" />
+      <feComposite in2="hardAlpha" operator="arithmetic" k2="-1" k3="1" />
+      <feComponentTransfer result="rimAlpha">
+        <feFuncA type="linear" slope="2.5" intercept="0" />
+      </feComponentTransfer>
+      <feFlood class="rim-flood" flood-color="white" result="rimColor" />
+      <feComposite in="rimColor" in2="rimAlpha" operator="in" result="rim" />
+      <feMerge>
+        <feMergeNode in="SourceGraphic" />
+        <feMergeNode in="rim" />
+      </feMerge>
+    </filter>
+    <path id="icon-magic" d="M7 3L7.5 2L8.5 1.5L7.5 1L7 0L6.5 1L5.5 1.5L6.5 2L7 3ZM2.5 5L3.33313 3.33344L5 2.5L3.33313 1.66656L2.5 0L1.66688 1.66656L0 2.5L1.66688 3.33344L2.5 5ZM13.5 9L12.6669 10.6666L11 11.5L12.6669 12.3334L13.5 14L14.3331 12.3334L16 11.5L14.3331 10.6666L13.5 9ZM15.7069 2.94469L13.0553 0.293125C12.8603 0.0975 12.6044 0 12.3484 0C12.0925 0 11.8366 0.0975 11.6412 0.293125L0.293125 11.6412C-0.0975 12.0319 -0.0975 12.665 0.293125 13.0553L2.94469 15.7069C3.14 15.9022 3.39594 15.9997 3.65156 15.9997C3.9075 15.9997 4.16344 15.9022 4.35875 15.7069L15.7069 4.35844C16.0975 3.96844 16.0975 3.335 15.7069 2.94469ZM11.2328 6.35813L9.64188 4.76719L12.3481 2.06094L13.9391 3.65188L11.2328 6.35813Z" />
+  </defs>
+</svg>
+
+<div class="stage">
+
+<div class="btn-row">
+<input type="radio" name="btn-style" value="0" aria-label="Выбрать стиль 1" checked />
+<div class="glow-wrap">
+<button class="mesh-btn" type="button">
+  <!-- Animated mesh gradient: the four original Figma blobs (exact paths,
+       gradients and blur radii), each on its own drift loop. -->
+  <svg class="mesh" viewBox="0 0 152 52" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <!-- Ellipse 1: magenta -> white; lowered so its crescent top edge
+         lands at ~y31 and reads as the mesh's hard boundary -->
+    <g transform="translate(-57.28 -13.5)">
+      <g class="blob blob-1" filter="url(#blur-lg)">
+        <path d="M251.1 57.2692C251.1 90.0836 232.158 109.1 162.047 109.1C91.9363 109.1 35.1 82.4986 35.1 49.6842C35.1 16.8698 79.9363 49.6842 150.047 49.6842C220.158 49.6842 251.1 24.4547 251.1 57.2692Z" fill="url(#grad-magenta)" />
+      </g>
+    </g>
+
+    <!-- Ellipse 2: violet -> white, rotated -30deg, center (132.66, 36.78) -->
+    <g transform="translate(132.66 36.78) rotate(-30) translate(-60.6975 -34.251)">
+      <g class="blob blob-2" filter="url(#blur-md)">
+        <path d="M107.595 23.2135C107.595 40.6041 86.5987 54.7019 60.6977 54.7019C34.7968 54.7019 13.8 40.6041 13.8 23.2135C13.8 5.82284 39.4866 17.8537 65.3875 17.8537C91.2884 17.8537 107.595 5.82284 107.595 23.2135Z" fill="url(#grad-violet)" />
+      </g>
+    </g>
+
+    <!-- Ellipse 3: white 12%, rotated 2.45deg, center (74.19, 7.55) -->
+    <g transform="translate(74.189 7.554) rotate(2.45) translate(-68.009 -36.182)">
+      <g class="blob blob-3" filter="url(#blur-sm)">
+        <use class="fill-mist" href="#blob-soft" fill="white" fill-opacity="0.12" />
+      </g>
+    </g>
+
+    <!-- Ellipse 4: white 12%, rotated 137.08deg, center (93.24, 53.4) -->
+    <g transform="translate(93.2395 53.4045) rotate(137.08) translate(-68.009 -36.182)">
+      <g class="blob blob-4" filter="url(#blur-sm)">
+        <use class="fill-mist" href="#blob-soft" fill="white" fill-opacity="0.12" />
+      </g>
+    </g>
+  </svg>
+
+  <!-- fa-solid:magic; base layer with inner glow + rotated ghost copy -->
+  <svg class="icon" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <use class="ghost" href="#icon-magic" fill="white" fill-opacity="0.2" />
+    <g filter="url(#icon-glow)">
+      <use href="#icon-magic" fill="white" fill-opacity="0.51" />
+    </g>
+  </svg>
+
+  <span class="label">Узнать мэтч</span>
+</button>
+</div>
+<button class="ghost-mesh gm-1" type="button" aria-label="Узнать мэтч">
+  <!-- text is a mask; the real animated mesh shows through the glyphs -->
+  <svg viewBox="0 0 152 52" width="152" height="52" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <defs>
+      <mask id="gm1-mask">
+        <text x="76" y="31" text-anchor="middle" font-family="Geologica, sans-serif" font-weight="600" font-size="14" fill="#fff" style="font-variation-settings:'CRSV' 0,'SHRP' 0">Узнать мэтч</text>
+      </mask>
+    </defs>
+    <g mask="url(#gm1-mask)">
+      <rect width="152" height="52" fill="var(--base)" />
+      <g transform="translate(-57.28 -13.5)">
+        <g class="blob blob-1" filter="url(#blur-lg)">
+          <path d="M251.1 57.2692C251.1 90.0836 232.158 109.1 162.047 109.1C91.9363 109.1 35.1 82.4986 35.1 49.6842C35.1 16.8698 79.9363 49.6842 150.047 49.6842C220.158 49.6842 251.1 24.4547 251.1 57.2692Z" fill="url(#grad-magenta)" />
+        </g>
+      </g>
+      <g transform="translate(132.66 36.78) rotate(-30) translate(-60.6975 -34.251)">
+        <g class="blob blob-2" filter="url(#blur-md)">
+          <path d="M107.595 23.2135C107.595 40.6041 86.5987 54.7019 60.6977 54.7019C34.7968 54.7019 13.8 40.6041 13.8 23.2135C13.8 5.82284 39.4866 17.8537 65.3875 17.8537C91.2884 17.8537 107.595 5.82284 107.595 23.2135Z" fill="url(#grad-violet)" />
+        </g>
+      </g>
+      <g transform="translate(74.189 7.554) rotate(2.45) translate(-68.009 -36.182)">
+        <g class="blob blob-3" filter="url(#blur-sm)">
+          <use class="fill-mist" href="#blob-soft" fill="white" fill-opacity="0.12" />
+        </g>
+      </g>
+      <g transform="translate(93.2395 53.4045) rotate(137.08) translate(-68.009 -36.182)">
+        <g class="blob blob-4" filter="url(#blur-sm)">
+          <use class="fill-mist" href="#blob-soft" fill="white" fill-opacity="0.12" />
+        </g>
+      </g>
+    </g>
+  </svg>
+</button>
+</div>
+
+<div class="btn-row">
+<input type="radio" name="btn-style" value="1" aria-label="Выбрать стиль 2" />
+<div class="glow-wrap">
+<button class="mesh-btn mesh-btn--soft" type="button">
+  <!-- Soft variant: same palette vars, gentler vertical blend + starfield -->
+  <svg class="mesh" viewBox="0 0 152 52" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <!-- bottom blend: a tilted blob, so the pink curve cuts the base at an angle -->
+    <g class="blob blob-5" filter="url(#blur-soft)">
+      <ellipse cx="70" cy="63" rx="105" ry="34" transform="rotate(-10 70 63)" fill="url(#grad-soft)" />
+    </g>
+    <!-- white bloom hugging the bottom edge -->
+    <g class="blob blob-6" filter="url(#blur-softer)">
+      <ellipse class="fill-mist" cx="82" cy="76" rx="65" ry="20" transform="rotate(-6 82 76)" fill="white" fill-opacity="0.8" />
+    </g>
+    <!-- faint secondary tint, top-left -->
+    <g class="blob blob-7" filter="url(#blur-soft)">
+      <ellipse class="fill-g2" cx="18" cy="-2" rx="60" ry="20" fill-opacity="0.4" />
+    </g>
+
+    <!-- starfield -->
+    <g aria-hidden="true">
+      <circle class="star" cx="18" cy="11" r="0.8" style="--tw:7.5s;--td:-1.1s;--so:.4" />
+      <circle class="star" cx="29" cy="24" r="0.6" style="--tw:9s;--td:-4.6s;--so:.3" />
+      <circle class="star" cx="42" cy="8" r="0.7" style="--tw:8.2s;--td:-2.7s;--so:.45" />
+      <circle class="star" cx="53" cy="18" r="0.9" style="--tw:10.5s;--td:-6.3s;--so:.5" />
+      <circle class="star" cx="67" cy="6" r="0.6" style="--tw:7.8s;--td:-0.4s;--so:.35" />
+      <circle class="star" cx="73" cy="27" r="0.75" style="--tw:9.6s;--td:-5.2s;--so:.4" />
+      <circle class="star" cx="88" cy="12" r="0.8" style="--tw:8.8s;--td:-3.4s;--so:.5" />
+      <circle class="star" cx="97" cy="22" r="0.55" style="--tw:7.2s;--td:-1.9s;--so:.3" />
+      <circle class="star" cx="107" cy="7" r="0.7" style="--tw:10s;--td:-7.7s;--so:.45" />
+      <circle class="star" cx="116" cy="17" r="0.85" style="--tw:8.5s;--td:-2.2s;--so:.5" />
+      <circle class="star" cx="127" cy="10" r="0.6" style="--tw:9.3s;--td:-5.9s;--so:.35" />
+      <circle class="star" cx="136" cy="23" r="0.75" style="--tw:7.9s;--td:-0.8s;--so:.4" />
+      <circle class="star" cx="46" cy="35" r="0.55" style="--tw:9.8s;--td:-4.1s;--so:.3" />
+      <circle class="star" cx="84" cy="38" r="0.55" style="--tw:8s;--td:-6.8s;--so:.3" />
+      <circle class="star" cx="114" cy="36" r="0.6" style="--tw:10.8s;--td:-3s;--so:.35" />
+      <circle class="star" cx="24" cy="38" r="0.6" style="--tw:8.4s;--td:-7.3s;--so:.3" />
+      <circle class="star" cx="61" cy="14" r="0.55" style="--tw:9.1s;--td:-8.5s;--so:.35" />
+      <circle class="star" cx="102" cy="30" r="0.7" style="--tw:7.6s;--td:-2.5s;--so:.4" />
+      <circle class="star" cx="142" cy="15" r="0.7" style="--tw:8.9s;--td:-6s;--so:.45" />
+      <circle class="star" cx="10" cy="20" r="0.7" style="--tw:9.4s;--td:-3.8s;--so:.4" />
+      <circle class="star" cx="14" cy="31" r="0.6" style="--tw:8.6s;--td:-5.5s;--so:.35" />
+      <circle class="star" cx="35" cy="15" r="0.7" style="--tw:7.3s;--td:-3.6s;--so:.4" />
+      <circle class="star" cx="49" cy="27" r="0.55" style="--tw:9.7s;--td:-1.4s;--so:.3" />
+      <circle class="star" cx="58" cy="40" r="0.6" style="--tw:8.1s;--td:-7.1s;--so:.35" />
+      <circle class="star" cx="78" cy="17" r="0.75" style="--tw:10.2s;--td:-4.9s;--so:.45" />
+      <circle class="star" cx="93" cy="42" r="0.55" style="--tw:7.7s;--td:-6.5s;--so:.3" />
+      <circle class="star" cx="110" cy="24" r="0.6" style="--tw:9.9s;--td:-0.6s;--so:.35" />
+      <circle class="star" cx="122" cy="33" r="0.7" style="--tw:8.3s;--td:-5.1s;--so:.4" />
+      <circle class="star" cx="133" cy="6" r="0.6" style="--tw:7.4s;--td:-2s;--so:.35" />
+      <circle class="star" cx="145" cy="28" r="0.55" style="--tw:9.2s;--td:-7.9s;--so:.3" />
+    </g>
+  </svg>
+
+  <!-- same fa-solid:magic icon; defs are reused from the first button's svg -->
+  <svg class="icon" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <use class="ghost" href="#icon-magic" fill="white" fill-opacity="0.2" />
+    <g filter="url(#icon-glow)">
+      <use href="#icon-magic" fill="white" fill-opacity="0.51" />
+    </g>
+  </svg>
+
+  <span class="label">Узнать мэтч</span>
+</button>
+</div>
+<button class="ghost-mesh gm-2" type="button" aria-label="Узнать мэтч">
+  <!-- light top-down gradient + stars being born inside the glyphs -->
+  <svg viewBox="0 0 152 52" width="152" height="52" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <defs>
+      <mask id="gm2-mask">
+        <text x="76" y="31" text-anchor="middle" font-family="Geologica, sans-serif" font-weight="600" font-size="14" fill="#fff" style="font-variation-settings:'CRSV' 0,'SHRP' 0">Узнать мэтч</text>
+      </mask>
+    </defs>
+    <g mask="url(#gm2-mask)">
+      <rect width="152" height="52" fill="var(--base)" />
+      <g class="blob blob-5" filter="url(#blur-soft)">
+        <ellipse cx="70" cy="63" rx="105" ry="34" transform="rotate(-10 70 63)" fill="url(#grad-soft)" />
+      </g>
+      <g class="blob blob-6" filter="url(#blur-softer)">
+        <ellipse class="fill-mist" cx="82" cy="76" rx="65" ry="20" transform="rotate(-6 82 76)" fill="white" fill-opacity="0.8" />
+      </g>
+      <g class="blob blob-7" filter="url(#blur-soft)">
+        <ellipse class="fill-g2" cx="18" cy="-2" rx="60" ry="20" fill-opacity="0.4" />
+      </g>
+      <g>
+        <circle class="star" cx="34" cy="24" r="0.7" style="--tw:7.5s;--td:-1.1s;--so:.8" />
+        <circle class="star" cx="47" cy="30" r="0.55" style="--tw:9s;--td:-4.6s;--so:.7" />
+        <circle class="star" cx="58" cy="25" r="0.6" style="--tw:8.2s;--td:-2.7s;--so:.8" />
+        <circle class="star" cx="68" cy="31" r="0.7" style="--tw:10.5s;--td:-6.3s;--so:.9" />
+        <circle class="star" cx="78" cy="26" r="0.55" style="--tw:7.8s;--td:-0.4s;--so:.7" />
+        <circle class="star" cx="88" cy="30" r="0.6" style="--tw:9.6s;--td:-5.2s;--so:.8" />
+        <circle class="star" cx="99" cy="24" r="0.7" style="--tw:8.8s;--td:-3.4s;--so:.9" />
+        <circle class="star" cx="109" cy="29" r="0.55" style="--tw:7.2s;--td:-1.9s;--so:.7" />
+        <circle class="star" cx="118" cy="25" r="0.6" style="--tw:10s;--td:-7.7s;--so:.8" />
+        <circle class="star" cx="41" cy="27" r="0.5" style="--tw:8.5s;--td:-2.2s;--so:.6" />
+        <circle class="star" cx="93" cy="27" r="0.5" style="--tw:9.3s;--td:-5.9s;--so:.6" />
+        <circle class="star" cx="113" cy="27" r="0.5" style="--tw:7.9s;--td:-0.8s;--so:.6" />
+      </g>
+    </g>
+  </svg>
+</button>
+</div>
+
+<div class="btn-row">
+<input type="radio" name="btn-style" value="2" aria-label="Выбрать стиль 3" />
+<button class="mesh-btn mesh-btn--glass" type="button">
+  <!-- Static progressive-gradient sheen: exact Figma blob, no drift -->
+  <svg class="mesh" viewBox="0 0 152 52" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <g transform="translate(72.67 4.28) rotate(2.45) translate(-102.0775 -53.647)">
+      <g filter="url(#blur-glass)">
+        <path d="M184.855 54.953C184.855 79.0879 159.468 87.9941 126.216 87.9941C92.9636 87.9941 19.3 69.668 19.3 45.533C19.3 21.3981 96.025 19.3 129.277 19.3C162.53 19.3 184.855 30.8181 184.855 54.953Z" fill="url(#grad-glass)" fill-opacity="0.12" />
+        <path class="stroke-sheen" d="M129.278 19.8C145.858 19.8 159.649 22.6735 169.277 28.5031C178.875 34.3151 184.355 43.0724 184.355 54.9533C184.355 60.8942 182.794 65.8758 179.956 70.0148C177.115 74.158 172.976 77.4831 167.781 80.0764C157.38 85.2688 142.812 87.4943 126.216 87.4943C109.655 87.4943 82.9797 82.9249 60.4475 75.34C49.1821 71.5478 38.9845 67.0121 31.6135 61.9377C24.2154 56.8445 19.8002 51.3045 19.8 45.5334C19.8 39.8116 24.3425 35.2791 32.0188 31.7053C39.6661 28.145 50.2397 25.629 61.8938 23.8605C85.1921 20.3251 112.655 19.8 129.278 19.8Z" stroke="white" stroke-opacity="0.11" />
+      </g>
+    </g>
+  </svg>
+
+  <svg class="icon" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <use class="ghost" href="#icon-magic" fill="white" fill-opacity="0.2" />
+    <g filter="url(#icon-glow)">
+      <use href="#icon-magic" fill="white" fill-opacity="0.51" />
+    </g>
+  </svg>
+
+  <span class="label">Узнать мэтч</span>
+</button>
+<button class="ghost-mesh gm-3" type="button">Узнать мэтч</button>
+</div>
+
+</div>
+
+<section class="ui-stage" aria-label="Блок интерфейса">
+  <label class="fld-label" for="vac-url">Ссылка на вакансию (только для сохранения в истории)</label>
+  <input class="fld" id="vac-url" type="url" placeholder="https://example.com/vacancy/123" />
+
+  <div class="row-2">
+    <label class="fld-label" for="vac-text">Текст вакансии <span class="req">*</span></label>
+    <textarea class="fld" id="vac-text" placeholder="Вставьте сюда текст вакансии"></textarea>
+  </div>
+
+  <div class="cta-row">
+    <div>
+      <h3>Мэтч &amp; Сопровод</h3>
+      <p class="sub">Покажет вашу совместимость и напишет письмо</p>
+    </div>
+    <div class="cta-actions">
+      <button class="ghost-btn" type="button">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke-width="1.5" stroke-linecap="round" aria-hidden="true">
+          <path d="M2 4.5h12M2 11.5h12" />
+          <circle cx="6" cy="4.5" r="1.9" fill="var(--card)" />
+          <circle cx="10.5" cy="11.5" r="1.9" fill="var(--card)" />
+        </svg>
+        Настроить письмо
+      </button>
+
+      <span class="cta-slot"></span>
+    </div>
+  </div>
+</section>
+
+<section class="ui2-stage" aria-label="Блок интерфейса 2">
+  <div class="search-row">
+    <input class="search-input" type="text" placeholder="job title or company name" aria-label="Поиск вакансии" />
+    <button class="search-btn" type="button">
+      <svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke-width="1.8" stroke-linecap="round" aria-hidden="true">
+        <circle cx="8" cy="8" r="5.2" />
+        <path d="M12.2 12.2L16 16" />
+      </svg>
+      Search
+    </button>
+  </div>
+  <div class="search-meta">
+    <button class="ghost-btn" type="button">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke-width="1.5" stroke-linecap="round" aria-hidden="true">
+        <path d="M2 4.5h12M2 11.5h12" />
+        <circle cx="6" cy="4.5" r="1.9" fill="var(--card)" />
+        <circle cx="10.5" cy="11.5" r="1.9" fill="var(--card)" />
+      </svg>
+      Where to search
+    </button>
+    <div class="search-meta-right">
+      <span class="ai-slot"></span>
+      <button class="ghost-btn" type="button">How to search?</button>
+    </div>
+  </div>
+</section>
+
+<nav class="seg-tabs" aria-label="Вид">
+  <button type="button" class="active" data-view="preview">Кнопки</button>
+  <button type="button" data-view="ui">Интерфейс</button>
+  <button type="button" data-view="ui2">Интерфейс 2</button>
+</nav>
+
+<nav class="palette-bar" aria-label="Палитра кнопки">
+  <button type="button" class="active" data-palette="violet" aria-label="Виолет" title="Виолет" style="--c1:#bb18fb;--c2:#592af5">
+    <span class="swatch"></span>
+  </button>
+  <button type="button" data-palette="ocean" aria-label="Океан" title="Океан" style="--c1:#1fd1ff;--c2:#2456f5">
+    <span class="swatch"></span>
+  </button>
+  <button type="button" data-palette="sunset" aria-label="Закат" title="Закат" style="--c1:#fb9018;--c2:#ec4e33">
+    <span class="swatch"></span>
+  </button>
+  <button type="button" data-palette="emerald" aria-label="Изумруд" title="Изумруд" style="--c1:#2df5b2;--c2:#0ea56e">
+    <span class="swatch"></span>
+  </button>
+  <button type="button" data-palette="graphite" aria-label="Графит" title="Графит" style="--c1:#a7b0cc;--c2:#4a4d59">
+    <span class="swatch"></span>
+  </button>
+  <button type="button" data-palette="black" aria-label="Чёрный" title="Чёрный" style="--c1:#3f3f4a;--c2:#000000">
+    <span class="swatch"></span>
+  </button>
+  <button type="button" data-palette="white" aria-label="Белый" title="Белый" style="--c1:#ffffff;--c2:#c9c9d6">
+    <span class="swatch"></span>
+  </button>
+</nav>
+
+<script>
+  const bar = document.querySelector('.palette-bar');
+  bar.addEventListener('click', (e) => {
+    const btn = e.target.closest('[data-palette]');
+    if (!btn) return;
+    document.body.dataset.palette = btn.dataset.palette;
+    bar.querySelectorAll('.active').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+  });
+
+  const tabs = document.querySelector('.seg-tabs');
+  tabs.addEventListener('click', (e) => {
+    const btn = e.target.closest('[data-view]');
+    if (!btn) return;
+    document.body.dataset.view = btn.dataset.view;
+    tabs.querySelectorAll('.active').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+  });
+
+  // Radio pick: clone the chosen stage button (with its glow wrapper)
+  // into the UI-block CTA slot — an exact copy, defs live globally
+  const styleRadios = [...document.querySelectorAll('input[name="btn-style"]')];
+  const stageButtons = [...document.querySelectorAll('.stage .mesh-btn')];
+  const ctaSlot = document.querySelector('.cta-slot');
+
+  function renderCta() {
+    const i = +styleRadios.find(r => r.checked).value;
+    const src = stageButtons[i];
+    const unit = src.closest('.glow-wrap') || src;
+    const clone = unit.cloneNode(true);
+    const btn = clone.matches('.mesh-btn') ? clone : clone.querySelector('.mesh-btn');
+    btn.classList.add('mesh-btn--cta');
+    ctaSlot.replaceChildren(clone);
+    renderAiSearch(i);
+  }
+
+  // "AI search" in UI block 2: the picked ghost style with swapped text
+  const aiSlot = document.querySelector('.ai-slot');
+  const ghostButtons = [...document.querySelectorAll('.stage .ghost-mesh')];
+
+  function renderAiSearch(i) {
+    const clone = ghostButtons[i].cloneNode(true);
+    const mask = clone.querySelector('mask');
+    if (mask) {
+      mask.id = 'ai-mask-' + i;
+      clone.querySelector('g[mask]').setAttribute('mask', `url(#ai-mask-${i})`);
+      clone.querySelectorAll('text').forEach(t => { t.textContent = 'AI search'; });
+      // crop to the glyph area: text stays 14px, row height matches Figma
+      const svg = clone.querySelector('svg');
+      svg.setAttribute('viewBox', '38 6 76 40');
+      svg.setAttribute('width', '76');
+      svg.setAttribute('height', '40');
+    } else {
+      clone.textContent = 'AI search';
+    }
+    aiSlot.replaceChildren(clone);
+  }
+
+  document.querySelectorAll('.btn-row').forEach(row => {
+    row.addEventListener('click', () => {
+      row.querySelector('input[name="btn-style"]').checked = true;
+      renderCta();
+    });
+  });
+
+  renderCta();
+
+</script>
+
+</body>
+</html>

@@ -15,14 +15,14 @@ const featuredExperience: FeaturedExperience[] = [
     company: 'WMT AI',
     role: 'Продуктовый дизайнер · AI',
     period: '2025 — наст. время',
-    logo: '/company-favicons/wmt.svg',
+    logo: '/company-favicons/wmt-current.svg',
   },
   {
     id: 'uxart',
     company: 'UXART',
     role: 'UX/UI-дизайнер',
     period: '2023 — 2025 · 1,5 года',
-    logo: '/company-favicons/uxart.ico',
+    logo: '/company-favicons/uxart-current.svg',
   },
 ]
 
@@ -45,7 +45,7 @@ export function Experience() {
             >
               <div className={styles.companyCell}>
                 <img
-                  className={styles.logo}
+                  className={`${styles.logo} ${styles.logoFullBleed}`}
                   src={item.logo}
                   alt=""
                   aria-hidden

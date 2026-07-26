@@ -1,0 +1,1366 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="light" />
+    <title>Apple Liquid Glass — native controls study</title>
+    <style>
+      :root {
+        --ink: #131416;
+        --muted: rgba(19, 20, 22, 0.55);
+        --hairline: rgba(10, 18, 28, 0.1);
+        --page: #f3f3f5;
+        --green: #34c759;
+        --blue: #0a84ff;
+        --spring: linear(0, 0.008 1%, 0.035 2%, 0.145 4%, 0.426 7%, 0.715 10%, 0.89 13%, 0.982 16%, 1.025 20%, 1.041 24%, 1.034 30%, 1.012 39%, 0.999 52%, 1);
+        font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue", sans-serif;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      html {
+        min-width: 320px;
+        background: var(--page);
+      }
+
+      body {
+        min-height: 100vh;
+        margin: 0;
+        color: var(--ink);
+        background:
+          radial-gradient(circle at 12% -8%, #ffffff 0 20rem, transparent 46rem),
+          linear-gradient(180deg, #f8f8fa, #ececf0);
+        -webkit-font-smoothing: antialiased;
+      }
+
+      button,
+      input {
+        font: inherit;
+      }
+
+      button {
+        color: inherit;
+      }
+
+      button:focus-visible,
+      input:focus-visible {
+        outline: 3px solid rgba(10, 132, 255, 0.48);
+        outline-offset: 4px;
+      }
+
+      .segment-button:focus-visible,
+      .tab-button:focus-visible,
+      .switch-control:focus-visible,
+      .glass-button:focus-visible,
+      .search-tab:focus-visible {
+        outline: none;
+        filter: drop-shadow(0 4px 8px rgba(10, 132, 255, 0.2));
+      }
+
+      .page {
+        width: min(1120px, calc(100% - 32px));
+        margin: 0 auto;
+        padding: 64px 0 120px;
+      }
+
+      .intro {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) minmax(240px, 360px);
+        align-items: end;
+        gap: 36px;
+        margin-bottom: 42px;
+      }
+
+      .kicker {
+        margin: 0 0 12px;
+        color: #676a70;
+        font-size: 12px;
+        font-weight: 650;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+      }
+
+      h1 {
+        max-width: 720px;
+        margin: 0;
+        font-size: clamp(42px, 7vw, 82px);
+        font-weight: 650;
+        letter-spacing: -0.055em;
+        line-height: 0.96;
+      }
+
+      .intro-copy {
+        margin: 0 0 4px;
+        color: var(--muted);
+        font-size: 15px;
+        line-height: 1.55;
+      }
+
+      .sheet {
+        display: grid;
+        grid-template-columns: repeat(12, minmax(0, 1fr));
+        gap: 18px;
+      }
+
+      .sample {
+        position: relative;
+        grid-column: span 6;
+        min-height: 390px;
+        overflow: hidden;
+        border: 0;
+        border-radius: 32px;
+        background-color: #d8d9dd;
+        background-image:
+          radial-gradient(circle at 18% 18%, rgba(255, 255, 255, 0.7) 0 7%, transparent 34%),
+          radial-gradient(circle at 82% 26%, rgba(153, 167, 198, 0.2) 0 8%, transparent 36%),
+          linear-gradient(135deg, #e3e4e7, #cfd2d8 52%, #d8dcdd);
+        box-shadow: 0 22px 60px rgba(59, 64, 77, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.42);
+        isolation: isolate;
+      }
+
+      .sample:nth-child(2) {
+        background-image:
+          radial-gradient(circle at 22% 74%, rgba(255, 255, 255, 0.62) 0 7%, transparent 34%),
+          radial-gradient(circle at 78% 24%, rgba(146, 158, 183, 0.22) 0 8%, transparent 38%),
+          linear-gradient(145deg, #dedfe3, #cbd0d6 54%, #d9dcde);
+      }
+
+      .sample:nth-child(3) {
+        background-image:
+          radial-gradient(circle at 24% 18%, rgba(255, 255, 255, 0.58) 0 7%, transparent 35%),
+          radial-gradient(circle at 78% 76%, rgba(111, 151, 194, 0.22) 0 8%, transparent 37%),
+          linear-gradient(125deg, #d8dade, #c8cdd3 48%, #d6d9da);
+      }
+
+      .sample:nth-child(4) {
+        background-image:
+          radial-gradient(circle at 14% 78%, rgba(255, 255, 255, 0.58) 0 7%, transparent 35%),
+          radial-gradient(circle at 80% 20%, rgba(172, 165, 190, 0.2) 0 8%, transparent 38%),
+          linear-gradient(145deg, #dddde1, #ced1d6 49%, #dadcdd);
+      }
+
+      .sample.wide {
+        grid-column: 1 / -1;
+        min-height: 360px;
+        background-image:
+          radial-gradient(circle at 12% 24%, rgba(255, 255, 255, 0.64) 0 7%, transparent 34%),
+          radial-gradient(circle at 84% 20%, rgba(125, 144, 178, 0.2) 0 8%, transparent 38%),
+          radial-gradient(circle at 62% 92%, rgba(160, 178, 180, 0.16) 0 8%, transparent 36%),
+          linear-gradient(135deg, #dfe0e4, #cdd1d6 50%, #d9dcdd);
+      }
+
+      .sample::before {
+        position: absolute;
+        inset: 0;
+        z-index: -1;
+        content: "";
+        background-image:
+          linear-gradient(rgba(255, 255, 255, 0.1) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(255, 255, 255, 0.1) 1px, transparent 1px);
+        background-size: 34px 34px;
+        mask-image: linear-gradient(to bottom right, black, transparent 82%);
+        opacity: 0.12;
+      }
+
+      .sample-head {
+        position: absolute;
+        top: 24px;
+        left: 26px;
+        right: 26px;
+        z-index: 5;
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 16px;
+        color: rgba(19, 20, 22, 0.84);
+        text-shadow: 0 1px 0 rgba(255, 255, 255, 0.26);
+        pointer-events: none;
+      }
+
+      .sample h2 {
+        margin: 0;
+        font-size: 18px;
+        font-weight: 650;
+        letter-spacing: -0.025em;
+      }
+
+      .sample-note {
+        margin: 4px 0 0;
+        color: rgba(19, 20, 22, 0.46);
+        font-size: 12px;
+      }
+
+      .sample-index {
+        font-size: 11px;
+        font-weight: 750;
+        letter-spacing: 0.12em;
+      }
+
+      .stage {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 92px 28px 34px;
+      }
+
+      .ambient-copy {
+        position: absolute;
+        right: 22px;
+        bottom: 16px;
+        color: rgba(19, 20, 22, 0.34);
+        font-size: 10px;
+        font-weight: 720;
+        letter-spacing: 0.11em;
+        text-transform: uppercase;
+        pointer-events: none;
+      }
+
+      .liquid {
+        --press: 0;
+        --glow-x: 50%;
+        --glow-y: 50%;
+        position: relative;
+        overflow: hidden;
+        border: 0;
+        background: rgba(255, 255, 255, 0.24);
+        box-shadow:
+          0 calc(7px - var(--press) * 2px) calc(20px - var(--press) * 5px) rgba(35, 42, 55, calc(0.13 + var(--press) * 0.06)),
+          0 1px 2px rgba(38, 45, 57, 0.08);
+        backdrop-filter: blur(18px) saturate(1.08);
+        -webkit-backdrop-filter: blur(18px) saturate(1.08);
+        isolation: isolate;
+      }
+
+      .liquid::before {
+        position: absolute;
+        inset: 0;
+        z-index: 1;
+        content: "";
+        border-radius: inherit;
+        background:
+          radial-gradient(circle at var(--glow-x) var(--glow-y), rgba(255, 255, 255, calc(0.48 * var(--press))), transparent 46%);
+        mix-blend-mode: screen;
+        pointer-events: none;
+      }
+
+      .liquid::after {
+        position: absolute;
+        inset: 0;
+        z-index: 2;
+        content: "";
+        border-radius: inherit;
+        padding: 1px;
+        background: conic-gradient(from 205deg, transparent 0 14%, rgba(255, 255, 255, 0.28) 20%, transparent 34% 76%, rgba(74, 91, 119, 0.11) 86%, transparent 94%);
+        -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+        -webkit-mask-composite: xor;
+        mask-composite: exclude;
+        opacity: calc(0.58 + var(--press) * 0.24);
+        pointer-events: none;
+      }
+
+      .refract {
+        position: absolute;
+        inset: -4%;
+        z-index: 0;
+        background-repeat: no-repeat;
+        transform: scale(1.09);
+        transform-origin: center;
+        will-change: filter, background-position;
+        pointer-events: none;
+      }
+
+      .control-content {
+        position: relative;
+        z-index: 4;
+      }
+
+      /* Native glass buttons */
+      .button-set {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .glass-button {
+        --press: 0;
+        min-width: 110px;
+        height: 52px;
+        padding: 0 22px;
+        border-radius: 26px;
+        color: rgba(20, 22, 25, 0.9);
+        font-size: 15px;
+        font-weight: 620;
+        cursor: pointer;
+        touch-action: manipulation;
+        transform:
+          translate3d(calc(var(--pointer-x, 0) * var(--press) * 2px), calc(var(--pointer-y, 0) * var(--press) * 2px), 0)
+          scaleX(calc(1 - var(--press) * 0.035))
+          scaleY(calc(1 - var(--press) * 0.065));
+        transform-origin: center;
+        will-change: transform;
+      }
+
+      .glass-button.prominent {
+        background: rgba(0, 113, 236, 0.64);
+        color: white;
+        box-shadow:
+          0 calc(8px - var(--press) * 3px) 20px rgba(20, 76, 150, 0.2),
+          0 1px 2px rgba(0, 48, 122, 0.14);
+      }
+
+      .glass-button.prominent::before {
+        background:
+          radial-gradient(circle at var(--glow-x) var(--glow-y), rgba(255, 255, 255, calc(0.42 * var(--press))), transparent 46%),
+          linear-gradient(rgba(0, 113, 236, 0.42), rgba(0, 113, 236, 0.42));
+        mix-blend-mode: normal;
+      }
+
+      .glass-button.prominent .refract {
+        opacity: 0.72;
+      }
+
+      .button-set[data-energized="true"] .glass-button:not([data-pressed="true"])::before {
+        background:
+          radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.18), transparent 62%),
+          linear-gradient(145deg, rgba(255, 255, 255, 0.38), transparent 28% 66%, rgba(255, 255, 255, 0.1));
+      }
+
+      /* Native switch */
+      .switch-control {
+        --switch-progress: 0;
+        position: relative;
+        width: 78px;
+        height: 46px;
+        padding: 0;
+        border: 0;
+        border-radius: 23px;
+        background: rgba(118, 118, 128, 0.24);
+        box-shadow: inset 0 1px 3px rgba(35, 40, 48, 0.1);
+        cursor: pointer;
+        touch-action: none;
+      }
+
+      .switch-fill {
+        position: absolute;
+        inset: 0;
+        border-radius: inherit;
+        background: #34c759;
+        opacity: var(--switch-progress);
+        box-shadow: none;
+      }
+
+      .switch-lens {
+        --press: 0;
+        position: absolute;
+        top: 4px;
+        left: 4px;
+        width: 38px;
+        height: 38px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.52);
+        transform:
+          translate3d(var(--switch-x, 0px), 0, 0)
+          scaleX(calc((1 + var(--expand, 0) * 0.42) * (1 - var(--deform, 0) * 0.2)))
+          scaleY(calc((1 + var(--expand, 0) * 0.42) * (1 + var(--deform, 0) * 0.4)));
+        will-change: transform;
+      }
+
+      .switch-lens,
+      .slider-lens,
+      .selection-lens,
+      .tab-lens {
+        z-index: 3;
+      }
+
+      .switch-control[data-dragging="true"] .switch-lens {
+        box-shadow:
+          0 8px 20px rgba(35, 42, 53, 0.2),
+          0 1px 2px rgba(35, 42, 53, 0.1);
+      }
+
+      /* Native slider */
+      .slider-control {
+        --value: 0.48;
+        position: relative;
+        width: min(330px, 82vw);
+        height: 70px;
+        touch-action: none;
+      }
+
+      .slider-track {
+        position: absolute;
+        top: 32px;
+        left: 0;
+        right: 0;
+        height: 7px;
+        overflow: hidden;
+        border-radius: 99px;
+        background: rgba(118, 118, 128, 0.22);
+        box-shadow: inset 0 1px 2px rgba(34, 39, 47, 0.1);
+      }
+
+      .slider-fill {
+        width: calc(var(--value) * 100%);
+        height: 100%;
+        border-radius: inherit;
+        background: #0a84ff;
+      }
+
+      .slider-native {
+        position: absolute;
+        z-index: 6;
+        inset: 0;
+        width: 100%;
+        height: 70px;
+        margin: 0;
+        opacity: 0;
+        cursor: grab;
+      }
+
+      .slider-native:active {
+        cursor: grabbing;
+      }
+
+      .slider-lens {
+        --press: 0;
+        --lens-w: 44px;
+        --lens-h: 30px;
+        position: absolute;
+        top: 50%;
+        left: calc(var(--value) * 100%);
+        width: var(--lens-w);
+        height: var(--lens-h);
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.18);
+        transform: translate(-50%, -50%);
+        will-change: left, width, height;
+        pointer-events: none;
+      }
+
+      .slider-lens::before {
+        background:
+          radial-gradient(circle at 50% 50%, rgba(255, 255, 255, calc(0.32 * var(--press))), transparent 52%),
+          linear-gradient(
+            rgba(255, 255, 255, calc(0.48 - var(--expand, 0) * 0.38)),
+            rgba(255, 255, 255, calc(0.48 - var(--expand, 0) * 0.38))
+          );
+        mix-blend-mode: normal;
+      }
+
+      .slider-lens .refract {
+        opacity: calc(0.42 + var(--expand, 0) * 0.58);
+      }
+
+      .slider-track-copy {
+        position: absolute;
+        top: 50%;
+        left: 0;
+        height: 7px;
+        border-radius: 99px;
+        transform-origin: left center;
+        will-change: transform, background;
+      }
+
+      .slider-value {
+        position: absolute;
+        top: calc(50% + 54px);
+        left: 50%;
+        color: rgba(19, 20, 22, 0.48);
+        font-size: 12px;
+        font-weight: 650;
+        font-variant-numeric: tabular-nums;
+        transform: translateX(-50%);
+        text-shadow: 0 1px 0 rgba(255, 255, 255, 0.26);
+      }
+
+      /* Native segmented control */
+      .segmented-control {
+        position: relative;
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        width: min(370px, 86vw);
+        height: 52px;
+        padding: 4px;
+        border-radius: 26px;
+        background: rgba(255, 255, 255, 0.34);
+        box-shadow: 0 8px 20px rgba(35, 42, 55, 0.12);
+        overflow: visible;
+      }
+
+      .segmented-control > .refract {
+        inset: 0;
+        border-radius: inherit;
+        clip-path: inset(0 round 26px);
+      }
+
+      .selection-lens {
+        --press: 0;
+        --lens-w: calc((100% - 8px) / 3);
+        --lens-h: 44px;
+        --lens-shift: 0px;
+        position: absolute;
+        top: 50%;
+        left: 4px;
+        width: var(--lens-w);
+        height: var(--lens-h);
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.46);
+        box-shadow: 0 3px 9px rgba(35, 42, 55, 0.13);
+        transform: translate3d(calc(var(--selection-x, 0px) + var(--lens-shift)), -50%, 0);
+        will-change: transform, width, height;
+        pointer-events: none;
+        overflow: hidden;
+      }
+
+      .selection-lens::before {
+        background:
+          radial-gradient(circle at 50% 50%, rgba(255, 255, 255, calc(0.28 * var(--press))), transparent 52%),
+          linear-gradient(
+            rgba(255, 255, 255, calc(0.34 - var(--deform, 0) * 0.7)),
+            rgba(255, 255, 255, calc(0.34 - var(--deform, 0) * 0.7))
+          );
+        mix-blend-mode: normal;
+      }
+
+      .segment-button {
+        position: relative;
+        z-index: 5;
+        border: 0;
+        background: transparent;
+        color: rgba(19, 20, 22, 0.52);
+        font-size: 13px;
+        font-weight: 620;
+        cursor: pointer;
+        transition: color 180ms ease, transform 140ms ease;
+      }
+
+      .segment-button[aria-selected="true"] {
+        color: rgba(19, 20, 22, 0.9);
+        text-shadow: none;
+      }
+
+      .segment-button:active {
+        transform: scale(0.96);
+      }
+
+      /* Native iOS tab bar */
+      .tabbar-group {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        width: min(474px, 91vw);
+        isolation: isolate;
+      }
+
+      .tabbar-shell {
+        position: relative;
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        width: calc(100% - 82px);
+        height: 72px;
+        padding: 6px;
+        border-radius: 36px;
+        background: rgba(255, 255, 255, 0.4);
+        box-shadow: 0 10px 26px rgba(35, 42, 55, 0.13);
+      }
+
+      .tab-lens {
+        --press: 0;
+        position: absolute;
+        top: 6px;
+        left: 6px;
+        width: calc((100% - 12px) / 3);
+        height: 60px;
+        border-radius: 30px;
+        background: rgba(255, 255, 255, 0.38);
+        box-shadow: 0 3px 10px rgba(35, 42, 55, 0.11);
+        transform:
+          translate3d(var(--selection-x, 0px), 0, 0)
+          scaleX(calc(1 + var(--deform, 0) * 0.18))
+          scaleY(calc(1 - var(--deform, 0) * 0.12));
+        will-change: transform;
+        pointer-events: none;
+      }
+
+      /* One ambient light direction for the whole floating navigation group. */
+      .tabbar-shell::after,
+      .search-tab::after {
+        background: linear-gradient(145deg, rgba(255, 255, 255, 0.34), transparent 32% 72%, rgba(66, 82, 105, 0.1));
+        opacity: calc(0.42 + var(--press) * 0.12);
+      }
+
+      .tab-lens::before {
+        background: linear-gradient(145deg, rgba(255, 255, 255, 0.13), transparent 52%);
+        mix-blend-mode: soft-light;
+      }
+
+      .tab-lens::after {
+        background: linear-gradient(145deg, rgba(255, 255, 255, 0.2), transparent 38% 78%, rgba(66, 82, 105, 0.06));
+        opacity: 0.2;
+      }
+
+      .tab-button {
+        position: relative;
+        z-index: 5;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 3px;
+        border: 0;
+        background: transparent;
+        color: rgba(19, 20, 22, 0.55);
+        font-size: 10px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: color 180ms ease, transform 140ms ease;
+      }
+
+      .tab-button[aria-selected="true"] {
+        color: rgba(19, 20, 22, 0.94);
+        text-shadow: none;
+      }
+
+      .tab-button:active {
+        transform: scale(0.94);
+      }
+
+      .tab-icon {
+        width: 22px;
+        height: 22px;
+        fill: none;
+        stroke: currentColor;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+        stroke-width: 1.9;
+      }
+
+      .search-tab {
+        --press: 0;
+        position: relative;
+        flex: 0 0 72px;
+        width: 72px;
+        height: 72px;
+        padding: 0;
+        border-radius: 50%;
+        color: rgba(19, 20, 22, 0.9);
+        cursor: pointer;
+        transform: scaleX(calc(1 - var(--press) * 0.05)) scaleY(calc(1 - var(--press) * 0.07));
+      }
+
+      .search-tab .tab-icon {
+        position: relative;
+        z-index: 4;
+        width: 28px;
+        height: 28px;
+      }
+
+      .engineering-note {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 12px;
+        margin-top: 20px;
+      }
+
+      .metric {
+        padding: 16px 18px;
+        border: 1px solid var(--hairline);
+        border-radius: 20px;
+        background: rgba(255, 255, 255, 0.55);
+      }
+
+      .metric strong {
+        display: block;
+        margin-bottom: 4px;
+        font-size: 13px;
+      }
+
+      .metric span {
+        color: var(--muted);
+        font-size: 12px;
+        line-height: 1.45;
+      }
+
+      .svg-defs {
+        position: absolute;
+        width: 0;
+        height: 0;
+        overflow: hidden;
+      }
+
+      @media (max-width: 760px) {
+        .page {
+          padding-top: 36px;
+        }
+
+        .intro {
+          grid-template-columns: 1fr;
+          gap: 20px;
+        }
+
+        .sample,
+        .sample.wide {
+          grid-column: 1 / -1;
+          min-height: 350px;
+          border-radius: 26px;
+        }
+
+        .engineering-note {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        *,
+        *::before,
+        *::after {
+          animation-duration: 0.01ms !important;
+          transition-duration: 0.01ms !important;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <svg class="svg-defs" aria-hidden="true"><defs id="filter-defs"></defs></svg>
+
+    <main class="page">
+      <header class="intro">
+        <div>
+          <p class="kicker">Apple system controls · web study</p>
+          <h1>Native Liquid Glass motion.</h1>
+        </div>
+        <p class="intro-copy">
+          Не концепт-компоненты: системные button, switch, slider, segmented control и iOS tab bar.
+          Все состояния реагируют на press, hold и drag.
+        </p>
+      </header>
+
+      <section class="sheet" aria-label="Превью системных Liquid Glass компонентов">
+        <article class="sample">
+          <header class="sample-head">
+            <div><h2>Glass buttons</h2><p class="sample-note">Press · local glow · neighbour energy</p></div>
+            <span class="sample-index">01</span>
+          </header>
+          <div class="stage">
+            <div class="button-set" id="button-set">
+              <button class="glass-button liquid" type="button">
+                <span class="refract" data-scale="10" data-chroma="0.18"></span>
+                <span class="control-content">Cancel</span>
+              </button>
+              <button class="glass-button prominent liquid" type="button">
+                <span class="refract" data-scale="11" data-chroma="0.2"></span>
+                <span class="control-content">Continue</span>
+              </button>
+            </div>
+          </div>
+          <span class="ambient-copy">interactive glass()</span>
+        </article>
+
+        <article class="sample">
+          <header class="sample-head">
+            <div><h2>Switch</h2><p class="sample-note">Tap · hold · rubber drag</p></div>
+            <span class="sample-index">02</span>
+          </header>
+          <div class="stage">
+            <button class="switch-control" id="native-switch" type="button" role="switch" aria-checked="false" aria-label="Airplane mode">
+              <span class="switch-fill"></span>
+              <span class="switch-lens liquid">
+                <span class="refract" data-scale="14" data-chroma="0.24"></span>
+              </span>
+            </button>
+          </div>
+          <span class="ambient-copy">51 × 31 native ratio</span>
+        </article>
+
+        <article class="sample">
+          <header class="sample-head">
+            <div><h2>Slider</h2><p class="sample-note">Direct tracking · lens lifts on touch</p></div>
+            <span class="sample-index">03</span>
+          </header>
+          <div class="stage">
+            <div class="slider-control" id="native-slider">
+              <div class="slider-track"><div class="slider-fill"></div></div>
+              <div class="slider-lens liquid">
+                <span class="refract" data-scale="10" data-chroma="0.16"><span class="slider-track-copy"></span></span>
+              </div>
+              <input class="slider-native" type="range" min="0" max="100" value="48" aria-label="Volume" />
+              <output class="slider-value">48</output>
+            </div>
+          </div>
+          <span class="ambient-copy">native input back-sync</span>
+        </article>
+
+        <article class="sample">
+          <header class="sample-head">
+            <div><h2>Segmented control</h2><p class="sample-note">Spring travel · velocity deformation</p></div>
+            <span class="sample-index">04</span>
+          </header>
+          <div class="stage">
+            <div class="segmented-control liquid" id="segmented" role="tablist" aria-label="Media type">
+              <span class="refract" data-scale="5" data-chroma="0.08"></span>
+              <span class="selection-lens liquid" aria-hidden="true">
+                <span class="refract" data-scale="8" data-chroma="0.12"></span>
+              </span>
+              <button class="segment-button" type="button" role="tab" aria-selected="true">All</button>
+              <button class="segment-button" type="button" role="tab" aria-selected="false">Photos</button>
+              <button class="segment-button" type="button" role="tab" aria-selected="false">Videos</button>
+            </div>
+          </div>
+          <span class="ambient-copy">k 50 · c 13</span>
+        </article>
+
+        <article class="sample wide">
+          <header class="sample-head">
+            <div><h2>iOS tab bar</h2><p class="sample-note">Floating navigation layer · fluid selected state</p></div>
+            <span class="sample-index">05</span>
+          </header>
+          <div class="stage">
+            <div class="tabbar-group">
+              <nav class="tabbar-shell liquid" id="tabbar" aria-label="App tabs">
+                <span class="refract" data-scale="5" data-chroma="0.08"></span>
+                <span class="tab-lens liquid" aria-hidden="true">
+                  <span class="refract" data-scale="8" data-chroma="0.12"></span>
+                </span>
+                <button class="tab-button" type="button" aria-selected="true">
+                  <svg class="tab-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 5.5h14v13H5z" /><path d="m7.5 15 3.2-3.4 2.6 2.5 2.2-2.1 2 3" /><circle cx="9" cy="9" r="1" /></svg>
+                  <span>Library</span>
+                </button>
+                <button class="tab-button" type="button" aria-selected="false">
+                  <svg class="tab-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M5.5 4.5h13v15h-13z" /><path d="M8.5 8h7M8.5 11h7M8.5 14h4.5" /></svg>
+                  <span>Read</span>
+                </button>
+                <button class="tab-button" type="button" aria-selected="false">
+                  <svg class="tab-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8.5" r="3.5" /><path d="M5.5 20c.7-3.7 2.8-5.5 6.5-5.5s5.8 1.8 6.5 5.5" /></svg>
+                  <span>Profile</span>
+                </button>
+              </nav>
+              <button class="search-tab liquid" type="button" aria-label="Search">
+                <span class="refract" data-scale="8" data-chroma="0.12"></span>
+                <svg class="tab-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6" /><path d="m15 15 4.5 4.5" /></svg>
+              </button>
+            </div>
+          </div>
+          <span class="ambient-copy">functional layer above content</span>
+        </article>
+      </section>
+
+      <aside class="engineering-note" aria-label="Motion reference values">
+        <div class="metric"><strong>Switch</strong><span>600 ms elastic travel; 320 ms lens lift; 520 ms settle; rubber overshoot while dragging.</span></div>
+        <div class="metric"><strong>Selection lens</strong><span>Travel spring stiffness 50 / damping 13; shape spring stiffness 66 / damping 4.5.</span></div>
+        <div class="metric"><strong>Optics</strong><span>Generated RG map, separate RGB displacement, adaptive rim light and touch-origin glow.</span></div>
+      </aside>
+    </main>
+
+    <script>
+      const svgNS = "http://www.w3.org/2000/svg";
+      const defs = document.querySelector("#filter-defs");
+      const reduceMotion = matchMedia("(prefers-reduced-motion: reduce)").matches;
+      const clamp = (value, min, max) => Math.min(max, Math.max(min, value));
+      let filterSerial = 0;
+
+      class Spring {
+        constructor({ value = 0, stiffness = 400, damping = 30, mass = 1, onUpdate }) {
+          this.value = value;
+          this.velocity = 0;
+          this.target = value;
+          this.stiffness = stiffness;
+          this.damping = damping;
+          this.mass = mass;
+          this.onUpdate = onUpdate;
+          this.running = false;
+          this.last = 0;
+        }
+
+        set(value) {
+          this.value = value;
+          this.velocity = 0;
+          this.target = value;
+          this.onUpdate?.(value, 0);
+        }
+
+        to(target) {
+          this.target = target;
+          if (reduceMotion) return this.set(target);
+          if (!this.running) {
+            this.running = true;
+            this.last = performance.now();
+            requestAnimationFrame((time) => this.tick(time));
+          }
+        }
+
+        tick(time) {
+          const elapsed = Math.min((time - this.last) / 1000, 0.032);
+          this.last = time;
+          const steps = Math.max(1, Math.ceil(elapsed / 0.008));
+          const dt = elapsed / steps;
+          for (let step = 0; step < steps; step += 1) {
+            const force = -this.stiffness * (this.value - this.target) - this.damping * this.velocity;
+            this.velocity += (force / this.mass) * dt;
+            this.value += this.velocity * dt;
+          }
+          this.onUpdate?.(this.value, this.velocity);
+          if (Math.abs(this.velocity) < 0.01 && Math.abs(this.target - this.value) < 0.001) {
+            this.value = this.target;
+            this.velocity = 0;
+            this.running = false;
+            this.onUpdate?.(this.value, 0);
+            return;
+          }
+          requestAnimationFrame((next) => this.tick(next));
+        }
+      }
+
+      function createMap(width, height) {
+        const w = clamp(Math.round(width), 28, 420);
+        const h = clamp(Math.round(height), 28, 260);
+        const canvas = document.createElement("canvas");
+        canvas.width = w;
+        canvas.height = h;
+        const context = canvas.getContext("2d", { willReadFrequently: true });
+        const image = context.createImageData(w, h);
+        const halfW = w / 2;
+        const halfH = h / 2;
+        const radius = Math.max(4, Math.min(halfW, halfH) - 1);
+
+        function write(x, y, rx, gy) {
+          const index = (y * w + x) * 4;
+          image.data[index] = rx;
+          image.data[index + 1] = gy;
+          image.data[index + 2] = 128;
+          image.data[index + 3] = 255;
+        }
+
+        for (let y = 0; y < Math.ceil(h / 2); y += 1) {
+          for (let x = 0; x < Math.ceil(w / 2); x += 1) {
+            const px = x + 0.5 - halfW;
+            const py = y + 0.5 - halfH;
+            const qx = Math.abs(px) - (halfW - radius);
+            const qy = Math.abs(py) - (halfH - radius);
+            const outside = Math.hypot(Math.max(qx, 0), Math.max(qy, 0));
+            const signedDistance = outside + Math.min(Math.max(qx, qy), 0) - radius;
+            const innerDistance = Math.max(0, -signedDistance);
+            const edge = Math.pow(1 - clamp(innerDistance / Math.max(6, radius * 0.82), 0, 1), 1.52);
+            const bendX = clamp((-px / halfW) * edge * 0.5, -0.5, 0.5);
+            const bendY = clamp((-py / halfH) * edge * 0.5, -0.5, 0.5);
+            const red = Math.round(128 + bendX * 255);
+            const green = Math.round(128 + bendY * 255);
+            const mirrorRed = 256 - red;
+            const mirrorGreen = 256 - green;
+            const mx = w - 1 - x;
+            const my = h - 1 - y;
+            write(x, y, red, green);
+            write(mx, y, mirrorRed, green);
+            write(x, my, red, mirrorGreen);
+            write(mx, my, mirrorRed, mirrorGreen);
+          }
+        }
+
+        context.putImageData(image, 0, 0);
+        return canvas.toDataURL("image/png");
+      }
+
+      function colorMatrix(channel, input, result) {
+        const matrix = document.createElementNS(svgNS, "feColorMatrix");
+        matrix.setAttribute("in", input);
+        matrix.setAttribute("type", "matrix");
+        matrix.setAttribute("result", result);
+        const values = channel === "r"
+          ? "1 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 1 0"
+          : channel === "g"
+            ? "0 0 0 0 0  0 1 0 0 0  0 0 0 0 0  0 0 0 1 0"
+            : "0 0 0 0 0  0 0 0 0 0  0 0 1 0 0  0 0 0 1 0";
+        matrix.setAttribute("values", values);
+        return matrix;
+      }
+
+      function applyFilter(refract) {
+        const surface = refract.parentElement;
+        const rect = surface.getBoundingClientRect();
+        if (!rect.width || !rect.height) return;
+        if (refract.dataset.filterId) document.getElementById(refract.dataset.filterId)?.remove();
+        const id = `apple-liquid-${Date.now()}-${filterSerial++}`;
+        const scale = Number(refract.dataset.scale || 18);
+        const chroma = Number(refract.dataset.chroma || 1);
+        const filter = document.createElementNS(svgNS, "filter");
+        filter.id = id;
+        filter.setAttribute("x", "0");
+        filter.setAttribute("y", "0");
+        filter.setAttribute("width", "100%");
+        filter.setAttribute("height", "100%");
+        filter.setAttribute("color-interpolation-filters", "sRGB");
+
+        const map = document.createElementNS(svgNS, "feImage");
+        const mapUrl = createMap(rect.width, rect.height);
+        map.setAttribute("href", mapUrl);
+        map.setAttributeNS("http://www.w3.org/1999/xlink", "href", mapUrl);
+        map.setAttribute("width", "100%");
+        map.setAttribute("height", "100%");
+        map.setAttribute("preserveAspectRatio", "none");
+        map.setAttribute("result", "map");
+        filter.append(map);
+
+        [[scale + chroma, "red-source"], [scale, "green-source"], [scale - chroma, "blue-source"]].forEach(([amount, result]) => {
+          const displacement = document.createElementNS(svgNS, "feDisplacementMap");
+          displacement.setAttribute("in", "SourceGraphic");
+          displacement.setAttribute("in2", "map");
+          displacement.setAttribute("scale", String(amount));
+          displacement.setAttribute("xChannelSelector", "R");
+          displacement.setAttribute("yChannelSelector", "G");
+          displacement.setAttribute("result", result);
+          filter.append(displacement);
+        });
+        filter.append(colorMatrix("r", "red-source", "red"));
+        filter.append(colorMatrix("g", "green-source", "green"));
+        filter.append(colorMatrix("b", "blue-source", "blue"));
+        const blendRG = document.createElementNS(svgNS, "feBlend");
+        blendRG.setAttribute("in", "red");
+        blendRG.setAttribute("in2", "green");
+        blendRG.setAttribute("mode", "screen");
+        blendRG.setAttribute("result", "rg");
+        filter.append(blendRG);
+        const blendRGB = document.createElementNS(svgNS, "feBlend");
+        blendRGB.setAttribute("in", "rg");
+        blendRGB.setAttribute("in2", "blue");
+        blendRGB.setAttribute("mode", "screen");
+        filter.append(blendRGB);
+        defs.append(filter);
+        refract.dataset.filterId = id;
+        refract.style.filter = `url(#${id})`;
+      }
+
+      function syncRefractor(refract) {
+        const surface = refract.parentElement;
+        const stage = surface.closest(".sample");
+        if (!stage) return;
+        const stageRect = stage.getBoundingClientRect();
+        const surfaceRect = surface.getBoundingClientRect();
+        refract.style.backgroundImage = getComputedStyle(stage).backgroundImage;
+        refract.style.backgroundSize = `${stageRect.width}px ${stageRect.height}px`;
+        refract.style.backgroundPosition = `${stageRect.left - surfaceRect.left}px ${stageRect.top - surfaceRect.top}px`;
+      }
+
+      function syncSliderRefraction() {
+        const control = document.querySelector("#native-slider");
+        const lens = control?.querySelector(".slider-lens");
+        const refract = lens?.querySelector(".refract");
+        if (!control || !lens || !refract) return;
+        const value = Number(control.querySelector("input").value);
+        const controlRect = control.getBoundingClientRect();
+        const trackCopy = refract.querySelector(".slider-track-copy");
+        syncRefractor(refract);
+        if (!trackCopy) return;
+        const lensWidth = lens.getBoundingClientRect().width;
+        trackCopy.style.width = `${controlRect.width}px`;
+        trackCopy.style.background = `linear-gradient(90deg, #0a84ff 0 ${value}%, rgba(118, 118, 128, 0.22) ${value}% 100%)`;
+        trackCopy.style.transform = `translate3d(${lensWidth / 2 - (value / 100) * controlRect.width}px, -50%, 0)`;
+      }
+
+      function syncAllRefractors() {
+        document.querySelectorAll(".refract").forEach(syncRefractor);
+        syncSliderRefraction();
+      }
+
+      function installPressPhysics(button) {
+        const set = button.closest(".button-set");
+        const press = new Spring({
+          stiffness: 520,
+          damping: 28,
+          mass: 1,
+          onUpdate: (value) => {
+            button.style.setProperty("--press", clamp(value, 0, 1.08));
+            syncRefractor(button.querySelector(".refract"));
+          },
+        });
+        const updatePoint = (event) => {
+          const rect = button.getBoundingClientRect();
+          const x = clamp((event.clientX - rect.left) / rect.width, 0, 1);
+          const y = clamp((event.clientY - rect.top) / rect.height, 0, 1);
+          button.style.setProperty("--glow-x", `${x * 100}%`);
+          button.style.setProperty("--glow-y", `${y * 100}%`);
+          button.style.setProperty("--pointer-x", String((x - 0.5) * 2));
+          button.style.setProperty("--pointer-y", String((y - 0.5) * 2));
+        };
+        button.addEventListener("pointerdown", (event) => {
+          updatePoint(event);
+          button.setPointerCapture(event.pointerId);
+          button.dataset.pressed = "true";
+          if (set) set.dataset.energized = "true";
+          press.to(1);
+        });
+        button.addEventListener("pointermove", (event) => {
+          if (button.dataset.pressed === "true") updatePoint(event);
+        });
+        const release = () => {
+          button.dataset.pressed = "false";
+          if (set) set.dataset.energized = "false";
+          press.to(0);
+        };
+        button.addEventListener("pointerup", release);
+        button.addEventListener("pointercancel", release);
+        button.addEventListener("pointerleave", (event) => {
+          if (!button.hasPointerCapture?.(event.pointerId)) release();
+        });
+      }
+
+      document.querySelectorAll(".glass-button, .search-tab").forEach(installPressPhysics);
+
+      const switchControl = document.querySelector("#native-switch");
+      const switchLens = switchControl.querySelector(".switch-lens");
+      const switchTravel = 32;
+      let switchOn = false;
+      let switchDragging = false;
+      let switchMoved = false;
+      let switchStartX = 0;
+      let switchStartValue = 0;
+      let switchLastX = 0;
+      let switchLastTime = 0;
+      let switchHoldTimer = 0;
+      let switchPointer = null;
+      const switchDeformation = new Spring({
+        stiffness: 180,
+        damping: 14,
+        value: 0,
+        onUpdate: (value) => switchLens.style.setProperty("--deform", clamp(value, 0, 0.35)),
+      });
+
+      const switchPosition = new Spring({
+        value: 0,
+        stiffness: 122,
+        damping: 17,
+        mass: 0.85,
+        onUpdate: (value, velocity) => {
+          const bounded = clamp(value, -0.17, 1.17);
+          switchControl.style.setProperty("--switch-progress", clamp(bounded, 0, 1));
+          switchLens.style.setProperty("--switch-x", `${bounded * switchTravel}px`);
+          const target = Math.min(0.35, Math.pow(Math.abs(velocity), 0.75) * 0.035);
+          switchDeformation.to(target);
+          syncRefractor(switchLens.querySelector(".refract"));
+        },
+      });
+      const switchExpand = new Spring({
+        stiffness: 190,
+        damping: 18,
+        value: 0,
+        onUpdate: (value) => switchLens.style.setProperty("--expand", clamp(value, 0, 1)),
+      });
+
+      function setSwitch(on, instant = false) {
+        switchOn = on;
+        switchControl.setAttribute("aria-checked", String(on));
+        instant ? switchPosition.set(on ? 1 : 0) : switchPosition.to(on ? 1 : 0);
+      }
+
+      function rubber(value) {
+        if (value < 0) return -0.17 * (1 - Math.exp(value * 7));
+        if (value > 1) return 1 + 0.17 * (1 - Math.exp((1 - value) * 7));
+        return value;
+      }
+
+      switchControl.addEventListener("pointerdown", (event) => {
+        switchPointer = event.pointerId;
+        switchControl.setPointerCapture(event.pointerId);
+        switchStartX = switchLastX = event.clientX;
+        switchLastTime = event.timeStamp;
+        switchStartValue = switchPosition.value;
+        switchMoved = false;
+        switchDragging = true;
+        switchControl.dataset.dragging = "true";
+        switchHoldTimer = window.setTimeout(() => switchExpand.to(1), 200);
+      });
+
+      switchControl.addEventListener("pointermove", (event) => {
+        if (event.pointerId !== switchPointer) return;
+        const distance = event.clientX - switchStartX;
+        if (!switchMoved && Math.abs(distance) > 3) {
+          switchMoved = true;
+          window.clearTimeout(switchHoldTimer);
+          switchExpand.to(1);
+        }
+        if (!switchMoved) return;
+        const next = rubber(switchStartValue + distance / switchTravel);
+        const elapsed = Math.max(8, event.timeStamp - switchLastTime) / 1000;
+        switchPosition.value = next;
+        switchPosition.velocity = ((event.clientX - switchLastX) / switchTravel) / elapsed;
+        switchPosition.target = next;
+        switchPosition.onUpdate(next, switchPosition.velocity);
+        switchLastX = event.clientX;
+        switchLastTime = event.timeStamp;
+      });
+
+      function finishSwitch(event, cancelled = false) {
+        if (event.pointerId !== switchPointer) return;
+        window.clearTimeout(switchHoldTimer);
+        switchPointer = null;
+        switchDragging = false;
+        switchControl.dataset.dragging = "false";
+        switchExpand.to(0);
+        if (cancelled) return setSwitch(switchOn);
+        setSwitch(switchMoved ? switchPosition.value > 0.5 : !switchOn);
+      }
+
+      switchControl.addEventListener("pointerup", (event) => finishSwitch(event));
+      switchControl.addEventListener("pointercancel", (event) => finishSwitch(event, true));
+      switchControl.addEventListener("keydown", (event) => {
+        if (event.key === " " || event.key === "Enter") {
+          event.preventDefault();
+          setSwitch(!switchOn);
+          switchExpand.to(1);
+          window.setTimeout(() => switchExpand.to(0), 320);
+        }
+      });
+      setSwitch(false, true);
+
+      const slider = document.querySelector("#native-slider");
+      const sliderInput = slider.querySelector("input");
+      const sliderLens = slider.querySelector(".slider-lens");
+      const sliderOutput = slider.querySelector("output");
+      const sliderExpand = new Spring({
+        stiffness: 210,
+        damping: 20,
+        onUpdate: (value) => {
+          const expanded = clamp(value, 0, 1);
+          const width = 44 + (90 - 44) * expanded;
+          const height = 30 + (60 - 30) * expanded;
+          sliderLens.style.setProperty("--lens-w", `${width}px`);
+          sliderLens.style.setProperty("--lens-h", `${height}px`);
+          sliderLens.style.setProperty("--expand", expanded);
+          sliderLens.style.setProperty("--press", expanded);
+          syncSliderRefraction();
+        },
+      });
+      function updateSlider() {
+        const value = Number(sliderInput.value);
+        slider.style.setProperty("--value", value / 100);
+        sliderOutput.value = String(value);
+        sliderOutput.textContent = String(value);
+        requestAnimationFrame(syncSliderRefraction);
+      }
+      sliderInput.addEventListener("input", updateSlider);
+      let sliderPointer = null;
+      const setSliderFromPointer = (event) => {
+        const rect = slider.getBoundingClientRect();
+        const value = Math.round(clamp((event.clientX - rect.left) / rect.width, 0, 1) * 100);
+        sliderInput.value = String(value);
+        updateSlider();
+      };
+      sliderInput.addEventListener("pointerdown", (event) => {
+        sliderPointer = event.pointerId;
+        sliderInput.setPointerCapture(event.pointerId);
+        setSliderFromPointer(event);
+        sliderExpand.to(1);
+      });
+      sliderInput.addEventListener("pointermove", (event) => {
+        if (event.pointerId === sliderPointer) setSliderFromPointer(event);
+      });
+      sliderInput.addEventListener("pointerup", (event) => {
+        if (event.pointerId !== sliderPointer) return;
+        setSliderFromPointer(event);
+        sliderPointer = null;
+        sliderExpand.to(0);
+      });
+      sliderInput.addEventListener("pointercancel", () => {
+        sliderPointer = null;
+        sliderExpand.to(0);
+      });
+      sliderInput.addEventListener("blur", () => sliderExpand.to(0));
+      updateSlider();
+
+      function installSelectionControl(root, buttonSelector, lensSelector, stiffness, damping, deformationMode) {
+        const buttons = [...root.querySelectorAll(buttonSelector)];
+        const lens = root.querySelector(lensSelector);
+        let selected = 0;
+        let step = 0;
+        const deformation = new Spring({
+          stiffness: 66,
+          damping: 4.5,
+          mass: 1,
+          onUpdate: (value) => {
+            const deformationValue = clamp(value, 0, 0.3);
+            lens.style.setProperty("--deform", deformationValue);
+            lens.style.setProperty("--press", deformationValue / 0.3);
+            if (deformationMode === "segment") {
+              const baseWidth = step || (root.clientWidth - 8) / buttons.length;
+              const width = baseWidth * (1 - deformationValue * 0.3);
+              const height = 44 * (1 + deformationValue * 4);
+              lens.style.setProperty("--lens-w", `${width}px`);
+              lens.style.setProperty("--lens-h", `${height}px`);
+              lens.style.setProperty("--lens-shift", `${(baseWidth - width) / 2}px`);
+            }
+            syncRefractor(lens.querySelector(".refract"));
+          },
+        });
+        const travel = new Spring({
+          stiffness,
+          damping,
+          mass: 1,
+          onUpdate: (value, velocity) => {
+            lens.style.setProperty("--selection-x", `${value}px`);
+            const normalizedVelocity = step ? velocity / step : 0;
+            const deformTarget = Math.min(0.3, Math.sqrt(Math.abs(normalizedVelocity)) * 0.134);
+            deformation.to(deformTarget);
+            syncRefractor(lens.querySelector(".refract"));
+          },
+        });
+
+        function measure(instant = false) {
+          step = (root.clientWidth - (root === document.querySelector("#tabbar") ? 12 : 8)) / buttons.length;
+          if (deformationMode === "segment") {
+            lens.style.setProperty("--lens-w", `${step}px`);
+            lens.style.setProperty("--lens-h", "44px");
+            lens.style.setProperty("--lens-shift", "0px");
+          }
+          const target = selected * step;
+          instant ? travel.set(target) : travel.to(target);
+        }
+
+        buttons.forEach((button, index) => {
+          button.addEventListener("click", () => {
+            if (selected === index) return;
+            selected = index;
+            buttons.forEach((item, itemIndex) => item.setAttribute("aria-selected", String(itemIndex === selected)));
+            measure();
+          });
+        });
+        measure(true);
+        return { measure };
+      }
+
+      const segmentedMotion = installSelectionControl(
+        document.querySelector("#segmented"),
+        ".segment-button",
+        ".selection-lens",
+        50,
+        13,
+        "segment",
+      );
+      const tabMotion = installSelectionControl(
+        document.querySelector("#tabbar"),
+        ".tab-button",
+        ".tab-lens",
+        72,
+        14,
+        "tab",
+      );
+
+      function rebuild() {
+        document.querySelectorAll(".refract").forEach(applyFilter);
+        syncAllRefractors();
+        segmentedMotion.measure(true);
+        tabMotion.measure(true);
+      }
+
+      let resizeFrame = 0;
+      addEventListener("resize", () => {
+        cancelAnimationFrame(resizeFrame);
+        resizeFrame = requestAnimationFrame(rebuild);
+      });
+      addEventListener("scroll", () => requestAnimationFrame(syncAllRefractors), { passive: true });
+      requestAnimationFrame(rebuild);
+    </script>
+  </body>
+</html>

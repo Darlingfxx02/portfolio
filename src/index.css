@@ -221,6 +221,83 @@ h3 {
   font-family: var(--font-sf);
 }
 
+.case-narrative-page:is(
+    .zinda-formation-page,
+    .zinda-system-page,
+    .zinda-mobile-page
+  ) {
+  --case-wide: 980px;
+}
+
+.case-narrative-page:is(
+    .zinda-formation-page,
+    .zinda-system-page,
+    .zinda-mobile-page
+  )
+  .case-narrative-main {
+  width: min(calc(100% - 64px), 980px);
+  max-width: 980px;
+}
+
+.case-narrative-page:is(
+    .zinda-formation-page,
+    .zinda-system-page,
+    .zinda-mobile-page
+  )
+  .case-narrative-intro__title {
+  max-width: 900px;
+  font-size: clamp(34px, 5vw, 56px);
+  font-weight: 560;
+  letter-spacing: -0.05em;
+  line-height: 0.98;
+  text-wrap: balance;
+}
+
+.case-narrative-page:is(
+    .zinda-formation-page,
+    .zinda-system-page,
+    .zinda-mobile-page
+  )
+  .case-narrative-hero {
+  margin-top: 64px;
+}
+
+.case-narrative-page:is(
+    .zinda-formation-page,
+    .zinda-system-page,
+    .zinda-mobile-page
+  )
+  :is(.case-narrative-hero img, .case-narrative-media img) {
+  border-radius: 18px;
+}
+
+.case-narrative-page:is(
+    .zinda-formation-page,
+    .zinda-system-page,
+    .zinda-mobile-page
+  )
+  .case-narrative-section {
+  margin-top: 64px;
+}
+
+.case-narrative-page:is(
+    .zinda-formation-page,
+    .zinda-system-page,
+    .zinda-mobile-page
+  )
+  .case-narrative-context {
+  margin-top: 48px;
+}
+
+.case-narrative-page:is(
+    .zinda-formation-page,
+    .zinda-system-page,
+    .zinda-mobile-page
+  )
+  .case-narrative-media {
+  width: min(calc(100vw - 64px), 980px);
+}
+
 .case-narrative-topbar {
   display: flex;
   width: min(calc(100% - 48px), 1120px);
@@ -329,6 +406,24 @@ h3 {
   background: var(--c-surface);
 }
 
+.case-narrative-focus-crop {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  border-radius: 18px;
+  background: var(--c-surface);
+}
+
+.case-narrative-focus-crop img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.case-narrative-focus-crop--system img {
+  object-position: 50% 25%;
+}
+
 .case-narrative-hero--phones {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -353,6 +448,74 @@ h3 {
   height: 437px;
   object-fit: contain;
   padding: 16px;
+}
+
+.case-narrative-hero--comparison {
+  grid-template-columns: minmax(0, 1.55fr) minmax(220px, 0.45fr);
+}
+
+.case-narrative-hero--comparison img:first-child {
+  object-fit: cover;
+  object-position: center;
+}
+
+.case-narrative-media--phone {
+  display: flex;
+  justify-content: center;
+}
+
+.case-narrative-media--phone figure {
+  width: min(100%, 390px);
+}
+
+.case-narrative-media--phone img {
+  background: transparent;
+}
+
+.case-narrative-media--compact {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.case-narrative-media--compact figure {
+  position: relative;
+  height: 280px;
+  overflow: hidden;
+  border-radius: 18px;
+  background: var(--c-surface);
+}
+
+.case-narrative-media--compact img {
+  width: 100%;
+  height: 100%;
+  padding: 12px;
+  object-fit: contain;
+}
+
+.zinda-mobile-page .case-narrative-media--mobile-showcase figure {
+  height: 520px;
+}
+
+.zinda-mobile-page .case-narrative-media--mobile-comparison {
+  grid-template-columns: minmax(0, 1.4fr) minmax(220px, 0.6fr);
+}
+
+.case-narrative-media figcaption {
+  position: absolute;
+  right: 12px;
+  bottom: 12px;
+  left: 12px;
+  width: fit-content;
+  max-width: calc(100% - 24px);
+  padding: 7px 10px;
+  border: 1px solid color-mix(in srgb, var(--c-text) 12%, transparent);
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--c-bg) 88%, transparent);
+  color: var(--c-text);
+  font-size: 11px;
+  line-height: 1.2;
+  backdrop-filter: blur(12px);
 }
 
 .case-narrative-section {
@@ -1423,6 +1586,16 @@ h3 {
     font-size: 20px;
   }
 
+  .case-narrative-page:is(
+      .zinda-formation-page,
+      .zinda-system-page,
+      .zinda-mobile-page
+    )
+    .case-narrative-intro__title {
+    font-size: clamp(30px, 10vw, 44px);
+    line-height: 1;
+  }
+
   .case-narrative-intro__body,
   .case-narrative-section__body {
     font-size: 16px;
@@ -1453,9 +1626,34 @@ h3 {
     padding: 8px;
   }
 
+  .case-narrative-hero--comparison {
+    grid-template-columns: minmax(0, 1.4fr) minmax(88px, 0.6fr);
+  }
+
   .case-narrative-media--split img {
     height: 240px;
     padding: 8px;
+  }
+
+  .case-narrative-media--compact {
+    gap: 6px;
+  }
+
+  .case-narrative-media--compact figure {
+    height: 180px;
+    border-radius: 12px;
+  }
+
+  .case-narrative-media--compact img {
+    padding: 6px;
+  }
+
+  .zinda-mobile-page .case-narrative-media--mobile-showcase figure {
+    height: 340px;
+  }
+
+  .zinda-mobile-page .case-narrative-media--mobile-comparison {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
   .case-narrative-section {

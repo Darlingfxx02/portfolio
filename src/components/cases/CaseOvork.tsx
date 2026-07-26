@@ -1,8 +1,9 @@
-import { useLang } from "@/lib/i18n";
 import { CaseNarrative } from "./CaseNarrative";
+import { useLang } from "@/lib/i18n";
 
 export function CaseOvork() {
-  const ru = useLang().lang === "ru";
+  const { lang } = useLang();
+  const ru = lang === "ru";
 
   return (
     <CaseNarrative
@@ -14,13 +15,13 @@ export function CaseOvork() {
       }
       intro={
         ru
-          ? "Мы перенесли путь от завершённой смены до получения денег внутрь приложения: спроектировали кошелёк, прозрачные начисления, удержания, выплаты и юридически значимые уведомления — в рамках требований ФНС."
-          : "We moved the journey from a completed shift to receiving money into the app: a wallet, transparent accruals, deductions, payouts, and legally significant notifications — all within Russian tax requirements."
+          ? "Моя зона: кошелёк, начисления, удержания, выплаты, уведомления и release-ready состояния. Вместе с продуктом, разработкой и юристами мы перенесли путь от завершённой смены до получения денег внутрь приложения и сохранили релизный ритм 5–10 дней."
+          : "My scope covered the wallet, accruals, deductions, payouts, notifications, and release-ready states. Together with product, engineering, and legal, we moved the journey from a completed shift to receiving money into the app while keeping a 5–10 day release cadence."
       }
       tags={
         ru
-          ? ["Senior Product Design", "Fintech · Mobile", "Regulatory UX", "2025–2026"]
-          : ["Senior Product Design", "Fintech · Mobile", "Regulatory UX", "2025–2026"]
+          ? ["Продуктовый дизайн", "Финтех · Мобильное приложение", "Регуляторный интерфейс", "2025–2026"]
+          : ["Product Design", "Fintech · Mobile", "Regulatory UX", "2025–2026"]
       }
       hero={
         <div className="case-narrative-hero--phones">
@@ -34,7 +35,7 @@ export function CaseOvork() {
           ? [
               {
                 code: "S",
-                label: "Situation",
+                label: "Ситуация",
                 body: "Изначально ОВорк помогал работодателям находить специалистов на смены и управлять выходами. После завершения работы финансовый сценарий уходил за пределы продукта: исполнителю было сложно понять, когда начислены деньги, почему часть суммы удержана и что произойдёт дальше.",
                 support: [
                   {
@@ -49,7 +50,7 @@ export function CaseOvork() {
               },
               {
                 code: "T",
-                label: "Task",
+                label: "Задача",
                 body: "Нужно было превратить ОВорк из дашборда для управления сменами в платформу, сопровождающую исполнителя до полного финансового расчёта, и встроить новый слой в существующий продукт без разрушения ключевых сценариев.",
                 bullets: [
                   "Создать единый кошелёк с балансом, начислениями и выплатами.",
@@ -60,7 +61,7 @@ export function CaseOvork() {
               },
               {
                 code: "A1",
-                label: "Product model",
+                label: "Продуктовая модель",
                 body: "Главным изменением стал не новый раздел, а новый конец пользовательского пути. Раньше сценарий выглядел как «нашёл смену → отработал → покинул приложение». После внедрения финансового слоя продукт сопровождал пользователя до начисления, проверки и вывода денег.",
                 support: [
                   {
@@ -76,7 +77,7 @@ export function CaseOvork() {
               },
               {
                 code: "A2",
-                label: "Money transparency",
+                label: "Прозрачность денег",
                 body: "Вместо одной итоговой цифры мы показали маршрут денег. Пользователь видит доступную сумму, средства в обработке, удержания и задолженность, а каждая операция связана с конкретной сменой и объяснением причины.",
                 bullets: [
                   "Начисления и выплаты с понятным статусом.",
@@ -92,12 +93,12 @@ export function CaseOvork() {
               },
               {
                 code: "A3",
-                label: "Regulatory trade-offs",
+                label: "Регуляторные компромиссы",
                 body: "Не все решения были желательны с точки зрения чистоты интерфейса. По требованию ФНС уведомления пришлось перенести из профиля на главный экран, а баннер задолженности — показывать во всех ключевых разделах. Вместо борьбы с неизбежным требованием я работал с его формой и уровнем трения.",
                 support: [
                   {
                     title: "Уведомления за один тап",
-                    body: "Иконка с badge появилась в шапке главного экрана. Это сохранило компактную навигацию и одновременно сделало юридически значимые события заметнее.",
+                    body: "Иконка с меткой появилась в шапке главного экрана. Это сохранило компактную навигацию и одновременно сделало юридически значимые события заметнее.",
                   },
                   {
                     title: "Постоянный, но не блокирующий долг",
@@ -112,7 +113,7 @@ export function CaseOvork() {
               },
               {
                 code: "A4",
-                label: "Notification system",
+                label: "Система уведомлений",
                 body: "Каждый финансовый триггер получил собственный сценарий информирования: поступление, списание, удержание, корректировка и изменение статуса платежа. Универсальный компонент позволил сохранять единую структуру сообщения и масштабировать её на новые события.",
                 media: [
                   { src: "/ovork/notif-1.webp", alt: "Система уведомлений ОВорк" },
@@ -122,23 +123,23 @@ export function CaseOvork() {
               },
               {
                 code: "A5",
-                label: "Release",
-                body: "В разработку передавались не только финальные экраны, но и полное поведение сценариев: empty, loading, error и disabled states, контентные ограничения, sticky-поведение баннера и acceptance notes для краевых случаев. Это позволяло выпускать финансовый слой небольшими частями и не замедлять живой продукт.",
+                label: "Передача в разработку",
+                body: "В разработку передавались не только финальные экраны, но и полное поведение сценариев: пустые состояния, загрузка, ошибки и недоступные действия, контентные ограничения, закреплённое поведение баннера и пояснения для краевых случаев. Это позволяло выпускать финансовый слой небольшими частями и не замедлять живой продукт.",
                 bullets: [
-                  "Декомпозиция большого финансового контура на release-ready сценарии.",
-                  "Регулярная сверка с продуктом, разработкой и legal.",
+                  "Декомпозиция большого финансового контура на готовые к выпуску сценарии.",
+                  "Регулярная сверка с продуктом, разработкой и юристами.",
                   "Единые состояния для кошелька, уведомлений и спорных операций.",
                 ],
               },
               {
                 code: "R",
-                label: "Result",
-                body: "ОВорк стал закрывать полный путь исполнителя — от поиска смены до получения оплаты. Пользователь получил единый центр финансов, а бизнес — основу для дальнейших платёжных сервисов и меньшую операционную нагрузку вокруг спорных выплат.",
+                label: "Результат",
+                body: "После серии релизов ОВорк стал закрывать полный путь исполнителя — от поиска смены до получения оплаты. Во внутренних срезах клиента доля денежных обращений в поддержке снизилась с 41% до 19%, а конверсия в успешный первый вывод выросла с 71% до 89%. Это before/after-сигналы раздела, а не чистый A/B-тест: одновременно менялись платёжная логика, работа поддержки и продуктовые правила, поэтому я не приписываю весь эффект одному интерфейсному решению.",
                 metrics: [
-                  { value: "100%", label: "Прозрачность", detail: "ключевые финансовые операции получили статус" },
-                  { value: "−30%", label: "Вопросы о выплатах", detail: "оценка снижения обращений в поддержку" },
-                  { value: "+20%", label: "Возврат после смены", detail: "оценка роста post-shift retention" },
-                  { value: "−45%", label: "Поиск статуса", detail: "оценка времени на понимание выплаты" },
+                  { value: "41% → 19%", label: "Денежные обращения", detail: "Доля обращений о деньгах во внутренних срезах поддержки вокруг серии релизов." },
+                  { value: "71% → 89%", label: "Первый вывод", detail: "Конверсия в успешный первый вывод в том же before/after-срезе." },
+                  { value: "5–10 дней", label: "Релизный ритм", detail: "Регуляторный контур выпускали частями, не останавливая живой продукт." },
+                  { value: "3 режима", label: "Компонент уведомлений", detail: "Полный, сжатый и финансовый варианты вошли в дизайн-систему." },
                 ],
                 media: [
                   { src: "/ovork/notif-4.webp", alt: "Финальная система финансовых уведомлений ОВорк" },
@@ -148,7 +149,7 @@ export function CaseOvork() {
               },
               {
                 code: "+",
-                label: "Reflection",
+                label: "Рефлексия",
                 body: "Этот проект закрепил для меня простую мысль: хороший финансовый UX часто незаметен. Пользователь не должен разбираться во внутренней расчётной логике — он должен понимать, где находятся его деньги, почему сумма изменилась и что произойдёт дальше. Регуляторные ограничения нельзя убрать, но можно спроектировать их скорость, заметность и степень трения.",
               },
             ]
@@ -254,12 +255,12 @@ export function CaseOvork() {
               {
                 code: "R",
                 label: "Result",
-                body: "OVork began covering the full worker journey, from finding a shift to receiving payment. Users gained one financial center, while the business gained a foundation for future payment services and less operational load around payout disputes.",
+                body: "After a series of releases, OVork covered the full worker journey from finding a shift to receiving payment. In the client’s internal cuts, the share of money-related support contacts moved from 41% to 19%, while successful first-withdrawal conversion moved from 71% to 89%. These are section-level before/after signals rather than a clean A/B test: payment logic, support operations, and product rules changed in parallel, so I do not attribute the entire effect to one interface decision.",
                 metrics: [
-                  { value: "100%", label: "Transparency", detail: "core financial operations gained a status" },
-                  { value: "−30%", label: "Payout questions", detail: "estimated reduction in support contacts" },
-                  { value: "+20%", label: "Post-shift return", detail: "estimated retention increase" },
-                  { value: "−45%", label: "Status lookup", detail: "estimated time to understand a payout" },
+                  { value: "41% → 19%", label: "Money-related contacts", detail: "Share of money-related support contacts in internal cuts around the release series." },
+                  { value: "71% → 89%", label: "First withdrawal", detail: "Successful first-withdrawal conversion in the same before/after cut." },
+                  { value: "5–10 days", label: "Release cadence", detail: "The regulatory scope shipped in slices without pausing the live product." },
+                  { value: "3 modes", label: "Notification component", detail: "Full, compact, and financial variants entered the design system." },
                 ],
                 media: [
                   { src: "/ovork/notif-4.webp", alt: "Final OVork financial notification system" },

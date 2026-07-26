@@ -16,7 +16,7 @@ export function DockBar({
 }) {
   const { lang } = useLang()
 
-  // The CTA morphs between "Work with me" and "Contact". Keep it a single
+  // The CTA morphs between "Написать мне" and "Контакты". Keep it a single
   // persistent element and animate its width to the active label so the
   // change is smooth instead of a hard swap.
   const workRef = useRef<HTMLSpanElement>(null)
@@ -66,7 +66,7 @@ export function DockBar({
           type="button"
           style={ctaW ? { width: ctaW } : undefined}
           onClick={onCta}
-          aria-label={onContact ? 'Contact' : 'Work with me'}
+          aria-label={onContact ? 'Контакты' : 'Написать мне'}
           aria-controls={onContact ? 'panel-about' : undefined}
         >
           <span
@@ -75,7 +75,7 @@ export function DockBar({
             data-show={!onContact}
             aria-hidden={Boolean(onContact)}
           >
-            Work with me
+            Написать мне
           </span>
           <span
             ref={contactRef}
@@ -83,7 +83,7 @@ export function DockBar({
             data-show={Boolean(onContact)}
             aria-hidden={!onContact}
           >
-            Contact
+            Контакты
           </span>
         </button>
       </div>

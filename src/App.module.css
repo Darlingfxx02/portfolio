@@ -3,20 +3,76 @@
   display: flex;
   flex-direction: column;
   width: 100%;
+  min-height: 100svh;
+  padding-top: 72px;
   background: var(--bg);
 }
 
-.introStack {
+.homeScreen {
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 48px;
   width: 100%;
-  padding: 0 var(--pad) 48px;
+  min-height: calc(100svh - 72px);
+  padding: 0 var(--pad) 120px;
+  animation: screenIn 110ms ease-out both;
+}
+
+.homeScreen > * {
+  animation: homeBlockIn 260ms var(--ease) both;
+}
+
+.homeScreen > :nth-child(1) {
+  animation-delay: 35ms;
+}
+
+.homeScreen > :nth-child(2) {
+  animation-delay: 85ms;
+}
+
+.homeScreen > :nth-child(3) {
+  animation-delay: 135ms;
+}
+
+@keyframes screenIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes homeBlockIn {
+  from {
+    opacity: 0;
+    filter: blur(8px);
+    transform: translateY(16px) scale(0.995);
+  }
+  to {
+    opacity: 1;
+    filter: none;
+    transform: translateY(0) scale(1);
+  }
 }
 
 @media (max-width: 720px) {
-  .introStack {
-    padding-bottom: 48px;
+  .page {
+    padding-top: 64px;
+  }
+
+  .homeScreen {
+    min-height: calc(100svh - 64px);
+    padding-bottom: 96px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .homeScreen,
+  .homeScreen > * {
+    animation: none;
   }
 }

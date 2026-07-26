@@ -4,77 +4,20 @@
   width: 100%;
 }
 
-.navWrap {
-  width: 100%;
-  padding: 0 var(--pad);
-}
-
-.nav {
-  display: flex;
-  align-items: center;
-  gap: 24px;
-  width: 100%;
-  max-width: 640px;
-  margin: 0 auto;
-  overflow-x: auto;
-  scrollbar-width: none;
-}
-
-.nav::-webkit-scrollbar {
-  display: none;
-}
-
-.tab {
-  position: relative;
-  flex: none;
-  padding: 0 0 4px;
-  color: var(--text-dim);
-  font-family: var(--font-sf);
-  font-size: 15px;
-  font-weight: var(--wt-regular);
-  line-height: 1.5;
-  letter-spacing: 0;
-  transition: color 180ms ease;
-}
-
-.tab::after {
-  position: absolute;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  height: 2px;
-  background: var(--text);
-  content: '';
-  opacity: 0;
-  transform: scaleX(0.45);
-  transform-origin: 0 50%;
-  transition:
-    opacity 180ms ease,
-    transform 260ms var(--ease);
-}
-
-.tab:hover {
-  color: var(--text-mid);
-}
-
-.tab[data-active] {
-  color: var(--text);
-}
-
-.tab[data-active]::after {
-  opacity: 1;
-  transform: scaleX(1);
-}
-
 .panel {
   position: relative;
   width: 100%;
   /* Keep enough document height for every tab so swapping a short panel in
      cannot make the browser clamp scrollY and visibly move the page. */
-  min-height: 100svh;
-  padding-top: 40px;
-  animation: panelIn 360ms var(--ease) both;
+  min-height: calc(100svh - 72px);
+  padding-top: 56px;
+  animation: panelIn 110ms ease-out both;
   outline: none;
+}
+
+.revealBlock {
+  animation: revealBlockIn 250ms var(--ease) both;
+  animation-delay: calc(35ms + var(--reveal-index, 0) * 45ms);
 }
 
 .workGroup {
@@ -128,6 +71,11 @@
   object-fit: contain;
 }
 
+.jobLogo[data-brand] {
+  padding: 0;
+  background: transparent;
+}
+
 .jobCompany p {
   grid-column: 2;
   grid-row: 1;
@@ -151,12 +99,37 @@
 }
 
 .jobProjects {
+  --rail-y: 0px;
   display: flex;
   flex-direction: column;
   gap: 8px;
-  margin-left: 44px;
-  padding-left: 16px;
+  position: relative;
+  margin-left: 16px;
+  padding-left: 28px;
   border-left: 1px solid var(--line);
+}
+
+.jobProjects::before {
+  position: absolute;
+  z-index: 2;
+  top: var(--rail-y);
+  left: -2px;
+  width: 3px;
+  height: 28px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.88);
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.26);
+  content: '';
+  pointer-events: none;
+  opacity: 0;
+  transform: translateY(-50%);
+  transition:
+    top 220ms var(--ease),
+    opacity 120ms ease;
+}
+
+.jobProjects[data-rail-active]::before {
+  opacity: 1;
 }
 
 .workItem {
@@ -164,7 +137,7 @@
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: 4px;
+  gap: 0;
   width: 100%;
   padding: 8px 0;
   color: var(--text);
@@ -189,14 +162,12 @@
 .workTitle {
   display: inline;
   min-width: 0;
-  border-bottom: 2px solid var(--line);
   font-family: var(--font-sf);
   font-size: 15px;
   font-weight: var(--wt-regular);
   line-height: 1.5;
   letter-spacing: 0;
   text-wrap: balance;
-  transition: border-color 180ms ease;
 }
 
 .hoverChip {
@@ -228,11 +199,6 @@
 .workItem[data-chip-visible] .hoverChip {
   opacity: 1;
   transform: translate(12px, -50%) scale(1);
-}
-
-a.workItem:hover .workTitle,
-a.workItem:focus-visible .workTitle {
-  border-color: var(--text);
 }
 
 .workMeta {
@@ -296,7 +262,7 @@ a.workItem:focus-visible .workTitle {
 @keyframes panelIn {
   from {
     opacity: 0;
-    transform: translateY(8px);
+    transform: translateY(4px);
   }
   to {
     opacity: 1;
@@ -304,9 +270,23 @@ a.workItem:focus-visible .workTitle {
   }
 }
 
+@keyframes revealBlockIn {
+  from {
+    opacity: 0;
+    filter: blur(8px);
+    transform: translateY(14px) scale(0.995);
+  }
+  to {
+    opacity: 1;
+    filter: none;
+    transform: translateY(0) scale(1);
+  }
+}
+
 @media (max-width: 720px) {
   .panel {
-    padding-top: 40px;
+    min-height: calc(100svh - 64px);
+    padding-top: 48px;
   }
 
   .workGroup {
@@ -323,7 +303,7 @@ a.workItem:focus-visible .workTitle {
 
   .jobProjects {
     margin-left: 16px;
-    padding-left: 16px;
+    padding-left: 28px;
   }
 
   .about {
@@ -332,7 +312,8 @@ a.workItem:focus-visible .workTitle {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .panel {
+  .panel,
+  .revealBlock {
     animation: none;
   }
 }

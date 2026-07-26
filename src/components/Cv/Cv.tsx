@@ -58,6 +58,14 @@ export function Cv() {
     .filter((item): item is ExperienceItem => Boolean(item))
 
   useEffect(() => {
+    const previousTitle = document.title
+    document.title = cv.filename
+    return () => {
+      document.title = previousTitle
+    }
+  }, [])
+
+  useEffect(() => {
     const onAfter = () => {
       if (prevTitle.current) document.title = prevTitle.current
     }

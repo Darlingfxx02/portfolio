@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState, type CSSProperties, type ReactNode } from "react";
 import { useLang } from "@/lib/i18n";
-import { profile } from "@/data/profile";
 
 export type NarrativeSupport = {
   title: string;
@@ -20,7 +19,7 @@ export type NarrativeSection = {
   bullets?: string[];
   support?: NarrativeSupport[];
   metrics?: NarrativeMetric[];
-  media?: Array<{ src: string; alt: string }>;
+  media?: Array<{ src: string; alt: string; caption?: string }>;
   mediaClassName?: string;
 };
 
@@ -41,7 +40,8 @@ export function CaseNarrative({
   sections: NarrativeSection[];
   nextCase?: { href: string; label: string };
 }) {
-  const ru = useLang().lang === "ru";
+  const { lang } = useLang();
+  const ru = lang === "ru";
   const nextCaseProgress = useCaseAdvance(nextCase?.href);
 
   return (
@@ -49,25 +49,15 @@ export function CaseNarrative({
       <main className="case-narrative-main">
         <section className="case-narrative-intro">
           <h1 className="case-narrative-intro__title">{title}</h1>
-          <p className="case-narrative-intro__body">
-            If you’d like to learn more, please{" "}
-            <a href={profile.telegram} target="_blank" rel="noreferrer">
-              get in touch.
-            </a>
-          </p>
-        </section>
-
-        <div className="case-narrative-hero">{hero}</div>
-
-        <section className="case-narrative-section case-narrative-context">
-          <h2>{ru ? "Контекст" : "Context"}</h2>
-          <p className="case-narrative-section__body">{intro}</p>
+          <p className="case-narrative-intro__body">{intro}</p>
           <ul className="case-narrative-tags" aria-label={ru ? "Теги кейса" : "Case tags"}>
             {tags.map((tag) => (
               <li key={tag}>{tag}</li>
             ))}
           </ul>
         </section>
+
+        <div className="case-narrative-hero">{hero}</div>
 
         {sections.map((section) => (
           <NarrativeSectionView key={`${section.code}-${section.label}`} section={section} />
@@ -289,6 +279,7 @@ function NarrativeSectionView({ section }: { section: NarrativeSection }) {
           {section.media.map((media) => (
             <figure key={media.src}>
               <img src={media.src} alt={media.alt} loading="lazy" />
+              {media.caption && <figcaption>{media.caption}</figcaption>}
             </figure>
           ))}
         </div>

@@ -27,10 +27,13 @@ export const experience: ExperienceItem[] = [
     kind: 'employment',
     period: { start: '2025', ongoing: true },
     category: { ru: 'Продуктовый дизайнер · AI', en: 'Product designer · AI' },
-    lead: { ru: 'Веду дизайн двух AI-продуктов.', en: 'Leading design on two AI products.' },
+    lead: {
+      ru: 'Веду два AI-продукта от бизнес-задачи до релиза.',
+      en: 'Leading two AI products from business problem to release.',
+    },
     text: {
-      ru: ' Relevanter (подбор персонала) и НейроКлюч (Корпоративный доступ к зарубежным нейросетям без потери ПНД) — от сценариев до передачи в разработку.',
-      en: ' Relevanter (recruiting) and NeuroKey (corporate access to international AI models without compromising personal data) — from flows to developer handoff.',
+      ru: ' Relevanter для подбора персонала и НейроКлюч для корпоративного доступа к зарубежным AI-моделям без передачи персональных данных: прототипы на коде, полное покрытие состояний, handoff и итерации после запуска.',
+      en: ' Relevanter for recruiting and NeuroKey for enterprise access to international AI models without sharing personal data: code prototypes, full state coverage, handoff, and post-launch iteration.',
     },
   },
   {
@@ -58,8 +61,8 @@ export const experience: ExperienceItem[] = [
     category: { ru: 'Product Designer · mobile fintech', en: 'Product designer · mobile fintech' },
     lead: { ru: 'Студийный проект для живого финтех-продукта.', en: 'A studio-side project for a live fintech product.' },
     text: {
-      ru: ' Дорабатывал раздел кошелька под требования ФНС, выплаты и уведомления, с релизами каждые 5–10 дней.',
-      en: ' Updated the wallet section around tax-authority requirements, payouts, and notifications, with releases every 5–10 days.',
+      ru: ' Дорабатывал раздел кошелька под требования ФНС, выплаты и уведомления, с релизами каждые 5-10 дней.',
+      en: ' Updated the wallet section around tax-authority requirements, payouts, and notifications, with releases every 5-10 days.',
     },
   },
   {
@@ -73,10 +76,13 @@ export const experience: ExperienceItem[] = [
       duration: { ru: '4 месяца', en: '4 months' },
     },
     category: { ru: 'Продуктовый дизайнер · финтех', en: 'Product designer · fintech' },
-    lead: { ru: 'Финтех-банк для бизнеса.', en: 'A fintech bank for businesses.' },
+    lead: {
+      ru: 'Помог вывести B2B-банк из цикла отклонённых концепций.',
+      en: 'Helped move a B2B bank beyond a cycle of rejected concepts.',
+    },
     text: {
-      ru: ' Вёл концептное направление и ключевые UX-решения: multi-account архитектура, MVP-скоуп и handoff в разработку.',
-      en: ' Led the concept direction and key UX decisions: multi-account architecture, MVP scope, and engineering handoff.',
+      ru: ' Сформировал multi-account архитектуру четырёх ключевых зон, вынес кредитные продукты в post-MVP и довёл направление до handoff за 4 месяца; банк позже вышел.',
+      en: ' Defined a multi-account architecture across four core areas, moved lending to post-MVP, and took the direction to handoff in 4 months; the bank later shipped.',
     },
   },
   {
@@ -92,8 +98,8 @@ export const experience: ExperienceItem[] = [
     category: { ru: 'Продуктовый дизайнер · контракт', en: 'Product designer · contract' },
     lead: { ru: 'End-to-end дизайн AI-агрегатора с нуля.', en: 'End-to-end design of an AI aggregator from scratch.' },
     text: {
-      ru: ' ChatGPT, Claude, Gemini и Grok в одной подписке без VPN — переключение моделей в один клик и онбординг под неподготовленную аудиторию.',
-      en: ' ChatGPT, Claude, Gemini and Grok in one subscription with no VPN — one-click model switching and onboarding built for a non-technical audience.',
+      ru: ' ChatGPT, Claude, Gemini и Grok в одной подписке без VPN: переключение моделей в один клик и онбординг под неподготовленную аудиторию.',
+      en: ' ChatGPT, Claude, Gemini and Grok in one subscription with no VPN: one-click model switching and onboarding built for a non-technical audience.',
     },
   },
 ]
