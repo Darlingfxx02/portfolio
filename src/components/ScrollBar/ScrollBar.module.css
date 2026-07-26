@@ -25,3 +25,11 @@
   background: var(--text-mid);
   cursor: grabbing;
 }
+
+/* Mobile browsers already own the scroll gesture. The draggable desktop pill
+   can intercept edge swipes and its capped height misrepresents short pages. */
+@media (max-width: 720px), (hover: none) and (pointer: coarse) {
+  .thumb {
+    display: none;
+  }
+}

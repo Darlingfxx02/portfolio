@@ -244,8 +244,14 @@
     opacity 0.2s var(--ease);
 }
 
-.cta:hover {
-  opacity: 0.9;
+.cta:active {
+  opacity: 0.82;
+}
+
+@media (hover: hover) and (pointer: fine) and (min-width: 721px) {
+  .cta:hover {
+    opacity: 0.9;
+  }
 }
 
 /* Both labels stacked dead-centre; the inactive one fades + scales out. */

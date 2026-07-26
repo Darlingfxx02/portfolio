@@ -35,6 +35,7 @@ const CASES: Record<string, ComponentType> = {
 }
 
 const SECTION_ORDER: PortfolioTab[] = ['home', 'explorations', 'work', 'about']
+const TOUCH_SECTION_DISTANCE = 96
 type SectionScrollDirection = 'forward' | 'backward'
 type SectionArrival = 'top' | 'bottom' | 'saved'
 
@@ -275,7 +276,7 @@ function useCyclicSectionScroll({
     let gestureStartedAt = 0
     let idleTimer: number | null = null
     let touchStartY: number | null = null
-    let touchStartedAt = 0
+    let touchStartEdge: 'top' | 'bottom' | 'both' | null = null
     let gestureDirection: SectionScrollDirection | null = null
 
     const atBottom = () =>
@@ -296,7 +297,7 @@ function useCyclicSectionScroll({
       lastWheelAt = 0
       gestureStartedAt = 0
       touchStartY = null
-      touchStartedAt = 0
+      touchStartEdge = null
       gestureDirection = null
       setProgress(0)
     }
@@ -370,12 +371,20 @@ function useCyclicSectionScroll({
     }
 
     const onTouchStart = (event: TouchEvent) => {
-      if ((!atBottom() && !atTop()) || lockedRef.current) {
+      const startsAtTop = atTop()
+      const startsAtBottom = atBottom()
+      if ((!startsAtBottom && !startsAtTop) || lockedRef.current) {
         touchStartY = null
+        touchStartEdge = null
         return
       }
       touchStartY = event.touches[0]?.clientY ?? null
-      touchStartedAt = performance.now()
+      touchStartEdge =
+        startsAtTop && startsAtBottom
+          ? 'both'
+          : startsAtTop
+            ? 'top'
+            : 'bottom'
     }
 
     const onTouchMove = (event: TouchEvent) => {
@@ -389,24 +398,41 @@ function useCyclicSectionScroll({
       if (currentY === undefined) return
 
       const distance = touchStartY - currentY
+      if (Math.abs(distance) < 8) return
+
+      // A native page scroll and an inter-page swipe must never share the same
+      // touch. Only arm navigation when the gesture started on the matching
+      // edge and its first meaningful movement points out of that edge.
+      const startedForForward =
+        touchStartEdge === 'bottom' || touchStartEdge === 'both'
+      const startedForBackward =
+        touchStartEdge === 'top' || touchStartEdge === 'both'
       const nextDirection =
-        distance > 0 && atBottom()
+        distance > 0 && startedForForward && atBottom()
           ? 'forward'
-          : distance < 0 && atTop()
+          : distance < 0 && startedForBackward && atTop()
             ? 'backward'
             : null
-      if (!nextDirection) return
+      if (!nextDirection) {
+        touchStartY = null
+        touchStartEdge = null
+        gestureDirection = null
+        setProgress(0)
+        setDirection(undefined)
+        return
+      }
       event.preventDefault()
 
       if (gestureDirection !== nextDirection) {
         gestureDirection = nextDirection
         setDirection(nextDirection)
       }
-      const now = performance.now()
-      const distanceProgress = Math.min(Math.abs(distance) / 240, 1)
-      const timeProgress = Math.min((now - touchStartedAt + 60) / 420, 1)
-      setProgress(Math.min(distanceProgress, timeProgress))
-      if (distanceProgress >= 1 && timeProgress >= 1) navigate(nextDirection)
+      const distanceProgress = Math.min(
+        Math.abs(distance) / TOUCH_SECTION_DISTANCE,
+        1,
+      )
+      setProgress(distanceProgress)
+      if (distanceProgress >= 1) navigate(nextDirection)
     }
 
     const onTouchEnd = () => {
@@ -446,6 +472,7 @@ function useCyclicSectionScroll({
     window.addEventListener('touchstart', onTouchStart, { passive: true })
     window.addEventListener('touchmove', onTouchMove, { passive: false })
     window.addEventListener('touchend', onTouchEnd, { passive: true })
+    window.addEventListener('touchcancel', onTouchEnd, { passive: true })
     window.addEventListener('keydown', onKeyDown)
 
     return () => {
@@ -454,6 +481,7 @@ function useCyclicSectionScroll({
       window.removeEventListener('touchstart', onTouchStart)
       window.removeEventListener('touchmove', onTouchMove)
       window.removeEventListener('touchend', onTouchEnd)
+      window.removeEventListener('touchcancel', onTouchEnd)
       window.removeEventListener('keydown', onKeyDown)
     }
   }, [activeTab, disabled, onNavigate])

@@ -10,8 +10,8 @@ import { useLang, t } from '@/lib/i18n'
 import styles from './Cv.module.css'
 
 const COMPANY_LOGOS: Record<string, string> = {
-  wmt: '/company-favicons/wmt-current.svg',
-  uxart: '/company-favicons/uxart-current.svg?v=20260726-2',
+  wmt: '/company-favicons/wmt-current.svg?v=20260726-2',
+  uxart: '/company-favicons/uxart-current.svg?v=20260726-3',
   zinda: '/company-favicons/zinda.svg',
 }
 

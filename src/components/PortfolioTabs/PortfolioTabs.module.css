@@ -551,6 +551,13 @@
   }
 }
 
+@media (max-width: 720px), (hover: none) and (pointer: coarse) {
+  .jobProjects::before,
+  .hoverChip {
+    display: none;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .panel,
   .revealBlock {

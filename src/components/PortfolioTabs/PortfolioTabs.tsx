@@ -142,7 +142,7 @@ const workExperienceGroups: Array<{
   {
     id: 'wmt',
     experienceId: 'wmt',
-    logo: '/company-favicons/wmt-current.svg',
+    logo: '/company-favicons/wmt-current.svg?v=20260726-2',
     role: {
       ru: 'Продуктовый дизайнер',
       en: 'Product designer',
@@ -171,7 +171,7 @@ const workExperienceGroups: Array<{
   {
     id: 'uxart',
     experienceId: 'uxart',
-    logo: '/company-favicons/uxart-current.svg?v=20260726-2',
+    logo: '/company-favicons/uxart-current.svg?v=20260726-3',
     projects: [
       {
         id: 'ovork',
