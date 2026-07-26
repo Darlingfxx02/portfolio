@@ -114,9 +114,11 @@ function App() {
   const previousTab =
     SECTION_ORDER[(activeTabIndex - 1 + SECTION_ORDER.length) % SECTION_ORDER.length]
   const sectionArrivalRef = useRef<SectionArrival>('saved')
+  const resetSectionTransitionRef = useRef<() => void>(() => {})
 
   const showTab = useCallback((tab: PortfolioTab, arrival: SectionArrival = 'saved') => {
     const nextHash = `#${tab}`
+    if (arrival === 'saved') resetSectionTransitionRef.current()
     saveScrollPosition(window.location.hash)
     sectionArrivalRef.current = arrival
     if (window.location.hash === nextHash) {
@@ -141,6 +143,9 @@ function App() {
     disabled: onCase,
     onNavigate: navigateSection,
   })
+  useEffect(() => {
+    resetSectionTransitionRef.current = sectionTransition.reset
+  }, [sectionTransition.reset])
   const pendingTab =
     sectionTransition.direction === 'backward' ? previousTab : nextTab
 
@@ -248,6 +253,10 @@ function useCyclicSectionScroll({
   const [direction, setDirection] = useState<SectionScrollDirection>()
   const lockedRef = useRef(false)
   const unlockTimerRef = useRef<number | null>(null)
+  const reset = useCallback(() => {
+    setProgress(0)
+    setDirection(undefined)
+  }, [])
 
   useEffect(
     () => () => {
@@ -449,7 +458,7 @@ function useCyclicSectionScroll({
     }
   }, [activeTab, disabled, onNavigate])
 
-  return { progress, direction }
+  return { progress, direction, reset }
 }
 
 export default App

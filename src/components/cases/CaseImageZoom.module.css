@@ -1,0 +1,91 @@
+.root :global(.case-narrative-hero img),
+.root :global(.case-narrative-media img) {
+  cursor: zoom-in;
+}
+
+.root :global(.case-narrative-hero img:focus-visible),
+.root :global(.case-narrative-media img:focus-visible) {
+  outline: 2px solid var(--c-text);
+  outline-offset: 4px;
+}
+
+.viewer {
+  position: fixed;
+  z-index: 2000;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: 64px 32px;
+  background: rgba(0, 0, 0, 0.86);
+  cursor: zoom-out;
+  animation: viewerIn 260ms ease both;
+}
+
+.viewerClosing {
+  pointer-events: none;
+  animation: viewerOut 460ms ease both;
+}
+
+.viewerCard {
+  display: grid;
+  width: fit-content;
+  height: fit-content;
+  max-width: calc(100vw - 64px);
+  max-height: calc(100dvh - 128px);
+  overflow: hidden;
+  border-radius: 6px;
+  background: transparent;
+  cursor: default;
+  transform-origin: 0 0;
+  will-change: transform;
+}
+
+.viewerCard:focus {
+  outline: none;
+}
+
+.viewerCard img {
+  display: block;
+  width: auto;
+  height: auto;
+  max-width: calc(100vw - 64px);
+  max-height: calc(100dvh - 128px);
+  object-fit: contain;
+}
+
+@keyframes viewerIn {
+  from {
+    background: rgba(0, 0, 0, 0);
+  }
+  to {
+    background: rgba(0, 0, 0, 0.86);
+  }
+}
+
+@keyframes viewerOut {
+  from {
+    background: rgba(0, 0, 0, 0.86);
+  }
+  to {
+    background: rgba(0, 0, 0, 0);
+  }
+}
+
+@media (max-width: 720px) {
+  .viewer {
+    padding: 48px 16px;
+  }
+
+  .viewerCard,
+  .viewerCard img {
+    max-width: calc(100vw - 32px);
+    max-height: calc(100dvh - 96px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .viewer,
+  .viewerClosing {
+    animation-duration: 1ms;
+  }
+}

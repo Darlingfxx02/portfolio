@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState, type CSSProperties, type ReactNode } from "react";
 import { useLang } from "@/lib/i18n";
+import { CaseImageZoom } from "./CaseImageZoom";
 
 export type NarrativeSupport = {
   title: string;
@@ -45,7 +46,7 @@ export function CaseNarrative({
   const nextCaseProgress = useCaseAdvance(nextCase?.href);
 
   return (
-    <div className={`case-narrative-page ${pageClassName}`}>
+    <CaseImageZoom className={`case-narrative-page ${pageClassName}`}>
       <main className="case-narrative-main">
         <section className="case-narrative-intro">
           <h1 className="case-narrative-intro__title">{title}</h1>
@@ -81,7 +82,7 @@ export function CaseNarrative({
           )}
         </footer>
       </main>
-    </div>
+    </CaseImageZoom>
   );
 }
 
