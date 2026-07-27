@@ -38,7 +38,7 @@ const CASE_COMPONENTS: Record<string, ComponentType> = {
 const SECTION_ORDER: PortfolioTab[] = ['home', 'explorations', 'work', 'about']
 const TOUCH_SECTION_DISTANCE = 320
 type SectionScrollDirection = 'forward' | 'backward'
-type SectionArrival = 'top' | 'bottom' | 'saved'
+type SectionArrival = 'top' | 'saved'
 
 const SCROLL_STORAGE_PREFIX = 'darling-live:scroll:'
 
@@ -89,11 +89,9 @@ function scrollImmediatelyTo(hash: string, arrival: SectionArrival = 'saved') {
   const previousScrollBehavior = root.style.scrollBehavior
   const maxScroll = Math.max(0, root.scrollHeight - window.innerHeight)
   const target =
-    arrival === 'bottom'
-      ? maxScroll
-      : arrival === 'saved'
-        ? Math.min(savedScrollPosition(hash), maxScroll)
-        : 0
+    arrival === 'saved'
+      ? Math.min(savedScrollPosition(hash), maxScroll)
+      : 0
 
   root.style.scrollBehavior = 'auto'
   window.scrollTo(0, target)
@@ -136,7 +134,7 @@ function App() {
   const navigateSection = useCallback(
     (direction: SectionScrollDirection) => {
       if (direction === 'forward') showTab(nextTab, 'top')
-      else showTab(previousTab, 'bottom')
+      else showTab(previousTab, 'top')
     },
     [nextTab, previousTab, showTab],
   )
