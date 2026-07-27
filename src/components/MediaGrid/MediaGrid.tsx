@@ -65,15 +65,15 @@ const slots: MediaSlot[] = [
     size: 'standard',
   },
   {
+    src: '/media-grid/chat-attachments.png?v=20260722-1',
+    alt: 'AI chat with attached files and images',
+    size: 'standard',
+  },
+  {
     src: '/media-grid/owork-three-phones.png?v=20260722-2',
     alt: 'Three OWork mobile screens: shifts, profile, and wallet',
     size: 'widePhones',
     wide: true,
-  },
-  {
-    src: '/media-grid/chat-attachments.png?v=20260722-1',
-    alt: 'AI chat with attached files and images',
-    size: 'standard',
   },
   {
     src: '/media-grid/play-button.png?v=20260722-1',
