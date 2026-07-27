@@ -30,15 +30,31 @@ const SAFE_TAG_KEYS = new Set([
   'utm_source',
 ])
 
+const analyticsEnv = {
+  VITE_ANALYTICS_DEBUG: import.meta.env.VITE_ANALYTICS_DEBUG,
+  VITE_ANALYTICS_DISABLED: import.meta.env.VITE_ANALYTICS_DISABLED,
+  VITE_CLARITY_PROJECT_ID: import.meta.env.VITE_CLARITY_PROJECT_ID,
+  VITE_UMAMI_DOMAINS: import.meta.env.VITE_UMAMI_DOMAINS,
+  VITE_UMAMI_EXCLUDE_SEARCH: import.meta.env.VITE_UMAMI_EXCLUDE_SEARCH,
+  VITE_UMAMI_HOST_URL: import.meta.env.VITE_UMAMI_HOST_URL,
+  VITE_UMAMI_PERFORMANCE: import.meta.env.VITE_UMAMI_PERFORMANCE,
+  VITE_UMAMI_RESPECT_DNT: import.meta.env.VITE_UMAMI_RESPECT_DNT,
+  VITE_UMAMI_SRC: import.meta.env.VITE_UMAMI_SRC,
+  VITE_UMAMI_TAG: import.meta.env.VITE_UMAMI_TAG,
+  VITE_UMAMI_WEBSITE_ID: import.meta.env.VITE_UMAMI_WEBSITE_ID,
+} as const
+
+type AnalyticsEnvName = keyof typeof analyticsEnv
+
 let initialized = false
 let umamiConfigured = false
 const pendingUmamiEvents: Array<{ eventName: string; data: AnalyticsPayload }> = []
 
-function envValue(name: string): string | undefined {
-  return (import.meta.env as Record<string, string | undefined>)[name]
+function envValue(name: AnalyticsEnvName): string | undefined {
+  return analyticsEnv[name]
 }
 
-function envFlag(name: string, fallback = false): boolean {
+function envFlag(name: AnalyticsEnvName, fallback = false): boolean {
   const value = envValue(name)
   if (value == null || value === '') return fallback
   return value === 'true' || value === '1'
