@@ -1,15 +1,20 @@
 type AnalyticsValue = string | number | boolean | null | undefined
 type AnalyticsPayload = Record<string, AnalyticsValue>
+type ConsentValue = 'granted' | 'denied'
+type ClarityConsent = {
+  ad_Storage: ConsentValue
+  analytics_Storage: ConsentValue
+}
 
 type UmamiTracker = {
   track: (eventName: string, data?: AnalyticsPayload) => void
 }
 
-type ClarityTracker = (
-  command: 'consent' | 'event' | 'set',
-  keyOrValue?: string,
-  value?: string | string[],
-) => void
+type ClarityTracker = {
+  (command: 'consentv2', consent: ClarityConsent): void
+  (command: 'event', eventName: string): void
+  (command: 'set', key: string, value: string | string[]): void
+}
 
 declare global {
   interface Window {
@@ -45,6 +50,7 @@ const analyticsEnv = {
 } as const
 
 type AnalyticsEnvName = keyof typeof analyticsEnv
+const ANALYTICS_CONSENT_KEY = 'darling-live:analytics-consent'
 
 let initialized = false
 let umamiConfigured = false
@@ -169,14 +175,52 @@ function initClarity() {
   const projectId = envValue('VITE_CLARITY_PROJECT_ID')
   if (!projectId) return
 
-  window.clarity =
-    window.clarity ||
-    ((...args) => {
-      ;((window.clarity as unknown as { q?: unknown[] }).q ||= []).push(args)
-    })
+  if (!window.clarity) {
+    const queuedTracker = ((...args: unknown[]) => {
+      ;((queuedTracker as unknown as { q?: unknown[] }).q ||= []).push(args)
+    }) as ClarityTracker
+    window.clarity = queuedTracker
+  }
 
+  applyClarityConsent(readAnalyticsConsent() === true)
   loadScript(`https://www.clarity.ms/tag/${projectId}`, () => {})
   setClarityTags(defaultPayload())
+}
+
+function readAnalyticsConsent(): boolean | null {
+  try {
+    const value = window.localStorage.getItem(ANALYTICS_CONSENT_KEY)
+    if (value === 'granted') return true
+    if (value === 'denied') return false
+  } catch {
+    // Consent still defaults to denied when storage is unavailable.
+  }
+  return null
+}
+
+function applyClarityConsent(granted: boolean) {
+  window.clarity?.('consentv2', {
+    ad_Storage: 'denied',
+    analytics_Storage: granted ? 'granted' : 'denied',
+  })
+}
+
+export function getAnalyticsConsent(): boolean | null {
+  if (typeof window === 'undefined') return null
+  return readAnalyticsConsent()
+}
+
+export function setAnalyticsConsent(granted: boolean) {
+  if (typeof window === 'undefined') return
+  try {
+    window.localStorage.setItem(
+      ANALYTICS_CONSENT_KEY,
+      granted ? 'granted' : 'denied',
+    )
+  } catch {
+    // Apply the in-memory decision even if the browser blocks storage.
+  }
+  applyClarityConsent(granted)
 }
 
 function setClarityTags(payload: AnalyticsPayload) {

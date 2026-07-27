@@ -22,6 +22,7 @@ import { CaseZindaMobile } from '@/components/cases/CaseZindaMobile'
 import { CaseUxart } from '@/components/cases/CaseUxart'
 import { CaseOvork } from '@/components/cases/CaseOvork'
 import { Cv } from '@/components/Cv/Cv'
+import { AnalyticsConsent } from '@/components/AnalyticsConsent/AnalyticsConsent'
 import { cases } from '@/data/cases'
 import { initSfx, tabTick } from '@/lib/sound'
 import { initAnalytics, trackEvent } from '@/lib/analytics'
@@ -198,46 +199,49 @@ function App() {
   }, [hash])
 
   return (
-    onCv ? (
-      <Cv />
-    ) : (
-      <>
-        <PortfolioHeader
-          activeTab={onCase ? 'work' : activeTab}
-          pendingTab={onCase ? undefined : pendingTab}
-          transitionProgress={onCase ? 0 : sectionTransition.progress}
-          transitionDirection={onCase ? undefined : sectionTransition.direction}
-          onTabChange={showTab}
-        />
-        {onCase ? (
-          <CaseView />
-        ) : (
-          <div id="top" className={styles.page}>
-            {activeTab === 'home' ? (
-              <main
-                key="home"
-                id="panel-home"
-                className={styles.homeScreen}
-                role="tabpanel"
-                aria-labelledby="tab-home"
-              >
-                <Profile />
-                <UsageHeatmap />
-                <Experience />
-              </main>
-            ) : (
-              <PortfolioTabs key={activeTab} activeTab={activeTab} />
-            )}
-          </div>
-        )}
-        <DockBar
-          showBack={onCase}
-          onBack={onCase ? () => showTab('work') : undefined}
-          onContact={() => showTab('about')}
-        />
-        <ScrollBar />
-      </>
-    )
+    <>
+      {onCv ? (
+        <Cv />
+      ) : (
+        <>
+          <PortfolioHeader
+            activeTab={onCase ? 'work' : activeTab}
+            pendingTab={onCase ? undefined : pendingTab}
+            transitionProgress={onCase ? 0 : sectionTransition.progress}
+            transitionDirection={onCase ? undefined : sectionTransition.direction}
+            onTabChange={showTab}
+          />
+          {onCase ? (
+            <CaseView />
+          ) : (
+            <div id="top" className={styles.page}>
+              {activeTab === 'home' ? (
+                <main
+                  key="home"
+                  id="panel-home"
+                  className={styles.homeScreen}
+                  role="tabpanel"
+                  aria-labelledby="tab-home"
+                >
+                  <Profile />
+                  <UsageHeatmap />
+                  <Experience />
+                </main>
+              ) : (
+                <PortfolioTabs key={activeTab} activeTab={activeTab} />
+              )}
+            </div>
+          )}
+          <DockBar
+            showBack={onCase}
+            onBack={onCase ? () => showTab('work') : undefined}
+            onContact={() => showTab('about')}
+          />
+          <ScrollBar />
+        </>
+      )}
+      <AnalyticsConsent />
+    </>
   )
 }
 

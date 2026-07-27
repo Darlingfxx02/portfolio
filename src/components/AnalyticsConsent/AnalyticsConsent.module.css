@@ -1,0 +1,73 @@
+.banner {
+  position: fixed;
+  z-index: 2500;
+  right: 12px;
+  bottom: 12px;
+  left: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  width: min(620px, calc(100% - 24px));
+  margin-inline: auto;
+  padding: 14px;
+  border: 1px solid var(--bar-border);
+  border-radius: 16px;
+  background: rgba(20, 20, 20, 0.92);
+  box-shadow: var(--shadow-panel);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+}
+
+.banner p {
+  max-width: 350px;
+  color: var(--text-mid);
+  font-size: 13px;
+  line-height: 1.35;
+}
+
+.banner a {
+  color: var(--text);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.actions {
+  display: flex;
+  flex: none;
+  gap: 8px;
+}
+
+.actions button {
+  min-height: 38px;
+  padding: 0 13px;
+  border-radius: 10px;
+  font-size: 13px;
+  font-weight: var(--wt-medium);
+}
+
+.secondary {
+  background: var(--hover);
+}
+
+.primary {
+  color: var(--ink);
+  background: var(--paper);
+}
+
+@media (max-width: 620px) {
+  .banner {
+    align-items: stretch;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .banner p {
+    max-width: none;
+  }
+
+  .actions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+}
