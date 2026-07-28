@@ -13,7 +13,7 @@ import styles from './MediaGrid.module.css'
 type MediaSlot = {
   src: string
   alt: string
-  size: 'standard' | 'tall' | 'short' | 'widePhones' | 'wide620'
+  size: 'standard' | 'landscape' | 'tall' | 'short' | 'widePhones' | 'wide620'
   wide?: boolean
 }
 
@@ -26,6 +26,7 @@ type CardRect = {
 
 const cardRatios: Record<MediaSlot['size'], number> = {
   standard: 839 / 620,
+  landscape: 4 / 3,
   tall: 839 / 660,
   short: 839 / 382,
   widePhones: 1708 / 1074.583,
@@ -39,6 +40,16 @@ const cardMotion = {
 }
 
 const slots: MediaSlot[] = [
+  {
+    src: '/media-grid/file-sharing-upload.jpg?v=20260729-1',
+    alt: 'Mobile file sharing upload interface',
+    size: 'landscape',
+  },
+  {
+    src: '/media-grid/crypto-wallet-swap.jpg?v=20260729-1',
+    alt: 'Crypto wallet and asset swap mobile interfaces',
+    size: 'landscape',
+  },
   {
     src: '/media-grid/attachments.png?v=20260722-1',
     alt: 'File attachment interface for an AI prompt',
