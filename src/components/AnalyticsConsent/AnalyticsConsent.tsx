@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import {
   getAnalyticsConsent,
+  isAnalyticsConsentRequired,
   setAnalyticsConsent,
 } from '@/lib/analytics'
 import styles from './AnalyticsConsent.module.css'
@@ -8,7 +9,7 @@ import styles from './AnalyticsConsent.module.css'
 export function AnalyticsConsent() {
   const [choice, setChoice] = useState(getAnalyticsConsent)
 
-  if (choice !== null) return null
+  if (!isAnalyticsConsentRequired() || choice !== null) return null
 
   const choose = (granted: boolean) => {
     setAnalyticsConsent(granted)
@@ -16,14 +17,16 @@ export function AnalyticsConsent() {
   }
 
   return (
-    <section
-      className={styles.banner}
-      role="dialog"
+    <aside
+      className={styles.notice}
+      role="region"
       aria-label="Настройки аналитики"
     >
       <p>
-        Я использую Microsoft Clarity, чтобы видеть обезличенные клики,
-        прокрутку и улучшать портфолио.{' '}
+        <strong>Поможете сделать сайт лучше?</strong>{' '}
+        Обезличенная статистика покажет, что стоит улучшить.
+      </p>
+      <div className={styles.footer}>
         <a
           href="https://privacy.microsoft.com/privacystatement"
           target="_blank"
@@ -31,23 +34,23 @@ export function AnalyticsConsent() {
         >
           О данных
         </a>
-      </p>
-      <div className={styles.actions}>
-        <button
-          className={styles.secondary}
-          type="button"
-          onClick={() => choose(false)}
-        >
-          Без cookies
-        </button>
-        <button
-          className={styles.primary}
-          type="button"
-          onClick={() => choose(true)}
-        >
-          Разрешить
-        </button>
+        <div className={styles.actions}>
+          <button
+            className={styles.secondary}
+            type="button"
+            onClick={() => choose(false)}
+          >
+            Не сейчас
+          </button>
+          <button
+            className={styles.primary}
+            type="button"
+            onClick={() => choose(true)}
+          >
+            Да, помочь
+          </button>
+        </div>
       </div>
-    </section>
+    </aside>
   )
 }

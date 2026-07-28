@@ -205,6 +205,10 @@ function applyClarityConsent(granted: boolean) {
   })
 }
 
+export function isAnalyticsConsentRequired() {
+  return !analyticsDisabled() && Boolean(envValue('VITE_CLARITY_PROJECT_ID'))
+}
+
 export function getAnalyticsConsent(): boolean | null {
   if (typeof window === 'undefined') return null
   return readAnalyticsConsent()
