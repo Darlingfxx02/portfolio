@@ -36,6 +36,7 @@ const SAFE_TAG_KEYS = new Set([
 ])
 
 const analyticsEnv = {
+  VITE_ANALYTICS_CONSENT_NOTICE: import.meta.env.VITE_ANALYTICS_CONSENT_NOTICE,
   VITE_ANALYTICS_DEBUG: import.meta.env.VITE_ANALYTICS_DEBUG,
   VITE_ANALYTICS_DISABLED: import.meta.env.VITE_ANALYTICS_DISABLED,
   VITE_CLARITY_PROJECT_ID: import.meta.env.VITE_CLARITY_PROJECT_ID,
@@ -206,7 +207,11 @@ function applyClarityConsent(granted: boolean) {
 }
 
 export function isAnalyticsConsentRequired() {
-  return !analyticsDisabled() && Boolean(envValue('VITE_CLARITY_PROJECT_ID'))
+  return (
+    !analyticsDisabled() &&
+    envFlag('VITE_ANALYTICS_CONSENT_NOTICE', true) &&
+    Boolean(envValue('VITE_CLARITY_PROJECT_ID'))
+  )
 }
 
 export function getAnalyticsConsent(): boolean | null {
