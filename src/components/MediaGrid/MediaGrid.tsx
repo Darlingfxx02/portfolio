@@ -64,7 +64,7 @@ const slots: MediaSlot[] = [
     size: 'landscape',
   },
   {
-    src: '/media-grid/birthday-message.avif?v=20260731-2',
+    src: '/media-grid/birthday-message.avif?v=20260731-3',
     alt: 'Birthday message notification concept',
     size: 'landscape',
   },
