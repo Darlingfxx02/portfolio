@@ -59,6 +59,22 @@ const slots: MediaSlot[] = [
     size: 'landscape',
   },
   {
+    src: '/media-grid/music-carousel.avif?v=20260730-1',
+    alt: 'Perspective album carousel with music player controls',
+    size: 'landscape',
+  },
+  {
+    src: '/media-grid/birthday-message.avif?v=20260730-1',
+    alt: 'Birthday message notification concept',
+    size: 'landscape',
+  },
+  {
+    src: '/media-grid/kyc-flow.avif?v=20260730-1',
+    alt: 'Three-screen KYC identity verification flow',
+    size: 'wideKyc',
+    wide: true,
+  },
+  {
     src: '/media-grid/attachments.png?v=20260722-1',
     alt: 'File attachment interface for an AI prompt',
     size: 'standard',
@@ -114,22 +130,6 @@ const slots: MediaSlot[] = [
     src: '/media-grid/crypto-staking.png?v=20260722-1',
     alt: 'Crypto staking and rewards interface',
     size: 'wide620',
-    wide: true,
-  },
-  {
-    src: '/media-grid/music-carousel.avif?v=20260730-1',
-    alt: 'Perspective album carousel with music player controls',
-    size: 'landscape',
-  },
-  {
-    src: '/media-grid/birthday-message.avif?v=20260730-1',
-    alt: 'Birthday message notification concept',
-    size: 'landscape',
-  },
-  {
-    src: '/media-grid/kyc-flow.avif?v=20260730-1',
-    alt: 'Three-screen KYC identity verification flow',
-    size: 'wideKyc',
     wide: true,
   },
 ]
