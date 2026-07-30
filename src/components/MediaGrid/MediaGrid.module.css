@@ -53,6 +53,10 @@
   aspect-ratio: 1708 / 620;
 }
 
+.wideKyc {
+  aspect-ratio: 3309 / 1475;
+}
+
 .wide {
   grid-column: 1 / -1;
 }

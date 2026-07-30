@@ -13,7 +13,14 @@ import styles from './MediaGrid.module.css'
 type MediaSlot = {
   src: string
   alt: string
-  size: 'standard' | 'landscape' | 'tall' | 'short' | 'widePhones' | 'wide620'
+  size:
+    | 'standard'
+    | 'landscape'
+    | 'tall'
+    | 'short'
+    | 'widePhones'
+    | 'wide620'
+    | 'wideKyc'
   wide?: boolean
 }
 
@@ -31,6 +38,7 @@ const cardRatios: Record<MediaSlot['size'], number> = {
   short: 839 / 382,
   widePhones: 1708 / 1074.583,
   wide620: 1708 / 620,
+  wideKyc: 3309 / 1475,
 }
 
 const cardMotion = {
@@ -106,6 +114,22 @@ const slots: MediaSlot[] = [
     src: '/media-grid/crypto-staking.png?v=20260722-1',
     alt: 'Crypto staking and rewards interface',
     size: 'wide620',
+    wide: true,
+  },
+  {
+    src: '/media-grid/music-carousel.avif?v=20260730-1',
+    alt: 'Perspective album carousel with music player controls',
+    size: 'landscape',
+  },
+  {
+    src: '/media-grid/birthday-message.avif?v=20260730-1',
+    alt: 'Birthday message notification concept',
+    size: 'landscape',
+  },
+  {
+    src: '/media-grid/kyc-flow.avif?v=20260730-1',
+    alt: 'Three-screen KYC identity verification flow',
+    size: 'wideKyc',
     wide: true,
   },
 ]
