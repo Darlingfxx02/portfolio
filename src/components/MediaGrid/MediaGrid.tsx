@@ -69,7 +69,7 @@ const slots: MediaSlot[] = [
     size: 'landscape',
   },
   {
-    src: '/media-grid/kyc-flow.avif?v=20260730-1',
+    src: '/media-grid/kyc-flow.avif?v=20260731-1',
     alt: 'Three-screen KYC identity verification flow',
     size: 'wideKyc',
     wide: true,
