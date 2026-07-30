@@ -59,7 +59,7 @@ const slots: MediaSlot[] = [
     size: 'landscape',
   },
   {
-    src: '/media-grid/music-carousel.avif?v=20260730-1',
+    src: '/media-grid/music-carousel.avif?v=20260731-1',
     alt: 'Perspective album carousel with music player controls',
     size: 'landscape',
   },
