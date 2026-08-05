@@ -71,19 +71,30 @@ export function orderedCases(caseIds?: string[]): CaseStudy[] {
 }
 
 const Ctx = createContext<CompanyConfig>(DEFAULT_CONFIG)
+const ReadyCtx = createContext(false)
 
 export const useCompanyConfig = () => useContext(Ctx)
+// eslint-disable-next-line react-refresh/only-export-components
+export const useCompanyConfigReady = () => useContext(ReadyCtx)
 
 export function PersonalizationProvider({ children }: { children: ReactNode }) {
   const [config, setConfig] = useState<CompanyConfig>(DEFAULT_CONFIG)
+  const [ready, setReady] = useState(false)
   useEffect(() => {
     let alive = true
     loadCompanyConfig(recipientSlug()).then((c) => {
-      if (alive) setConfig(c)
+      if (alive) {
+        setConfig(c)
+        setReady(true)
+      }
     })
     return () => {
       alive = false
     }
   }, [])
-  return <Ctx.Provider value={config}>{children}</Ctx.Provider>
+  return (
+    <Ctx.Provider value={config}>
+      <ReadyCtx.Provider value={ready}>{children}</ReadyCtx.Provider>
+    </Ctx.Provider>
+  )
 }

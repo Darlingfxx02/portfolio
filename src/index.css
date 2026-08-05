@@ -118,6 +118,11 @@ html {
   -ms-overflow-style: none; /* legacy Edge */
 }
 
+html.is-loading,
+html.is-loading body {
+  overflow: hidden;
+}
+
 html::-webkit-scrollbar {
   display: none; /* WebKit */
 }

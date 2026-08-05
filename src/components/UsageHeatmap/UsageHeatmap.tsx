@@ -125,6 +125,12 @@ function getEstimate(): Promise<EstimatePayload | null> {
   return estimatePromise
 }
 
+/** Warm the data cache before the loading screen reveals the page. */
+// eslint-disable-next-line react-refresh/only-export-components
+export async function prepareUsageData(): Promise<void> {
+  await Promise.all([getUsage(), getEstimate()])
+}
+
 /** Monday=0 … Sunday=6 (GitHub-style week rows, Monday on top). */
 function weekdayMon(d: Date): number {
   return (d.getDay() + 6) % 7

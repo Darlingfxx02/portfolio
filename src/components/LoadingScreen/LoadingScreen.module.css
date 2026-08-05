@@ -1,0 +1,90 @@
+.screen {
+  position: fixed;
+  inset: 0;
+  z-index: 10000;
+  display: grid;
+  place-items: center;
+  min-height: 100svh;
+  overflow: hidden;
+  color: #fff;
+  background: #000;
+  cursor: wait;
+  clip-path: inset(0 0 0 0);
+  transition:
+    clip-path 720ms var(--ease),
+    filter 720ms var(--ease),
+    transform 720ms var(--ease);
+}
+
+.screen::before {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: min(62vw, 720px);
+  aspect-ratio: 1.6;
+  content: '';
+  pointer-events: none;
+  background: radial-gradient(
+    ellipse,
+    rgba(255, 255, 255, 0.15) 0%,
+    rgba(255, 255, 255, 0.07) 28%,
+    rgba(255, 255, 255, 0.018) 50%,
+    transparent 72%
+  );
+  filter: blur(26px);
+  transform: translate(-50%, -50%) scale(0.92);
+  animation: glow 2.4s ease-in-out infinite alternate;
+}
+
+.number {
+  position: relative;
+  display: block;
+  font-size: clamp(120px, 21vw, 320px);
+  font-weight: 300;
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: 'tnum';
+  letter-spacing: 0.04em;
+  line-height: 0.72;
+  text-shadow:
+    0 0 18px rgba(255, 255, 255, 0.18),
+    0 0 64px rgba(255, 255, 255, 0.08);
+  transform: translateX(0.02em);
+  animation: numberIn 520ms var(--ease) both;
+}
+
+.exiting {
+  pointer-events: none;
+  filter: blur(8px);
+  transform: scale(1.025);
+  clip-path: inset(0 0 100% 0);
+}
+
+@keyframes numberIn {
+  from {
+    opacity: 0;
+    filter: blur(20px);
+    transform: translateX(0.02em) translateY(0.12em) scaleY(0.9);
+  }
+}
+
+@keyframes glow {
+  to {
+    opacity: 0.72;
+    transform: translate(-50%, -50%) scale(1.08);
+  }
+}
+
+@media (max-width: 720px) {
+  .number {
+    font-size: clamp(112px, 34vw, 160px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .screen,
+  .screen::before,
+  .number {
+    animation: none;
+    transition-duration: 1ms;
+  }
+}

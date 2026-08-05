@@ -5,12 +5,15 @@ import './tailwind.css'
 import App from './App.tsx'
 import { PersonalizationProvider } from '@/lib/personalization'
 import { LanguageProvider } from '@/lib/i18n'
+import { SiteBoot } from '@/components/LoadingScreen/SiteBoot'
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <LanguageProvider>
       <PersonalizationProvider>
-        <App />
+        <SiteBoot>
+          <App />
+        </SiteBoot>
       </PersonalizationProvider>
     </LanguageProvider>
   </StrictMode>,
