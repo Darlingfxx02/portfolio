@@ -145,10 +145,11 @@ async function createRelation() {
 }
 
 async function publicPolicyId() {
-  // The public (unauthenticated) policy is the one not attached to any role.
-  const policies = await api('GET', '/policies?fields=id,name,role&limit=-1')
-  const pub = policies.find((p) => p.role === null)
-  if (!pub) throw new Error('No public policy found (policy with role=null).')
+  // Directus 11 stores role-policy links in directus_access rather than on the
+  // policy itself. The built-in unauthenticated policy has this stable name.
+  const policies = await api('GET', '/policies?fields=id,name&limit=-1')
+  const pub = policies.find((p) => p.name === '$t:public_label')
+  if (!pub) throw new Error('No built-in public policy found.')
   return pub.id
 }
 
