@@ -1,0 +1,30 @@
+# Security override for the manually managed production Compose stack.
+# Apply together with the server's existing docker-compose.yml so its Coolify
+# network and Traefik labels remain intact:
+#
+#   docker compose -f docker-compose.yml -f docker-compose.security.yml up -d directus
+
+services:
+  directus:
+    # Remove the legacy host port while keeping container-to-container access.
+    ports: !reset []
+    expose:
+      - '8055'
+    environment:
+      CORS_METHODS: 'GET'
+      CORS_ALLOWED_HEADERS: 'Content-Type'
+      CORS_CREDENTIALS: 'false'
+
+      RATE_LIMITER_ENABLED: 'true'
+      RATE_LIMITER_POINTS: '100'
+      RATE_LIMITER_DURATION: '1'
+
+      ASSETS_TRANSFORM_MAX_CONCURRENT: '5'
+      ASSETS_TRANSFORM_IMAGE_MAX_OUTPUT_DIMENSION: '1600'
+      ASSETS_TRANSFORM_TIMEOUT: '5000ms'
+      ASSETS_TRANSFORM_MAX_OPERATIONS: '3'
+
+      HSTS_ENABLED: 'true'
+      HSTS_MAX_AGE: '31536000'
+      REFRESH_TOKEN_COOKIE_SECURE: 'true'
+      REFRESH_TOKEN_COOKIE_SAME_SITE: 'lax'
