@@ -22,7 +22,12 @@ Coolify: [Directus + Postgres]  ──REST──▶  portfolio SPA (#works grid)
 
 ## 2. Bootstrap the `works` collection
 
-One-time, from your machine (needs Node 18+):
+The Compose stack runs `bootstrap.mjs` automatically after Directus becomes
+healthy. Keep `ADMIN_EMAIL` and `ADMIN_PASSWORD` in Coolify synchronized with
+the current Directus admin credentials so later deployments can re-apply the
+least-privilege policy.
+
+You can also run it manually:
 
 ```bash
 DIRECTUS_URL=https://cms.darlingdesign.pro \
@@ -31,8 +36,10 @@ node directus/bootstrap.mjs
 ```
 
 Creates the `works` collection (`image`, `status`, `sort`, `title`), links the
-image to Directus files, and grants **public read** on `works` (published only)
-and files — so the site fetches with no auth. Idempotent; re-run anytime.
+image to Directus files, and grants narrowly scoped **public read** on published
+works and only the files referenced by those works. Unrelated uploads, exports,
+draft assets, and private file metadata remain inaccessible. The script is
+idempotent and also tightens permissions created by an older version.
 
 ## 3. Add work images
 

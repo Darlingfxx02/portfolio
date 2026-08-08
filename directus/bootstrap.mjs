@@ -154,19 +154,34 @@ async function publicPolicyId() {
 
 async function grantPublicRead(policy) {
   const wanted = [
-    { collection: 'works', action: 'read', fields: ['*'], permissions: { status: { _eq: 'published' } } },
-    { collection: 'directus_files', action: 'read', fields: ['*'], permissions: {} },
+    {
+      collection: 'works',
+      action: 'read',
+      fields: ['id', 'image', 'status', 'sort', 'date_created'],
+      permissions: { status: { _eq: 'published' } },
+    },
+    {
+      collection: 'directus_files',
+      action: 'read',
+      fields: ['id', 'width', 'height', 'type'],
+      // A file is public only while a published work references it. This avoids
+      // exposing unrelated uploads, exports, or draft assets from Directus.
+      permissions: {
+        '$FOLLOW(works, image)': { status: { _eq: 'published' } },
+      },
+    },
   ]
   const existing = await api(
     'GET',
-    `/permissions?filter[policy][_eq]=${policy}&fields=collection,action&limit=-1`,
+    `/permissions?filter[policy][_eq]=${policy}&fields=id,collection,action,fields,permissions&limit=-1`,
   ).catch(() => [])
   for (const perm of wanted) {
-    const has = (existing ?? []).some(
+    const current = (existing ?? []).find(
       (e) => e.collection === perm.collection && e.action === perm.action,
     )
-    if (has) {
-      console.log(`• public read on ${perm.collection} already granted — skipping`)
+    if (current) {
+      await api('PATCH', `/permissions/${current.id}`, perm)
+      console.log(`✓ tightened existing public read on ${perm.collection}`)
       continue
     }
     await api('POST', '/permissions', { policy, ...perm })

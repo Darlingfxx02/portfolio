@@ -42,9 +42,16 @@ export function youTubeId(input: string): string | null {
   try {
     const u = new URL(input);
     const host = u.hostname.replace(/^www\./, "");
-    if (host === "youtu.be") return u.pathname.slice(1).split("/")[0] || null;
-    if (host.endsWith("youtube.com")) {
-      if (u.pathname === "/watch") return u.searchParams.get("v");
+    if (u.protocol !== "https:") return null;
+    if (host === "youtu.be") {
+      const id = u.pathname.slice(1).split("/")[0];
+      return /^[\w-]{11}$/.test(id) ? id : null;
+    }
+    if (host === "youtube.com" || host.endsWith(".youtube.com")) {
+      if (u.pathname === "/watch") {
+        const id = u.searchParams.get("v") || "";
+        return /^[\w-]{11}$/.test(id) ? id : null;
+      }
       const m = u.pathname.match(/^\/(?:embed|shorts|v)\/([\w-]{11})/);
       if (m) return m[1];
     }
@@ -52,6 +59,16 @@ export function youTubeId(input: string): string | null {
     /* not a parseable URL */
   }
   return null;
+}
+
+/** Only permit ordinary web URLs before opening backend-provided links. */
+export function safeExternalUrl(input: string): string | null {
+  try {
+    const url = new URL(input);
+    return url.protocol === "https:" || url.protocol === "http:" ? url.href : null;
+  } catch {
+    return null;
+  }
 }
 
 // The IFrame API script is global and may only be injected once.

@@ -2,7 +2,7 @@ import { useState } from "react";
 import { createPortal } from "react-dom";
 import { VideoPlayer } from "./VideoPlayer";
 import { trackEvent } from "@/lib/analytics";
-import { youTubeId } from "@/lib/youtube";
+import { safeExternalUrl, youTubeId } from "@/lib/youtube";
 
 export type VideoCardProps = {
   /** Имя компании-получателя — подставляется в «Hello {company}». */
@@ -45,7 +45,10 @@ export function VideoCard({
       provider: videoId ? "youtube" : "external",
     });
     if (videoId) setOpen(true);
-    else window.open(href, "_blank", "noopener,noreferrer");
+    else {
+      const externalUrl = safeExternalUrl(href);
+      if (externalUrl) window.open(externalUrl, "_blank", "noopener,noreferrer");
+    }
   };
 
   return (

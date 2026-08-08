@@ -29,8 +29,19 @@ services:
         condition: service_healthy
     volumes:
       - uploads:/directus/uploads
-    ports:
-      - '8055:8055'
+    # Reachable by Coolify's proxy and sibling containers, but not published
+    # directly on the host where it could bypass TLS and proxy protections.
+    expose:
+      - '8055'
+    healthcheck:
+      test:
+        - CMD
+        - node
+        - -e
+        - "fetch('http://127.0.0.1:8055/server/health').then(r=>{if(!r.ok)process.exit(1)}).catch(()=>process.exit(1))"
+      interval: 10s
+      timeout: 5s
+      retries: 12
     environment:
       KEY: ${DIRECTUS_KEY}
       SECRET: ${DIRECTUS_SECRET}
@@ -51,8 +62,40 @@ services:
       # Let the portfolio's browser JS call the /items API cross-origin.
       CORS_ENABLED: 'true'
       CORS_ORIGIN: ${CORS_ORIGIN}
+      CORS_METHODS: 'GET'
+      CORS_ALLOWED_HEADERS: 'Content-Type'
+      CORS_CREDENTIALS: 'false'
+
+      RATE_LIMITER_ENABLED: 'true'
+      RATE_LIMITER_POINTS: '100'
+      RATE_LIMITER_DURATION: '1'
+
+      # Keep arbitrary asset-transform requests from exhausting CPU/memory.
+      ASSETS_TRANSFORM_MAX_CONCURRENT: '5'
+      ASSETS_TRANSFORM_IMAGE_MAX_OUTPUT_DIMENSION: '1600'
+      ASSETS_TRANSFORM_TIMEOUT: '5000ms'
+      ASSETS_TRANSFORM_MAX_OPERATIONS: '3'
+
+      HSTS_ENABLED: 'true'
+      HSTS_MAX_AGE: '31536000'
+      REFRESH_TOKEN_COOKIE_SECURE: 'true'
+      REFRESH_TOKEN_COOKIE_SAME_SITE: 'lax'
 
       WEBSOCKETS_ENABLED: 'true'
+
+  bootstrap:
+    image: node:22-alpine
+    restart: 'no'
+    depends_on:
+      directus:
+        condition: service_healthy
+    volumes:
+      - ./bootstrap.mjs:/bootstrap.mjs:ro
+    environment:
+      DIRECTUS_URL: http://directus:8055
+      ADMIN_EMAIL: ${ADMIN_EMAIL}
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD}
+    command: ['node', '/bootstrap.mjs']
 
 volumes:
   db-data:
