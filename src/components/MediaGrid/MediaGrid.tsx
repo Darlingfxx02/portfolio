@@ -49,13 +49,23 @@ const cardMotion = {
 
 const slots: MediaSlot[] = [
   {
-    src: '/media-grid/file-sharing-upload.jpg?v=20260729-1',
-    alt: 'Mobile file sharing upload interface',
+    src: '/media-grid/crypto-wallet-swap.jpg?v=20260729-1',
+    alt: 'Crypto wallet and asset swap mobile interfaces',
     size: 'landscape',
   },
   {
-    src: '/media-grid/crypto-wallet-swap.jpg?v=20260729-1',
-    alt: 'Crypto wallet and asset swap mobile interfaces',
+    src: '/media-grid/midnight-mix-recap.png?v=20260812-1',
+    alt: 'Midnight Mix mobile social recap concept',
+    size: 'landscape',
+  },
+  {
+    src: '/media-grid/appearance-card-settings.png?v=20260812-1',
+    alt: 'Card appearance settings interface',
+    size: 'landscape',
+  },
+  {
+    src: '/media-grid/file-sharing-upload.jpg?v=20260729-1',
+    alt: 'Mobile file sharing upload interface',
     size: 'landscape',
   },
   {
