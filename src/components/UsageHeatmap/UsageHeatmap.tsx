@@ -65,9 +65,13 @@ const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', '
  * how personalization falls back to a default when the backend is absent.
  */
 async function loadUsage(): Promise<UsagePayload | null> {
-  for (const url of ['/api/usage', '/usage.json']) {
+  // The CDN caches plain static-file URLs independently from deployments. Add
+  // a per-load version to the fallback so a newly published snapshot is visible
+  // immediately instead of waiting for an old /usage.json object to expire.
+  const snapshotUrl = `/usage.json?v=${Date.now()}`
+  for (const url of ['/api/usage', snapshotUrl]) {
     try {
-      const res = await fetch(url, { cache: 'no-cache' })
+      const res = await fetch(url, { cache: 'no-store' })
       if (!res.ok) continue
       const data = (await res.json()) as UsagePayload
       if (data && data.days && typeof data.days === 'object') return data
