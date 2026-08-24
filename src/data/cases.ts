@@ -30,7 +30,6 @@ export const cases: CaseStudy[] = [
     device: 'phone',
     image: '/cases/case-cover-ovork.avif?v=20260723-1',
     images: ['/cases/ovork-1.webp', '/cases/ovork-2.webp', '/cases/ovork-3.webp'],
-    disabled: true,
   },
   {
     id: 'uxart',
