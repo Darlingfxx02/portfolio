@@ -24,9 +24,8 @@ export function CaseUxart() {
           : ["AI Transformation", "Design Operations", "Service Design", "2025"]
       }
       hero={
-        <div className="case-narrative-hero--split case-narrative-hero--figma-export">
+        <div className="case-narrative-hero--figma-export">
           <img src="/uxart/bani-final-hero.avif" alt={ru ? "Финальная главная страница сайта Приморских бань" : "Final Primorskie Bani website home page"} />
-          <img src="/uxart/bani-final-services.avif" alt={ru ? "Финальный раздел услуг сайта Приморских бань" : "Final Primorskie Bani website services section"} />
         </div>
       }
       sections={
