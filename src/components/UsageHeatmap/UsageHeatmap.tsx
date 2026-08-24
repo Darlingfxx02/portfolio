@@ -473,8 +473,6 @@ export function UsageHeatmap() {
           <span>
             {fmtCompact(stat.total)} tokens · {stat.activeDays} days
           </span>
-          <img className={styles.statIcon} src="/stickers/claude-icon.webp" alt="Claude" />
-          <img className={styles.statIcon} src="/stickers/codex-icon.webp" alt="Codex" />
         </p>
       </div>
     </section>
