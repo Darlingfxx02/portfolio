@@ -24,9 +24,9 @@ export function CaseUxart() {
           : ["AI Transformation", "Design Operations", "Service Design", "2025"]
       }
       hero={
-        <div className="case-narrative-hero--split">
-          <img src="/uxart/hero-1.webp" alt={ru ? "AI-прототип для пресейла UXART" : "UXART AI presale prototype"} />
-          <img src="/uxart/hero-2.webp" alt={ru ? "Интерактивный экран AI-прототипа" : "Interactive AI prototype screen"} />
+        <div className="case-narrative-hero--split case-narrative-hero--figma-export">
+          <img src="/uxart/bani-final-hero.avif" alt={ru ? "Финальная главная страница сайта Приморских бань" : "Final Primorskie Bani website home page"} />
+          <img src="/uxart/bani-final-services.avif" alt={ru ? "Финальный раздел услуг сайта Приморских бань" : "Final Primorskie Bani website services section"} />
         </div>
       }
       sections={
@@ -90,7 +90,7 @@ export function CaseUxart() {
                   },
                 ],
                 media: [
-                  { src: "/uxart/embed.webp", alt: "Встроенный AI-инструмент в процессе UXART" },
+                  { src: "/uxart/bani-final-complex.avif", alt: "Финальный раздел комплекса сайта Приморских бань" },
                 ],
               },
               {
@@ -110,10 +110,10 @@ export function CaseUxart() {
                 media: [
                   { src: "/uxart/presale1-1.webp", alt: "Первый AI-усиленный пресейл UXART" },
                   { src: "/uxart/presale1-3.webp", alt: "Деталь интерактивного пресейл-прототипа" },
-                  { src: "/uxart/presale2-1.webp", alt: "Второй AI-усиленный пресейл UXART" },
-                  { src: "/uxart/presale2-2.webp", alt: "Интерактивная версия второго пресейла" },
+                  { src: "/uxart/bani-final-pricing.avif", alt: "Финальный раздел тарифов сайта Приморских бань" },
+                  { src: "/uxart/bani-final-news.avif", alt: "Финальный раздел новостей сайта Приморских бань" },
                 ],
-                mediaClassName: "case-narrative-media--split",
+                mediaClassName: "case-narrative-media--uxart-presales",
               },
               {
                 code: "A4",
@@ -215,7 +215,7 @@ export function CaseUxart() {
                   },
                 ],
                 media: [
-                  { src: "/uxart/embed.webp", alt: "Embedded AI tool in the UXART workflow" },
+                  { src: "/uxart/bani-final-complex.avif", alt: "Final Primorskie Bani website complex section" },
                 ],
               },
               {
@@ -235,10 +235,10 @@ export function CaseUxart() {
                 media: [
                   { src: "/uxart/presale1-1.webp", alt: "First UXART AI-enhanced presale" },
                   { src: "/uxart/presale1-3.webp", alt: "Interactive presale prototype detail" },
-                  { src: "/uxart/presale2-1.webp", alt: "Second UXART AI-enhanced presale" },
-                  { src: "/uxart/presale2-2.webp", alt: "Interactive version of the second presale" },
+                  { src: "/uxart/bani-final-pricing.avif", alt: "Final Primorskie Bani website pricing section" },
+                  { src: "/uxart/bani-final-news.avif", alt: "Final Primorskie Bani website news section" },
                 ],
-                mediaClassName: "case-narrative-media--split",
+                mediaClassName: "case-narrative-media--uxart-presales",
               },
               {
                 code: "A4",

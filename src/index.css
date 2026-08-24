@@ -500,6 +500,28 @@ h3 {
   background: transparent;
 }
 
+.case-narrative-media--uxart-presales {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.case-narrative-media--uxart-presales figure:nth-child(-n + 2) img {
+  height: 437px;
+  padding: 16px;
+  object-fit: contain;
+}
+
+.case-narrative-media--uxart-presales figure:nth-child(n + 3) {
+  grid-column: 1 / -1;
+}
+
+.case-narrative-media--uxart-presales figure:nth-child(n + 3) img {
+  height: auto;
+  padding: 0;
+  background: transparent;
+}
+
 .case-narrative-page.zinda-system-page .case-narrative-media--figma-narrow {
   width: min(100%, 608px);
 }
@@ -1696,6 +1718,15 @@ h3 {
 
   .case-narrative-media--figma-export img {
     padding: 0;
+  }
+
+  .case-narrative-media--uxart-presales {
+    gap: 6px;
+  }
+
+  .case-narrative-media--uxart-presales figure:nth-child(-n + 2) img {
+    height: 240px;
+    padding: 8px;
   }
 
   .case-narrative-media--figma-pair {
