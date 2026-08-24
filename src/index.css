@@ -682,25 +682,10 @@ h3 {
   max-width: 100%;
   padding: 8px 16px;
   border-radius: 999px;
-  background: rgba(105, 210, 166, 0.13);
-  color: #75d9b4;
+  background: var(--c-surface-2);
+  color: var(--c-text-2);
   font-size: 15px;
   line-height: 1.35;
-}
-
-.case-narrative-metric[data-tone="1"] .case-narrative-metric__pill {
-  background: rgba(108, 119, 232, 0.14);
-  color: #9ca5ff;
-}
-
-.case-narrative-metric[data-tone="2"] .case-narrative-metric__pill {
-  background: rgba(185, 109, 201, 0.14);
-  color: #d39add;
-}
-
-.case-narrative-metric[data-tone="3"] .case-narrative-metric__pill {
-  background: rgba(206, 170, 55, 0.15);
-  color: #e4c75c;
 }
 
 .case-narrative-metric dt,
