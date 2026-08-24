@@ -54,15 +54,40 @@ function claudeTokens(d) {
 // replays included), so to match its totals we must NOT collapse duplicates —
 // doing so undercounts relative to the dashboard.
 
-/** Codex CLI: event_msg/token_count carries per-turn last_token_usage. */
-function codexTokens(d) {
+/**
+ * Codex CLI: token_count carries cumulative totals for the current rollout.
+ * Use the delta between consecutive totals instead of summing
+ * last_token_usage: Codex can emit the same last usage more than once, which
+ * otherwise double-counts a small part of a session.
+ */
+function codexTokens(d, state) {
   if (d?.type !== 'event_msg') return 0
   const p = d.payload
   if (!p || p.type !== 'token_count') return 0
-  const lu = p.info?.last_token_usage
-  if (!lu) return 0
-  const input = Math.max(0, num(lu.input_tokens) - num(lu.cached_input_tokens))
-  return input + num(lu.output_tokens)
+  const total = p.info?.total_token_usage
+  if (!total) return 0
+
+  const current = {
+    input: num(total.input_tokens),
+    cached: num(total.cached_input_tokens),
+    output: num(total.output_tokens),
+  }
+  let input = current.input - state.input
+  let cached = current.cached - state.cached
+  let output = current.output - state.output
+
+  // A restarted/reset counter begins a new cumulative sequence in the same
+  // file. Count its current totals as the first delta of that sequence.
+  if (input < 0 || cached < 0 || output < 0) {
+    input = current.input
+    cached = current.cached
+    output = current.output
+  }
+
+  state.input = current.input
+  state.cached = current.cached
+  state.output = current.output
+  return Math.max(0, input - cached) + Math.max(0, output)
 }
 
 const SOURCES = [
@@ -117,6 +142,7 @@ function scanSource(source) {
   const byId = source.dedupeKey ? new Map() : null
   const files = walk(source.dir, source.accept)
   for (const file of files) {
+    const state = { input: 0, cached: 0, output: 0 }
     let text
     try {
       text = readFileSync(file, 'utf8')
@@ -132,7 +158,7 @@ function scanSource(source) {
       } catch {
         continue // tolerate a torn last line of an in-flight session
       }
-      const tokens = source.extract(d)
+      const tokens = source.extract(d, state)
       if (!tokens) continue
       const key = localDateKey(d.timestamp)
       if (!key) continue
