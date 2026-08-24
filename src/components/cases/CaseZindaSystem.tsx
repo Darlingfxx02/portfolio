@@ -3,32 +3,25 @@ import { useLang } from "@/lib/i18n";
 
 const systemIllustrations = [
   [
-    { src: "/zinda/focus-main-desktop.png", alt: "Система в веб-продукте" },
-    { src: "/zinda/mobile-chat-home.png", alt: "Система в мобильном интерфейсе" },
+    { src: "/zinda/system-case/growth-token.avif", alt: "Семантические токены дизайн-системы" },
   ],
   [
-    { src: "/zinda/system-token-rules.png", alt: "Правила токенов и цветовые режимы" },
-    { src: "/zinda/series/ui-flags.jpg", alt: "Система валютных и страновых флагов" },
+    { src: "/zinda/system-case/foundation-icons.avif", alt: "Общий набор продуктовых иконок" },
+    { src: "/zinda/system-case/foundation-flags.avif", alt: "Система валютных и страновых флагов" },
   ],
   [
-    { src: "/zinda/system-inputs-focus.png", alt: "Размеры и состояния полей ввода" },
-    { src: "/zinda/system-icons.png", alt: "Общий набор продуктовых иконок" },
+    { src: "/zinda/system-case/button-states.avif", alt: "Матрица размеров, приоритетов и состояний кнопки" },
   ],
   [
-    { src: "/zinda/mobile-chat-files.png", alt: "Компоненты в чате" },
-    { src: "/zinda/focus-payments-mobile.png", alt: "Компоненты в платежах" },
+    { src: "/zinda/system-case/product-chat-mobile.avif", alt: "Компоненты системы в мобильном чате" },
+    { src: "/zinda/system-case/product-payments-mobile.avif", alt: "Компоненты системы в мобильных платежах" },
   ],
   [
-    { src: "/zinda/focus-chat-light.png", alt: "Закреплённый диалог в светлой теме" },
-    { src: "/zinda/focus-chat-dark.png", alt: "Закреплённый диалог в тёмной теме" },
+    { src: "/zinda/system-case/chat-desktop.avif", alt: "Чат Zinda в светлой теме" },
   ],
   [
-    { src: "/zinda/system-organizer-structure.png", alt: "Структура Organizer и компоненты статусов" },
-    { src: "/zinda/system-update-date.png", alt: "Метка даты обновления дизайн-системы" },
-  ],
-  [
-    { src: "/zinda/mobile-profile-user.png", alt: "Общий язык в профиле пользователя" },
-    { src: "/zinda/mobile-profile-company.png", alt: "Общий язык в профиле компании" },
+    { src: "/zinda/system-case/organizer.avif", alt: "Структура Organizer и компоненты статусов" },
+    { src: "/zinda/system-case/update-date.avif", alt: "Метка даты обновления дизайн-системы" },
   ],
 ];
 
@@ -55,10 +48,10 @@ export function CaseZindaSystem() {
           : ["Design Systems", "Fintech", "Web + Mobile", "Light + Dark"]
       }
       hero={
-        <div className="case-narrative-focus-crop case-narrative-focus-crop--system">
+        <div className="case-narrative-hero--figma-export">
           <img
-            src="/zinda/focus-button-system.png"
-            alt={ru ? "Матрица состояний кнопки Zinda" : "Zinda button state matrix"}
+            src="/zinda/system-case/hero.avif"
+            alt={ru ? "Документация и компоненты дизайн-системы Zinda" : "Zinda design-system documentation and components"}
           />
         </div>
       }
@@ -100,11 +93,6 @@ export function CaseZindaSystem() {
                 code: "05",
                 label: "Темы — не перекраска",
                 body: "В чате существовали отдельные светлая и тёмная ветки. Это заставило проверить контраст, поверхности, системные статусы и выразительность акцентного цвета в двух полноценных средах, а не просто инвертировать фон.",
-                media: [
-                  { src: "/zinda/focus-chat-light.png", alt: "Закреплённый диалог в светлой теме Chat Zinda" },
-                  { src: "/zinda/focus-chat-dark.png", alt: "Закреплённый диалог в тёмной теме Chat Zinda" },
-                ],
-                mediaClassName: "case-narrative-media--split",
               },
               {
                 code: "06",
@@ -160,11 +148,6 @@ export function CaseZindaSystem() {
                 code: "05",
                 label: "Themes are not recoloring",
                 body: "Chat had separate light and dark branches. This forced us to validate contrast, surfaces, system statuses, and the accent color in two complete environments instead of merely inverting the background.",
-                media: [
-                  { src: "/zinda/focus-chat-light.png", alt: "Pinned conversation in Zinda Chat light theme" },
-                  { src: "/zinda/focus-chat-dark.png", alt: "Pinned conversation in Zinda Chat dark theme" },
-                ],
-                mediaClassName: "case-narrative-media--split",
               },
               {
                 code: "06",
@@ -182,11 +165,24 @@ export function CaseZindaSystem() {
                   { value: "4", label: "Product areas", detail: "Home, payments, profile, and chat." },
                 ],
               },
-            ]).map((section, index) => ({
-              ...section,
-              media: systemIllustrations[index],
-              mediaClassName: "case-narrative-media--compact",
-            }))}
+            ]).map((section, index) => {
+              const media = systemIllustrations[index];
+              const isPair = media?.length === 2;
+
+              return {
+                ...section,
+                media,
+                mediaClassName: media
+                  ? `case-narrative-media--figma-export${
+                      isPair
+                        ? " case-narrative-media--figma-pair"
+                        : index === 4
+                          ? ""
+                          : " case-narrative-media--figma-narrow"
+                    }${index < 5 ? " case-narrative-media--gap-24" : ""}`
+                  : undefined,
+              };
+            })}
       nextCase={{ href: "#case/zinda-mobile", label: ru ? "Мобильное направление" : "Mobile direction" }}
     />
   );

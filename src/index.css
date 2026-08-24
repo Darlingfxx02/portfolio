@@ -253,6 +253,10 @@ h3 {
   margin-top: 64px;
 }
 
+.case-narrative-page.zinda-formation-page .case-narrative-hero {
+  margin-top: 24px;
+}
+
 .case-narrative-page:is(
     .zinda-formation-page,
     .zinda-system-page,
@@ -450,6 +454,13 @@ h3 {
   object-position: center;
 }
 
+.case-narrative-hero--figma-export img {
+  height: auto;
+  padding: 0;
+  background: transparent;
+  object-fit: contain;
+}
+
 .case-narrative-media--phone {
   display: flex;
   justify-content: center;
@@ -484,12 +495,61 @@ h3 {
   object-fit: contain;
 }
 
+.case-narrative-media--figma-export img {
+  padding: 0;
+  background: transparent;
+}
+
+.case-narrative-page.zinda-system-page .case-narrative-media--figma-narrow {
+  width: min(100%, 608px);
+}
+
+.case-narrative-media--figma-pair {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.case-narrative-media--figma-pair-asymmetric {
+  grid-template-columns: minmax(0, 500fr) minmax(0, 468fr);
+}
+
+.zinda-formation-page .case-narrative-media--flush {
+  margin-top: 0;
+}
+
+.zinda-formation-page .case-narrative-media--gap-24 {
+  margin-top: 24px;
+}
+
+.zinda-system-page .case-narrative-media--gap-24 {
+  margin-top: 24px;
+}
+
 .zinda-mobile-page .case-narrative-media--mobile-showcase figure {
   height: 520px;
 }
 
 .zinda-mobile-page .case-narrative-media--mobile-comparison {
   grid-template-columns: minmax(0, 1.4fr) minmax(220px, 0.6fr);
+}
+
+.zinda-mobile-page .case-narrative-media--mobile-comparison img {
+  object-position: top;
+}
+
+@media (min-width: 768px) {
+  .zinda-mobile-page .case-narrative-hero {
+    min-height: calc(100dvh - 64px);
+  }
+
+  .zinda-mobile-page .case-narrative-media--gap-24 {
+    margin-top: 24px;
+  }
+
+  .zinda-mobile-page .case-narrative-media--gap-30 {
+    margin-top: 30px;
+  }
 }
 
 .case-narrative-media figcaption {
@@ -1611,6 +1671,11 @@ h3 {
     grid-template-columns: minmax(0, 1.4fr) minmax(88px, 0.6fr);
   }
 
+  .case-narrative-hero--figma-export img {
+    height: auto;
+    padding: 0;
+  }
+
   .case-narrative-media--split img {
     height: 240px;
     padding: 8px;
@@ -1627,6 +1692,14 @@ h3 {
 
   .case-narrative-media--compact img {
     padding: 6px;
+  }
+
+  .case-narrative-media--figma-export img {
+    padding: 0;
+  }
+
+  .case-narrative-media--figma-pair {
+    gap: 6px;
   }
 
   .zinda-mobile-page .case-narrative-media--mobile-showcase figure {

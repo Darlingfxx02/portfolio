@@ -3,32 +3,28 @@ import { useLang } from "@/lib/i18n";
 
 const mobileIllustrations = [
   [
-    { src: "/zinda/payments-desktop-list.png", alt: "Шаблоны платежей в веб-версии" },
-    { src: "/zinda/mobile-templates-clean.png", alt: "Шаблоны платежей в мобильной версии" },
+    { src: "/zinda/mobile-case/section-01-desktop.avif", alt: "Шаблоны платежей в веб-версии" },
+    { src: "/zinda/mobile-case/section-01-mobile.avif", alt: "Шаблоны платежей в мобильной версии" },
   ],
   [
-    { src: "/zinda/mobile-history-shadow.png", alt: "История операций как последовательный мобильный список" },
-    { src: "/zinda/mobile-payment-success.png", alt: "Результат платежа как отдельное мобильное состояние" },
+    { src: "/zinda/mobile-case/section-02-history.avif", alt: "История операций как последовательный мобильный список" },
+    { src: "/zinda/mobile-case/section-02-result.avif", alt: "Результат платежа как отдельное мобильное состояние" },
   ],
   [
-    { src: "/zinda/mobile-payments-form.png", alt: "Мобильная точка входа в счета и платежи" },
-    { src: "/zinda/mobile-exchange.png", alt: "Мобильный сценарий обмена валют" },
+    { src: "/zinda/mobile-case/section-03-payment.avif", alt: "Мобильная точка входа в счета и платежи" },
+    { src: "/zinda/mobile-case/section-03-exchange.avif", alt: "Мобильный сценарий обмена валют" },
   ],
   [
-    { src: "/zinda/mobile-profile-documents.png", alt: "Документы компании в мобильной версии" },
-    { src: "/zinda/mobile-profile-roles.png", alt: "Управление ролями сотрудников в мобильной версии" },
+    { src: "/zinda/mobile-case/section-04-documents.avif", alt: "Документы компании в мобильной версии" },
+    { src: "/zinda/mobile-case/section-04-roles.avif", alt: "Управление ролями сотрудников в мобильной версии" },
   ],
   [
-    { src: "/zinda/mobile-chat-home.png", alt: "Главная мобильного чата" },
-    { src: "/zinda/mobile-chat-files.png", alt: "Мобильный чат с отправленными файлами" },
+    { src: "/zinda/mobile-case/section-05-chat-list.avif", alt: "Главная мобильного чата" },
+    { src: "/zinda/mobile-case/section-05-chat-detail.avif", alt: "Мобильный чат с отправленными файлами" },
   ],
   [
-    { src: "/zinda/process-tasks-focus.jpg", alt: "Планирование мобильного направления и аудит нагрузки" },
-    { src: "/zinda/process-brief-focus.jpg", alt: "Требования для самостоятельной передачи в разработку" },
-  ],
-  [
-    { src: "/zinda/mobile-home-shadow.png", alt: "Базовая ветка главной страницы мобильного банка" },
-    { src: "/zinda/mobile-company-info.png", alt: "Концептуальная ветка приложения, не представленная как реализация" },
+    { src: "/zinda/mobile-case/section-06-planning.avif", alt: "Планирование мобильного направления и аудит нагрузки" },
+    { src: "/zinda/mobile-case/section-06-handoff.avif", alt: "Требования для самостоятельной передачи в разработку" },
   ],
 ];
 
@@ -55,13 +51,13 @@ export function CaseZindaMobile() {
           : ["Direction Ownership", "Fintech · Mobile", "Desktop → Mobile", "2024"]
       }
       hero={
-        <div className="case-narrative-hero--split case-narrative-hero--comparison">
+        <div className="case-narrative-hero--split case-narrative-hero--comparison case-narrative-hero--figma-export">
           <img
-            src="/zinda/focus-main-desktop.png"
+            src="/zinda/mobile-case/hero-desktop.avif"
             alt={ru ? "Главная Zinda в веб-версии" : "Zinda home on desktop"}
           />
           <img
-            src="/zinda/focus-main-mobile.png"
+            src="/zinda/mobile-case/hero-mobile.avif"
             alt={ru ? "Главная Zinda в мобильной версии" : "Zinda home on mobile"}
           />
         </div>
@@ -198,29 +194,25 @@ export function CaseZindaMobile() {
                   { value: "1", label: "Direction", detail: "Independent ownership from desktop-flow audit to specifications." },
                 ],
               },
-            ]).map((section, index) => ({
-              ...section,
-              media: mobileIllustrations[index].map((media, mediaIndex) =>
-                index === 6
-                  ? {
-                      ...media,
-                      caption: ru
-                        ? mediaIndex === 0
-                          ? "Главная · базовая ветка"
-                          : "Концепт приложения · исследовательская ветка"
-                        : mediaIndex === 0
-                          ? "Home · baseline"
-                          : "App concept · exploratory branch",
-                    }
-                  : media,
-              ),
-              mediaClassName:
-                index === 5
-                  ? "case-narrative-media--compact"
-                  : `case-narrative-media--compact case-narrative-media--mobile-showcase${
-                      index === 0 ? " case-narrative-media--mobile-comparison" : ""
-                    }`,
-            }))}
+            ]).map((section, index) => {
+              const media = mobileIllustrations[index];
+
+              return {
+                ...section,
+                media,
+                mediaClassName: media
+                  ? `case-narrative-media--compact case-narrative-media--figma-export${
+                      index < 5 ? " case-narrative-media--mobile-showcase" : ""
+                    }${index === 0 ? " case-narrative-media--mobile-comparison" : ""}${
+                      index === 2 || index === 4
+                        ? " case-narrative-media--gap-24"
+                        : index === 3
+                          ? " case-narrative-media--gap-30"
+                          : ""
+                    }`
+                  : undefined,
+              };
+            })}
       nextCase={{ href: "#case/uxart", label: "UXART" }}
     />
   );

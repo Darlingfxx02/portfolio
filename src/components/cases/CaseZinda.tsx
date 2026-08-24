@@ -2,34 +2,24 @@ import { CaseNarrative } from "./CaseNarrative";
 import { useLang } from "@/lib/i18n";
 
 const formationIllustrations = [
+  undefined,
   [
-    { src: "/zinda/tone-1.webp", alt: "Первое выразительное направление" },
-    { src: "/zinda/tone-2.webp", alt: "Более спокойное направление" },
+    { src: "/zinda/product-case/concept-dark.avif", alt: "Тёмная концепция продукта" },
+    { src: "/zinda/product-case/concept-calm.avif", alt: "Спокойное направление после компромисса" },
   ],
   [
-    { src: "/zinda/concept.webp", alt: "Тёмная концепция продукта" },
-    { src: "/zinda/main-screen.webp", alt: "Спокойное направление после компромисса" },
+    { src: "/zinda/product-case/team-tasks.avif", alt: "Артефакт распределения задач и нагрузки" },
+    { src: "/zinda/product-case/team-notes.avif", alt: "Заметки после созвона" },
+  ],
+  undefined,
+  [
+    { src: "/zinda/product-case/mobile-map.avif", alt: "Карта экранов и состояний мобильного банка" },
   ],
   [
-    { src: "/zinda/process-tasks-focus.jpg", alt: "Артефакт распределения задач и нагрузки" },
-    { src: "/zinda/process-call-focus.jpg", alt: "Заметки после созвона" },
+    { src: "/zinda/product-case/mobile-home.avif", alt: "Главная Zinda в мобильной версии" },
+    { src: "/zinda/product-case/mobile-payments.avif", alt: "Платежи Zinda в мобильной версии" },
   ],
-  [
-    { src: "/zinda/payments-desktop-list.png", alt: "Развитый интерфейс веб-банка" },
-    { src: "/zinda/system-token-rules.png", alt: "Правила токенов, связывающие продуктовые разделы" },
-  ],
-  [
-    { src: "/zinda/process-brief-focus.jpg", alt: "Требования и продуктовый бриф" },
-    { src: "/zinda/system-buttons-focus.png", alt: "Компонентная архитектура позднего этапа проекта" },
-  ],
-  [
-    { src: "/zinda/main-screen-phone.webp", alt: "Экран мобильной концепции" },
-    { src: "/zinda/phone-screen.webp", alt: "Экран мобильной версии для разработки" },
-  ],
-  [
-    { src: "/zinda/hero-laptop.webp", alt: "Продукт Zinda в контексте" },
-    { src: "/zinda/macbook-1.webp", alt: "Финальный макет веб-версии" },
-  ],
+  undefined,
 ];
 
 export function CaseZinda() {
@@ -55,10 +45,12 @@ export function CaseZinda() {
           : ["Product Design", "Fintech · B2B", "Multi-account IA", "2023–2024"]
       }
       hero={
-        <img
-          src="/zinda/focus-main-desktop.png"
-          alt={ru ? "Главный экран веб-банка Zinda" : "Zinda desktop bank home screen"}
-        />
+        <div className="case-narrative-hero--figma-export">
+          <img
+            src="/zinda/product-case/hero.avif"
+            alt={ru ? "Главный экран веб-банка Zinda" : "Zinda desktop bank home screen"}
+          />
+        </div>
       }
       sections={(ru
           ? [
@@ -71,9 +63,6 @@ export function CaseZinda() {
                   "Три конкурирующих представления о продукте.",
                   "Юридические ограничения и сложная схема подрядчиков.",
                   "Необходимость одновременно сформировать продукт и способ работы над ним.",
-                ],
-                media: [
-                  { src: "/zinda/three-variants.webp", alt: "Три отклонённые концепции Zinda" },
                 ],
               },
               {
@@ -156,9 +145,6 @@ export function CaseZinda() {
                   "Legal constraints and a layered contractor setup.",
                   "A need to shape both the product and the way the team worked.",
                 ],
-                media: [
-                  { src: "/zinda/three-variants.webp", alt: "Three rejected Zinda concepts" },
-                ],
               },
               {
                 code: "02",
@@ -228,11 +214,25 @@ export function CaseZinda() {
                   { value: "1 direction", label: "Independent ownership", detail: "Mobile from desktop-flow audit to engineering specifications." },
                 ],
               },
-            ]).map((section, index) => ({
-              ...section,
-              media: formationIllustrations[index],
-              mediaClassName: "case-narrative-media--compact",
-            }))}
+            ]).map((section, index) => {
+              const media = formationIllustrations[index];
+
+              return {
+                ...section,
+                media,
+                mediaClassName: media
+                  ? `case-narrative-media--figma-export${
+                      media.length === 2 ? " case-narrative-media--figma-pair" : ""
+                    }${
+                      index === 5
+                        ? " case-narrative-media--figma-pair-asymmetric case-narrative-media--gap-24"
+                        : index === 4
+                          ? " case-narrative-media--flush"
+                          : ""
+                    }`
+                  : undefined,
+              };
+            })}
       nextCase={{ href: "#case/zinda-system", label: ru ? "Дизайн-система" : "Design system" }}
     />
   );
