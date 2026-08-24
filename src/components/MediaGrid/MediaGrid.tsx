@@ -54,6 +54,11 @@ const slots: MediaSlot[] = [
     size: 'landscape',
   },
   {
+    src: '/media-grid/pink-onboarding.avif?v=20260825-1',
+    alt: 'Pink mobile onboarding start screen',
+    size: 'landscape',
+  },
+  {
     src: '/media-grid/midnight-mix-recap.png?v=20260812-1',
     alt: 'Midnight Mix mobile social recap concept',
     size: 'landscape',
@@ -61,11 +66,6 @@ const slots: MediaSlot[] = [
   {
     src: '/media-grid/appearance-card-settings.png?v=20260812-1',
     alt: 'Card appearance settings interface',
-    size: 'landscape',
-  },
-  {
-    src: '/media-grid/file-sharing-upload.jpg?v=20260729-1',
-    alt: 'Mobile file sharing upload interface',
     size: 'landscape',
   },
   {
@@ -83,6 +83,26 @@ const slots: MediaSlot[] = [
     alt: 'Three-screen KYC identity verification flow',
     size: 'wideKyc',
     wide: true,
+  },
+  {
+    src: '/media-grid/creative-quest.avif?v=20260825-1',
+    alt: 'Creative Quest challenge completion screen',
+    size: 'landscape',
+  },
+  {
+    src: '/media-grid/trip-planner.avif?v=20260825-1',
+    alt: 'Trip planner reaction interface concept',
+    size: 'landscape',
+  },
+  {
+    src: '/media-grid/file-sharing-upload.jpg?v=20260729-1',
+    alt: 'Mobile file sharing upload interface',
+    size: 'landscape',
+  },
+  {
+    src: '/media-grid/orders-dashboard.avif?v=20260825-1',
+    alt: 'Orders administration dashboard',
+    size: 'landscape',
   },
   {
     src: '/media-grid/attachments.png?v=20260722-1',
