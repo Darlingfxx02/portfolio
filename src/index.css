@@ -388,6 +388,12 @@ h3 {
   margin-top: 56px;
 }
 
+.uxart-page .case-narrative-hero {
+  width: min(calc(100vw - 48px), 1200px);
+  margin-left: 50%;
+  transform: translateX(-50%);
+}
+
 .case-narrative-hero > * {
   width: 100%;
 }
