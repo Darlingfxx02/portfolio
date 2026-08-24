@@ -266,11 +266,9 @@ function NarrativeSectionView({ section }: { section: NarrativeSection }) {
               key={`${metric.value}-${metric.label}`}
             >
               <div className="case-narrative-metric__highlight">
-                <div className="case-narrative-metric__layer">
-                  <div className="case-narrative-metric__pill">
-                    <dt>{metric.label}</dt>
-                    <dd>{metric.value}</dd>
-                  </div>
+                <div className="case-narrative-metric__pill">
+                  <dt>{metric.label}</dt>
+                  <dd>{metric.value}</dd>
                 </div>
               </div>
               {metric.detail && <p>{metric.detail}</p>}
