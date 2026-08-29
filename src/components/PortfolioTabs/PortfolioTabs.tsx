@@ -201,33 +201,13 @@ const workExperienceGroups: Array<{
         status: 'Soon',
       },
       {
-        id: 'zinda-mobile',
-        caseId: 'zinda-mobile',
-        experienceId: 'zinda',
-        year: '2024',
-        title: {
-          ru: 'Zinda. Мобильное приложение — самостоятельное направление',
-          en: 'Zinda Mobile. An independently led direction',
-        },
-      },
-      {
-        id: 'zinda-system',
-        caseId: 'zinda-system',
-        experienceId: 'zinda',
-        year: '2023 — 2024',
-        title: {
-          ru: 'Zinda. Дизайн-система банка',
-          en: 'Zinda. The bank design system',
-        },
-      },
-      {
         id: 'zinda',
         caseId: 'zinda',
         experienceId: 'zinda',
-        year: '2023',
+        year: '2023 — 2024',
         title: {
-          ru: 'Zinda. Как мы собирали банк',
-          en: 'Zinda. How we built the bank',
+          ru: 'Zinda. Новый B2B-банк для бизнеса',
+          en: 'Zinda. A new B2B bank for business',
         },
       },
     ],

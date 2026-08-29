@@ -17,18 +17,6 @@ const CASE_FALLBACK: PoolItem[] = [
     ratio: 0.5625,
     caseId: 'zinda',
   },
-  {
-    id: 'zinda-system',
-    url: '/cases/case-cover-zinda-system.jpg',
-    ratio: 0.5625,
-    caseId: 'zinda-system',
-  },
-  {
-    id: 'zinda-mobile',
-    url: '/cases/case-cover-zinda-mobile.jpg',
-    ratio: 0.5625,
-    caseId: 'zinda-mobile',
-  },
   { id: 'ovork-1', url: '/cases/ovork-1.webp', ratio: 1.55, caseId: 'ovork' },
   { id: 'ovork-2', url: '/cases/ovork-2.webp', ratio: 1.55, caseId: 'ovork' },
   { id: 'ovork-3', url: '/cases/ovork-3.webp', ratio: 1.55, caseId: 'ovork' },
