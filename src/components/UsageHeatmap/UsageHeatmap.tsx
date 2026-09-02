@@ -492,8 +492,6 @@ export function UsageHeatmap() {
             {fmtCompact(stat.total)} {lang === 'ru' ? 'токенов' : 'tokens'} ·{' '}
             {stat.activeDays} {pluralizeDays(stat.activeDays, lang)}
           </span>
-          <img className={styles.statIcon} src="/stickers/claude-icon.webp" alt="Claude" />
-          <img className={styles.statIcon} src="/stickers/codex-icon.webp" alt="Codex" />
         </p>
       </div>
     </section>

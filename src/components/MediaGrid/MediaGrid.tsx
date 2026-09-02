@@ -60,6 +60,11 @@ const slots: MediaSlot[] = [
     size: 'landscape',
   },
   {
+    src: '/media-grid/pink-onboarding.avif?v=20260825-1',
+    alt: { ru: 'Стартовый экран розового мобильного онбординга', en: 'Pink mobile onboarding start screen' },
+    size: 'landscape',
+  },
+  {
     src: '/media-grid/midnight-mix-recap.png?v=20260812-1',
     alt: { ru: 'Концепт мобильного социального recap Midnight Mix', en: 'Midnight Mix mobile social recap concept' },
     size: 'landscape',
