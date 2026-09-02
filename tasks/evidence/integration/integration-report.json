@@ -1,0 +1,114 @@
+{
+  "schema_version": 1,
+  "integration_id": "local-integration-TASK-DRESSER-FIGMA-001-R1-20260831T082623Z",
+  "task_ids": ["TASK-DRESSER-FIGMA-001", "TASK-DRESSER-FIGMA-001-R1"],
+  "status": "integrated",
+  "integrated_at": "2026-08-31T08:26:23Z",
+  "integrator": "/root/integrate_figma_bridge",
+  "scope": {
+    "source_files": [
+      "server/figma-plugin-bridge/server.mjs",
+      "server/figma-plugin-bridge/protocol.mjs",
+      "server/figma-plugin-bridge/tests/server.test.mjs",
+      "server/figma-plugin-bridge/tests/protocol.test.mjs"
+    ],
+    "scope_result": "PASS",
+    "notes": [
+      "R1 changes are limited to the four frozen bridge files: route/body validation in two production modules and matching regressions in two tests.",
+      "Package metadata, runtime-state, MCP, mirror, source blocked evidence, plugin UI/controller/manifest, portfolio, dist, task history, and unrelated dirty work were not changed by R1 or integration.",
+      "The source blocker note remains byte-identical with SHA-256 ba969f9073adf9f8524e5a3459a381e6038864c82d2cfae4509737985ea79b9f."
+    ]
+  },
+  "commands": [
+    {"command": "node --test --test-name-pattern='route-specific preflight|shutdown body' server/figma-plugin-bridge/tests/server.test.mjs server/figma-plugin-bridge/tests/protocol.test.mjs", "exit_code": 0, "result": "PASS", "notes": "3/3 targeted remediation tests passed."},
+    {"command": "pnpm test:figma-bridge", "exit_code": 0, "result": "PASS", "notes": "Fresh sequential run passed 8/8. An earlier integrator-only parallel run collided on fixed port 4783 and was discarded before this clean rerun."},
+    {"command": "pnpm lint:figma-bridge", "exit_code": 0, "result": "PASS"},
+    {"command": "pnpm build:figma-bridge", "exit_code": 0, "result": "PASS"},
+    {"command": "pnpm test:mockup-mcp", "exit_code": 0, "result": "PASS", "notes": "Fresh 10/10 including live Chrome export, timeout cleanup, isolation, and BUSY."},
+    {"command": "pnpm lint:mockup-mcp && pnpm build:mockup-mcp", "exit_code": 0, "result": "PASS"},
+    {"command": "cd .local/dresser-mirror && shasum -a 256 -c MANIFEST.sha256", "exit_code": 0, "result": "PASS", "notes": "474/474 exact entries passed."},
+    {"command": "git diff --check", "exit_code": 0, "result": "PASS"},
+    {"command": "pnpm exec tsc -b --pretty false", "exit_code": 0, "result": "PASS"},
+    {"command": "pnpm exec vite build --outDir <external-temp-dir> --emptyOutDir", "exit_code": 0, "result": "PASS", "notes": "Tracked dist was not mutated."},
+    {"command": "pnpm lint", "exit_code": 1, "result": "ACCEPTED_PREEXISTING_DEBT", "notes": "Exactly the frozen 10 errors in five out-of-scope files; no bridge or MCP finding."},
+    {"command": "independent full OPTIONS and shutdown framing matrix", "exit_code": 0, "result": "PASS", "notes": "3 canonical valid preflights, 8 denied cross-route/missing/extra/unknown cases, two body-bearing shutdown rejections, and three empty-body successes passed with exact side-effect counts."},
+    {"command": "live authenticated bridge mesh render through real BrowserSessionManager", "exit_code": 0, "result": "PASS", "notes": "dresser-preset/v1 exposed 28 models, 69 colors, and 5 packs; real Chrome returned a 3230x3230 PNG of 2346327 bytes with matching SHA-256 and metadata; outputs, runtime, inputs, port, and temp baseline were preserved."}
+  ],
+  "cross_task_checks": {
+    "exact_prior_reproducers": "PASS",
+    "canonical_preflight_allow_matrix": "PASS",
+    "cross_route_method_rejection": "PASS",
+    "missing_and_extra_header_rejection": "PASS",
+    "unknown_options_route_rejection": "PASS",
+    "nonempty_content_length_shutdown_rejection": "PASS",
+    "nonempty_chunked_shutdown_rejection": "PASS",
+    "empty_shutdown_success_after_end": "PASS",
+    "manager_and_shutdown_side_effect_counts": "PASS",
+    "listener_and_runtime_liveness_after_rejection": "PASS",
+    "bridge_neighbor_regression": "PASS",
+    "authenticated_live_browser_export": "PASS",
+    "mcp_public_contract_and_cleanup": "PASS",
+    "mirror_integrity": "PASS",
+    "portfolio_build_compatibility": "PASS"
+  },
+  "changed_files": [
+    "server/figma-plugin-bridge/server.mjs",
+    "server/figma-plugin-bridge/protocol.mjs",
+    "server/figma-plugin-bridge/tests/server.test.mjs",
+    "server/figma-plugin-bridge/tests/protocol.test.mjs",
+    "tasks/TASK-DRESSER-FIGMA-001-R1/task.json",
+    "tasks/STATE.json",
+    "tasks/claims/archive/TASK-DRESSER-FIGMA-001-R1-874eb690af824a2ab6cb46053865916d.json",
+    "tasks/evidence/TASK-DRESSER-FIGMA-001-R1/",
+    "tasks/evidence/integration/integration-report.json"
+  ],
+  "evidence_paths": [
+    "tasks/TASK-DRESSER-FIGMA-001-R1/task.json",
+    "tasks/TASK-DRESSER-FIGMA-001-R1/preflight-verdict.json",
+    "tasks/claims/archive/TASK-DRESSER-FIGMA-001-R1-874eb690af824a2ab6cb46053865916d.json",
+    "tasks/evidence/TASK-DRESSER-FIGMA-001-R1/targeted-reproducers.log",
+    "tasks/evidence/TASK-DRESSER-FIGMA-001-R1/reproducer-regression.md",
+    "tasks/evidence/TASK-DRESSER-FIGMA-001-R1/preflight-matrix.md",
+    "tasks/evidence/TASK-DRESSER-FIGMA-001-R1/shutdown-framing.md",
+    "tasks/evidence/TASK-DRESSER-FIGMA-001-R1/bridge-tests.log",
+    "tasks/evidence/TASK-DRESSER-FIGMA-001-R1/mcp-tests.log",
+    "tasks/evidence/TASK-DRESSER-FIGMA-001-R1/mirror-integrity.log",
+    "tasks/evidence/TASK-DRESSER-FIGMA-001-R1/regression.md",
+    "tasks/evidence/TASK-DRESSER-FIGMA-001/integration-blocker.md"
+  ],
+  "unresolved_risks": [
+    {"id": "GLOBAL_LINT_DEBT", "severity": "non_blocking", "detail": "Repo lint retains exactly 10 frozen errors in five out-of-scope files; bridge and MCP scoped lint pass."},
+    {"id": "DIRTY_WORKTREE", "severity": "non_blocking", "detail": "Unrelated user-owned source, media, task, and generated dist changes remain preserved and excluded."}
+  ],
+  "handoffs": [],
+  "lifecycle": {
+    "provider": "local",
+    "external_tracker_sync": "not_applicable",
+    "pending_events": 0,
+    "immutable_ids": [
+      "railway-20260831-figma-plugin-mvp",
+      "b44d0a543b6343e4b0820c98c8df10a5",
+      "874eb690af824a2ab6cb46053865916d",
+      "local-integration-TASK-DRESSER-FIGMA-001-R1-20260831T082623Z"
+    ],
+    "facts": [
+      "Source and R1 executor claims are archived append-only with outcome implemented.",
+      "R1 is remediation attempt 1 at dependency depth 1 and closes both frozen source integration blockers.",
+      "No external provider is configured, so no external tracker write was attempted.",
+      "The dependent frontend task remains separate and no frontend work was absorbed."
+    ]
+  },
+  "github_delivery_batch": {
+    "repository": "git@github.com:Darlingfxx02/portfolio.git",
+    "remote": "origin",
+    "branch": "main",
+    "base_head_sha": "dbb8da559fe46efc46f0943dac7ce51a1a86279e",
+    "intended_local_commit_sha": null,
+    "included_task_ids": ["TASK-DRESSER-FIGMA-001", "TASK-DRESSER-FIGMA-001-R1"],
+    "remaining_related_tasks": ["TASK-DRESSER-FIGMA-002"],
+    "batch": "integration-group-after-dependent-task",
+    "push_required_early": false,
+    "delivery_status": "local-only-no-commit-authorized"
+  },
+  "final_verification": {"required": true, "performed_by_integrator": false, "eligible": true}
+}

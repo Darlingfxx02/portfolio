@@ -92,9 +92,10 @@ export function CaseFramework({
   meta: SnapshotItem[];
   steps: CaseFrameworkStep[];
 }) {
+  const ru = useLang().lang === "ru";
   const scanSteps = steps.filter((step) => ["S", "A", "R"].includes(step.code));
   return (
-    <div className="case-framework" aria-label="Case summary">
+    <div className="case-framework" aria-label={ru ? "Краткое содержание кейса" : "Case summary"}>
       <div className="case-framework__steps">
         {scanSteps.map((step) => (
           <div className="case-framework__step" key={step.code}>
@@ -112,8 +113,9 @@ export function CaseFramework({
 }
 
 export function CaseMedium({ sections }: { sections: CaseMediumSection[] }) {
+  const ru = useLang().lang === "ru";
   return (
-    <section className="case-medium" aria-label="Case overview">
+    <section className="case-medium" aria-label={ru ? "Обзор кейса" : "Case overview"}>
       {sections.map((section) => (
         <article className="case-medium__section" key={section.label}>
           <p className="case-medium__label">{section.label}</p>
@@ -184,8 +186,9 @@ export function Eyebrow({ children }: { children: ReactNode }) {
 }
 
 function TagList({ tags }: { tags: string[] }) {
+  const ru = useLang().lang === "ru";
   return (
-    <ul className="case-editorial-meta" aria-label="Project metadata">
+    <ul className="case-editorial-meta" aria-label={ru ? "Данные проекта" : "Project metadata"}>
       {tags.map((tag) => (
         <li key={tag}>{tag}</li>
       ))}

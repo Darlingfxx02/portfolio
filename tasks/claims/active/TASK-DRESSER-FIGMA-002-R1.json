@@ -1,0 +1,10 @@
+{
+  "schema_version": 1,
+  "task_id": "TASK-DRESSER-FIGMA-002-R1",
+  "token": "7c2b9d80534d4b85ba4264a3098577d1",
+  "state": "active",
+  "pm_id": "railway-20260831-figma-plugin-mvp",
+  "executor": "figma-plugin-executor",
+  "claimed_at": "2026-08-31T20:23:02.036885Z",
+  "heartbeat_at": "2026-08-31T20:33:26.052527Z"
+}

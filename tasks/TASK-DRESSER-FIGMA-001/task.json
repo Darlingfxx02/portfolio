@@ -1,0 +1,224 @@
+{
+  "schema_version": 4,
+  "id": "TASK-DRESSER-FIGMA-001",
+  "title": "Add a local Dresser render bridge for Figma",
+  "goal": "A local authenticated loopback companion accepts bounded Frame PNG bytes and a dresser-preset/v1 preset, renders through the exact browser-backed Dresser mirror, and returns PNG bytes without changing the mirror or MCP contracts.",
+  "status": "implemented-unverified",
+  "assignment": {
+    "token": "b44d0a543b6343e4b0820c98c8df10a5",
+    "pm_id": "railway-20260831-figma-plugin-mvp",
+    "executor": "figma-bridge-executor",
+    "claimed_at": "2026-08-31T07:46:24.523545Z",
+    "heartbeat_at": "2026-08-31T07:54:46.934906Z",
+    "finished_at": "2026-08-31T08:00:17.362378Z",
+    "outcome": "implemented"
+  },
+  "depends_on": [],
+  "delivery": {
+    "mode": "mvp",
+    "user_value": "The development Figma plugin can reuse every PNG-relevant Dresser mockup and setting without embedding the 146 MB mirror or duplicating its renderer.",
+    "slice": "enabler",
+    "demo": {
+      "steps": [
+        "Start the task-owned loopback companion and read its locally generated runtime identity without printing the token.",
+        "Request dresser-preset/v1 capabilities, then POST one bounded PNG body plus a valid preset with the per-run token.",
+        "Confirm the response is Dresser's own browser-exported PNG and that temporary source, output, Chrome, and mirror state is cleaned."
+      ],
+      "evidence": "tasks/evidence/TASK-DRESSER-FIGMA-001/demo.md"
+    },
+    "unlocks": [
+      "TASK-DRESSER-FIGMA-002 compact Figma plugin round trip"
+    ],
+    "remediation": {
+      "source_task_id": null,
+      "attempt": 0,
+      "dependency_depth": 0
+    },
+    "github": {
+      "required": false,
+      "remote": "origin",
+      "branch": "main",
+      "batch": "integration-group",
+      "push_after": "not-authorized-local-only",
+      "force_push": false
+    }
+  },
+  "work_classification": {
+    "ux_flow": false,
+    "reason": "This enabler defines a local byte-and-preset transport around the existing renderer; selection flow, panel structure, states, and canvas insertion belong to TASK-DRESSER-FIGMA-002."
+  },
+  "tracking": {
+    "provider": "local",
+    "local": {
+      "reason": "The approved MVP is local development work and explicitly excludes external tracking, Figma Community publication, deployment, and push."
+    }
+  },
+  "risk": {
+    "level": "medium",
+    "reasons": [
+      "Adds a loopback HTTP and temporary-file boundary for user-provided image bytes and controlled Chrome, but remains local, token-protected, bounded, and reversible."
+    ]
+  },
+  "impact": [
+    "backend-api",
+    "external-integration",
+    "data-privacy"
+  ],
+  "zones": [
+    "server",
+    "root"
+  ],
+  "scope": {
+    "in": [
+      "server/figma-plugin-bridge/server.mjs",
+      "server/figma-plugin-bridge/protocol.mjs",
+      "server/figma-plugin-bridge/runtime-state.mjs",
+      "server/figma-plugin-bridge/tests/*.test.mjs",
+      "package.json"
+    ],
+    "out": [
+      "server/mockup-mcp/browser-session.mjs, server/mockup-mcp/server.mjs, dresser-preset/v1, and all existing MCP public behavior",
+      ".local/dresser-mirror contents, MANIFEST.sha256, browser bundle, mockups, picture backgrounds, and video assets",
+      "Figma manifest, main-thread controller, compact UI, visual styling, selection flow, and canvas insertion",
+      "public or non-loopback transport, cloud rendering, persistence, analytics, credentials, deployment, publication, and Figma Community release",
+      "existing portfolio routes, generated dist assets, unrelated dirty-worktree files, tasks/HISTORY.md, Git push, force-push, merge, tag, and release"
+    ]
+  },
+  "constraints": [
+    "Reuse BrowserSessionManager and validatePreset from server/mockup-mcp as imported dependencies; do not copy or reimplement Dresser rendering, patch the mirror, call the public Dresser site, or alter the two MCP tools and their schemas.",
+    "Bind only to the fixed development origin http://127.0.0.1:4783 required by the dependent manifest, fail closed if the port is occupied, validate the Host header, and never scan or expose another interface.",
+    "Generate a cryptographically random bearer token per companion start, store it only below gitignored .local/dresser-figma with owner-only permissions, never serve or log it, and require it for capabilities, render, and shutdown-sensitive routes.",
+    "Accept render source only as an image/png request body with a 25 MiB hard limit and valid PNG signature/dimensions; accept the small preset as bounded base64url JSON, parse it with dresser-preset/v1, and reject malformed, unknown, out-of-range, chunked-over-limit, or trailing input before browser mutation.",
+    "Support the opaque Figma iframe only through a narrowly scoped CORS preflight and Origin: null response contract plus the bearer token; reject other origins, methods, paths, content types, and unauthenticated requests without reflecting arbitrary origins.",
+    "Write request bytes to a unique task-owned temporary .png, call the serialized browser manager, read the resulting PNG, then remove the temporary source and bridge-owned output on success, failure, disconnect, timeout, and process shutdown without touching pre-existing MCP artifacts.",
+    "Return only bounded capability JSON, safe stable error codes, or image/png bytes with width, height, byte-size, and SHA-256 headers; do not expose filesystem paths, source names, token values, screenshot bytes in logs, raw CDP payloads, stack traces, or internal errors.",
+    "Preserve unrelated dirty-worktree changes and do not push, deploy, publish, install a Figma Community plugin, or edit generated portfolio dist files."
+  ],
+  "acceptance_criteria": [
+    "The companion starts on 127.0.0.1:4783 only, writes a private per-run runtime record below .local/dresser-figma, reports a non-sensitive health state, and stops cleanly without leaving its listener or runtime token behind.",
+    "An authenticated capabilities request returns the exact live dresser-preset/v1 capability object discovered through the current .local/dresser-mirror, including every current model/color, solid, mesh, transparent, picture pack, aspect ratio, fixed padding, scale, and x/y bound.",
+    "An authenticated render request with a genuine bounded PNG and valid preset invokes BrowserSessionManager, returns Dresser's browser-exported image/png bytes and correct metadata headers, and never returns a browser screenshot substitute or arbitrary output path.",
+    "Missing or wrong tokens, non-loopback Host values, disallowed origins, unsupported methods or paths, malformed preflight, wrong content types, invalid PNGs, oversized or truncated bodies, and invalid presets fail with stable redacted errors before browser mutation.",
+    "Overlapping renders have one deterministic serialized or BUSY outcome; client disconnects, browser/mirror failures, timeouts, and shutdown remove only bridge-owned temporary inputs, outputs, Chrome processes, mirror processes, and runtime state.",
+    "No request body, source name, local path, bearer token, raw preset, CDP payload, or stack trace appears in stdout, stderr, response errors, or persisted evidence.",
+    "Existing MCP tests, schemas, exact mirror integrity, successful render behavior, timeout cleanup, and local interactive Dresser remain unchanged."
+  ],
+  "validation": {
+    "profiles": [
+      "baseline",
+      "security-baseline",
+      "backend-api",
+      "external-integration",
+      "data-privacy"
+    ],
+    "commands": [
+      {
+        "id": "bridge-tests",
+        "command": "pnpm test:figma-bridge",
+        "evidence": "tasks/evidence/TASK-DRESSER-FIGMA-001/bridge-tests.log"
+      },
+      {
+        "id": "bridge-lint",
+        "command": "pnpm lint:figma-bridge",
+        "evidence": "tasks/evidence/TASK-DRESSER-FIGMA-001/bridge-lint.log"
+      },
+      {
+        "id": "bridge-build",
+        "command": "pnpm build:figma-bridge",
+        "evidence": "tasks/evidence/TASK-DRESSER-FIGMA-001/bridge-build.log"
+      },
+      {
+        "id": "mcp-tests",
+        "command": "pnpm test:mockup-mcp",
+        "evidence": "tasks/evidence/TASK-DRESSER-FIGMA-001/mcp-tests.log"
+      },
+      {
+        "id": "mcp-lint",
+        "command": "pnpm lint:mockup-mcp",
+        "evidence": "tasks/evidence/TASK-DRESSER-FIGMA-001/mcp-lint.log"
+      },
+      {
+        "id": "mcp-build",
+        "command": "pnpm build:mockup-mcp",
+        "evidence": "tasks/evidence/TASK-DRESSER-FIGMA-001/mcp-build.log"
+      },
+      {
+        "id": "mirror-integrity",
+        "command": "cd .local/dresser-mirror && shasum -a 256 -c MANIFEST.sha256",
+        "evidence": "tasks/evidence/TASK-DRESSER-FIGMA-001/mirror-integrity.log"
+      }
+    ],
+    "checks": [
+      {
+        "id": "authenticated-live-demo",
+        "description": "Against the real task-owned listener, request live capabilities and render one disposable Frame-sized PNG with a representative device, mesh, ratio, scale, and position; verify returned PNG signature, metadata, exact browser export path, and no token/path disclosure.",
+        "evidence": "tasks/evidence/TASK-DRESSER-FIGMA-001/demo.md"
+      },
+      {
+        "id": "transport-negatives",
+        "description": "Exercise wrong or absent token, hostile Host, non-null Origin, unsupported method/path/content type, malformed preflight/preset, spoofed/truncated/oversized PNG, slow body, overlap, and disconnect; require bounded redacted errors and no browser mutation or partial response.",
+        "evidence": "tasks/evidence/TASK-DRESSER-FIGMA-001/negative-paths.md"
+      },
+      {
+        "id": "owned-state-cleanup",
+        "description": "Record only task-owned temporary paths and child PIDs, then verify success, failure, timeout, disconnect, SIGTERM, and restart leave no bridge source/output/runtime token, Chrome, mirror child, or open port and never remove a pre-existing MCP PNG.",
+        "evidence": "tasks/evidence/TASK-DRESSER-FIGMA-001/cleanup.md"
+      },
+      {
+        "id": "scope-and-neighbor-regression",
+        "description": "Inspect the scoped diff, MCP tool discovery/schema, browser success and timeout tests, mirror manifest, and interactive /tools/mockup; confirm no mirror, MCP contract, plugin UI, portfolio, or unrelated dirty-worktree change.",
+        "evidence": "tasks/evidence/TASK-DRESSER-FIGMA-001/regression.md"
+      }
+    ]
+  },
+  "rollback": {
+    "steps": [
+      "Stop only the bridge process identified by its runtime record, remove only .local/dresser-figma task-owned state, and verify port 4783 is closed.",
+      "Remove server/figma-plugin-bridge and revert only its package.json scripts, then rerun the existing MCP test, lint, build, and mirror-integrity checks."
+    ],
+    "data_recovery": [
+      "No persistent user data or migration exists; bridge inputs and outputs are disposable, while pre-existing MCP artifacts and the source Figma document remain untouched."
+    ]
+  },
+  "interface": null,
+  "visual_gate": {
+    "required": false,
+    "reason": "This enabler has no product UI and deliberately leaves selection flow, panel layout, visible states, and Figma canvas behavior to the gated dependent task."
+  },
+  "approvals": {
+    "intent": {
+      "status": "approved",
+      "evidence": "tasks/STATE.json"
+    },
+    "preflight": {
+      "status": "approved",
+      "evidence": "tasks/TASK-DRESSER-FIGMA-001/preflight-verdict.json"
+    },
+    "visual": {
+      "status": "not-required",
+      "evidence": ""
+    },
+    "destructive_action": {
+      "status": "not-required",
+      "evidence": ""
+    }
+  },
+  "evidence_required": [
+    "task-scoped bridge test, lint, and syntax/build logs with exit codes",
+    "live authenticated capabilities and browser-render demo evidence",
+    "authentication, Host, CORS, body, preset, overlap, and disconnect negative results",
+    "temporary file, runtime token, child process, and listener cleanup evidence",
+    "log and error redaction evidence",
+    "existing MCP test, lint, build, schema, and timeout-cleanup regression evidence",
+    "exact mirror manifest integrity and scoped-diff evidence"
+  ],
+  "history": {
+    "summary": "Add a token-protected loopback bridge from Figma PNG bytes to the exact browser-backed Dresser renderer.",
+    "touchpoints": [
+      "loopback render protocol",
+      "ephemeral bearer token",
+      "temporary PNG lifecycle",
+      "MCP reuse"
+    ]
+  }
+}

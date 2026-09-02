@@ -1,0 +1,129 @@
+{
+  "schema_version": 2,
+  "task_id": "TASK-MOCKUP-001",
+  "status": "approved",
+  "baseline": [
+    {
+      "path": "baseline.md",
+      "viewport": "1440x900",
+      "state": "new isolated route; no prior editor screen exists"
+    }
+  ],
+  "concepts": [
+    {
+      "id": "recommended",
+      "path": "concept-recommended.md",
+      "label": "Focused desktop studio",
+      "cost": "low",
+      "risk": "low-to-medium"
+    }
+  ],
+  "selected_concept": "recommended",
+  "change_region": "Only the new code-split /tools/mockup full-viewport route and its exported PNG composition.",
+  "reference_application": {
+    "ux": [
+      {
+        "reference": "Dresser browser workflow supplied by the user",
+        "controls": [
+          "short import-adjust-export sequence",
+          "empty, loaded, adjusted, export, and invalid-file states"
+        ],
+        "restriction": "Behavioral reference only; do not copy code, UI, wording, branding, media, or device assets. Mobbin research was explicitly waived for this local prototype."
+      }
+    ],
+    "ui": [
+      {
+        "reference": "Darling Live tokens and existing controls",
+        "controls": [
+          "dark neutral palette",
+          "Geist/system typography",
+          "compact spacing",
+          "subtle surfaces and hairlines",
+          "visible focus treatment"
+        ]
+      }
+    ]
+  },
+  "icon_strategy": {
+    "library": "@phosphor-icons/react",
+    "fallback": "Question",
+    "semantic_keys": [
+      "action.upload",
+      "action.export",
+      "action.reset",
+      "navigation.back",
+      "action.unknown"
+    ],
+    "rules": [
+      "Use named imports only.",
+      "Every icon-only control has an accessible name.",
+      "Do not draw placeholder glyphs."
+    ]
+  },
+  "must_preserve": [
+    "All existing portfolio routes and visible content.",
+    "Existing portfolio navigation and SiteBoot behavior outside /tools/mockup.",
+    "Imported image privacy: browser memory only, no persistence or transmission.",
+    "Last valid composition after an invalid import.",
+    "Unrelated dirty-worktree changes."
+  ],
+  "must_change": [
+    "Add an isolated dark full-viewport editor at /tools/mockup.",
+    "Provide a dominant central square preview canvas.",
+    "Provide original media and composition controls around the preview.",
+    "Render one original unbranded generic phone frame.",
+    "Export a PNG matching the preview geometry."
+  ],
+  "structure": [
+    "56px top bar with back, title, reset, and export actions.",
+    "256px left media rail for upload, file state, local-only note, and recoverable errors.",
+    "Flexible central stage containing a centered square output preview.",
+    "304px right composition rail for background, padding, scale, horizontal position, and vertical position."
+  ],
+  "behavior": [
+    "Empty state exposes a prominent upload action in the stage and the persistent upload control in the media rail.",
+    "Valid PNG or JPEG replaces the empty state with the deterministic composition.",
+    "Every control updates the preview immediately from one shared geometry model.",
+    "Export is enabled only for a valid image and downloads the composition at its declared canvas dimensions.",
+    "Reset restores composition defaults without removing the imported image.",
+    "Invalid input reports a nearby recoverable error and leaves the last valid composition intact."
+  ],
+  "responsive": [
+    "Prototype target is desktop at 1440x900.",
+    "At widths below 1100px, rails may narrow but must not overlay the preview or hide controls.",
+    "Mobile adaptation is explicitly outside this prototype."
+  ],
+  "content": [
+    "Use the original product name Mockup Studio, not Dresser.",
+    "Use concise labels: Upload image, Background, Padding, Scale, Horizontal, Vertical, Reset, Export PNG.",
+    "State that images stay on this device; never show the local filename in logs or persistent UI."
+  ],
+  "visual_details": {
+    "shell": "#000000",
+    "surface": "rgba(20,20,20,0.8)",
+    "border": "rgba(255,255,255,0.08)",
+    "primary_text": "#ffffff",
+    "secondary_text": "rgba(255,255,255,0.6)",
+    "radius": "12px controls, 16px panels, original rounded phone geometry",
+    "focus": "2px solid white with 3px offset",
+    "motion": "100-180ms state feedback only; respect prefers-reduced-motion"
+  },
+  "acceptance": [
+    "The editor reads as a focused full-screen tool, not as another portfolio page.",
+    "The central canvas remains visually dominant at 1440x900.",
+    "Preview and PNG export share background, crop, frame, scale, padding, and position geometry.",
+    "No Dresser branding, copied UI, code, media, text, or recognizable device artwork appears.",
+    "Keyboard focus is visible and icon-only actions are named.",
+    "The surrounding portfolio remains visually and behaviorally unchanged."
+  ],
+  "approval": {
+    "status": "approved",
+    "required_user_message": "Утверждаю визуальный контракт TASK-MOCKUP-001: recommended.",
+    "user_message": "да",
+    "timestamp": "2026-08-30T15:59:18Z"
+  },
+  "known_debt": [
+    "Mobbin research was not completed because the connector was unavailable; the user explicitly approved continuing without it for this local-only prototype.",
+    "The new route has no screenshot baseline because no editor screen exists before implementation."
+  ]
+}

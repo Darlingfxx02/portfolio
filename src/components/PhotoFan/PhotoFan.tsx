@@ -33,7 +33,7 @@ export function PhotoFan({ photos, open }: { photos: FanPhoto[]; open: boolean }
             transitionDelay: open ? `${i * 40}ms` : '0ms',
           }}
         >
-          <img src={p.src} alt={p.alt ?? ''} draggable={false} loading="lazy" />
+          <img src={p.src} alt={p.alt ?? ''} draggable={false} loading="eager" />
         </figure>
       ))}
     </div>

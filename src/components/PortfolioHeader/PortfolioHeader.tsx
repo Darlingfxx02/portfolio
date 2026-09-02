@@ -1,5 +1,6 @@
 import { useRef, type CSSProperties, type KeyboardEvent } from 'react'
 import type { PortfolioTab } from '@/components/PortfolioTabs/PortfolioTabs'
+import { LanguageSwitcher } from '@/components/LanguageSwitcher/LanguageSwitcher'
 import { t, useLang, type Loc } from '@/lib/i18n'
 import styles from './PortfolioHeader.module.css'
 
@@ -45,6 +46,9 @@ export function PortfolioHeader({
 
   return (
     <header className={styles.header}>
+      <div className={styles.language}>
+        <LanguageSwitcher />
+      </div>
       <nav
         className={styles.nav}
         role="tablist"

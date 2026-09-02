@@ -1,0 +1,226 @@
+{
+  "schema_version": 4,
+  "id": "TASK-MOCKUP-MCP-001-R1",
+  "title": "Contain Dresser export timeout and child cleanup",
+  "goal": "A real browser-backed Dresser export timeout returns a bounded MCP error without terminating Node, and every Chrome and mirror child created by that render is stopped with its disposable state removed.",
+  "status": "verified",
+  "assignment": {
+    "token": "86b713faa76c4a84a3222edca2da4683",
+    "pm_id": "railway-20260830-browser-mcp-mvp",
+    "executor": "browser-mcp-remediation-executor",
+    "claimed_at": "2026-08-30T19:47:21.221953Z",
+    "heartbeat_at": "2026-08-30T19:50:09.258981Z",
+    "finished_at": "2026-08-30T19:53:37.392900Z",
+    "outcome": "implemented"
+  },
+  "depends_on": [
+    "TASK-MOCKUP-MCP-001"
+  ],
+  "delivery": {
+    "mode": "mvp",
+    "user_value": "An agent can recover from a stalled Dresser PNG download without losing the MCP server or leaving local browser and mirror processes behind.",
+    "slice": "hardening",
+    "demo": {
+      "steps": [
+        "Run the targeted live timeout regression with the exact local mirror and a real controlled Chrome process.",
+        "Reach Dresser's exportPng/download wait, induce a bounded download timeout, and observe a stable MCP error while Node remains alive.",
+        "Verify the test-created Chrome and mirror PIDs are gone, their loopback port is closed, disposable profile/download directories are removed, and no partial PNG exists."
+      ],
+      "evidence": "tasks/evidence/TASK-MOCKUP-MCP-001-R1/live-export-timeout.md"
+    },
+    "unlocks": [
+      "final verification of TASK-MOCKUP-MCP-001"
+    ],
+    "remediation": {
+      "source_task_id": "TASK-MOCKUP-MCP-001",
+      "attempt": 1,
+      "dependency_depth": 1
+    },
+    "github": {
+      "required": false,
+      "remote": "origin",
+      "branch": "main",
+      "batch": "standalone",
+      "push_after": "not-authorized-local-only",
+      "force_push": false
+    }
+  },
+  "work_classification": {
+    "ux_flow": false,
+    "reason": "This remediation changes internal promise and child-process lifecycle handling only; it does not alter product flow, screen structure, navigation, or defaults."
+  },
+  "tracking": {
+    "provider": "local",
+    "local": {
+      "reason": "The approved MCP MVP and its single remediation remain local-only with no Discord or external tracker writes."
+    }
+  },
+  "risk": {
+    "level": "medium",
+    "reasons": [
+      "The fix changes timeout and process-lifecycle behavior at the browser integration boundary, but is local, reversible, and does not change the public preset or artifact contract."
+    ]
+  },
+  "impact": [
+    "backend-api",
+    "external-integration",
+    "data-privacy"
+  ],
+  "zones": [
+    "server"
+  ],
+  "scope": {
+    "in": [
+      "server/mockup-mcp/browser-session.mjs",
+      "server/mockup-mcp/tests/mcp-live.test.mjs"
+    ],
+    "out": [
+      "MCP tool names, input/output schemas, dresser-preset/v1, capability discovery, normal render semantics, artifact metadata, and stable error codes",
+      "server/mockup-mcp/server.mjs, server/mockup-mcp/preset-schema.mjs, server/mockup-mcp/dresser-preset-v1.schema.json, package.json, pnpm-lock.yaml, and README changes",
+      "changes to any file or asset inside .local/dresser-mirror",
+      "changes to /tools/mockup or any portfolio interface",
+      "new rendering features, Figma ingestion, multi-screen composition, batch rendering, video work, public transport, deployment, publication, and Git push",
+      "fixing the accepted full-repository lint debt or any unrelated dirty-worktree file"
+    ]
+  },
+  "constraints": [
+    "Fix only the verified race in which the timeout-bearing Browser.downloadWillBegin promise can reject before exportPng attaches its handler, plus the cleanup path needed to contain that failure.",
+    "Attach rejection handling to every started timeout/download promise immediately, await it in a structured try/finally path, and preserve the existing bounded DOWNLOAD_FAILED public error rather than allowing an unhandled rejection or process exit.",
+    "Guarantee idempotent cleanup for every session outcome: close CDP/browser resources, stop only the Chrome and mirror child processes created by that session, wait for termination with a bound, escalate only for those owned PIDs when necessary, and remove disposable profile/download directories while preserving completed intentional PNG artifacts.",
+    "The regression must launch the exact loopback .local/dresser-mirror and a real controlled Chrome session, load a valid source and preset, reach the actual exportPng/download branch, and induce the timeout there; replacing launch with an immediate throwing stub does not satisfy this task.",
+    "Any test-only timeout seam must remain internal to browser-session.mjs, must not change the MCP surface or normal runtime defaults, and must provide observable proof that the export action occurred before timeout handling and cleanup assertions.",
+    "Do not kill, reuse, or inspect unrelated Chrome processes or the user's existing mirror on port 5173; tests must use their own child PIDs, disposable directories, and loopback port.",
+    "Preserve every non-blocked behavior and security boundary frozen in TASK-MOCKUP-MCP-001, including loopback-only traffic, redacted errors, unique non-overwriting outputs, serialization, mirror integrity, and the accepted 10-error full-repository lint baseline.",
+    "Preserve unrelated dirty-worktree changes. Do not edit generated dist files, task history, original task/audit evidence, or perform Git push, deployment, publication, force-push, merge, tag, or release."
+  ],
+  "acceptance_criteria": [
+    "When a real Dresser PNG export reaches its Browser.downloadWillBegin wait and times out, the promise is already rejection-handled, Node remains alive, and dresser_render_png returns the existing bounded DOWNLOAD_FAILED MCP error with no unhandledRejection or uncaughtException.",
+    "After that timeout, the exact Chrome and mirror child PIDs created for the render have exited, the test loopback port no longer accepts connections, CDP is closed, disposable profile/download directories are absent, and no partial or stale PNG is returned or left in the final output root.",
+    "An automated live regression launches the exact local mirror and real Chrome, loads a valid screenshot/preset, proves the Dresser export action was invoked, induces the export/download timeout after launch, asserts the bounded error and server liveness, and verifies cleanup without replacing launch with an immediate throwing stub.",
+    "Existing live success, solid/mesh rendering, capability discovery, sequential isolation, BUSY behavior, source/preset negatives, and unavailable-browser/mirror errors continue to pass with unchanged public MCP schemas, dresser-preset/v1, artifact metadata, and stable codes.",
+    "Only browser-session.mjs and mcp-live.test.mjs change; mirror integrity, task-scoped MCP lint/tests/build, diff validation, and the strict no-regression comparison to the accepted full-repository lint baseline pass."
+  ],
+  "validation": {
+    "profiles": [
+      "baseline",
+      "security-baseline",
+      "backend-api",
+      "external-integration",
+      "data-privacy"
+    ],
+    "commands": [
+      {
+        "id": "live-timeout-regression",
+        "command": "node --test --test-name-pattern='live export timeout' server/mockup-mcp/tests/mcp-live.test.mjs",
+        "evidence": "tasks/evidence/TASK-MOCKUP-MCP-001-R1/live-timeout-test.log"
+      },
+      {
+        "id": "mcp-tests",
+        "command": "pnpm test:mockup-mcp",
+        "evidence": "tasks/evidence/TASK-MOCKUP-MCP-001-R1/mcp-tests.log"
+      },
+      {
+        "id": "lint",
+        "command": "pnpm lint:mockup-mcp",
+        "evidence": "tasks/evidence/TASK-MOCKUP-MCP-001-R1/lint.log"
+      },
+      {
+        "id": "build",
+        "command": "pnpm build:mockup-mcp",
+        "evidence": "tasks/evidence/TASK-MOCKUP-MCP-001-R1/build.log"
+      },
+      {
+        "id": "mirror-integrity",
+        "command": "cd .local/dresser-mirror && shasum -a 256 -c MANIFEST.sha256",
+        "evidence": "tasks/evidence/TASK-MOCKUP-MCP-001-R1/mirror-integrity.log"
+      },
+      {
+        "id": "diff-check",
+        "command": "git diff --check",
+        "evidence": "tasks/evidence/TASK-MOCKUP-MCP-001-R1/diff-check.log"
+      }
+    ],
+    "checks": [
+      {
+        "id": "independent-live-timeout",
+        "description": "Outside the unit-test process, run the real BrowserSessionManager against the exact mirror with a valid screenshot/preset and a bounded export-stage timeout; record export invocation, caught DOWNLOAD_FAILED, continued process liveness, and absence of unhandled rejection or exception.",
+        "evidence": "tasks/evidence/TASK-MOCKUP-MCP-001-R1/live-export-timeout.md"
+      },
+      {
+        "id": "owned-process-cleanup",
+        "description": "Record the remediation run's owned Chrome and mirror PIDs, loopback port, profile path, and download path without exposing user source paths; after timeout verify both PIDs are gone, the port is closed, disposable directories are absent, and unrelated Chrome plus the user's port-5173 mirror were untouched.",
+        "evidence": "tasks/evidence/TASK-MOCKUP-MCP-001-R1/process-cleanup.md"
+      },
+      {
+        "id": "contract-and-happy-regression",
+        "description": "Re-run stdio tool discovery, live capabilities, and one successful PNG render; compare tool schemas, dresser-preset/v1, stable codes, artifact fields, and successful cleanup with TASK-MOCKUP-MCP-001 evidence.",
+        "evidence": "tasks/evidence/TASK-MOCKUP-MCP-001-R1/contract-regression.md"
+      },
+      {
+        "id": "scope-and-baseline",
+        "description": "Inspect the scoped diff and run full pnpm lint as a no-regression comparison; require changes only in the two in-scope files and exactly the accepted 10 errors in the same five out-of-scope files with no MCP finding.",
+        "evidence": "tasks/evidence/TASK-MOCKUP-MCP-001-R1/scope-baseline.md"
+      }
+    ]
+  },
+  "rollback": {
+    "steps": [
+      "Revert only the TASK-MOCKUP-MCP-001-R1 changes in server/mockup-mcp/browser-session.mjs and server/mockup-mcp/tests/mcp-live.test.mjs.",
+      "Stop only any R1 test-owned child process still identified by its recorded PID, remove only its disposable test directories, and rerun the original task-scoped MCP checks."
+    ],
+    "data_recovery": [
+      "No migration or source-data mutation exists; failed-render files are disposable, and successful pre-existing PNG artifacts remain untouched."
+    ]
+  },
+  "interface": null,
+  "visual_gate": {
+    "required": false,
+    "reason": "This remediation changes browser promise and child-process cleanup internals only and has no visible interface or UX-flow impact."
+  },
+  "approvals": {
+    "intent": {
+      "status": "approved",
+      "evidence": "tasks/STATE.json"
+    },
+    "preflight": {
+      "status": "approved",
+      "evidence": "tasks/TASK-MOCKUP-MCP-001-R1/preflight-verdict.json"
+    },
+    "visual": {
+      "status": "not-required",
+      "evidence": ""
+    },
+    "destructive_action": {
+      "status": "not-required",
+      "evidence": ""
+    }
+  },
+  "evidence_required": [
+    "targeted real-browser export-timeout regression log",
+    "bounded DOWNLOAD_FAILED and MCP process-liveness evidence",
+    "owned Chrome and mirror PID termination plus closed-port evidence",
+    "disposable profile/download cleanup and no-partial-artifact evidence",
+    "unchanged MCP contract and successful-render regression",
+    "task-scoped tests, lint, build, mirror-integrity, and diff logs",
+    "two-file scoped diff and unchanged full-repository lint debt comparison"
+  ],
+  "history": {
+    "summary": "Contain the real Dresser export timeout and always clean up task-owned Chrome and mirror child processes.",
+    "touchpoints": [
+      "download promise handling",
+      "child-process cleanup",
+      "live timeout regression"
+    ]
+  },
+  "integration": {
+    "status": "integrated",
+    "integrated_at": "2026-08-30T19:55:40Z",
+    "report": "tasks/evidence/integration/integration-report.json",
+    "final_verification_required": true
+  },
+  "final_review": {
+    "status": "PASS_WITH_DEBT",
+    "verdict": "tasks/audit/TASK-MOCKUP-MCP-001-R1/verdict.json",
+    "accepted_debt": true
+  }
+}

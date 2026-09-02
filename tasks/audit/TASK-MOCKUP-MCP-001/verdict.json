@@ -1,0 +1,181 @@
+{
+  "schema_version": 2,
+  "mode": "final",
+  "task_id": "TASK-MOCKUP-MCP-001",
+  "delivery_mode": "mvp",
+  "scope_expansion": false,
+  "status": "FAIL",
+  "checks": [
+    {
+      "id": "acceptance-1",
+      "status": "PASS",
+      "summary": "Fresh official-SDK stdio discovery exposed exactly the two frozen public tools with machine-readable object input and output schemas.",
+      "evidence": ["tasks/audit/TASK-MOCKUP-MCP-001/final-verification.md"]
+    },
+    {
+      "id": "acceptance-2",
+      "status": "PASS",
+      "summary": "Fresh live-browser discovery returned the exact mirror identity, 28 models, supported backgrounds, aspect ratios, defaults, and bounds.",
+      "evidence": ["tasks/audit/TASK-MOCKUP-MCP-001/final-verification.md"]
+    },
+    {
+      "id": "acceptance-3",
+      "status": "PASS",
+      "summary": "Fresh solid and mesh jobs applied materially different device, background, aspect, scale, and position presets through the browser and used Dresser download events.",
+      "evidence": ["tasks/audit/TASK-MOCKUP-MCP-001/final-verification.md", "server/mockup-mcp/browser-session.mjs"]
+    },
+    {
+      "id": "acceptance-4",
+      "status": "PASS",
+      "summary": "Both fresh PNGs exist below the fixed output root, have valid signatures, non-zero sizes, matching SHA-256 values and dimensions, and visually reflect their presets.",
+      "evidence": ["tasks/audit/TASK-MOCKUP-MCP-001/final-verification.md"]
+    },
+    {
+      "id": "acceptance-5",
+      "status": "PASS",
+      "summary": "Fresh sequential solid and mesh jobs had unique paths and hashes, and an overlapping call received stable BUSY while its winner completed.",
+      "evidence": ["tasks/audit/TASK-MOCKUP-MCP-001/final-verification.md"]
+    },
+    {
+      "id": "acceptance-6",
+      "status": "FAIL",
+      "summary": "A real controlled-browser export timeout caused an unhandled DOWNLOAD_FAILED rejection and terminated Node instead of returning a bounded MCP error.",
+      "reason": "The timeout-bearing download promise can reject before exportPng attaches its await handler, so the required bounded error path is not preserved.",
+      "evidence": ["tasks/audit/TASK-MOCKUP-MCP-001/final-verification.md", "server/mockup-mcp/browser-session.mjs"]
+    },
+    {
+      "id": "acceptance-7",
+      "status": "FAIL",
+      "summary": "Normal privacy checks passed, but the timeout crash bypassed final cleanup and left the verifier-created mirror process listening on loopback.",
+      "reason": "Process termination prevents the render finally block from closing the live session, and a real orphan mirror was observed.",
+      "evidence": ["tasks/audit/TASK-MOCKUP-MCP-001/final-verification.md"]
+    },
+    {
+      "id": "acceptance-8",
+      "status": "PASS",
+      "summary": "Mirror integrity, task-scoped tests/lint/build, diff check, and neighbor scope pass; full lint reproduces only the exact frozen 10-error debt.",
+      "evidence": ["tasks/audit/TASK-MOCKUP-MCP-001/final-verification.md"]
+    },
+    {
+      "id": "mcp-tests",
+      "status": "PASS",
+      "summary": "Fresh pnpm test:mockup-mcp passed 9 of 9 tests, although a separate finding records the timeout harness gap.",
+      "evidence": ["tasks/audit/TASK-MOCKUP-MCP-001/final-verification.md"]
+    },
+    {
+      "id": "lint",
+      "status": "PASS",
+      "summary": "Fresh task-scoped MCP ESLint passed with zero warnings.",
+      "evidence": ["tasks/audit/TASK-MOCKUP-MCP-001/final-verification.md"]
+    },
+    {
+      "id": "build",
+      "status": "PASS",
+      "summary": "Fresh task-scoped syntax and JSON build validation passed.",
+      "evidence": ["tasks/audit/TASK-MOCKUP-MCP-001/final-verification.md"]
+    },
+    {
+      "id": "mirror-integrity",
+      "status": "PASS",
+      "summary": "Fresh SHA-256 manifest verification passed for every exact mirror file.",
+      "evidence": ["tasks/audit/TASK-MOCKUP-MCP-001/final-verification.md", ".local/dresser-mirror/MANIFEST.sha256"]
+    },
+    {
+      "id": "diff-check",
+      "status": "PASS",
+      "summary": "Fresh git diff --check passed.",
+      "evidence": ["tasks/audit/TASK-MOCKUP-MCP-001/final-verification.md"]
+    },
+    {
+      "id": "protocol-and-capabilities",
+      "status": "PASS",
+      "summary": "Independent stdio discovery and live browser capability reconciliation passed with exact stable metadata.",
+      "evidence": ["tasks/audit/TASK-MOCKUP-MCP-001/final-verification.md"]
+    },
+    {
+      "id": "browser-render-demo",
+      "status": "PASS",
+      "summary": "Independent solid and mesh PNGs were generated, hashed, dimension-checked, and visually inspected; source uses Dresser download events rather than Page.captureScreenshot.",
+      "evidence": ["tasks/audit/TASK-MOCKUP-MCP-001/final-verification.md"]
+    },
+    {
+      "id": "input-and-failure-negatives",
+      "status": "FAIL",
+      "summary": "File/schema/browser negatives pass, but the live export-timeout path crashes the process; the test harness only injects launch-time errors for timeout/download codes.",
+      "reason": "The required live timeout scenario does not return a bounded MCP error and is not exercised by the passing automated negative test.",
+      "evidence": ["tasks/audit/TASK-MOCKUP-MCP-001/final-verification.md", "server/mockup-mcp/tests/mcp-live.test.mjs"]
+    },
+    {
+      "id": "isolation-and-concurrency",
+      "status": "PASS",
+      "summary": "Normal fresh sessions reset state, return unique non-overwriting output paths, clean temporary directories, and reject overlap with stable BUSY.",
+      "evidence": ["tasks/audit/TASK-MOCKUP-MCP-001/final-verification.md"]
+    },
+    {
+      "id": "privacy-network-boundary",
+      "status": "FAIL",
+      "summary": "Loopback traffic and redaction pass in normal/error calls, but timeout process termination leaves an orphan mirror and therefore fails required temporary-state cleanup.",
+      "reason": "The observed timeout crash left a task-created loopback server running until the verifier explicitly killed it.",
+      "evidence": ["tasks/audit/TASK-MOCKUP-MCP-001/final-verification.md"]
+    },
+    {
+      "id": "neighbor-regression",
+      "status": "PASS",
+      "summary": "The exact mirror manifest and existing interactive route remain intact; task production files stay within the frozen package/server scope.",
+      "evidence": ["tasks/audit/TASK-MOCKUP-MCP-001/final-verification.md"]
+    },
+    {
+      "id": "full-repo-lint-baseline-debt",
+      "status": "PASS",
+      "summary": "Fresh full lint reproduced exactly 10 errors in the same five frozen out-of-scope files and no MCP-owned error.",
+      "evidence": ["tasks/audit/TASK-MOCKUP-MCP-001/final-verification.md"]
+    },
+    {
+      "id": "scope",
+      "status": "PASS",
+      "summary": "Production changes remain bounded to approved package metadata and server/mockup-mcp; unrelated dirty work, mirror files, portfolio UI, deployment, and Git state were not mutated.",
+      "evidence": ["tasks/audit/TASK-MOCKUP-MCP-001/final-verification.md"]
+    },
+    {
+      "id": "risk:backend-api",
+      "status": "FAIL",
+      "summary": "Normal MCP contract behavior passes, but an export timeout can terminate the server process rather than return the frozen bounded error.",
+      "reason": "A client-facing failure scenario can destroy MCP availability instead of producing a stable tool error.",
+      "evidence": ["tasks/audit/TASK-MOCKUP-MCP-001/final-verification.md"]
+    },
+    {
+      "id": "risk:external-integration",
+      "status": "FAIL",
+      "summary": "Normal controlled-browser integration passes, but the timeout failure leaves its loopback mirror process alive after Node termination.",
+      "reason": "The browser integration does not reliably release its spawned mirror process on the required timeout path.",
+      "evidence": ["tasks/audit/TASK-MOCKUP-MCP-001/final-verification.md"]
+    },
+    {
+      "id": "risk:data-privacy",
+      "status": "PASS",
+      "summary": "Fresh public errors and stderr did not disclose source identity or executable paths, browser traffic stayed local, and no media payload logging was found.",
+      "evidence": ["tasks/audit/TASK-MOCKUP-MCP-001/final-verification.md"]
+    }
+  ],
+  "findings": [
+    {
+      "severity": "release-blocker",
+      "summary": "The live Dresser export timeout can reject before a handler is attached, terminating Node and leaving the mirror process instead of returning a bounded MCP error.",
+      "evidence": "tasks/audit/TASK-MOCKUP-MCP-001/final-verification.md",
+      "check_id": "acceptance-6"
+    },
+    {
+      "severity": "test-harness-defect",
+      "summary": "The timeout/download negative test replaces launch with an immediate throw, so it never executes the real export timeout or cleanup branch.",
+      "evidence": "server/mockup-mcp/tests/mcp-live.test.mjs",
+      "check_id": "input-and-failure-negatives"
+    }
+  ],
+  "debt": [
+    "Ten unchanged out-of-scope full-repository lint errors remain as frozen accepted MVP debt.",
+    "The checkout contains unrelated user-owned dirty changes; the task is intentionally local-only with no authorized commit or push."
+  ],
+  "reviewer": {
+    "independent_from_executor": true
+  }
+}

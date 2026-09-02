@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "task_id": "TASK-DRESSER-FIGMA-001",
+  "token": "b44d0a543b6343e4b0820c98c8df10a5",
+  "state": "archived",
+  "pm_id": "railway-20260831-figma-plugin-mvp",
+  "executor": "figma-bridge-executor",
+  "claimed_at": "2026-08-31T07:46:24.523545Z",
+  "heartbeat_at": "2026-08-31T07:54:46.934906Z",
+  "outcome": "implemented",
+  "reason": "",
+  "finished_at": "2026-08-31T08:00:17.362378Z"
+}

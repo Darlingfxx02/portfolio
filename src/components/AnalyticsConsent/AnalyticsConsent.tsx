@@ -4,9 +4,11 @@ import {
   isAnalyticsConsentRequired,
   setAnalyticsConsent,
 } from '@/lib/analytics'
+import { useLang } from '@/lib/i18n'
 import styles from './AnalyticsConsent.module.css'
 
 export function AnalyticsConsent() {
+  const { lang } = useLang()
   const [choice, setChoice] = useState(getAnalyticsConsent)
 
   if (!isAnalyticsConsentRequired() || choice !== null) return null
@@ -20,11 +22,15 @@ export function AnalyticsConsent() {
     <aside
       className={styles.notice}
       role="region"
-      aria-label="Настройки аналитики"
+      aria-label={lang === 'ru' ? 'Настройки аналитики' : 'Analytics settings'}
     >
       <p>
-        <strong>Поможете сделать сайт лучше?</strong>{' '}
-        Обезличенная статистика покажет, что стоит улучшить.
+        <strong>
+          {lang === 'ru' ? 'Поможете сделать сайт лучше?' : 'Help improve the site?'}
+        </strong>{' '}
+        {lang === 'ru'
+          ? 'Обезличенная статистика покажет, что стоит улучшить.'
+          : 'Anonymous usage data helps me see what needs improvement.'}
       </p>
       <div className={styles.footer}>
         <a
@@ -32,7 +38,7 @@ export function AnalyticsConsent() {
           target="_blank"
           rel="noreferrer"
         >
-          О данных
+          {lang === 'ru' ? 'О данных' : 'About data'}
         </a>
         <div className={styles.actions}>
           <button
@@ -40,14 +46,14 @@ export function AnalyticsConsent() {
             type="button"
             onClick={() => choose(false)}
           >
-            Не сейчас
+            {lang === 'ru' ? 'Не сейчас' : 'Not now'}
           </button>
           <button
             className={styles.primary}
             type="button"
             onClick={() => choose(true)}
           >
-            Да, помочь
+            {lang === 'ru' ? 'Да, помочь' : 'Yes, help'}
           </button>
         </div>
       </div>

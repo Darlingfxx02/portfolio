@@ -13,17 +13,20 @@ import type { Loc } from '@/lib/i18n'
 export const cv = {
   name: profile.name,
   filename: 'Timothe_Ermolaev_Resume',
-  title: { ru: 'Продуктовый дизайнер', en: 'Product designer' } as Loc,
-  focus: { ru: 'Финтех и AI', en: 'Fintech and AI' } as Loc,
+  title: {
+    ru: 'Продуктовый дизайнер / Product Designer',
+    en: 'Product Designer',
+  } as Loc,
+  focus: { ru: 'AI · B2B · FinTech', en: 'AI · B2B · FinTech' } as Loc,
   summary: {
-    ru: 'Продуктовый дизайнер с опытом более 3 лет. Сейчас работаю в продуктовой команде WMT AI и отвечаю за дизайн двух AI-продуктов: от бизнес-задачи и сценариев до прототипа, handoff и итераций после релиза. До этого полтора года работал в дизайн-студии: вёл несколько клиентских проектов параллельно, быстро погружался в новые домены и доводил решения до передачи в разработку.',
-    en: 'Product designer with 3+ years of experience. I currently work in-house at WMT AI, leading design for two AI products from business problem and user flows to prototype, handoff, and post-release iteration. Before that, I spent a year and a half at a design studio, running several client projects in parallel, quickly learning new domains, and taking solutions through developer handoff.',
+    ru: 'Продуктовый дизайнер с опытом более 3 лет в AI-, B2B- и FinTech-продуктах. Веду end-to-end дизайн: от бизнес-задачи, UX-архитектуры и пользовательских сценариев до интерактивного прототипа, UI, дизайн-системы, handoff, дизайн-ревью и итераций после релиза. Проектирую enterprise UX, роли и права доступа, multi-account сценарии, кошельки и выплаты, LLM-функции, ошибки и edge cases. Работаю с продуктом, аналитикой и разработкой; использую Figma, AI-инструменты и code-прототипы для проверки логики до фронтенда.',
+    en: 'Product Designer with 3+ years of experience across AI, B2B, and FinTech products. I lead end-to-end design from business problem, UX architecture, and user flows to interactive prototypes, UI, design systems, handoff, design review, and post-release iteration. I design enterprise UX, roles and permissions, multi-account journeys, wallets and payouts, LLM features, errors, and edge cases. I work cross-functionally with product, analytics, and engineering, using Figma, AI tools, and code prototypes to validate logic before frontend development.',
   } as Loc,
   contacts: [
-    { label: 'Email', value: profile.email, href: `mailto:${profile.email}` },
-    { label: 'Telegram', value: profile.telegramHandle, href: profile.telegram },
-    { label: 'Portfolio', value: 'darling.design', href: 'https://darling.design/#works' },
-    { label: 'GitHub', value: 'Darlingfxx02', href: profile.links.claudeSkills },
+    { label: { ru: 'Почта', en: 'Email' }, value: profile.email, href: `mailto:${profile.email}` },
+    { label: { ru: 'Telegram', en: 'Telegram' }, value: profile.telegramHandle, href: profile.telegram },
+    { label: { ru: 'Портфолио', en: 'Portfolio' }, value: 'darling.design', href: 'https://darling.design/#works' },
+    { label: { ru: 'GitHub', en: 'GitHub' }, value: 'Darlingfxx02', href: profile.links.claudeSkills },
   ],
   // Headline metrics — a scannable strip near the top of the CV.
   highlights: [
@@ -36,19 +39,19 @@ export const cv = {
   achievements: {
     wmt: {
       ru: [
-        'Довёл ключевые сценарии двух AI-продуктов от бизнес-задачи до реализации и итераций после релиза',
-        'Перевёл раннее обсуждение сценариев в интерактивные прототипы на коде, чтобы продукт и разработка проверяли логику до фронтенда',
-        'Объединил требования, состояния и handoff в повторяемый дизайн-цикл для обеих продуктовых команд',
+        'Отвечаю за end-to-end дизайн-цикл: UX-архитектуру, user flows, прототипы, UI, handoff, дизайн-ревью и итерации после релиза',
+        'Проектирую enterprise UX: роли и права доступа, LLM-сценарии, системные состояния, ошибки и edge cases',
+        'Перевожу ранние сценарии в AI- и code-прототипы, развиваю дизайн-систему и сопровождаю реализацию с продуктом, аналитикой и разработкой',
       ],
       en: [
-        'Took key journeys across two AI products from business problem to implementation and post-release iteration',
-        'Turned early flow discussions into interactive code prototypes so product and engineering could validate logic before frontend work',
-        'Unified requirements, state coverage, and handoff into a repeatable design cycle for both product teams',
+        'Own the end-to-end design cycle: UX architecture, user flows, prototypes, UI, handoff, design review, and post-release iteration',
+        'Design enterprise UX across roles and permissions, LLM journeys, system states, errors, and edge cases',
+        'Turn early journeys into AI and code prototypes, evolve the design system, and support delivery with product, analytics, and engineering',
       ],
     },
     uxart: {
       ru: [
-        'Вёл 3–4 проектных потока параллельно',
+        'Вёл 3-4 проектных потока параллельно в AI, FinTech и B2B-продуктах',
         'Заменил статичные пресейл-макеты на кликабельные AI-прототипы, доступные по ссылке',
         'После ретро и обучения команды следующий пресейл выиграли; формат AI-прототипов закрепился как стандарт студии',
       ],
@@ -72,14 +75,14 @@ export const cv = {
     },
     zinda: {
       ru: [
-        'После 3 отклонённых концепций помог свести участников к одной продуктовой основе; за 4 месяца направление дошло до handoff, банк позже вышел',
-        'Сформировал multi-account архитектуру для 4 ключевых зон и сократил MVP, вынеся кредитные продукты в post-MVP',
-        'Самостоятельно довёл мобильное направление от аудита веб-сценариев до прототипов и спецификаций; production delivery завершали командой',
+        'За 4 месяца прошёл путь от UX-аудита веб-сценариев до мобильной архитектуры, прототипов, спецификаций и handoff',
+        'Спроектировал около 40 экранов и состояний, сформировал multi-account архитектуру и вынес кредитные продукты в post-MVP',
+        'Production delivery завершала команда; продукт вышел',
       ],
       en: [
-        'After 3 rejected concepts, helped align stakeholders around one product foundation; the direction reached handoff in 4 months and the bank later shipped',
-        'Defined a multi-account architecture across 4 core areas and narrowed the MVP by moving lending to post-MVP',
-        'Independently took the mobile direction from desktop-flow audit to prototypes and specifications; production delivery was collaborative',
+        'Moved from a UX audit of web journeys to mobile architecture, prototypes, specifications, and handoff in 4 months',
+        'Designed about 40 screens and states, defined a multi-account architecture, and moved lending products to post-MVP',
+        'Production delivery was completed by the team; the product shipped',
       ],
     },
     combogpt: {
@@ -101,22 +104,22 @@ export const cv = {
     {
       group: { ru: 'Продукт', en: 'Product' },
       items: {
-        ru: ['Продуктовая стратегия', 'Дискавери', 'Диалог с бизнесом'],
-        en: ['Product strategy', 'Discovery', 'Working with business'],
+        ru: ['B2B SaaS', 'Enterprise UX', 'Продуктовые метрики'],
+        en: ['B2B SaaS', 'Enterprise UX', 'Product metrics'],
       },
     },
     {
       group: { ru: 'Дизайн', en: 'Design' },
       items: {
-        ru: ['UX/UI', 'Figma', 'Дизайн-системы'],
-        en: ['UX/UI', 'Figma', 'Design systems'],
+        ru: ['UX/UI · Figma', 'User Flow', 'Дизайн-системы'],
+        en: ['UX/UI · Figma', 'User Flow', 'Design systems'],
       },
     },
     {
-      group: { ru: 'Код', en: 'Code' },
+      group: { ru: 'Доставка', en: 'Delivery' },
       items: {
-        ru: ['Прототипы на коде', 'AI workflows'],
-        en: ['Code prototypes', 'AI workflows'],
+        ru: ['Handoff · Design QA', 'Code-прототипы', 'AI workflows'],
+        en: ['Handoff · Design QA', 'Code prototypes', 'AI workflows'],
       },
     },
   ] as { group: Loc; items: Loc<string[]> }[],

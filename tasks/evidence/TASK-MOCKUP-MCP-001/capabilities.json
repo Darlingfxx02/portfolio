@@ -1,0 +1,566 @@
+{
+  "version": "dresser-preset/v1",
+  "mirror": {
+    "manifest": "MANIFEST.sha256",
+    "sha256": "50363797dfae069048924ddef79cbc6e29c31338e84562c8fd822cf4608380e7",
+    "route": "/tools/mockup"
+  },
+  "source": {
+    "acceptedMimeTypes": [
+      "image/png",
+      "image/jpeg"
+    ],
+    "maxBytes": 26214400
+  },
+  "deviceModels": [
+    {
+      "id": "none",
+      "label": "None",
+      "colors": []
+    },
+    {
+      "id": "browser-light",
+      "label": "Light Browser",
+      "colors": []
+    },
+    {
+      "id": "browser-dark",
+      "label": "Dark Browser",
+      "colors": []
+    },
+    {
+      "id": "iPhone 17",
+      "label": "iPhone 17",
+      "colors": [
+        {
+          "id": "iphone-17-black",
+          "label": "Black"
+        },
+        {
+          "id": "iphone-17-lavender",
+          "label": "Lavender"
+        },
+        {
+          "id": "iphone-17-mist-blue",
+          "label": "Mist Blue"
+        },
+        {
+          "id": "iphone-17-sage",
+          "label": "Sage"
+        },
+        {
+          "id": "iphone-17-white",
+          "label": "White"
+        }
+      ]
+    },
+    {
+      "id": "iPhone Air",
+      "label": "iPhone Air",
+      "colors": [
+        {
+          "id": "iphone-air-sky-blue",
+          "label": "Sky Blue"
+        },
+        {
+          "id": "iphone-air-light-gold",
+          "label": "Light Gold"
+        },
+        {
+          "id": "iphone-air-cloud-white",
+          "label": "Cloud White"
+        },
+        {
+          "id": "iphone-air-space-black",
+          "label": "Space Black"
+        }
+      ]
+    },
+    {
+      "id": "iPhone 17 Pro",
+      "label": "iPhone 17 Pro",
+      "colors": [
+        {
+          "id": "iphone-17-pro-silver",
+          "label": "Silver"
+        },
+        {
+          "id": "iphone-17-pro-cosmic-orange",
+          "label": "Cosmic Orange"
+        },
+        {
+          "id": "iphone-17-pro-deep-blue",
+          "label": "Deep Blue"
+        }
+      ]
+    },
+    {
+      "id": "iPhone 17 Pro Max",
+      "label": "iPhone 17 Pro Max",
+      "colors": [
+        {
+          "id": "iphone-17-pro-max-silver",
+          "label": "Silver"
+        },
+        {
+          "id": "iphone-17-pro-max-cosmic-orange",
+          "label": "Cosmic Orange"
+        },
+        {
+          "id": "iphone-17-pro-max-deep-blue",
+          "label": "Deep Blue"
+        }
+      ]
+    },
+    {
+      "id": "iPhone 16",
+      "label": "iPhone 16",
+      "colors": [
+        {
+          "id": "iphone-16",
+          "label": "Default"
+        }
+      ]
+    },
+    {
+      "id": "iPhone 16 Plus",
+      "label": "iPhone 16 Plus",
+      "colors": [
+        {
+          "id": "iphone-16-plus",
+          "label": "Default"
+        }
+      ]
+    },
+    {
+      "id": "iPhone 16 Pro",
+      "label": "iPhone 16 Pro",
+      "colors": [
+        {
+          "id": "iphone-16-pro",
+          "label": "Default"
+        }
+      ]
+    },
+    {
+      "id": "iPhone 16 Pro Max",
+      "label": "iPhone 16 Pro Max",
+      "colors": [
+        {
+          "id": "iphone-16-pro-max",
+          "label": "Default"
+        }
+      ]
+    },
+    {
+      "id": "iPhone 15",
+      "label": "iPhone 15",
+      "colors": [
+        {
+          "id": "iphone-15-black",
+          "label": "Black"
+        },
+        {
+          "id": "iphone-15-blue",
+          "label": "Blue"
+        },
+        {
+          "id": "iphone-15-green",
+          "label": "Green"
+        },
+        {
+          "id": "iphone-15-pink",
+          "label": "Pink"
+        },
+        {
+          "id": "iphone-15-yellow",
+          "label": "Yellow"
+        }
+      ]
+    },
+    {
+      "id": "iPhone 15 Plus",
+      "label": "iPhone 15 Plus",
+      "colors": [
+        {
+          "id": "iphone-15-plus-black",
+          "label": "Black"
+        },
+        {
+          "id": "iphone-15-plus-blue",
+          "label": "Blue"
+        },
+        {
+          "id": "iphone-15-plus-green",
+          "label": "Green"
+        },
+        {
+          "id": "iphone-15-plus-pink",
+          "label": "Pink"
+        },
+        {
+          "id": "iphone-15-plus-yellow",
+          "label": "Yellow"
+        }
+      ]
+    },
+    {
+      "id": "iPhone 15 Pro",
+      "label": "iPhone 15 Pro",
+      "colors": [
+        {
+          "id": "iphone-15-pro-black-titanium",
+          "label": "Black Titanium"
+        },
+        {
+          "id": "iphone-15-pro-blue-titanium",
+          "label": "Blue Titanium"
+        },
+        {
+          "id": "iphone-15-pro-natural-titanium",
+          "label": "Natural Titanium"
+        },
+        {
+          "id": "iphone-15-pro-white-titanium",
+          "label": "White Titanium"
+        }
+      ]
+    },
+    {
+      "id": "iPhone 15 Pro Max",
+      "label": "iPhone 15 Pro Max",
+      "colors": [
+        {
+          "id": "iphone-15-pro-max-black-titanium",
+          "label": "Black Titanium"
+        },
+        {
+          "id": "iphone-15-pro-max-blue-titanium",
+          "label": "Blue Titanium"
+        },
+        {
+          "id": "iphone-15-pro-max-natural-titanium",
+          "label": "Natural Titanium"
+        },
+        {
+          "id": "iphone-15-pro-max-white-titanium",
+          "label": "White Titanium"
+        }
+      ]
+    },
+    {
+      "id": "iPhone 14",
+      "label": "iPhone 14",
+      "colors": [
+        {
+          "id": "iphone-14-blue",
+          "label": "Blue"
+        },
+        {
+          "id": "iphone-14-midnight",
+          "label": "Midnight"
+        },
+        {
+          "id": "iphone-14-product-red",
+          "label": "PRODUCT Red"
+        },
+        {
+          "id": "iphone-14-purple",
+          "label": "Purple"
+        },
+        {
+          "id": "iphone-14-starlight",
+          "label": "Starlight"
+        }
+      ]
+    },
+    {
+      "id": "iPhone 14 Plus",
+      "label": "iPhone 14 Plus",
+      "colors": [
+        {
+          "id": "iphone-14-plus-blue",
+          "label": "Blue"
+        },
+        {
+          "id": "iphone-14-plus-midnight",
+          "label": "Midnight"
+        },
+        {
+          "id": "iphone-14-plus-product-red",
+          "label": "PRODUCT Red"
+        },
+        {
+          "id": "iphone-14-plus-purple",
+          "label": "Purple"
+        },
+        {
+          "id": "iphone-14-plus-starlight",
+          "label": "Starlight"
+        }
+      ]
+    },
+    {
+      "id": "iPhone 14 Pro",
+      "label": "iPhone 14 Pro",
+      "colors": [
+        {
+          "id": "iphone-14-pro-deep-purple",
+          "label": "Deep Purple"
+        },
+        {
+          "id": "iphone-14-pro-gold",
+          "label": "Gold"
+        },
+        {
+          "id": "iphone-14-pro-silver",
+          "label": "Silver"
+        },
+        {
+          "id": "iphone-14-pro-space-black",
+          "label": "Space Black"
+        }
+      ]
+    },
+    {
+      "id": "iPhone 14 Pro Max",
+      "label": "iPhone 14 Pro Max",
+      "colors": [
+        {
+          "id": "iphone-14-pro-max-deep-purple",
+          "label": "Deep Purple"
+        },
+        {
+          "id": "iphone-14-pro-max-gold",
+          "label": "Gold"
+        },
+        {
+          "id": "iphone-14-pro-max-silver",
+          "label": "Silver"
+        },
+        {
+          "id": "iphone-14-pro-max-space-black",
+          "label": "Space Black"
+        }
+      ]
+    },
+    {
+      "id": "iPhone 13",
+      "label": "iPhone 13",
+      "colors": [
+        {
+          "id": "iphone-13-midnight",
+          "label": "Midnight"
+        },
+        {
+          "id": "iphone-13-starlight",
+          "label": "Starlight"
+        }
+      ]
+    },
+    {
+      "id": "iPhone 13 Pro",
+      "label": "iPhone 13 Pro",
+      "colors": [
+        {
+          "id": "iphone-13-pro-graphite",
+          "label": "Graphite"
+        },
+        {
+          "id": "iphone-13-pro-silver",
+          "label": "Silver"
+        }
+      ]
+    },
+    {
+      "id": "iPhone 13 Pro Max",
+      "label": "iPhone 13 Pro Max",
+      "colors": [
+        {
+          "id": "iphone-13-pro-max-graphite",
+          "label": "Graphite"
+        },
+        {
+          "id": "iphone-13-pro-max-silver",
+          "label": "Silver"
+        }
+      ]
+    },
+    {
+      "id": "iPhone 12",
+      "label": "iPhone 12",
+      "colors": [
+        {
+          "id": "iphone-12",
+          "label": "Default"
+        }
+      ]
+    },
+    {
+      "id": "iPhone 12 Pro",
+      "label": "iPhone 12 Pro",
+      "colors": [
+        {
+          "id": "iphone-12-pro",
+          "label": "Default"
+        }
+      ]
+    },
+    {
+      "id": "iPhone 12 Pro Max",
+      "label": "iPhone 12 Pro Max",
+      "colors": [
+        {
+          "id": "iphone-12-pro-max",
+          "label": "Default"
+        }
+      ]
+    },
+    {
+      "id": "iPad Pro 11″ (M4)",
+      "label": "iPad Pro 11″ (M4)",
+      "colors": [
+        {
+          "id": "ipad-pro-m4-11-silver",
+          "label": "Silver"
+        },
+        {
+          "id": "ipad-pro-m4-11-space-black",
+          "label": "Space Black"
+        }
+      ]
+    },
+    {
+      "id": "iPad Pro 13″ (M4)",
+      "label": "iPad Pro 13″ (M4)",
+      "colors": [
+        {
+          "id": "ipad-pro-m4-13-silver",
+          "label": "Silver"
+        },
+        {
+          "id": "ipad-pro-m4-13-space-black",
+          "label": "Space Black"
+        }
+      ]
+    },
+    {
+      "id": "iPad mini",
+      "label": "iPad mini",
+      "colors": [
+        {
+          "id": "ipad-mini",
+          "label": "Default"
+        }
+      ]
+    }
+  ],
+  "backgrounds": {
+    "modes": [
+      "solid",
+      "mesh",
+      "transparent",
+      "picture"
+    ],
+    "solid": {
+      "defaultColor": "#1C1C1C"
+    },
+    "mesh": {
+      "colorCount": 3,
+      "defaultColors": [
+        "#141414",
+        "#53545A",
+        "#FDFDFD"
+      ]
+    },
+    "picturePacks": [
+      {
+        "id": "sky",
+        "label": "sky",
+        "imageCount": 20
+      },
+      {
+        "id": "onyx",
+        "label": "onyx",
+        "imageCount": 20
+      },
+      {
+        "id": "white",
+        "label": "white",
+        "imageCount": 20
+      },
+      {
+        "id": "meadow",
+        "label": "meadow",
+        "imageCount": 20
+      },
+      {
+        "id": "sage",
+        "label": "sage",
+        "imageCount": 20
+      }
+    ]
+  },
+  "layout": {
+    "aspectRatios": [
+      {
+        "id": "16:9",
+        "label": "16:9"
+      },
+      {
+        "id": "4:3",
+        "label": "4:3"
+      },
+      {
+        "id": "1:1",
+        "label": "1:1"
+      },
+      {
+        "id": "9:16",
+        "label": "9:16"
+      }
+    ],
+    "padding": {
+      "default": 72,
+      "min": 72,
+      "max": 72,
+      "step": 1
+    },
+    "deviceScale": {
+      "default": 150,
+      "min": 60,
+      "max": 300,
+      "step": 10
+    },
+    "x": {
+      "default": 0,
+      "min": -1000,
+      "max": 1000,
+      "step": 10
+    },
+    "y": {
+      "default": 100,
+      "min": -1000,
+      "max": 1000,
+      "step": 10
+    }
+  },
+  "defaults": {
+    "version": "dresser-preset/v1",
+    "device": {
+      "modelId": "iPhone 17",
+      "colorId": "iphone-17-black"
+    },
+    "background": {
+      "mode": "solid",
+      "color": "#1C1C1C"
+    },
+    "layout": {
+      "aspectRatioId": "16:9",
+      "padding": 72,
+      "deviceScale": 150,
+      "x": 0,
+      "y": 100
+    }
+  }
+}

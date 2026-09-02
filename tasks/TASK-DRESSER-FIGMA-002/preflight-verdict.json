@@ -1,0 +1,175 @@
+{
+  "schema_version": 2,
+  "mode": "preflight",
+  "task_id": "TASK-DRESSER-FIGMA-002",
+  "delivery_mode": "mvp",
+  "scope_expansion": false,
+  "status": "FAIL",
+  "checks": [
+    {
+      "id": "acceptance-1",
+      "status": "FAIL",
+      "summary": "The documented one-command development path cannot give the sandboxed plugin the companion's private per-run bearer token without persisting, exposing, or serving it.",
+      "evidence": ["tasks/evidence/TASK-DRESSER-FIGMA-002/preflight-review.md", "server/figma-plugin-bridge/runtime-state.mjs", "server/figma-plugin-bridge/server.mjs"],
+      "reason": "The bridge requires an ephemeral bearer token, but the frozen plugin scope defines no compliant runtime handoff from the owner-only filesystem record to Figma."
+    },
+    {
+      "id": "acceptance-2",
+      "status": "FAIL",
+      "summary": "Frame export and compact UI are feasible, but authenticated capabilities cannot load from the current companion under the frozen no-persistence and no-bridge-change constraints.",
+      "evidence": ["tasks/evidence/TASK-DRESSER-FIGMA-002/preflight-review.md", "server/figma-plugin-bridge/protocol.mjs"],
+      "reason": "Neither the Figma main sandbox nor its iframe can read `.local/dresser-figma/runtime.json`, and the bridge does not expose the token."
+    },
+    {
+      "id": "acceptance-3",
+      "status": "PASS",
+      "summary": "The frozen dresser-preset/v1 capability schema is closed, bounded, and sufficient to populate every required PNG-relevant control without inventing settings.",
+      "evidence": ["tasks/TASK-DRESSER-FIGMA-002/task.json", "server/mockup-mcp/preset-schema.mjs", "tasks/evidence/TASK-DRESSER-FIGMA-002/reference-research.md"]
+    },
+    {
+      "id": "acceptance-4",
+      "status": "PASS",
+      "summary": "The approved contract makes browser PNG bytes the only preview source and defines explicit initial, stale, update, and pre-insert rendering transitions.",
+      "evidence": ["tasks/visual/TASK-DRESSER-FIGMA-002/visual-contract.json", "tasks/TASK-DRESSER-FIGMA-002/task.json"]
+    },
+    {
+      "id": "acceptance-5",
+      "status": "PASS",
+      "summary": "The packet specifies a single new image-filled rectangle, exact name and absolute placement, selected result, and unchanged source/unrelated nodes.",
+      "evidence": ["tasks/TASK-DRESSER-FIGMA-002/task.json", "tasks/evidence/TASK-DRESSER-FIGMA-002/preflight-review.md"]
+    },
+    {
+      "id": "acceptance-6",
+      "status": "PASS",
+      "summary": "Selection, message, companion, response, image, duplicate, and insertion failures are enumerated with recoverable no-partial-mutation outcomes.",
+      "evidence": ["tasks/TASK-DRESSER-FIGMA-002/task.json"]
+    },
+    {
+      "id": "acceptance-7",
+      "status": "PASS",
+      "summary": "Both source export and returned PNG are bounded by explicit proportional downscale, PNG dimension validation, and Figma's documented 4096 px image limit.",
+      "evidence": ["tasks/TASK-DRESSER-FIGMA-002/task.json", "tasks/evidence/TASK-DRESSER-FIGMA-002/preflight-review.md"]
+    },
+    {
+      "id": "acceptance-8",
+      "status": "PASS",
+      "summary": "The approved visual contract freezes compact and expanded layouts, light/dark theming, focus, labels, states, reduced motion, icon fallback, and accessibility review.",
+      "evidence": ["tasks/visual/TASK-DRESSER-FIGMA-002/visual-contract.json", "tasks/evidence/TASK-DRESSER-FIGMA-002/icon-system.md"]
+    },
+    {
+      "id": "acceptance-9",
+      "status": "PASS",
+      "summary": "The intended data boundary is explicit and testable, but it is also the constraint that makes the undefined bearer-token handoff blocking under acceptance 1 and 2.",
+      "evidence": ["tasks/TASK-DRESSER-FIGMA-002/task.json", "server/figma-plugin-bridge/server.mjs", "tasks/evidence/TASK-DRESSER-FIGMA-002/preflight-review.md"]
+    },
+    {
+      "id": "plugin-tests",
+      "status": "PASS",
+      "summary": "The task owns the plugin tests and package script needed to add this bounded command during implementation.",
+      "evidence": ["tasks/TASK-DRESSER-FIGMA-002/task.json", "package.json"]
+    },
+    {
+      "id": "plugin-lint",
+      "status": "PASS",
+      "summary": "The task owns all plugin source and the scoped package script needed for a no-warning lint gate.",
+      "evidence": ["tasks/TASK-DRESSER-FIGMA-002/task.json", "package.json"]
+    },
+    {
+      "id": "plugin-build",
+      "status": "PASS",
+      "summary": "The task owns the sandbox-safe main/UI build, local manifest generation, and package script needed for the frozen build gate.",
+      "evidence": ["tasks/TASK-DRESSER-FIGMA-002/task.json", "package.json"]
+    },
+    {
+      "id": "mcp-regression",
+      "status": "PASS",
+      "summary": "The existing MCP regression command is real and protects the renderer that remains outside plugin scope.",
+      "evidence": ["tasks/TASK-DRESSER-FIGMA-002/task.json", "package.json", "tasks/audit/TASK-DRESSER-FIGMA-001-R1/final-verification.md"]
+    },
+    {
+      "id": "development-manifest-import",
+      "status": "PASS",
+      "summary": "The manifest, real development ID, CSP/network, built artifact, console, and themed launch checks are concrete; authenticated startup remains separately failed by acceptance 1 and 2.",
+      "evidence": ["tasks/TASK-DRESSER-FIGMA-002/task.json", "tasks/evidence/TASK-DRESSER-FIGMA-002/preflight-review.md"]
+    },
+    {
+      "id": "selected-frame-demo",
+      "status": "PASS",
+      "summary": "The observable demo freezes one disposable top-level Frame, exact preview/settings flow, source/result metadata, 80 px placement, and source preservation.",
+      "evidence": ["tasks/TASK-DRESSER-FIGMA-002/task.json", "tasks/visual/TASK-DRESSER-FIGMA-002/visual-contract.json"]
+    },
+    {
+      "id": "capability-and-visual-fidelity",
+      "status": "PASS",
+      "summary": "The check covers live option reconciliation and representative model/background/ratio/position pixel comparisons without unsupported controls.",
+      "evidence": ["tasks/TASK-DRESSER-FIGMA-002/task.json", "server/mockup-mcp/preset-schema.mjs"]
+    },
+    {
+      "id": "selection-message-render-recovery",
+      "status": "PASS",
+      "summary": "The negative matrix includes selection drift, malformed/stale messages, missing identity, bridge failures, invalid results, duplicate insert, and restart with no partial node.",
+      "evidence": ["tasks/TASK-DRESSER-FIGMA-002/task.json"]
+    },
+    {
+      "id": "figma-image-boundary",
+      "status": "PASS",
+      "summary": "The check directly exercises below/above-limit and extreme-ratio frames, matching dimensions, predictable placement, one undo step, and no source mutation.",
+      "evidence": ["tasks/TASK-DRESSER-FIGMA-002/task.json", "tasks/evidence/TASK-DRESSER-FIGMA-002/preflight-review.md"]
+    },
+    {
+      "id": "icon-fallback",
+      "status": "PASS",
+      "summary": "The task freezes a typed named-import resolver, Question fallback, development-only diagnostic, and bans placeholder/full-catalog alternatives.",
+      "evidence": ["tasks/TASK-DRESSER-FIGMA-002/task.json", "tasks/evidence/TASK-DRESSER-FIGMA-002/icon-system.md"]
+    },
+    {
+      "id": "icon-accessibility",
+      "status": "PASS",
+      "summary": "The visual/accessibility check covers both approved sizes and themes, keyboard order, focus, labels, announcements, names, geometry, disabled/loading states, and clipping.",
+      "evidence": ["tasks/TASK-DRESSER-FIGMA-002/task.json", "tasks/visual/TASK-DRESSER-FIGMA-002/visual-contract.json"]
+    },
+    {
+      "id": "privacy-network-scope",
+      "status": "PASS",
+      "summary": "The final check is correctly scoped to loopback PNG/preset traffic, sensitive-data absence, no persistence, scoped diff, and neighbor preservation.",
+      "evidence": ["tasks/TASK-DRESSER-FIGMA-002/task.json", "server/figma-plugin-bridge/protocol.mjs"]
+    },
+    {
+      "id": "scope",
+      "status": "PASS",
+      "summary": "Plugin ownership is explicit and isolated from the verified bridge, mirror, MCP, portfolio, generated dist, publication, deployment, remote delivery, and unrelated dirty work.",
+      "evidence": ["tasks/TASK-DRESSER-FIGMA-002/task.json", "tasks/evidence/TASK-DRESSER-FIGMA-002/preflight-review.md"]
+    },
+    {
+      "id": "risk:frontend",
+      "status": "PASS",
+      "summary": "The approved compact visual contract and explicit Mobbin waiver freeze hierarchy, states, defaults, responsiveness, icons, and accessibility without new UX discretion.",
+      "evidence": ["tasks/visual/TASK-DRESSER-FIGMA-002/visual-contract.json", "tasks/evidence/TASK-DRESSER-FIGMA-002/mobbin-waiver.md"]
+    },
+    {
+      "id": "risk:external-integration",
+      "status": "PASS",
+      "summary": "Figma and companion boundaries are enumerated with real manifest/import, network, negative, render, cleanup, and regression evidence requirements.",
+      "evidence": ["tasks/TASK-DRESSER-FIGMA-002/task.json", "tasks/audit/TASK-DRESSER-FIGMA-001-R1/verdict.json"]
+    },
+    {
+      "id": "risk:data-privacy",
+      "status": "FAIL",
+      "summary": "The packet simultaneously requires authenticated companion access, forbids token persistence/exposure, and excludes the only component that could add a runtime bootstrap channel.",
+      "evidence": ["tasks/evidence/TASK-DRESSER-FIGMA-002/preflight-review.md", "server/figma-plugin-bridge/runtime-state.mjs", "server/figma-plugin-bridge/server.mjs"],
+      "reason": "Any currently available token handoff either persists/exposes the secret or changes the out-of-scope bridge contract."
+    }
+  ],
+  "findings": [
+    {
+      "severity": "release-blocker",
+      "summary": "No compliant bearer-token handoff exists from the local companion runtime record to the sandboxed Figma plugin.",
+      "evidence": "tasks/evidence/TASK-DRESSER-FIGMA-002/preflight-review.md",
+      "check_id": "acceptance-1"
+    }
+  ],
+  "debt": [],
+  "reviewer": {
+    "independent_from_executor": true
+  }
+}

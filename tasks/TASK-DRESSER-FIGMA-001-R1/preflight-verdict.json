@@ -1,0 +1,147 @@
+{
+  "schema_version": 2,
+  "mode": "preflight",
+  "task_id": "TASK-DRESSER-FIGMA-001-R1",
+  "delivery_mode": "mvp",
+  "scope_expansion": false,
+  "status": "PASS",
+  "checks": [
+    {
+      "id": "acceptance-1",
+      "status": "PASS",
+      "summary": "The three exact cross-route OPTIONS failures are source-evidenced and frozen to bounded rejection, absent permission headers, and zero manager or shutdown calls.",
+      "evidence": ["tasks/TASK-DRESSER-FIGMA-001-R1/task.json", "tasks/evidence/TASK-DRESSER-FIGMA-001/integration-blocker.md", "tasks/evidence/TASK-DRESSER-FIGMA-001-R1/preflight-review.md"]
+    },
+    {
+      "id": "acceptance-2",
+      "status": "PASS",
+      "summary": "The packet defines an exact canonical policy for all three routes and explicitly forbids deriving allow values from caller input.",
+      "evidence": ["tasks/TASK-DRESSER-FIGMA-001-R1/task.json", "tasks/evidence/TASK-DRESSER-FIGMA-001-R1/preflight-review.md", "server/figma-plugin-bridge/protocol.mjs"]
+    },
+    {
+      "id": "acceptance-3",
+      "status": "PASS",
+      "summary": "Unknown routes, missing required headers, and every extra header have stable allowed error outcomes with no permission, side effect, token, or stack disclosure.",
+      "evidence": ["tasks/TASK-DRESSER-FIGMA-001-R1/task.json"]
+    },
+    {
+      "id": "acceptance-4",
+      "status": "PASS",
+      "summary": "The verified non-empty chunked shutdown gap maps directly to full decoded-body consumption and INVALID_BODY before any 202, callback, runtime removal, or listener close.",
+      "evidence": ["tasks/TASK-DRESSER-FIGMA-001-R1/task.json", "tasks/evidence/TASK-DRESSER-FIGMA-001/integration-blocker.md", "server/figma-plugin-bridge/server.mjs"]
+    },
+    {
+      "id": "acceptance-5",
+      "status": "PASS",
+      "summary": "Both explicit zero length and empty chunked success paths are concrete, require end-of-stream validation, and preserve the existing 202 with exactly one delayed shutdown callback.",
+      "evidence": ["tasks/TASK-DRESSER-FIGMA-001-R1/task.json"]
+    },
+    {
+      "id": "acceptance-6",
+      "status": "PASS",
+      "summary": "The owned tests can reproduce all four source failures and freeze the complete allow/deny matrix and framing cases without weakening existing assertions.",
+      "evidence": ["tasks/TASK-DRESSER-FIGMA-001-R1/task.json", "server/figma-plugin-bridge/tests/server.test.mjs", "server/figma-plugin-bridge/tests/protocol.test.mjs"]
+    },
+    {
+      "id": "acceptance-7",
+      "status": "PASS",
+      "summary": "Full bridge and MCP regressions, scoped lint/build, mirror integrity, diff hygiene, and exact four-file ownership protect every passing source-task neighbor.",
+      "evidence": ["tasks/TASK-DRESSER-FIGMA-001-R1/task.json", "tasks/evidence/TASK-DRESSER-FIGMA-001-R1/preflight-review.md"]
+    },
+    {
+      "id": "targeted-reproducers",
+      "status": "PASS",
+      "summary": "The command targets names owned by the two in-scope test files and will exercise only the route-specific preflight and shutdown-body regressions added by this remediation.",
+      "evidence": ["tasks/TASK-DRESSER-FIGMA-001-R1/task.json", "server/figma-plugin-bridge/tests/server.test.mjs", "server/figma-plugin-bridge/tests/protocol.test.mjs"]
+    },
+    {
+      "id": "bridge-tests",
+      "status": "PASS",
+      "summary": "The existing command is real and fresh baseline execution passed all 5 current tests before remediation.",
+      "evidence": ["tasks/TASK-DRESSER-FIGMA-001-R1/task.json", "package.json", "tasks/evidence/TASK-DRESSER-FIGMA-001-R1/preflight-review.md"]
+    },
+    {
+      "id": "bridge-lint",
+      "status": "PASS",
+      "summary": "The existing task-scoped lint command covers every owned bridge file and fresh baseline execution exited 0.",
+      "evidence": ["tasks/TASK-DRESSER-FIGMA-001-R1/task.json", "package.json", "tasks/evidence/TASK-DRESSER-FIGMA-001-R1/preflight-review.md"]
+    },
+    {
+      "id": "bridge-build",
+      "status": "PASS",
+      "summary": "The existing syntax build covers both production modules in scope and fresh baseline execution exited 0.",
+      "evidence": ["tasks/TASK-DRESSER-FIGMA-001-R1/task.json", "package.json", "tasks/evidence/TASK-DRESSER-FIGMA-001-R1/preflight-review.md"]
+    },
+    {
+      "id": "mcp-tests",
+      "status": "PASS",
+      "summary": "The existing MCP regression command is frozen to protect the imported renderer while MCP files remain outside remediation scope.",
+      "evidence": ["tasks/TASK-DRESSER-FIGMA-001-R1/task.json", "package.json"]
+    },
+    {
+      "id": "mirror-integrity",
+      "status": "PASS",
+      "summary": "The exact mirror manifest command remains frozen while every mirror path is excluded from remediation scope.",
+      "evidence": ["tasks/TASK-DRESSER-FIGMA-001-R1/task.json", ".local/dresser-mirror/MANIFEST.sha256"]
+    },
+    {
+      "id": "diff-check",
+      "status": "PASS",
+      "summary": "Fresh preflight diff hygiene passed and the final check is bounded by the explicit four-file ownership rule.",
+      "evidence": ["tasks/TASK-DRESSER-FIGMA-001-R1/task.json", "tasks/evidence/TASK-DRESSER-FIGMA-001-R1/preflight-review.md"]
+    },
+    {
+      "id": "exact-integration-reproducers",
+      "status": "PASS",
+      "summary": "The observable check copies the exact four source integration requests and requires rejection, no permission reflection, continued liveness, and zero side effects.",
+      "evidence": ["tasks/TASK-DRESSER-FIGMA-001-R1/task.json", "tasks/evidence/TASK-DRESSER-FIGMA-001/integration-blocker.md"]
+    },
+    {
+      "id": "complete-preflight-matrix",
+      "status": "PASS",
+      "summary": "The matrix covers every valid route tuple, cross-route method, missing and extra header, case/order variant, and unknown route with canonical positive responses only.",
+      "evidence": ["tasks/TASK-DRESSER-FIGMA-001-R1/task.json", "tasks/evidence/TASK-DRESSER-FIGMA-001-R1/preflight-review.md"]
+    },
+    {
+      "id": "shutdown-framing-and-liveness",
+      "status": "PASS",
+      "summary": "The framing check covers zero, positive, absent, empty/non-empty chunked, slow, incomplete, aborted, and parser-rejected requests with callback timing and listener liveness assertions.",
+      "evidence": ["tasks/TASK-DRESSER-FIGMA-001-R1/task.json"]
+    },
+    {
+      "id": "scope-security-neighbor-regression",
+      "status": "PASS",
+      "summary": "The check combines four-file diff review with all passing auth, Host, origin, capability, render, BUSY, redaction, cleanup, MCP, and mirror boundaries.",
+      "evidence": ["tasks/TASK-DRESSER-FIGMA-001-R1/task.json", "tasks/evidence/TASK-DRESSER-FIGMA-001-R1/preflight-review.md"]
+    },
+    {
+      "id": "scope",
+      "status": "PASS",
+      "summary": "The remediation is limited to two bridge modules and two tests, changes no dependency or public feature surface, and is sequentially dependent on the source task.",
+      "evidence": ["tasks/TASK-DRESSER-FIGMA-001-R1/task.json", "tasks/TASK-DRESSER-FIGMA-001/task.json", "tasks/evidence/TASK-DRESSER-FIGMA-001-R1/preflight-review.md"]
+    },
+    {
+      "id": "risk:backend-api",
+      "status": "PASS",
+      "summary": "The security-sensitive API change only narrows OPTIONS and shutdown acceptance and is covered by exact positive/negative matrices and unchanged error contracts.",
+      "evidence": ["tasks/TASK-DRESSER-FIGMA-001-R1/task.json"]
+    },
+    {
+      "id": "risk:external-integration",
+      "status": "PASS",
+      "summary": "Raw HTTP framing, Node parser behavior, route-specific CORS, listener continuity, and callback timing are directly observable without involving new external systems.",
+      "evidence": ["tasks/TASK-DRESSER-FIGMA-001-R1/task.json"]
+    },
+    {
+      "id": "risk:data-privacy",
+      "status": "PASS",
+      "summary": "The remediation preserves token/body redaction, forbids permission reflection, adds no persistence, and asserts no runtime-state mutation on rejected shutdown requests.",
+      "evidence": ["tasks/TASK-DRESSER-FIGMA-001-R1/task.json"]
+    }
+  ],
+  "findings": [],
+  "debt": [],
+  "reviewer": {
+    "independent_from_executor": true
+  }
+}

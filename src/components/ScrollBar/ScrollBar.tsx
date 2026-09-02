@@ -46,7 +46,7 @@ export function ScrollBar() {
         compute()
       })
     }
-    compute()
+    onScroll()
     window.addEventListener('scroll', onScroll, { passive: true })
     window.addEventListener('resize', compute)
     // Height changes on route switches, sticker drags, infinite scroll, etc.

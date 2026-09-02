@@ -1,0 +1,122 @@
+{
+  "schema_version": 2,
+  "mode": "preflight",
+  "task_id": "TASK-MOCKUP-001",
+  "delivery_mode": "prototype",
+  "scope_expansion": false,
+  "status": "PASS",
+  "checks": [
+    {
+      "id": "scope",
+      "status": "PASS",
+      "summary": "The task has bounded, non-overlapping ownership, explicit clean-room exclusions, a reversible local-only delivery boundary, and an approved Mobbin exception.",
+      "evidence": [
+        "tasks/TASK-MOCKUP-001/task.json",
+        "tasks/BRIEF.json",
+        "tasks/CONSTRAINTS.json",
+        "tasks/evidence/TASK-MOCKUP-001/preflight-review.md"
+      ]
+    },
+    {
+      "id": "acceptance-1",
+      "status": "PASS",
+      "summary": "Direct-route code splitting and isolation from SiteBoot are specific and verifiable while preserving the ordinary portfolio boot path.",
+      "evidence": ["tasks/TASK-MOCKUP-001/task.json", "src/main.tsx"]
+    },
+    {
+      "id": "acceptance-2",
+      "status": "PASS",
+      "summary": "Valid local PNG/JPEG decode, browser-memory handling, generic unbranded geometry, and copied-asset exclusions are explicit.",
+      "evidence": ["tasks/TASK-MOCKUP-001/task.json", "tasks/evidence/TASK-MOCKUP-001/reference-research.md"]
+    },
+    {
+      "id": "acceptance-3",
+      "status": "PASS",
+      "summary": "Background, padding, scale, and x/y controls define one bounded deterministic composition.",
+      "evidence": ["tasks/TASK-MOCKUP-001/task.json"]
+    },
+    {
+      "id": "acceptance-4",
+      "status": "PASS",
+      "summary": "PNG dimensions and preview/export visual parity are observable and included in the demo evidence contract.",
+      "evidence": ["tasks/TASK-MOCKUP-001/task.json"]
+    },
+    {
+      "id": "acceptance-5",
+      "status": "PASS",
+      "summary": "Unsupported, corrupt, and zero-dimension negative paths require recoverable errors and preservation of the last valid composition.",
+      "evidence": ["tasks/TASK-MOCKUP-001/task.json"]
+    },
+    {
+      "id": "acceptance-6",
+      "status": "PASS",
+      "summary": "Build, lint, privacy, focus, labeling, and existing-portfolio checks are concrete and mapped to evidence.",
+      "evidence": ["tasks/TASK-MOCKUP-001/task.json", "tasks/evidence/TASK-MOCKUP-001/icon-system.md"]
+    },
+    {
+      "id": "lint",
+      "status": "PASS",
+      "summary": "The repository defines the frozen pnpm lint command and the task reserves a concrete log path.",
+      "evidence": ["package.json", "tasks/TASK-MOCKUP-001/task.json"]
+    },
+    {
+      "id": "build",
+      "status": "PASS",
+      "summary": "The repository defines the frozen production build command and the task reserves a concrete log path.",
+      "evidence": ["package.json", "tasks/TASK-MOCKUP-001/task.json"]
+    },
+    {
+      "id": "diff-check",
+      "status": "PASS",
+      "summary": "The diff hygiene command is valid and scoped review evidence is required before completion.",
+      "evidence": ["tasks/TASK-MOCKUP-001/task.json", "tasks/evidence/TASK-MOCKUP-001/preflight-review.md"]
+    },
+    {
+      "id": "core-demo-visual",
+      "status": "PASS",
+      "summary": "The demo covers direct navigation, import, every composition control, export, visual comparison, and console state.",
+      "evidence": ["tasks/TASK-MOCKUP-001/task.json"]
+    },
+    {
+      "id": "invalid-file-negative",
+      "status": "PASS",
+      "summary": "The negative test covers unsupported, corrupt, and zero-dimension input with recoverability.",
+      "evidence": ["tasks/TASK-MOCKUP-001/task.json"]
+    },
+    {
+      "id": "privacy-boundary",
+      "status": "PASS",
+      "summary": "Network and storage inspection before and after import/export can verify that image bytes and editor state remain local and ephemeral.",
+      "evidence": ["tasks/TASK-MOCKUP-001/task.json"]
+    },
+    {
+      "id": "icon-fallback",
+      "status": "PASS",
+      "summary": "The installed icon system, semantic resolver, neutral unknown-key fallback, and diagnostic behavior are frozen and testable.",
+      "evidence": ["tasks/TASK-MOCKUP-001/task.json", "tasks/evidence/TASK-MOCKUP-001/icon-system.md", "package.json"]
+    },
+    {
+      "id": "icon-accessibility",
+      "status": "PASS",
+      "summary": "Keyboard traversal, visible focus, accessible names, and consistent icon geometry are explicitly required.",
+      "evidence": ["tasks/TASK-MOCKUP-001/task.json", "tasks/evidence/TASK-MOCKUP-001/icon-system.md", "src/index.css"]
+    },
+    {
+      "id": "risk:frontend",
+      "status": "PASS",
+      "summary": "Frontend risk is bounded by route isolation, code splitting, desktop-only scope, visual verification, and preservation of the existing portfolio path.",
+      "evidence": ["tasks/TASK-MOCKUP-001/task.json", "src/main.tsx"]
+    },
+    {
+      "id": "risk:data-privacy",
+      "status": "PASS",
+      "summary": "The task forbids transmission and persistence and includes direct browser network and storage verification.",
+      "evidence": ["tasks/TASK-MOCKUP-001/task.json"]
+    }
+  ],
+  "findings": [],
+  "debt": [],
+  "reviewer": {
+    "independent_from_executor": true
+  }
+}

@@ -1,0 +1,177 @@
+{
+  "schema_version": 2,
+  "mode": "preflight",
+  "task_id": "TASK-DRESSER-FIGMA-002-R1",
+  "delivery_mode": "mvp",
+  "scope_expansion": false,
+  "status": "PASS",
+  "checks": [
+    {
+      "id": "acceptance-1",
+      "status": "PASS",
+      "summary": "The secret-free bootstrap and companion-served UI are feasible; real Chrome accepted the exact HttpOnly Secure SameSite=None __Host cookie family in a cross-site loopback iframe, while live Figma remains the frozen release gate.",
+      "evidence": ["tasks/evidence/TASK-DRESSER-FIGMA-002-R1/preflight-review.md", "tasks/TASK-DRESSER-FIGMA-002-R1/task.json"]
+    },
+    {
+      "id": "acceptance-2",
+      "status": "PASS",
+      "summary": "Official Figma APIs and the closed live capability schema support bounded Frame PNG export, typed Uint8Array transport, and complete same-origin capability loading.",
+      "evidence": ["tasks/evidence/TASK-DRESSER-FIGMA-002-R1/preflight-review.md", "server/mockup-mcp/preset-schema.mjs"]
+    },
+    {
+      "id": "acceptance-3",
+      "status": "PASS",
+      "summary": "R1 inherits the approved compact and expanded visual contract, all accessibility states, and the frozen Phosphor resolver without new UX discretion.",
+      "evidence": ["tasks/visual/TASK-DRESSER-FIGMA-002/visual-contract.json", "tasks/evidence/TASK-DRESSER-FIGMA-002-R1/reference-handoff.md", "tasks/evidence/TASK-DRESSER-FIGMA-002-R1/icon-handoff.md"]
+    },
+    {
+      "id": "acceptance-4",
+      "status": "PASS",
+      "summary": "Initial, manual, and stale pre-insert renders are frozen to exact browser PNG bytes with matching preset identity, metadata, preview, and inserted dimensions.",
+      "evidence": ["tasks/TASK-DRESSER-FIGMA-002-R1/task.json", "tasks/visual/TASK-DRESSER-FIGMA-002/visual-contract.json"]
+    },
+    {
+      "id": "acceptance-5",
+      "status": "PASS",
+      "summary": "The canvas mutation is precisely one named image rectangle at source absolute x plus width plus 80 and source y, with result selection, undoability, and source/unrelated-node preservation.",
+      "evidence": ["tasks/TASK-DRESSER-FIGMA-002-R1/task.json"]
+    },
+    {
+      "id": "acceptance-6",
+      "status": "PASS",
+      "summary": "Selection, message, bridge, session, legacy auth, render, image, duplicate, and mutation failure scenarios are concrete and require recoverability with no partial node.",
+      "evidence": ["tasks/TASK-DRESSER-FIGMA-002-R1/task.json"]
+    },
+    {
+      "id": "acceptance-7",
+      "status": "PASS",
+      "summary": "Session issuance/use is restricted by exact route, same origin, client marker, fetch metadata, single auth mode, expiry/restart state, shutdown denial, and no permissive CORS.",
+      "evidence": ["tasks/TASK-DRESSER-FIGMA-002-R1/task.json", "tasks/evidence/TASK-DRESSER-FIGMA-002-R1/security-architecture.md"]
+    },
+    {
+      "id": "acceptance-8",
+      "status": "PASS",
+      "summary": "The packet excludes bearer/session values from JavaScript-visible state and artifacts; only the required inaccessible HttpOnly cookie and server-side hash/expiry are permitted, with explicit leakage scans and restart invalidation.",
+      "evidence": ["tasks/TASK-DRESSER-FIGMA-002-R1/task.json", "tasks/evidence/TASK-DRESSER-FIGMA-002-R1/preflight-review.md"]
+    },
+    {
+      "id": "acceptance-9",
+      "status": "PASS",
+      "summary": "Legacy bearer/CORS/shutdown behavior is frozen byte-for-contract while cookie sessions are explicitly denied shutdown and mixed authentication.",
+      "evidence": ["tasks/TASK-DRESSER-FIGMA-002-R1/task.json", "tasks/audit/TASK-DRESSER-FIGMA-001-R1/verdict.json"]
+    },
+    {
+      "id": "acceptance-10",
+      "status": "PASS",
+      "summary": "The final matrix covers plugin, bridge, security, canvas, visual/accessibility, MCP, mirror, cleanup, and dirty-scope boundaries without remote delivery.",
+      "evidence": ["tasks/TASK-DRESSER-FIGMA-002-R1/task.json", "tasks/evidence/TASK-DRESSER-FIGMA-002-R1/preflight-review.md"]
+    },
+    {
+      "id": "targeted-session-tests",
+      "status": "PASS",
+      "summary": "The owned test scopes and exact pattern cover session, same-origin UI, restart invalidation, and selected-Frame behavior.",
+      "evidence": ["tasks/TASK-DRESSER-FIGMA-002-R1/task.json"]
+    },
+    {
+      "id": "bridge-tests",
+      "status": "PASS",
+      "summary": "The existing complete bridge command protects bearer, CORS, preflight, body framing, render, cleanup, and shutdown neighbors.",
+      "evidence": ["package.json", "tasks/audit/TASK-DRESSER-FIGMA-001-R1/final-verification.md"]
+    },
+    {
+      "id": "plugin-tests",
+      "status": "PASS",
+      "summary": "R1 owns the new plugin tests and package script required to implement the frozen plugin command.",
+      "evidence": ["tasks/TASK-DRESSER-FIGMA-002-R1/task.json", "package.json"]
+    },
+    {
+      "id": "scoped-lint",
+      "status": "PASS",
+      "summary": "The command is bounded to the two owned implementation surfaces and keeps repository-wide unrelated lint debt outside the gate.",
+      "evidence": ["tasks/TASK-DRESSER-FIGMA-002-R1/task.json", "package.json"]
+    },
+    {
+      "id": "scoped-build",
+      "status": "PASS",
+      "summary": "The command covers the sandbox-safe plugin bundles, local manifest/bootstrap, and bridge syntax without generated portfolio dist.",
+      "evidence": ["tasks/TASK-DRESSER-FIGMA-002-R1/task.json", "package.json"]
+    },
+    {
+      "id": "mcp-tests",
+      "status": "PASS",
+      "summary": "The existing MCP suite is a real frozen regression for the renderer and browser cleanup that remain outside R1 implementation scope.",
+      "evidence": ["package.json", "tasks/audit/TASK-DRESSER-FIGMA-001-R1/final-verification.md"]
+    },
+    {
+      "id": "live-session-security",
+      "status": "PASS",
+      "summary": "The observable check makes real Figma Desktop cookie/navigation compatibility, expiry/rotation/restart, legacy parity, shutdown denial, CSRF negatives, and zero manager mutation a mandatory release gate.",
+      "evidence": ["tasks/TASK-DRESSER-FIGMA-002-R1/task.json", "tasks/evidence/TASK-DRESSER-FIGMA-002-R1/preflight-review.md"]
+    },
+    {
+      "id": "selected-frame-demo",
+      "status": "PASS",
+      "summary": "The demo is a complete first-value slice from one disposable top-level Frame through exact preview/settings to matching beside-source insertion and one undo.",
+      "evidence": ["tasks/TASK-DRESSER-FIGMA-002-R1/task.json", "tasks/visual/TASK-DRESSER-FIGMA-002/visual-contract.json"]
+    },
+    {
+      "id": "capability-visual-fidelity",
+      "status": "PASS",
+      "summary": "The check reconciles every live option and representative model/background/layout output at both approved sizes/themes with no stale or unsupported UI.",
+      "evidence": ["tasks/TASK-DRESSER-FIGMA-002-R1/task.json", "server/mockup-mcp/preset-schema.mjs"]
+    },
+    {
+      "id": "privacy-scope-regression",
+      "status": "PASS",
+      "summary": "The check covers every artifact and runtime leakage surface, hashed-session cleanup, four-task security inheritance, legacy parity, mirror/MCP integrity, and dirty-scope isolation.",
+      "evidence": ["tasks/TASK-DRESSER-FIGMA-002-R1/task.json", "tasks/evidence/TASK-DRESSER-FIGMA-002-R1/security-architecture.md"]
+    },
+    {
+      "id": "icon-fallback",
+      "status": "PASS",
+      "summary": "The frozen icon check requires named imports, typed Question fallback, development-only diagnostics, and excludes placeholders or full-catalog bundling.",
+      "evidence": ["tasks/TASK-DRESSER-FIGMA-002-R1/task.json", "tasks/evidence/TASK-DRESSER-FIGMA-002-R1/icon-handoff.md"]
+    },
+    {
+      "id": "icon-accessibility",
+      "status": "PASS",
+      "summary": "The check covers keyboard, focus, names, geometry, announcements, states, reduced motion, themes, approved sizes, and clipping.",
+      "evidence": ["tasks/TASK-DRESSER-FIGMA-002-R1/task.json", "tasks/visual/TASK-DRESSER-FIGMA-002/visual-contract.json"]
+    },
+    {
+      "id": "scope",
+      "status": "PASS",
+      "summary": "R1 ownership is limited to the bridge session extension and new plugin surface; legacy bearer behavior, MCP/mirror, portfolio/dist, publication, delivery, and unrelated dirty work are excluded.",
+      "evidence": ["tasks/TASK-DRESSER-FIGMA-002-R1/task.json", "tasks/evidence/TASK-DRESSER-FIGMA-002-R1/preflight-review.md"]
+    },
+    {
+      "id": "risk:backend-api",
+      "status": "PASS",
+      "summary": "High-risk API expansion is bounded by exact routes, host/origin/fetch metadata, single auth mode, session hash/expiry, shutdown denial, and complete negative tests.",
+      "evidence": ["tasks/TASK-DRESSER-FIGMA-002-R1/task.json", "tasks/evidence/TASK-DRESSER-FIGMA-002-R1/security-architecture.md"]
+    },
+    {
+      "id": "risk:frontend",
+      "status": "PASS",
+      "summary": "The approved visual gate and Mobbin waiver are inherited without changes, and real Figma accessibility/visual evidence remains mandatory.",
+      "evidence": ["tasks/evidence/TASK-DRESSER-FIGMA-002/visual-gate-verdict.json", "tasks/evidence/TASK-DRESSER-FIGMA-002-R1/reference-handoff.md"]
+    },
+    {
+      "id": "risk:external-integration",
+      "status": "PASS",
+      "summary": "Chrome feasibility is proven and exact Figma Desktop cookie/navigation/messaging behavior is an explicit fail-closed release gate rather than an assumed compatibility claim.",
+      "evidence": ["tasks/evidence/TASK-DRESSER-FIGMA-002-R1/preflight-review.md", "tasks/TASK-DRESSER-FIGMA-002-R1/task.json"]
+    },
+    {
+      "id": "risk:data-privacy",
+      "status": "PASS",
+      "summary": "No bearer fallback is allowed; raw sessions remain only in HttpOnly cookie transport, server retention is hash-only, leakage scans are comprehensive, and restart invalidates retained cookies.",
+      "evidence": ["tasks/TASK-DRESSER-FIGMA-002-R1/task.json", "tasks/evidence/TASK-DRESSER-FIGMA-002-R1/security-architecture.md"]
+    }
+  ],
+  "findings": [],
+  "debt": [],
+  "reviewer": {
+    "independent_from_executor": true
+  }
+}

@@ -279,7 +279,7 @@ function NarrativeSectionView({ section }: { section: NarrativeSection }) {
         <div className={`case-narrative-media ${section.mediaClassName ?? ""}`}>
           {section.media.map((media) => (
             <figure key={media.src}>
-              <img src={media.src} alt={media.alt} loading="lazy" />
+              <img src={media.src} alt={media.alt} loading="eager" />
               {media.caption && <figcaption>{media.caption}</figcaption>}
             </figure>
           ))}

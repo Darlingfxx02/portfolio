@@ -17,8 +17,6 @@ import {
 import { DockBar } from '@/components/DockBar/DockBar'
 import { ScrollBar } from '@/components/ScrollBar/ScrollBar'
 import { CaseZinda } from '@/components/cases/CaseZinda'
-import { CaseZindaSystem } from '@/components/cases/CaseZindaSystem'
-import { CaseZindaMobile } from '@/components/cases/CaseZindaMobile'
 import { CaseUxart } from '@/components/cases/CaseUxart'
 import { CaseOvork } from '@/components/cases/CaseOvork'
 import { Cv } from '@/components/Cv/Cv'
@@ -30,8 +28,8 @@ import styles from './App.module.css'
 
 const CASE_COMPONENTS: Record<string, ComponentType> = {
   zinda: CaseZinda,
-  'zinda-system': CaseZindaSystem,
-  'zinda-mobile': CaseZindaMobile,
+  'zinda-system': CaseZinda,
+  'zinda-mobile': CaseZinda,
   uxart: CaseUxart,
   ovork: CaseOvork,
 }

@@ -6,6 +6,7 @@ import {
 } from '@phosphor-icons/react'
 import { cv } from '@/data/cv'
 import { experience, type ExperienceItem } from '@/data/experience'
+import { LanguageSwitcher } from '@/components/LanguageSwitcher/LanguageSwitcher'
 import { useLang, t } from '@/lib/i18n'
 import styles from './Cv.module.css'
 
@@ -218,6 +219,7 @@ export function Cv() {
   return (
     <main className={styles.page} data-theme={theme}>
       <div className={styles.toolbar}>
+        <LanguageSwitcher variant="surface" />
         <button
           type="button"
           className={styles.themeToggle}
@@ -267,8 +269,8 @@ export function Cv() {
             >
               <ul className={styles.contactList}>
                 {cv.contacts.map((contact) => (
-                  <li key={contact.label}>
-                    <span>{contact.label}</span>
+                  <li key={contact.href}>
+                    <span>{t(contact.label, lang)}</span>
                     <a href={contact.href} target="_blank" rel="noreferrer">
                       {contact.value}
                     </a>

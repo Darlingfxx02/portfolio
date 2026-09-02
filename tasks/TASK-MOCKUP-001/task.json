@@ -1,0 +1,314 @@
+{
+  "schema_version": 4,
+  "id": "TASK-MOCKUP-001",
+  "title": "Local clean-room mockup editor prototype",
+  "goal": "A desktop user can open /tools/mockup, import one still image, compose it in an original generic phone frame, and export the visible result as PNG.",
+  "status": "verified",
+  "assignment": {
+    "token": "1c31511ef514422eb19e3b3eaa351d03",
+    "pm_id": "railway-20260830-mockup-prototype",
+    "executor": "/root/mockup_executor",
+    "claimed_at": "2026-08-30T16:00:16.192409Z",
+    "heartbeat_at": "2026-08-30T16:09:47.680753Z",
+    "finished_at": "2026-08-30T16:11:28.119653Z",
+    "outcome": "implemented"
+  },
+  "depends_on": [],
+  "delivery": {
+    "mode": "prototype",
+    "user_value": "The portfolio checkout gains a local, reversible screenshot-to-PNG mockup workflow for hands-on evaluation.",
+    "slice": "vertical",
+    "demo": {
+      "steps": [
+        "Start the Vite app and open /tools/mockup directly on desktop.",
+        "Upload one PNG or JPEG screenshot, choose a solid background, and adjust padding, scale, and x/y position.",
+        "Export a PNG and compare it with the visible editor composition."
+      ],
+      "evidence": "tasks/evidence/TASK-MOCKUP-001/demo.md"
+    },
+    "unlocks": [
+      "local mockup-editor evaluation before deciding whether to expand the tool"
+    ],
+    "remediation": {
+      "source_task_id": null,
+      "attempt": 0,
+      "dependency_depth": 0
+    },
+    "github": {
+      "required": false,
+      "remote": "origin",
+      "branch": "main",
+      "batch": "standalone",
+      "push_after": "not-authorized-local-only",
+      "force_push": false
+    }
+  },
+  "work_classification": {
+    "ux_flow": true,
+    "reason": "The task defines a new editor screen, import-to-export state flow, defaults, input validation, and error recovery."
+  },
+  "tracking": {
+    "provider": "local",
+    "local": {
+      "reason": "The user approved local-only prototype tracking in tasks/ with no external publication or synchronization."
+    }
+  },
+  "risk": {
+    "level": "medium",
+    "reasons": [
+      "Adds a new visible route and browser file/canvas behavior, but remains local-only, reversible, and does not store or transmit user media."
+    ]
+  },
+  "impact": [
+    "frontend",
+    "data-privacy"
+  ],
+  "zones": [
+    "client"
+  ],
+  "scope": {
+    "in": [
+      "src/main.tsx",
+      "src/tools/mockup/MockupEditor.tsx",
+      "src/tools/mockup/MockupEditor.module.css",
+      "src/tools/mockup/renderMockup.ts",
+      "src/tools/mockup/icons.ts"
+    ],
+    "out": [
+      "Dresser production JavaScript, CSS, UI source, copy, media, device artwork, and branded assets",
+      "existing portfolio components and content except the minimum direct-route integration in src/main.tsx",
+      "SiteBoot media inventory and portfolio preload behavior",
+      "video import or export",
+      "multiple devices or screens",
+      "mobile adaptation",
+      "persistence, analytics, upload APIs, server processing, publication, deployment, and Git push",
+      "production visual polish and browser compatibility hardening"
+    ]
+  },
+  "constraints": [
+    "Implement all editor logic as original clean-room code; use Dresser only as a behavioral reference and use original generic device geometry with no brand marks.",
+    "Keep /tools/mockup code-split and reachable directly without waiting for SiteBoot or preloading portfolio media.",
+    "Process the selected image entirely in browser memory; do not upload it, persist it, add analytics for its content, or include user filenames/content in logs.",
+    "Reuse the installed @phosphor-icons/react system through named imports and preserve accessible names for icon-only controls.",
+    "Preserve all unrelated dirty-worktree changes and do not edit generated dist assets as source.",
+    "Do not push, publish, or deploy; Mobbin absence is an explicitly user-approved prototype debt, and the repository currently has no automated browser test harness."
+  ],
+  "acceptance_criteria": [
+    "Opening /tools/mockup directly renders a code-split desktop editor without waiting for the portfolio SiteBoot media preload, while ordinary portfolio routes retain their current boot behavior.",
+    "The editor accepts one valid local PNG or JPEG, decodes it in browser memory, and shows it inside an original unbranded generic phone frame without any copied Dresser code or assets.",
+    "A solid background color and padding, image scale, horizontal position, and vertical position controls update one deterministic visible composition.",
+    "Export downloads a PNG whose canvas dimensions and visible background, frame, crop, scale, and position match the editor preview.",
+    "An unsupported, unreadable, or zero-dimension file produces a clear recoverable error, does not crash the route, and does not replace the last valid composition.",
+    "Lint and production build pass, no image data leaves the browser, keyboard focus remains visible, controls have labels, and the existing portfolio still renders."
+  ],
+  "validation": {
+    "profiles": [
+      "baseline",
+      "security-baseline",
+      "frontend",
+      "data-privacy"
+    ],
+    "commands": [
+      {
+        "id": "lint",
+        "command": "pnpm lint",
+        "evidence": "tasks/evidence/TASK-MOCKUP-001/lint.log"
+      },
+      {
+        "id": "build",
+        "command": "pnpm build",
+        "evidence": "tasks/evidence/TASK-MOCKUP-001/build.log"
+      },
+      {
+        "id": "diff-check",
+        "command": "git diff --check",
+        "evidence": "tasks/evidence/TASK-MOCKUP-001/diff-check.log"
+      }
+    ],
+    "checks": [
+      {
+        "id": "core-demo-visual",
+        "description": "At desktop width, exercise direct route, valid image import, every control, and PNG export; compare preview and exported PNG and capture both plus a console-clean result.",
+        "evidence": "tasks/evidence/TASK-MOCKUP-001/demo.md"
+      },
+      {
+        "id": "invalid-file-negative",
+        "description": "Try unsupported, corrupt, and zero-dimension inputs; record the recoverable error and confirm the last valid composition remains usable.",
+        "evidence": "tasks/evidence/TASK-MOCKUP-001/invalid-file.md"
+      },
+      {
+        "id": "privacy-boundary",
+        "description": "Inspect the browser network log and storage before and after import/export; confirm no image bytes, filename, object URL, or editor state are transmitted or persisted.",
+        "evidence": "tasks/evidence/TASK-MOCKUP-001/privacy.md"
+      },
+      {
+        "id": "icon-fallback",
+        "description": "Exercise an unknown data-driven icon key in development/test and confirm the typed resolver returns the neutral Question icon with a diagnostic.",
+        "evidence": "tasks/evidence/TASK-MOCKUP-001/icon-fallback.md"
+      },
+      {
+        "id": "icon-accessibility",
+        "description": "Keyboard through all controls and verify every icon-only action has an accessible name, visible focus, and consistent Phosphor geometry.",
+        "evidence": "tasks/evidence/TASK-MOCKUP-001/accessibility.md"
+      }
+    ]
+  },
+  "rollback": {
+    "steps": [
+      "Remove only the TASK-MOCKUP-001-owned files under src/tools/mockup/ and the direct /tools/mockup branch added to src/main.tsx.",
+      "Re-run pnpm lint and pnpm build to confirm ordinary portfolio routes remain intact."
+    ],
+    "data_recovery": [
+      "None: the prototype must not persist or transmit imported images or editor state."
+    ]
+  },
+  "interface": {
+    "scale": "large",
+    "references": {
+      "required": true,
+      "mobbin": {
+        "status": "blocked",
+        "queries": [
+          "web browser mockup editor upload image customize background export"
+        ],
+        "platforms": [
+          "web"
+        ],
+        "product_jobs": [
+          "turn a screenshot into a device mockup"
+        ],
+        "flows": [
+          "image import, composition adjustment, PNG export"
+        ],
+        "states": [
+          "empty, image loaded, adjusted, export, invalid file"
+        ],
+        "evidence": "tasks/evidence/TASK-MOCKUP-001/reference-research.md",
+        "destination_tracking_ref": "TASK-MOCKUP-001",
+        "selections": [],
+        "reason": "Mobbin MCP was unavailable in this session; the user explicitly approved continuing without it for this local-only prototype, so the missing research remains visible debt."
+      },
+      "ux": [
+        {
+          "title": "Dresser browser mockup workflow",
+          "source": "User-supplied Dresser behavioral reference",
+          "url": "https://dresser.mishanaer.com/",
+          "screens": [
+            "browser-local mockup editor"
+          ],
+          "patterns": [
+            "import media, adjust composition, export visible result"
+          ],
+          "applied_to": [
+            "shortest screenshot-to-PNG prototype sequence"
+          ],
+          "decision_controls": [
+            "flow",
+            "screen-structure",
+            "state-transitions",
+            "defaults",
+            "validation",
+            "error-recovery"
+          ],
+          "evidence": "tasks/evidence/TASK-MOCKUP-001/reference-research.md"
+        }
+      ],
+      "ui": [
+        {
+          "title": "Darling Live existing visual system",
+          "source": "Current repository design tokens and controls",
+          "url": "repository://src/index.css",
+          "screens": [
+            "current portfolio desktop surfaces and controls"
+          ],
+          "patterns": [
+            "dark neutral surfaces, compact controls, tokenized spacing, visible focus"
+          ],
+          "applied_to": [
+            "original editor typography, density, spacing, surfaces, and icon treatment"
+          ],
+          "decision_controls": [
+            "typography",
+            "density",
+            "spacing",
+            "color",
+            "surfaces",
+            "iconography"
+          ],
+          "evidence": "tasks/evidence/TASK-MOCKUP-001/reference-research.md"
+        }
+      ]
+    },
+    "icons": {
+      "needed": true,
+      "strategy": "existing-library",
+      "library": "Phosphor Icons",
+      "package": "@phosphor-icons/react",
+      "dependency_files": [
+        "package.json",
+        "pnpm-lock.yaml"
+      ],
+      "resolver": "src/tools/mockup/icons.ts",
+      "fallback": "Question",
+      "semantic_keys": [
+        "action.upload",
+        "action.export",
+        "action.reset",
+        "navigation.back",
+        "action.unknown"
+      ],
+      "license_checked": true,
+      "evidence": "tasks/evidence/TASK-MOCKUP-001/icon-system.md"
+    }
+  },
+  "visual_gate": {
+    "required": true,
+    "reason": "The task introduces a new editor screen and exported visual artifact; preview/export fidelity and route isolation require visual approval."
+  },
+  "approvals": {
+    "intent": {
+      "status": "approved",
+      "evidence": "tasks/STATE.json"
+    },
+    "preflight": {
+      "status": "approved",
+      "evidence": "tasks/TASK-MOCKUP-001/preflight-verdict.json"
+    },
+    "visual": {
+      "status": "approved",
+      "evidence": "tasks/visual/TASK-MOCKUP-001/visual-contract.json"
+    },
+    "destructive_action": {
+      "status": "not-required",
+      "evidence": ""
+    }
+  },
+  "evidence_required": [
+    "lint, build, and diff-check logs with exit codes",
+    "desktop demo screenshots and exported PNG comparison",
+    "invalid-file recovery evidence",
+    "browser network and storage privacy evidence",
+    "keyboard, focus, accessible-name, and icon fallback evidence",
+    "scoped diff confirming no copied Dresser assets/code and no unrelated edits"
+  ],
+  "history": {
+    "summary": "Prototype a local clean-room screenshot-to-PNG editor with one generic phone frame and original UI.",
+    "touchpoints": [
+      "direct route isolation",
+      "browser image decode",
+      "canvas PNG export",
+      "clean-room UI"
+    ]
+  },
+  "integration": {
+    "status": "integrated",
+    "integrated_at": "2026-08-30T16:13:21Z",
+    "report": "tasks/evidence/integration/integration-report.json",
+    "final_verification_required": true
+  },
+  "final_review": {
+    "status": "PASS_WITH_DEBT",
+    "verdict": "tasks/audit/TASK-MOCKUP-001/verdict.json",
+    "accepted_debt": true
+  }
+}

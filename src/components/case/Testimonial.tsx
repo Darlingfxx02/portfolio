@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
 import { ScrollLineReveal } from "@/components/motion/ScrollLineReveal";
+import { useLang } from "@/lib/i18n";
 
 export type TestimonialProps = {
   /** Заголовок секции — обычно «Отзыв о работе». */
@@ -16,19 +17,21 @@ export type TestimonialProps = {
 };
 
 export function Testimonial({
-  title = "Отзыв о работе",
+  title,
   quote,
   author,
   role,
   avatar,
   className,
 }: TestimonialProps) {
+  const ru = useLang().lang === "ru";
+
   return (
     <div
       className={`flex w-full flex-col gap-12 px-[50px] py-[60px] ${className ?? ""}`}
     >
       <h2 className="text-[42px] font-semibold leading-[1.05] tracking-[-0.01em] text-[#263238]">
-        {title}
+        {title ?? (ru ? "Отзыв о работе" : "Testimonial")}
       </h2>
 
       {typeof quote === "string" ? (

@@ -26,14 +26,14 @@ export const experience: ExperienceItem[] = [
     company: 'WMT AI',
     kind: 'employment',
     period: { start: '2025', ongoing: true },
-    category: { ru: 'Продуктовый дизайнер · AI', en: 'Product designer · AI' },
+    category: { ru: 'Продуктовый дизайнер · AI · B2B SaaS', en: 'Product Designer · AI · B2B SaaS' },
     lead: {
-      ru: 'Веду два AI-продукта от бизнес-задачи до релиза.',
-      en: 'Leading two AI products from business problem to release.',
+      ru: 'Веду продуктовый дизайн двух B2B SaaS / AI-продуктов.',
+      en: 'Leading product design for two B2B SaaS / AI products.',
     },
     text: {
-      ru: ' Relevanter для подбора персонала и НейроКлюч для корпоративного доступа к зарубежным AI-моделям без передачи персональных данных: прототипы на коде, полное покрытие состояний, handoff и итерации после запуска.',
-      en: ' Relevanter for recruiting and NeuroKey for enterprise access to international AI models without sharing personal data: code prototypes, full state coverage, handoff, and post-launch iteration.',
+      ru: ' НейроКлюч - корпоративный доступ к LLM без передачи персональных данных; Relevanter - AI-сервис для подбора персонала.',
+      en: ' NeuroKey provides enterprise access to LLMs without sharing personal data; Relevanter is an AI recruitment service.',
     },
   },
   {
@@ -43,13 +43,13 @@ export const experience: ExperienceItem[] = [
     period: {
       start: '2023',
       end: '2025',
-      duration: { ru: '1,5 года', en: '1.5 years' },
+      duration: { ru: '2 года', en: '2 years' },
     },
     category: { ru: 'UX/UI-дизайнер', en: 'UX/UI designer' },
-    lead: { ru: 'Дизайн-студия из топа рейтинга Ruward.', en: 'A studio ranked among the top on Ruward.' },
+    lead: { ru: 'Вёл 3-4 проектных потока параллельно в AI, FinTech и B2B.', en: 'Ran 3-4 project streams in parallel across AI, FinTech, and B2B.' },
     text: {
-      ru: ' Вёл интерфейсные задачи на нескольких проектах параллельно и заменил статичные пресейл-макеты на живые AI-прототипы.',
-      en: ' Ran interface work across several projects in parallel and replaced static presale mockups with live AI-built prototypes.',
+      ru: ' Закрывал полный цикл: UX-аудит, анализ требований, архитектуру, user flows, прототипы, UI, дизайн-систему, спецификации и handoff.',
+      en: ' Covered the full cycle: UX audit, requirements analysis, architecture, user flows, prototypes, UI, design systems, specifications, and handoff.',
     },
   },
   {
@@ -57,7 +57,7 @@ export const experience: ExperienceItem[] = [
     company: 'OVork',
     kind: 'project',
     parentId: 'uxart',
-    period: { start: '2025', end: '2026' },
+    period: { start: '2024', end: '2025' },
     category: { ru: 'Product Designer · mobile fintech', en: 'Product designer · mobile fintech' },
     lead: { ru: 'Студийный проект для живого финтех-продукта.', en: 'A studio-side project for a live fintech product.' },
     text: {
@@ -77,12 +77,12 @@ export const experience: ExperienceItem[] = [
     },
     category: { ru: 'Продуктовый дизайнер · финтех', en: 'Product designer · fintech' },
     lead: {
-      ru: 'Помог вывести B2B-банк из цикла отклонённых концепций.',
-      en: 'Helped move a B2B bank beyond a cycle of rejected concepts.',
+      ru: 'За 4 месяца довёл мобильное направление B2B-банка до handoff.',
+      en: 'Took the mobile direction of a B2B bank to handoff in 4 months.',
     },
     text: {
-      ru: ' Сформировал multi-account архитектуру четырёх ключевых зон, вынес кредитные продукты в post-MVP и довёл направление до handoff за 4 месяца; банк позже вышел.',
-      en: ' Defined a multi-account architecture across four core areas, moved lending to post-MVP, and took the direction to handoff in 4 months; the bank later shipped.',
+      ru: ' Спроектировал около 40 экранов и состояний, multi-account архитектуру, прототипы и спецификации; кредитные продукты вынес в post-MVP. Продукт вышел.',
+      en: ' Designed about 40 screens and states, a multi-account architecture, prototypes, and specifications; moved lending products to post-MVP. The product shipped.',
     },
   },
   {
@@ -95,7 +95,7 @@ export const experience: ExperienceItem[] = [
       end: '2024',
       duration: { ru: 'около 3 месяцев', en: 'about 3 months' },
     },
-    category: { ru: 'Продуктовый дизайнер · контракт', en: 'Product designer · contract' },
+    category: { ru: 'Продуктовый дизайнер · AI', en: 'Product Designer · AI' },
     lead: { ru: 'End-to-end дизайн AI-агрегатора с нуля.', en: 'End-to-end design of an AI aggregator from scratch.' },
     text: {
       ru: ' ChatGPT, Claude, Gemini и Grok в одной подписке без VPN: переключение моделей в один клик и онбординг под неподготовленную аудиторию.',

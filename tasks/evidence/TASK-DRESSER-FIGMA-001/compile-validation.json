@@ -1,0 +1,7 @@
+{
+  "task_id": "TASK-DRESSER-FIGMA-001",
+  "phase": "compile",
+  "status": "PASS",
+  "validator": "/Users/darlingfxx/.codex/plugins/cache/railway-local/railway/0.1.0+codex.20260826203550/skills/railway-compile-task/scripts/validate_task.py",
+  "errors": []
+}

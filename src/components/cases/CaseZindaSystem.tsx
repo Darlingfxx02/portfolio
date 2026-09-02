@@ -1,27 +1,27 @@
 import { CaseNarrative } from "./CaseNarrative";
-import { useLang } from "@/lib/i18n";
+import { t, useLang } from "@/lib/i18n";
 
 const systemIllustrations = [
   [
-    { src: "/zinda/system-case/growth-token.avif", alt: "Семантические токены дизайн-системы" },
+    { src: "/zinda/system-case/growth-token.avif", alt: { ru: "Семантические токены дизайн-системы", en: "Design-system semantic tokens" } },
   ],
   [
-    { src: "/zinda/system-case/foundation-icons.avif", alt: "Общий набор продуктовых иконок" },
-    { src: "/zinda/system-case/foundation-flags.avif", alt: "Система валютных и страновых флагов" },
+    { src: "/zinda/system-case/foundation-icons.avif", alt: { ru: "Общий набор продуктовых иконок", en: "Shared product icon set" } },
+    { src: "/zinda/system-case/foundation-flags.avif", alt: { ru: "Система валютных и страновых флагов", en: "Currency and country flag system" } },
   ],
   [
-    { src: "/zinda/system-case/button-states.avif", alt: "Матрица размеров, приоритетов и состояний кнопки" },
+    { src: "/zinda/system-case/button-states.avif", alt: { ru: "Матрица размеров, приоритетов и состояний кнопки", en: "Button size, priority, and state matrix" } },
   ],
   [
-    { src: "/zinda/system-case/product-chat-mobile.avif", alt: "Компоненты системы в мобильном чате" },
-    { src: "/zinda/system-case/product-payments-mobile.avif", alt: "Компоненты системы в мобильных платежах" },
+    { src: "/zinda/system-case/product-chat-mobile.avif", alt: { ru: "Компоненты системы в мобильном чате", en: "System components in mobile chat" } },
+    { src: "/zinda/system-case/product-payments-mobile.avif", alt: { ru: "Компоненты системы в мобильных платежах", en: "System components in mobile payments" } },
   ],
   [
-    { src: "/zinda/system-case/chat-desktop.avif", alt: "Чат Zinda в светлой теме" },
+    { src: "/zinda/system-case/chat-desktop.avif", alt: { ru: "Чат Zinda в светлой теме", en: "Zinda chat in the light theme" } },
   ],
   [
-    { src: "/zinda/system-case/organizer.avif", alt: "Структура Organizer и компоненты статусов" },
-    { src: "/zinda/system-case/update-date.avif", alt: "Метка даты обновления дизайн-системы" },
+    { src: "/zinda/system-case/organizer.avif", alt: { ru: "Структура Organizer и компоненты статусов", en: "Organizer structure and status components" } },
+    { src: "/zinda/system-case/update-date.avif", alt: { ru: "Метка даты обновления дизайн-системы", en: "Design-system update date label" } },
   ],
 ];
 
@@ -166,7 +166,10 @@ export function CaseZindaSystem() {
                 ],
               },
             ]).map((section, index) => {
-              const media = systemIllustrations[index];
+              const media = systemIllustrations[index]?.map((item) => ({
+                ...item,
+                alt: t(item.alt, lang),
+              }));
               const isPair = media?.length === 2;
 
               return {

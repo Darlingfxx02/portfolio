@@ -1,6 +1,6 @@
 import styles from './HeaderTools.module.css'
 
-const CV_URL = '/cv/Timothe_Ermolaev_Resume.pdf?v=20260726-7'
+const CV_URL = '/cv/Timothe_Ermolaev_Resume.pdf?v=20260830-1'
 
 /** Top-right link that downloads the current CV. */
 export function HeaderTools() {

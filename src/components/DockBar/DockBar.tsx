@@ -33,7 +33,7 @@ export function DockBar({
     measure()
     // Re-measure once webfonts settle so the width matches the real glyphs.
     document.fonts?.ready.then(measure).catch(() => {})
-  }, [onContact])
+  }, [lang, onContact])
 
   const onCta = () => {
     if (onContact) {
@@ -69,7 +69,15 @@ export function DockBar({
           type="button"
           style={ctaW ? { width: ctaW } : undefined}
           onClick={onCta}
-          aria-label={onContact ? 'Контакты' : 'Написать мне'}
+          aria-label={
+            onContact
+              ? lang === 'ru'
+                ? 'Контакты'
+                : 'Contact'
+              : lang === 'ru'
+                ? 'Написать мне'
+                : 'Message me'
+          }
           aria-controls={onContact ? 'panel-about' : undefined}
         >
           <span
@@ -78,7 +86,7 @@ export function DockBar({
             data-show={!onContact}
             aria-hidden={Boolean(onContact)}
           >
-            Написать мне
+            {lang === 'ru' ? 'Написать мне' : 'Message me'}
           </span>
           <span
             ref={contactRef}
@@ -86,7 +94,7 @@ export function DockBar({
             data-show={Boolean(onContact)}
             aria-hidden={!onContact}
           >
-            Контакты
+            {lang === 'ru' ? 'Контакты' : 'Contact'}
           </span>
         </button>
       </div>

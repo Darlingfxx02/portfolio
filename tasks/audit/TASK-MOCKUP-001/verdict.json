@@ -1,0 +1,133 @@
+{
+  "schema_version": 2,
+  "mode": "final",
+  "task_id": "TASK-MOCKUP-001",
+  "delivery_mode": "prototype",
+  "scope_expansion": false,
+  "status": "PASS_WITH_DEBT",
+  "checks": [
+    {
+      "id": "acceptance-1",
+      "status": "PASS",
+      "summary": "The direct editor route loads its own mockup modules without App or SiteBoot, while a fresh ordinary route renders the portfolio and loads App and SiteBoot.",
+      "evidence": ["tasks/audit/TASK-MOCKUP-001/final-verification.md", "tasks/evidence/TASK-MOCKUP-001/browser-report.json"]
+    },
+    {
+      "id": "acceptance-2",
+      "status": "PASS",
+      "summary": "A valid local JPEG decodes in browser memory and renders in original unbranded generic phone geometry; no Dresser identifiers, code, or assets occur in task scope.",
+      "evidence": ["tasks/audit/TASK-MOCKUP-001/final-verification.md", "tasks/evidence/TASK-MOCKUP-001/editor-loaded-adjusted.png", "src/tools/mockup/renderMockup.ts"]
+    },
+    {
+      "id": "acceptance-3",
+      "status": "PASS",
+      "summary": "Background, padding, scale, horizontal, and vertical inputs all update the shared deterministic canvas composition.",
+      "evidence": ["tasks/evidence/TASK-MOCKUP-001/browser-report.json", "tasks/evidence/TASK-MOCKUP-001/editor-loaded-adjusted.png"]
+    },
+    {
+      "id": "acceptance-4",
+      "status": "PASS",
+      "summary": "The downloaded 1200 by 1200 PNG and visible canvas have the same fresh SHA-256, proving exact preview/export parity.",
+      "evidence": ["tasks/audit/TASK-MOCKUP-001/final-verification.md", "tasks/evidence/TASK-MOCKUP-001/mockup-studio.png"]
+    },
+    {
+      "id": "acceptance-5",
+      "status": "PASS",
+      "summary": "Unsupported, corrupt, and zero-dimension inputs produce clear recoverable errors without replacing the last valid composition or crashing the route.",
+      "evidence": ["tasks/evidence/TASK-MOCKUP-001/browser-report.json", "tasks/evidence/TASK-MOCKUP-001/editor-invalid-recovery.png"]
+    },
+    {
+      "id": "acceptance-6",
+      "status": "PASS",
+      "summary": "Task-scoped lint, typecheck, production build, privacy, keyboard focus, labels, and ordinary portfolio rendering pass; the unrelated full-repository lint failure is explicit accepted debt under the frozen prototype constraint.",
+      "evidence": ["tasks/audit/TASK-MOCKUP-001/final-verification.md", "tasks/evidence/TASK-MOCKUP-001/accessibility.md", "tasks/evidence/TASK-MOCKUP-001/privacy.md"]
+    },
+    {
+      "id": "lint",
+      "status": "PASS",
+      "summary": "All frozen task-owned TypeScript files pass ESLint; pnpm lint still exits 1 only for 10 errors in five unchanged out-of-scope files and is recorded as accepted prototype debt.",
+      "evidence": ["tasks/audit/TASK-MOCKUP-001/final-verification.md", "tasks/evidence/TASK-MOCKUP-001/lint.log", "tasks/evidence/TASK-MOCKUP-001/lint-scoped.log"]
+    },
+    {
+      "id": "build",
+      "status": "PASS",
+      "summary": "Fresh TypeScript compilation and an isolated production Vite build pass with separate MockupEditor and portfolio chunks.",
+      "evidence": ["tasks/audit/TASK-MOCKUP-001/final-verification.md", "tasks/evidence/TASK-MOCKUP-001/build.log"]
+    },
+    {
+      "id": "diff-check",
+      "status": "PASS",
+      "summary": "Fresh git diff --check passes.",
+      "evidence": ["tasks/audit/TASK-MOCKUP-001/final-verification.md", "tasks/evidence/TASK-MOCKUP-001/diff-check.log"]
+    },
+    {
+      "id": "core-demo-visual",
+      "status": "PASS",
+      "summary": "Fresh desktop browser execution covers direct route, import, all controls, export, console state, and exact preview/export comparison.",
+      "evidence": ["tasks/audit/TASK-MOCKUP-001/final-verification.md", "tasks/evidence/TASK-MOCKUP-001/demo.md", "tasks/evidence/TASK-MOCKUP-001/browser-report.json"]
+    },
+    {
+      "id": "invalid-file-negative",
+      "status": "PASS",
+      "summary": "All three frozen invalid-input cases preserve the valid canvas hash and ready state.",
+      "evidence": ["tasks/evidence/TASK-MOCKUP-001/invalid-file.md", "tasks/evidence/TASK-MOCKUP-001/browser-report.json"]
+    },
+    {
+      "id": "privacy-boundary",
+      "status": "PASS",
+      "summary": "Fresh network and storage inspection shows no image transmission or persistence and no filename disclosure.",
+      "evidence": ["tasks/audit/TASK-MOCKUP-001/final-verification.md", "tasks/evidence/TASK-MOCKUP-001/privacy.md", "tasks/evidence/TASK-MOCKUP-001/browser-report.json"]
+    },
+    {
+      "id": "icon-fallback",
+      "status": "PASS",
+      "summary": "The typed resolver uses named Phosphor imports and returns Question with a safe development diagnostic for an unknown key.",
+      "evidence": ["tasks/evidence/TASK-MOCKUP-001/icon-fallback.md", "src/tools/mockup/icons.ts"]
+    },
+    {
+      "id": "icon-accessibility",
+      "status": "PASS",
+      "summary": "Keyboard traversal reaches all nine controls with visible focus; icon-only navigation has an accessible name and decorative icons are hidden.",
+      "evidence": ["tasks/evidence/TASK-MOCKUP-001/accessibility.md", "tasks/evidence/TASK-MOCKUP-001/browser-report.json"]
+    },
+    {
+      "id": "scope",
+      "status": "PASS",
+      "summary": "Product changes remain within the five frozen paths, preserve unrelated dirty work, add no copied Dresser material, and retain a bounded rollback.",
+      "evidence": ["tasks/audit/TASK-MOCKUP-001/final-verification.md", "tasks/evidence/TASK-MOCKUP-001/scoped-diff.md", "tasks/evidence/integration/integration-report.json"]
+    },
+    {
+      "id": "risk:frontend",
+      "status": "PASS",
+      "summary": "Fresh typecheck, isolated production build, browser flow, visual inspection, route isolation, and ordinary-portfolio checks pass for the prototype target.",
+      "evidence": ["tasks/audit/TASK-MOCKUP-001/final-verification.md", "tasks/evidence/TASK-MOCKUP-001/editor-empty.png", "tasks/evidence/TASK-MOCKUP-001/editor-loaded-adjusted.png"]
+    },
+    {
+      "id": "risk:data-privacy",
+      "status": "PASS",
+      "summary": "Imported image bytes remain ephemeral browser memory and no storage, upload API, request body, analytics, or filename disclosure was observed.",
+      "evidence": ["tasks/audit/TASK-MOCKUP-001/final-verification.md", "tasks/evidence/TASK-MOCKUP-001/privacy.md"]
+    }
+  ],
+  "findings": [
+    {
+      "severity": "accepted-debt",
+      "summary": "Full-repository lint has 10 errors in five files unchanged from HEAD and outside TASK-MOCKUP-001 scope; scoped lint passes.",
+      "evidence": "tasks/audit/TASK-MOCKUP-001/final-verification.md",
+      "check_id": "lint"
+    },
+    {
+      "severity": "accepted-debt",
+      "summary": "Mobbin reference research was unavailable and explicitly waived by the user for this local-only prototype.",
+      "evidence": "tasks/visual/TASK-MOCKUP-001/visual-contract.json",
+      "check_id": "scope"
+    }
+  ],
+  "debt": [
+    "Ten unchanged out-of-scope full-repository lint errors remain; task-scoped lint passes.",
+    "Mobbin research remains waived for the local prototype."
+  ],
+  "reviewer": {
+    "independent_from_executor": true
+  }
+}

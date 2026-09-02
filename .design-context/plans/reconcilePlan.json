@@ -1,0 +1,183 @@
+{
+  "schemaVersion": 1,
+  "workflow": "figma-reconcile",
+  "status": "complete",
+  "target": {
+    "fileKey": "8SlcVurfGSkysWTlZsJYft",
+    "pageId": "2:69403",
+    "pageName": "⚙️ UI-kit",
+    "referenceFrameId": "40000085:8154",
+    "referenceFrameName": "reconciled/Date Picker documentation",
+    "visualReferences": [
+      {
+        "nodeId": "40000082:262538",
+        "name": "image 27",
+        "outputName": "reconciled/Navigation & selection documentation"
+      },
+      {
+        "nodeId": "40000082:262535",
+        "name": "image 26",
+        "outputName": "reconciled/Controls & lists documentation"
+      },
+      {
+        "nodeId": "40000082:262541",
+        "name": "image 28",
+        "outputName": "reconciled/Data & utility documentation"
+      }
+    ]
+  },
+  "contract": {
+    "experience": "editorial",
+    "platform": "desktop",
+    "preserveReferences": true,
+    "createCanonicalComponents": false,
+    "density": "balanced editorial",
+    "placement": {
+      "relation": "right-of-date-picker-documentation",
+      "y": 4212,
+      "width": 864,
+      "height": 1821,
+      "gap": 80,
+      "xByOutput": {
+        "reconciled/Navigation & selection documentation": 37777,
+        "reconciled/Controls & lists documentation": 38721,
+        "reconciled/Data & utility documentation": 39665
+      }
+    }
+  },
+  "discovery": {
+    "codeConnect": "none-found-in-repository",
+    "componentSource": "existing on-canvas components in ⚙️ UI-kit",
+    "typography": "editable Inter fallback inherited from the Date Picker documentation scaffold; canonical Suisse Intl and Oceanic runtime styles remain unavailable",
+    "knownLegacyIssue": "component set tab (2:272582) throws on componentPropertyDefinitions because the set has existing errors"
+  },
+  "semanticMerges": [
+    {
+      "facts": ["component category", "component name", "version", "purpose"],
+      "carrier": "document header"
+    },
+    {
+      "facts": ["currency icon", "code", "caption", "disclosure"],
+      "carrier": "single list-item instance"
+    },
+    {
+      "facts": ["currency identity", "trend", "current values"],
+      "carrier": "rate row or CurrencyRateCard"
+    },
+    {
+      "facts": ["colors", "type", "spacing", "radius", "shadow"],
+      "carrier": "compact specification table"
+    }
+  ],
+  "visibilityMap": {
+    "primaryMoment": "Read three component contracts and compare only the canonical variants and states available in the Zinda UI kit.",
+    "NOW": ["purpose", "anatomy", "canonical specimens", "available states"],
+    "SCAN": ["behavior notes", "token specification", "version metadata"],
+    "CONTEXT": ["legacy tab API warning", "missing focus and disabled state notes"],
+    "MORE": [],
+    "LATER": [],
+    "CRITICAL": []
+  },
+  "outputs": [
+    {
+      "name": "reconciled/Navigation & selection documentation",
+      "frameId": "40000109:9243",
+      "sourceNodeId": "40000082:262538",
+      "blocks": [
+        {
+          "id": "navigation-bar",
+          "status": "MATCH",
+          "component": "NavBar (2:273081)"
+        },
+        {
+          "id": "tabs",
+          "status": "PARTIAL",
+          "component": "tab variants (2:272583, 2:272585, 2:272588, 2:272590, 2:272593, 2:272595, 2:272598, 2:272600)",
+          "reason": "Visual variants match, but the owning set 2:272582 has existing component-property errors. Individual linked variant instances are used; gap overlays were removed at the user's request."
+        },
+        {
+          "id": "segmented-control",
+          "status": "MATCH",
+          "component": "SegmentControl (2:272603), Segment variants (2:272607, 2:272609)"
+        },
+        {
+          "id": "navigation-item",
+          "status": "MATCH",
+          "component": ".NavItem (2:272694)"
+        }
+      ]
+    },
+    {
+      "name": "reconciled/Controls & lists documentation",
+      "frameId": "40000109:9347",
+      "sourceNodeId": "40000082:262535",
+      "blocks": [
+        {
+          "id": "switch",
+          "status": "MATCH",
+          "component": "switches (2:273128), SwitcherLine (2:273138)"
+        },
+        {
+          "id": "currency-list-item",
+          "status": "MATCH",
+          "component": ".ListItem (2:272814)"
+        },
+        {
+          "id": "dropdown-list",
+          "status": "MATCH",
+          "component": "List (2:273117), Items (list) (2:272873), List field (2:272881)"
+        },
+        {
+          "id": "focus-and-disabled-list-states",
+          "status": "NO MATCH",
+          "component": null,
+          "reason": "The exact focus ring and disabled currency-row variants from the raster are not exposed by .ListItem. They are omitted instead of simulating canonical states; gap overlays were removed at the user's request."
+        }
+      ]
+    },
+    {
+      "name": "reconciled/Data & utility documentation",
+      "frameId": "40000109:9451",
+      "sourceNodeId": "40000082:262541",
+      "blocks": [
+        {
+          "id": "rate-card",
+          "status": "MATCH",
+          "component": "CurrencyRateCard (2:273697), Row (2:272723), Table (2:272734), .Graph (2:272653)"
+        },
+        {
+          "id": "country-and-currency",
+          "status": "MATCH",
+          "component": "Input (2:273627), .InputFill/Type=Currency (2:273661), Country flags legacy (2:277718)"
+        },
+        {
+          "id": "amount-and-date-card",
+          "status": "NO MATCH",
+          "component": null,
+          "reason": "No component safely represents the combined date and amount card with its selected outline. Native editable examples are retained without a gap overlay at the user's request."
+        },
+        {
+          "id": "utility-icons",
+          "status": "MATCH",
+          "component": ".Before (2:272611), .After (2:272624), .Graph (2:272653), switches (2:273128)"
+        },
+        {
+          "id": "brand-block",
+          "status": "MATCH",
+          "component": "Logo (2:273087), .NavHeader/Type=BackButton (2:273108)"
+        }
+      ]
+    }
+  ],
+  "sharedGaps": [],
+  "userCleanup": {
+    "gapBlocks": "deleted by user and intentionally not recreated",
+    "gapOverlays": "removed from all three documentation frames",
+    "surplusCallouts": "fifth inherited purple leader line, badge and number hidden in all three anatomy sections"
+  },
+  "validation": {
+    "structure": ["three 864×1821 frames", "source raster nodes remain unchanged", "MATCH specimens remain linked instances", "user-deleted gap blocks were not recreated", "no residual gap overlays", "no visible fifth inherited anatomy callouts"],
+    "visual": ["compare each frame with image 26, image 27 and image 28", "check section hierarchy, clipping and overlaps", "verify no output overlaps Components frame at x=41525"],
+    "tokens": ["reuse source component tokens and effects", "keep documentation surface neutral white", "do not invent canonical variables or styles"]
+  }
+}

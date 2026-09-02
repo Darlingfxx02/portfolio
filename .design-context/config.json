@@ -1,0 +1,24 @@
+{
+  "schemaVersion": 3,
+  "plugin": "figma-product-creator",
+  "setup": {
+    "mode": "progressive",
+    "initializedAt": "2026-08-17T19:46:14.763Z"
+  },
+  "contextual": {},
+  "icons": {
+    "sourceFile": "sources/icon-library.json",
+    "inheritance": "global-default"
+  },
+  "guidelineModules": {
+    "active": [
+      "universal/accessibility",
+      "universal/component-api",
+      "universal/cognitive-load",
+      "universal/semantic-compression",
+      "universal/surface-discipline",
+      "universal/token-fidelity"
+    ],
+    "excluded": []
+  }
+}

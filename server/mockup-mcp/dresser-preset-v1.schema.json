@@ -1,0 +1,75 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "dresser-preset/v1",
+  "title": "Dresser preset v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["version", "device", "background", "layout"],
+  "properties": {
+    "version": { "const": "dresser-preset/v1" },
+    "device": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["modelId", "colorId"],
+      "properties": {
+        "modelId": { "type": "string", "minLength": 1 },
+        "colorId": { "type": ["string", "null"], "minLength": 1 }
+      }
+    },
+    "background": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["mode", "color"],
+          "properties": {
+            "mode": { "const": "solid" },
+            "color": { "type": "string", "pattern": "^#[0-9A-Fa-f]{6}$" }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["mode", "colors"],
+          "properties": {
+            "mode": { "const": "mesh" },
+            "colors": {
+              "type": "array",
+              "minItems": 3,
+              "maxItems": 3,
+              "items": { "type": "string", "pattern": "^#[0-9A-Fa-f]{6}$" }
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["mode"],
+          "properties": { "mode": { "const": "transparent" } }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["mode", "packId", "imageIndex"],
+          "properties": {
+            "mode": { "const": "picture" },
+            "packId": { "type": "string", "minLength": 1 },
+            "imageIndex": { "type": "integer", "minimum": 1 }
+          }
+        }
+      ]
+    },
+    "layout": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["aspectRatioId", "padding", "deviceScale", "x", "y"],
+      "properties": {
+        "aspectRatioId": { "type": "string", "minLength": 1 },
+        "padding": { "type": "number" },
+        "deviceScale": { "type": "number" },
+        "x": { "type": "number" },
+        "y": { "type": "number" }
+      }
+    }
+  }
+}

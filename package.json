@@ -8,17 +8,32 @@
     "build": "tsc -b && vite build",
     "usage": "node scripts/aggregate-usage.mjs",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "mockup-mcp": "node server/mockup-mcp/server.mjs",
+    "test:mockup-mcp": "node --test --test-concurrency=1 server/mockup-mcp/tests/*.test.mjs",
+    "lint:mockup-mcp": "eslint server/mockup-mcp --max-warnings=0",
+    "build:mockup-mcp": "node --check server/mockup-mcp/server.mjs && node --check server/mockup-mcp/browser-session.mjs && node --check server/mockup-mcp/preset-schema.mjs && node -e \"JSON.parse(require('node:fs').readFileSync('server/mockup-mcp/dresser-preset-v1.schema.json','utf8'))\"",
+    "figma-bridge": "node server/figma-plugin-bridge/server.mjs",
+    "test:figma-bridge": "node --test --test-concurrency=1 server/figma-plugin-bridge/tests/*.test.mjs",
+    "lint:figma-bridge": "eslint server/figma-plugin-bridge --max-warnings=0",
+    "build:figma-bridge": "node --check server/figma-plugin-bridge/server.mjs && node --check server/figma-plugin-bridge/protocol.mjs && node --check server/figma-plugin-bridge/runtime-state.mjs && node --check server/figma-plugin-bridge/session-state.mjs",
+    "dev:figma-plugin": "node figma-plugin/scripts/dev.mjs",
+    "build:figma-plugin": "node figma-plugin/scripts/build.mjs && tsc -p figma-plugin/tsconfig.json",
+    "test:figma-plugin": "FIGMA_PLUGIN_ID=123456 node figma-plugin/scripts/build.mjs && node --test figma-plugin/tests/*.test.mjs",
+    "lint:figma-plugin": "eslint figma-plugin/src figma-plugin/scripts figma-plugin/vite.config.ts --max-warnings=0"
   },
   "dependencies": {
+    "@modelcontextprotocol/sdk": "1.30.0",
     "@phosphor-icons/react": "^2.1.10",
     "gsap": "^3.15.0",
     "party-js": "^2.2.0",
     "react": "^19.2.6",
-    "react-dom": "^19.2.6"
+    "react-dom": "^19.2.6",
+    "zod": "4.5.4"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
+    "@figma/plugin-typings": "^1.137.0",
     "@tailwindcss/vite": "^4.3.1",
     "@types/node": "^24.12.3",
     "@types/react": "^19.2.14",

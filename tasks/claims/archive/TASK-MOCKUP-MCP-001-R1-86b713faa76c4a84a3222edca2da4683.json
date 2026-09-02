@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "task_id": "TASK-MOCKUP-MCP-001-R1",
+  "token": "86b713faa76c4a84a3222edca2da4683",
+  "state": "archived",
+  "pm_id": "railway-20260830-browser-mcp-mvp",
+  "executor": "browser-mcp-remediation-executor",
+  "claimed_at": "2026-08-30T19:47:21.221953Z",
+  "heartbeat_at": "2026-08-30T19:50:09.258981Z",
+  "outcome": "implemented",
+  "reason": "",
+  "finished_at": "2026-08-30T19:53:37.392900Z"
+}

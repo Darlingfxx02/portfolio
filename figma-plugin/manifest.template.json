@@ -1,0 +1,13 @@
+{
+  "name": "Dresser",
+  "id": "__FIGMA_PLUGIN_ID__",
+  "api": "1.0.0",
+  "main": "dist/main.js",
+  "ui": "dist/bootstrap.html",
+  "editorType": ["figma"],
+  "networkAccess": {
+    "allowedDomains": ["none"],
+    "devAllowedDomains": ["http://127.0.0.1:4783"]
+  },
+  "documentAccess": "dynamic-page"
+}

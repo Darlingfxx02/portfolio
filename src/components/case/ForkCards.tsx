@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
 import { ScrollLineReveal } from "@/components/motion/ScrollLineReveal";
+import { useLang } from "@/lib/i18n";
 
 export type ForkOption = {
   /** Метка варианта — обычно «A», «B», «C». */
@@ -34,6 +35,8 @@ export function ForkCards({
   cost,
   className,
 }: ForkCardsProps) {
+  const ru = useLang().lang === "ru";
+
   return (
     <div
       className={`flex flex-col gap-12 px-[50px] py-[60px] ${className ?? ""}`}
@@ -67,8 +70,8 @@ export function ForkCards({
                 opt.chosen ? "text-white/60" : "text-[#90a4ae]"
               }`}
             >
-              Вариант {opt.label}
-              {opt.chosen ? " · выбран" : ""}
+              {ru ? "Вариант" : "Option"} {opt.label}
+              {opt.chosen ? (ru ? " · выбран" : " · selected") : ""}
             </span>
             <p className="text-[18px] font-semibold leading-[1.4]">
               {opt.title}

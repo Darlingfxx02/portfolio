@@ -1,0 +1,35 @@
+{
+  "schema_version": 2,
+  "delivery": {
+    "max_remediation_attempts": 1,
+    "max_dependency_depth": 2,
+    "rebaseline_after_second_failure": true
+  },
+  "tracking": {
+    "provider": "local",
+    "bridge": "none",
+    "target": "tasks/",
+    "initial_binding_required_for_dispatch": false,
+    "later_sync_failure_policy": "continue-local-and-reconcile"
+  },
+  "product": [
+    "Local-only prototype",
+    "Core screenshot-to-PNG workflow first"
+  ],
+  "engineering": [
+    "Isolate the editor from the portfolio boot-time media preload",
+    "Use only original implementation and generic device geometry",
+    "Preserve unrelated dirty-worktree changes",
+    "User explicitly approved reduced-assurance execution without the unavailable Mobbin reference gate"
+  ],
+  "forbidden": [
+    "Copying Dresser production JavaScript, CSS, media, or device assets",
+    "External publication, push, or deployment"
+  ],
+  "user_decisions_required": [
+    "destructive action",
+    "privacy or security trade-off",
+    "money or external publication",
+    "visible product compromise"
+  ]
+}

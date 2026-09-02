@@ -1,3 +1,4 @@
+/* eslint-disable react-refresh/only-export-components */
 import {
   createContext,
   useContext,
@@ -74,7 +75,6 @@ const Ctx = createContext<CompanyConfig>(DEFAULT_CONFIG)
 const ReadyCtx = createContext(false)
 
 export const useCompanyConfig = () => useContext(Ctx)
-// eslint-disable-next-line react-refresh/only-export-components
 export const useCompanyConfigReady = () => useContext(ReadyCtx)
 
 export function PersonalizationProvider({ children }: { children: ReactNode }) {

@@ -8,6 +8,7 @@ import {
   type ReactNode,
 } from 'react'
 import { createPortal } from 'react-dom'
+import { useLang } from '@/lib/i18n'
 import { click as playClick } from '@/lib/sound'
 import styles from './CaseImageZoom.module.css'
 
@@ -84,6 +85,7 @@ export function CaseImageZoom({
   className: string
   children: ReactNode
 }) {
+  const { lang } = useLang()
   const rootRef = useRef<HTMLDivElement | null>(null)
   const viewerCardRef = useRef<HTMLDivElement | null>(null)
   const [activeImage, setActiveImage] = useState<ActiveImage | null>(null)
@@ -223,7 +225,10 @@ export function CaseImageZoom({
     images.forEach((image) => {
       image.setAttribute('role', 'button')
       image.tabIndex = 0
-      image.setAttribute('aria-label', `Открыть изображение: ${image.alt}`)
+      image.setAttribute(
+        'aria-label',
+        `${lang === 'ru' ? 'Открыть изображение' : 'Open image'}: ${image.alt}`,
+      )
     })
 
     const onKeyDown = (event: KeyboardEvent) => {
@@ -246,7 +251,7 @@ export function CaseImageZoom({
         else image.setAttribute('aria-label', label)
       })
     }
-  }, [children])
+  }, [children, lang])
 
   const onRootClick = (event: ReactMouseEvent<HTMLDivElement>) => {
     if (event.target instanceof HTMLImageElement) openImage(event.target)
@@ -262,7 +267,10 @@ export function CaseImageZoom({
             className={`${styles.viewer} ${isClosing ? styles.viewerClosing : ''}`}
             role="dialog"
             aria-modal="true"
-            aria-label={activeImage.alt || 'Просмотр изображения'}
+            aria-label={
+              activeImage.alt ||
+              (lang === 'ru' ? 'Просмотр изображения' : 'Image preview')
+            }
             onClick={() => void closeImage()}
             onKeyDown={(event) => {
               event.stopPropagation()

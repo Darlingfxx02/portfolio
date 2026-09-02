@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
+import { useLang } from '@/lib/i18n'
 import styles from './LoadingScreen.module.css'
 
 type LoadingScreenProps = {
@@ -7,6 +8,7 @@ type LoadingScreenProps = {
 }
 
 export function LoadingScreen({ progress, exiting }: LoadingScreenProps) {
+  const { lang } = useLang()
   const [displayedProgress, setDisplayedProgress] = useState(0)
   const displayedRef = useRef(0)
 
@@ -35,7 +37,11 @@ export function LoadingScreen({ progress, exiting }: LoadingScreenProps) {
       className={`${styles.screen} ${exiting ? styles.exiting : ''}`}
       role="status"
       aria-live="polite"
-      aria-label={`Сайт загружен на ${roundedProgress} процентов`}
+      aria-label={
+        lang === 'ru'
+          ? `Сайт загружен на ${roundedProgress} процентов`
+          : `Site ${roundedProgress} percent loaded`
+      }
     >
       <span className={styles.number} aria-hidden>
         {String(roundedProgress).padStart(2, '0')}

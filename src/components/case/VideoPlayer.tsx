@@ -134,12 +134,15 @@ export function VideoPlayer({ videoId, title, onClose }: VideoPlayerProps) {
   }, []);
 
   useEffect(() => {
-    if (playing) poke();
-    else {
-      if (hideTimer.current) clearTimeout(hideTimer.current);
-      setChromeVisible(true);
-    }
+    const frame = requestAnimationFrame(() => {
+      if (playing) poke();
+      else {
+        if (hideTimer.current) clearTimeout(hideTimer.current);
+        setChromeVisible(true);
+      }
+    });
     return () => {
+      cancelAnimationFrame(frame);
       if (hideTimer.current) clearTimeout(hideTimer.current);
     };
   }, [playing, poke]);
@@ -206,7 +209,7 @@ export function VideoPlayer({ videoId, title, onClose }: VideoPlayerProps) {
       {/* Click-away to close on the black backdrop. */}
       <button
         type="button"
-        aria-label="Закрыть"
+        aria-label={L.close}
         className="absolute inset-0 cursor-default"
         onClick={onClose}
       />

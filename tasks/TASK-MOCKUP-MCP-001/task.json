@@ -1,0 +1,245 @@
+{
+  "schema_version": 4,
+  "id": "TASK-MOCKUP-MCP-001",
+  "title": "Browser-backed Dresser MCP vertical slice",
+  "goal": "An MCP client can discover the exact local Dresser mirror's supported preset values, submit one local screenshot with a versioned preset, and receive the absolute path and metadata for the PNG exported by that browser UI.",
+  "status": "rework-required",
+  "assignment": {
+    "token": "a65202dd1c4c436f950f765d4a61043a",
+    "pm_id": "railway-20260830-browser-mcp-mvp",
+    "executor": "browser-mcp-executor",
+    "claimed_at": "2026-08-30T19:08:03.441265Z",
+    "heartbeat_at": "2026-08-30T19:30:33.013962Z",
+    "finished_at": "2026-08-30T19:31:14.857606Z",
+    "outcome": "implemented"
+  },
+  "depends_on": [],
+  "delivery": {
+    "mode": "mvp",
+    "user_value": "An agent can turn a local product screenshot into a presentation-ready Dresser PNG without manually operating the editor.",
+    "slice": "vertical",
+    "demo": {
+      "steps": [
+        "Start the exact mirror from .local/dresser-mirror, a controlled Chrome session, and the local stdio MCP server.",
+        "Call dresser_get_capabilities and select supported device, background, mesh, and layout values from its versioned response.",
+        "Call dresser_render_png with one local PNG or JPEG and a dresser-preset/v1 preset, then verify the returned absolute artifact path opens as the PNG exported by Dresser."
+      ],
+      "evidence": "tasks/evidence/TASK-MOCKUP-MCP-001/demo.md"
+    },
+    "unlocks": [
+      "agent-driven screenshot-to-case asset generation through Dresser"
+    ],
+    "remediation": {
+      "source_task_id": null,
+      "attempt": 0,
+      "dependency_depth": 0
+    },
+    "github": {
+      "required": false,
+      "remote": "origin",
+      "branch": "main",
+      "batch": "standalone",
+      "push_after": "not-authorized-local-only",
+      "force_push": false
+    }
+  },
+  "work_classification": {
+    "ux_flow": false,
+    "reason": "This backend/tooling task exposes an existing editor flow and preset contract; it makes no screen-structure, navigation, or human interaction-flow decisions."
+  },
+  "tracking": {
+    "provider": "local",
+    "local": {
+      "reason": "The approved MVP slice is local-only and must not write lifecycle events to Discord or another external tracker."
+    }
+  },
+  "risk": {
+    "level": "medium",
+    "reasons": [
+      "The new MCP and browser boundary reads caller-selected local files, controls Chrome, and returns filesystem artifacts, but is loopback-only and reversible."
+    ]
+  },
+  "impact": [
+    "backend-api",
+    "external-integration",
+    "data-privacy"
+  ],
+  "zones": [
+    "server",
+    "root"
+  ],
+  "scope": {
+    "in": [
+      "package.json",
+      "pnpm-lock.yaml",
+      "server/mockup-mcp/server.mjs",
+      "server/mockup-mcp/browser-session.mjs",
+      "server/mockup-mcp/preset-schema.mjs",
+      "server/mockup-mcp/dresser-preset-v1.schema.json",
+      "server/mockup-mcp/tests/*.test.mjs",
+      "server/mockup-mcp/README.md"
+    ],
+    "out": [
+      "changes to any file or asset inside .local/dresser-mirror",
+      "changes to /tools/mockup or any portfolio interface",
+      "Figma ingestion, frame selection, multi-screen composition, batch rendering, video input, and video export",
+      "public or remote MCP transport, authentication, cloud storage, deployment, publication, and Git push",
+      "NDA isolation as a release gate for this redesign-phase MVP"
+    ]
+  },
+  "constraints": [
+    "Use the official MCP SDK over local stdio and keep the protocol contract independent from DOM selectors; package.json, pnpm-lock.yaml, and the task-owned test setup may change only for required MCP/runtime dependencies and scripts.",
+    "dresser_get_capabilities and dresser_render_png are the public MVP tools. Both expose dresser-preset/v1; capabilities return stable IDs, defaults, numeric bounds or enumerations, mirror manifest identity, and only values proven present in the live browser UI.",
+    "The dresser-preset/v1 schema is a closed, versioned object with device model/color IDs; a background union for solid color, explicit three-color mesh, transparent, and discovered built-in picture modes; and layout aspect-ratio ID, padding, device scale, and x/y position. Unknown properties, IDs, modes, non-finite numbers, and out-of-range values are rejected before browser mutation.",
+    "Render through a controlled Chrome/CDP page loaded from the loopback .local/dresser-mirror server; do not reimplement the composition renderer, call a remote Dresser site, inject caller-supplied JavaScript, or substitute a browser screenshot for Dresser's PNG export.",
+    "Canonicalize the source path, require a bounded regular PNG or JPEG whose content matches its declared type, and write only a new request-scoped .png under .local/dresser-mcp-output; never accept an arbitrary output path or overwrite an existing file.",
+    "Serialize browser mutations, start each render from a clean Dresser page state, apply every supplied field, wait for settled rendering and download completion with bounded timeouts, and return no artifact on partial or stale completion.",
+    "Keep the mirror and MCP endpoints on 127.0.0.1, preserve the mirror CSP/local-assets-only boundary, use an isolated disposable browser profile, and never log screenshot bytes, base64 media, full local source paths, credentials, or raw MCP/CDP payloads.",
+    "Preserve unrelated dirty-worktree changes. Do not edit generated dist files, .local/dresser-mirror, existing portfolio source, tasks/HISTORY.md, or perform Git push, deployment, publication, force-push, merge, tag, or release."
+  ],
+  "acceptance_criteria": [
+    "Starting the local stdio server succeeds with the documented command and MCP tool discovery exposes exactly dresser_get_capabilities and dresser_render_png with machine-readable input/output schemas.",
+    "dresser_get_capabilities opens the exact .local/dresser-mirror in a controlled browser and returns dresser-preset/v1 metadata containing the mirror manifest identity plus discovered device models/colors, PNG-relevant background modes and values, mesh color contract, layout options, defaults, and bounds.",
+    "dresser_render_png accepts one valid local PNG or JPEG and a valid dresser-preset/v1 object, applies its device, background or three-color mesh, aspect ratio, padding, scale, and x/y settings in the browser UI, and invokes Dresser's own PNG export.",
+    "A successful render returns an absolute path under .local/dresser-mcp-output together with image/png, non-zero byte size, SHA-256, pixel width, and pixel height; the file exists, has a valid PNG signature, and visually reflects the requested preset.",
+    "Two sequential renders with materially different supported presets do not leak source media or settings between jobs, and simultaneous calls are serialized or rejected with a stable non-destructive busy error.",
+    "Missing or non-regular source paths, traversal attempts, spoofed or unsupported media, oversized files, schema violations, unknown capability IDs, out-of-range values, unavailable browser/mirror, render timeout, and failed download return bounded MCP errors without creating or reusing an artifact.",
+    "During capability discovery and rendering, browser traffic stays on loopback/blob/data URLs, screenshot bytes and full source paths do not appear in logs or MCP errors, and temporary browser/profile/download state is removed while the intentional final PNG remains.",
+    "Existing portfolio code and the exact .local/dresser-mirror remain unchanged, the interactive mirror still opens at /tools/mockup, task-scoped MCP lint, tests, build, and whitespace validation pass, and a fresh full-repository lint run reproduces only the same 10 pre-existing out-of-scope errors recorded at preflight as accepted MVP debt."
+  ],
+  "validation": {
+    "profiles": [
+      "baseline",
+      "security-baseline",
+      "backend-api",
+      "external-integration",
+      "data-privacy"
+    ],
+    "commands": [
+      {
+        "id": "mcp-tests",
+        "command": "pnpm test:mockup-mcp",
+        "evidence": "tasks/evidence/TASK-MOCKUP-MCP-001/mcp-tests.log"
+      },
+      {
+        "id": "lint",
+        "command": "pnpm lint:mockup-mcp",
+        "evidence": "tasks/evidence/TASK-MOCKUP-MCP-001/lint.log"
+      },
+      {
+        "id": "build",
+        "command": "pnpm build:mockup-mcp",
+        "evidence": "tasks/evidence/TASK-MOCKUP-MCP-001/build.log"
+      },
+      {
+        "id": "mirror-integrity",
+        "command": "cd .local/dresser-mirror && shasum -a 256 -c MANIFEST.sha256",
+        "evidence": "tasks/evidence/TASK-MOCKUP-MCP-001/mirror-integrity.log"
+      },
+      {
+        "id": "diff-check",
+        "command": "git diff --check",
+        "evidence": "tasks/evidence/TASK-MOCKUP-MCP-001/diff-check.log"
+      }
+    ],
+    "checks": [
+      {
+        "id": "protocol-and-capabilities",
+        "description": "Connect an MCP client over stdio, list the two tools, call dresser_get_capabilities against the live mirror, validate the response against its schema, and reconcile stable IDs/defaults/bounds with the controls actually present in that browser page.",
+        "evidence": "tasks/evidence/TASK-MOCKUP-MCP-001/capabilities.json"
+      },
+      {
+        "id": "browser-render-demo",
+        "description": "Render a disposable screenshot once with solid background and once with explicit mesh colors plus different device/layout values; inspect returned metadata and both PNGs, and record that the browser used Dresser's export rather than Page.captureScreenshot.",
+        "evidence": "tasks/evidence/TASK-MOCKUP-MCP-001/demo.md"
+      },
+      {
+        "id": "input-and-failure-negatives",
+        "description": "Exercise missing/directory/traversal/spoofed/unsupported/oversized sources, malformed or unknown presets, unavailable CDP/mirror, timeout, and failed download; each must produce a stable non-leaking MCP error and no stale or partial artifact.",
+        "evidence": "tasks/evidence/TASK-MOCKUP-MCP-001/negative-paths.md"
+      },
+      {
+        "id": "isolation-and-concurrency",
+        "description": "Run sequential distinct jobs and overlapping calls; confirm clean-page reset, no media/settings bleed, deterministic serialization or busy behavior, unique output names, and no overwrite.",
+        "evidence": "tasks/evidence/TASK-MOCKUP-MCP-001/isolation.md"
+      },
+      {
+        "id": "privacy-network-boundary",
+        "description": "Capture network, stdout/stderr, MCP errors, and temporary filesystem state during import/export; confirm loopback/blob/data-only traffic, redacted source identity, no media payload logging, and cleanup of disposable browser state.",
+        "evidence": "tasks/evidence/TASK-MOCKUP-MCP-001/privacy-network.md"
+      },
+      {
+        "id": "neighbor-regression",
+        "description": "Open the mirror interactively at /tools/mockup and inspect scoped Git diff; confirm mirror files, existing portfolio routes, and TASK-MOCKUP-001-owned editor code are unchanged.",
+        "evidence": "tasks/evidence/TASK-MOCKUP-MCP-001/neighbor-regression.md"
+      },
+      {
+        "id": "full-repo-lint-baseline-debt",
+        "description": "Run pnpm lint and compare its complete findings with preflight-lint.log; accept the non-zero result only when it reproduces exactly the same 10 errors in the same five out-of-scope files and reports no new or task-owned MCP lint finding.",
+        "evidence": "tasks/evidence/TASK-MOCKUP-MCP-001/full-repo-lint-baseline.md"
+      }
+    ]
+  },
+  "rollback": {
+    "steps": [
+      "Remove only TASK-MOCKUP-MCP-001-owned files under server/mockup-mcp and revert only its package.json and pnpm-lock.yaml dependency/script additions.",
+      "Delete disposable .local/dresser-mcp-output test artifacts, then rerun pnpm lint and pnpm build to confirm the pre-task application remains intact."
+    ],
+    "data_recovery": [
+      "No source data migration exists; caller screenshots are read-only and generated PNGs are disposable local artifacts."
+    ]
+  },
+  "interface": null,
+  "visual_gate": {
+    "required": false,
+    "reason": "This task adds a local MCP/browser automation boundary and does not change any product interface or make UX-flow decisions."
+  },
+  "approvals": {
+    "intent": {
+      "status": "approved",
+      "evidence": "tasks/STATE.json"
+    },
+    "preflight": {
+      "status": "approved",
+      "evidence": "tasks/TASK-MOCKUP-MCP-001/preflight-verdict.json"
+    },
+    "visual": {
+      "status": "not-required",
+      "evidence": ""
+    },
+    "destructive_action": {
+      "status": "not-required",
+      "evidence": ""
+    }
+  },
+  "evidence_required": [
+    "MCP tool-list and capability-schema evidence",
+    "live browser capability reconciliation",
+    "solid and mesh PNG demo artifacts with hashes and dimensions",
+    "negative input, preset, CDP, mirror, timeout, and download results",
+    "job isolation and concurrency result",
+    "network, log-redaction, and temporary-state cleanup evidence",
+    "task-scoped MCP lint, build, test, mirror-integrity, and diff-check logs plus unchanged full-repository lint debt",
+    "scoped diff and neighbor regression report"
+  ],
+  "history": {
+    "summary": "Compile a browser-backed local MCP that turns a screenshot and versioned Dresser preset into a PNG artifact.",
+    "touchpoints": [
+      "MCP stdio contract",
+      "Chrome/CDP adapter",
+      "dresser-preset/v1",
+      "PNG artifact boundary"
+    ]
+  },
+  "integration": {
+    "status": "integrated",
+    "integrated_at": "2026-08-30T19:33:16Z",
+    "report": "tasks/evidence/integration/integration-report.json",
+    "final_verification_required": true
+  },
+  "final_review": {
+    "status": "FAIL",
+    "verdict": "tasks/audit/TASK-MOCKUP-MCP-001/verdict.json",
+    "accepted_debt": false
+  }
+}

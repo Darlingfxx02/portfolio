@@ -1,0 +1,90 @@
+{
+  "schemaVersion": 1,
+  "workflow": "figma-reconcile",
+  "status": "implemented-partial",
+  "approvedBy": "user message 2026-08-24",
+  "experience": "editorial",
+  "platform": "desktop",
+  "fileKey": "8SlcVurfGSkysWTlZsJYft",
+  "pageId": "2:69403",
+  "targets": [
+    {
+      "order": 1,
+      "frameId": "40000109:9243",
+      "name": "Navigation & selection documentation",
+      "primaryMoment": "Choose between page-level navigation and an exclusive view mode without semantic ambiguity.",
+      "matches": ["tab 2:272582", "SegmentControl 2:272603", "Segment 2:272606"],
+      "gaps": ["focus-visible variant", "disabled tab or segment", "component set property definitions currently return Figma errors"]
+    },
+    {
+      "order": 2,
+      "frameId": "40000109:9347",
+      "name": "Controls & lists documentation",
+      "primaryMoment": "Select a value or toggle a setting using the correct control for the interaction model.",
+      "matches": ["switches 2:273128", "SwitcherLine 2:273138", ".ListItem 2:272814", "List 2:273117", "list-item/new 2:273949"],
+      "gaps": ["focus-visible variants are not exposed consistently", "switch set has no explicit inactive disabled combination"]
+    },
+    {
+      "order": 3,
+      "frameId": "40000109:9451",
+      "name": "Data & utility documentation",
+      "primaryMoment": "Read financial context and distinguish content, status and utility actions.",
+      "matches": ["CurrencyRateCard 2:273697", "Currency input 2:273628", "Logo 2:273087", "Back button 2:273108", "existing service icon components"],
+      "partials": ["amount and date cards are documentation-native examples rather than a canonical component"],
+      "gaps": ["no canonical amount-date component", "documentation typography has no local text styles"]
+    }
+  ],
+  "visibilityMap": {
+    "NOW": ["purpose", "complete canonical specimen", "use versus avoid guidance"],
+    "SCAN": ["variants", "state matrix", "semantic token or API table"],
+    "CRITICAL": ["keyboard focus", "disabled behavior", "error semantics"],
+    "CONTEXT": ["owner", "version", "review date"],
+    "MORE": ["component property details and DS gaps"]
+  },
+  "preserveSource": true,
+  "preservationMethod": "locked clone below each target before mutation",
+  "createCanonicalComponents": false,
+  "typography": "Use the user-approved Inter documentation fallback and keep a visible typography gap because no canonical local documentation text styles exist.",
+  "validation": ["sequential per-frame implementation", "actual component-derived specimens", "no empty slots", "no section overlap", "Auto Layout root hugs content", "final screenshot for each target"],
+  "implementationResults": [
+    {
+      "order": 1,
+      "frameId": "40000109:9243",
+      "resultName": "reconciled/Navigation & modes documentation",
+      "height": 2451,
+      "backupId": "40000149:209",
+      "gapBlockId": "40000153:262635",
+      "status": "implemented-partial"
+    },
+    {
+      "order": 2,
+      "frameId": "40000109:9347",
+      "resultName": "reconciled/Controls, selection & lists documentation",
+      "height": 2659,
+      "backupId": "40000155:209",
+      "gapBlockId": "40000162:388",
+      "status": "implemented-partial"
+    },
+    {
+      "order": 3,
+      "frameId": "40000109:9451",
+      "resultName": "reconciled/Financial data & utility documentation",
+      "height": 2551,
+      "backupId": "40000167:209",
+      "gapBlockId": "40000166:292",
+      "status": "implemented-partial"
+    }
+  ],
+  "qa": {
+    "rootInstances": 0,
+    "emptySpecimenSlots": 0,
+    "directSectionOverlaps": 0,
+    "visibleTopLevelOverlaps": 0,
+    "rootClipping": false,
+    "screenshots": [
+      "/tmp/zinda-navigation-final.png",
+      "/tmp/zinda-controls-reconciled.png",
+      "/tmp/zinda-data-reconciled.png"
+    ]
+  }
+}

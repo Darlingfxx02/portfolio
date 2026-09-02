@@ -1,0 +1,161 @@
+{
+  "schema_version": 2,
+  "mode": "final",
+  "task_id": "TASK-DRESSER-FIGMA-001-R1",
+  "delivery_mode": "mvp",
+  "scope_expansion": false,
+  "status": "PASS_WITH_DEBT",
+  "checks": [
+    {
+      "id": "acceptance-1",
+      "status": "PASS",
+      "summary": "All three original wrong-route OPTIONS requests are bounded rejections with no permission headers and no manager or shutdown side effect.",
+      "evidence": ["tasks/audit/TASK-DRESSER-FIGMA-001-R1/final-verification.md", "tasks/evidence/TASK-DRESSER-FIGMA-001/integration-blocker.md"]
+    },
+    {
+      "id": "acceptance-2",
+      "status": "PASS",
+      "summary": "The three-route allow matrix is exact, case/order tolerant for header names, and emits only canonical permissions.",
+      "evidence": ["tasks/audit/TASK-DRESSER-FIGMA-001-R1/final-verification.md", "server/figma-plugin-bridge/protocol.mjs"]
+    },
+    {
+      "id": "acceptance-3",
+      "status": "PASS",
+      "summary": "Unknown route, missing header, and extra header preflights return stable NOT_FOUND or INVALID_PREFLIGHT without reflected permission or disclosure.",
+      "evidence": ["tasks/audit/TASK-DRESSER-FIGMA-001-R1/final-verification.md"]
+    },
+    {
+      "id": "acceptance-4",
+      "status": "PASS",
+      "summary": "Positive-length and non-empty chunked shutdown bodies return INVALID_BODY, preserve runtime/listener state, and invoke no shutdown callback.",
+      "evidence": ["tasks/audit/TASK-DRESSER-FIGMA-001-R1/final-verification.md"]
+    },
+    {
+      "id": "acceptance-5",
+      "status": "PASS",
+      "summary": "Content-Length 0, absent-length empty, and empty chunked requests each return 202 and invoke exactly one callback after full consumption.",
+      "evidence": ["tasks/audit/TASK-DRESSER-FIGMA-001-R1/final-verification.md"]
+    },
+    {
+      "id": "acceptance-6",
+      "status": "PASS",
+      "summary": "The four original failures, full allow/deny matrix, and shutdown framing cases are automated and passed in targeted and complete suites.",
+      "evidence": ["tasks/audit/TASK-DRESSER-FIGMA-001-R1/final-verification.md", "tasks/evidence/TASK-DRESSER-FIGMA-001-R1/targeted-reproducers.log"]
+    },
+    {
+      "id": "acceptance-7",
+      "status": "PASS",
+      "summary": "Bridge, MCP, mirror, TypeScript, Vite, live Chrome render, cleanup, and current neighbor-state checks pass; historical patch provenance is recorded separately as debt.",
+      "evidence": ["tasks/audit/TASK-DRESSER-FIGMA-001-R1/final-verification.md"]
+    },
+    {
+      "id": "targeted-reproducers",
+      "status": "PASS",
+      "summary": "Fresh targeted execution passed 3/3.",
+      "evidence": ["tasks/audit/TASK-DRESSER-FIGMA-001-R1/final-verification.md"]
+    },
+    {
+      "id": "bridge-tests",
+      "status": "PASS",
+      "summary": "Fresh sequential bridge execution passed 8/8.",
+      "evidence": ["tasks/audit/TASK-DRESSER-FIGMA-001-R1/final-verification.md"]
+    },
+    {
+      "id": "bridge-lint",
+      "status": "PASS",
+      "summary": "Task-scoped bridge lint exited 0 with no warnings.",
+      "evidence": ["tasks/audit/TASK-DRESSER-FIGMA-001-R1/final-verification.md"]
+    },
+    {
+      "id": "bridge-build",
+      "status": "PASS",
+      "summary": "Bridge syntax/build checks exited 0.",
+      "evidence": ["tasks/audit/TASK-DRESSER-FIGMA-001-R1/final-verification.md"]
+    },
+    {
+      "id": "mcp-tests",
+      "status": "PASS",
+      "summary": "Fresh MCP execution passed 10/10 including live Chrome and cleanup cases.",
+      "evidence": ["tasks/audit/TASK-DRESSER-FIGMA-001-R1/final-verification.md"]
+    },
+    {
+      "id": "mirror-integrity",
+      "status": "PASS",
+      "summary": "All 474 mirror manifest entries verified.",
+      "evidence": ["tasks/audit/TASK-DRESSER-FIGMA-001-R1/final-verification.md", ".local/dresser-mirror/MANIFEST.sha256"]
+    },
+    {
+      "id": "diff-check",
+      "status": "PASS",
+      "summary": "Git whitespace validation exited 0.",
+      "evidence": ["tasks/audit/TASK-DRESSER-FIGMA-001-R1/final-verification.md"]
+    },
+    {
+      "id": "exact-integration-reproducers",
+      "status": "PASS",
+      "summary": "Independent raw HTTP replay closed all four original blockers with continued liveness and zero rejected-request callbacks.",
+      "evidence": ["tasks/audit/TASK-DRESSER-FIGMA-001-R1/final-verification.md", "tasks/evidence/TASK-DRESSER-FIGMA-001/integration-blocker.md"]
+    },
+    {
+      "id": "complete-preflight-matrix",
+      "status": "PASS",
+      "summary": "Independent matrix passed 3 allowed and 8 denied route/method/header combinations.",
+      "evidence": ["tasks/audit/TASK-DRESSER-FIGMA-001-R1/final-verification.md"]
+    },
+    {
+      "id": "shutdown-framing-and-liveness",
+      "status": "PASS",
+      "summary": "All required framing cases preserved callback timing, listener liveness on rejection, and post-stop cleanup.",
+      "evidence": ["tasks/audit/TASK-DRESSER-FIGMA-001-R1/final-verification.md"]
+    },
+    {
+      "id": "scope-security-neighbor-regression",
+      "status": "PASS",
+      "summary": "Current bridge, MCP, mirror, mockup route, redaction, cleanup, and TASK-002 separation pass; historical four-file diff proof is explicit debt.",
+      "evidence": ["tasks/audit/TASK-DRESSER-FIGMA-001-R1/final-verification.md"]
+    },
+    {
+      "id": "scope",
+      "status": "PASS",
+      "summary": "Current implementation matches the frozen four-file ownership and contains no plugin/UI drift; absence of a Git baseline limits historical proof only.",
+      "evidence": ["tasks/audit/TASK-DRESSER-FIGMA-001-R1/final-verification.md"]
+    },
+    {
+      "id": "risk:backend-api",
+      "status": "PASS",
+      "summary": "Route-specific CORS and empty-body shutdown behavior are exact, bounded, live after rejection, and side-effect free.",
+      "evidence": ["tasks/audit/TASK-DRESSER-FIGMA-001-R1/final-verification.md"]
+    },
+    {
+      "id": "risk:external-integration",
+      "status": "PASS",
+      "summary": "Raw Node HTTP framing, Chrome-backed render, listener lifecycle, MCP contract, and mirror integration pass independently.",
+      "evidence": ["tasks/audit/TASK-DRESSER-FIGMA-001-R1/final-verification.md"]
+    },
+    {
+      "id": "risk:data-privacy",
+      "status": "PASS",
+      "summary": "No sensitive value or internal payload was exposed, rejected requests caused no mutation, and task-owned runtime/input/output/process state was cleaned.",
+      "evidence": ["tasks/audit/TASK-DRESSER-FIGMA-001-R1/final-verification.md"]
+    }
+  ],
+  "findings": [
+    {
+      "severity": "evidence-gap",
+      "summary": "No pre-R1 Git or immutable source-task snapshot exists to cryptographically reconstruct the historical four-file remediation diff.",
+      "evidence": "tasks/audit/TASK-DRESSER-FIGMA-001-R1/final-verification.md",
+      "check_id": "scope"
+    }
+  ],
+  "debt": [
+    {
+      "id": "untracked-r1-baseline",
+      "classification": "evidence-gap",
+      "summary": "The bridge directory is untracked, so current scope and timestamps are reproducible but historical four-file provenance is not Git-verifiable.",
+      "blocking": false
+    }
+  ],
+  "reviewer": {
+    "independent_from_executor": true
+  }
+}

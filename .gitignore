@@ -11,6 +11,8 @@ node_modules
 dist
 dist-ssr
 *.local
+figma-plugin/dist/
+figma-plugin/manifest.json
 
 # Editor directories and files
 .vscode/*

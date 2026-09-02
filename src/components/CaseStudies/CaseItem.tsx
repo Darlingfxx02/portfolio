@@ -57,7 +57,7 @@ export function CaseItem({ study }: { study: CaseStudy }) {
             alt=""
             width={1024}
             height={600}
-            loading="lazy"
+            loading="eager"
             draggable={false}
           />
         )}

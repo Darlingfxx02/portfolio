@@ -1,10 +1,13 @@
 import { useEffect, useMemo, useState, type ReactNode } from 'react'
 import { useCompanyConfigReady } from '@/lib/personalization'
 import { prepareUsageData } from '@/components/UsageHeatmap/UsageHeatmap'
+import {
+  siteBootImageSources,
+  siteBootVideoSources,
+} from '@/data/siteBootMedia'
 import { LoadingScreen } from './LoadingScreen'
 
 const MINIMUM_DISPLAY_MS = 1100
-const SAFETY_TIMEOUT_MS = 7000
 const EXIT_DURATION_MS = 720
 
 type Readiness = {
@@ -25,38 +28,127 @@ function waitForFonts() {
   return document.fonts?.ready?.then(() => undefined) ?? Promise.resolve()
 }
 
-function waitForCriticalMedia() {
+function afterLayout() {
   return new Promise<void>((resolve) => {
     window.requestAnimationFrame(() => {
-      const media = Array.from(
-        document.querySelectorAll<HTMLImageElement | HTMLVideoElement>(
-          'img:not([loading="lazy"]), video',
-        ),
-      )
-
-      const pending = media.filter((element) => {
-        if (element instanceof HTMLImageElement) return !element.complete
-        return element.readyState < HTMLMediaElement.HAVE_CURRENT_DATA
-      })
-
-      if (!pending.length) {
-        resolve()
-        return
-      }
-
-      let remaining = pending.length
-      const markReady = () => {
-        remaining -= 1
-        if (remaining <= 0) resolve()
-      }
-
-      pending.forEach((element) => {
-        element.addEventListener('load', markReady, { once: true })
-        element.addEventListener('loadeddata', markReady, { once: true })
-        element.addEventListener('error', markReady, { once: true })
-      })
+      window.requestAnimationFrame(() => resolve())
     })
   })
+}
+
+function isMediaReady(element: HTMLImageElement | HTMLVideoElement) {
+  if (element instanceof HTMLImageElement) return element.complete
+  return element.readyState >= HTMLMediaElement.HAVE_ENOUGH_DATA
+}
+
+function renderedMediaElements() {
+  return Array.from(
+    document.querySelectorAll<HTMLImageElement | HTMLVideoElement>(
+      '#root img, #root video',
+    ),
+  )
+}
+
+function sourceKey(source: string) {
+  return new URL(source, window.location.href).href
+}
+
+function siteMediaElements(
+  renderedMedia: Array<HTMLImageElement | HTMLVideoElement>,
+) {
+  const elementsBySource = new Map(
+    renderedMedia.map((element) => [
+      sourceKey(element.currentSrc || element.src),
+      element,
+    ]),
+  )
+
+  siteBootImageSources.forEach((source) => {
+    const key = sourceKey(source)
+    if (elementsBySource.has(key)) return
+
+    const image = new Image()
+    image.loading = 'eager'
+    image.src = source
+    elementsBySource.set(key, image)
+  })
+
+  siteBootVideoSources.forEach((source) => {
+    const key = sourceKey(source)
+    if (elementsBySource.has(key)) return
+
+    const video = document.createElement('video')
+    video.preload = 'auto'
+    video.muted = true
+    video.src = source
+    video.load()
+    elementsBySource.set(key, video)
+  })
+
+  return [...elementsBySource.values()]
+}
+
+function waitForMediaElement(element: HTMLImageElement | HTMLVideoElement) {
+  return new Promise<void>((resolve) => {
+    let settled = false
+
+    const cleanup = () => {
+      element.removeEventListener('load', markReady)
+      element.removeEventListener('canplaythrough', markReady)
+      element.removeEventListener('error', markReady)
+    }
+    const finish = () => {
+      if (settled) return
+      settled = true
+      cleanup()
+      resolve()
+    }
+    const markReady = () => {
+      if (
+        element instanceof HTMLImageElement &&
+        element.complete &&
+        element.naturalWidth > 0
+      ) {
+        void element.decode().catch(() => undefined).then(finish)
+        return
+      }
+      finish()
+    }
+
+    element.addEventListener('load', markReady)
+    element.addEventListener('canplaythrough', markReady)
+    element.addEventListener('error', markReady)
+
+    // The resource may have completed between the DOM query and listener setup.
+    if (isMediaReady(element)) markReady()
+  })
+}
+
+async function waitForSiteMedia(onProgress: (progress: number) => void) {
+  // Let the initial route finish mounting before merging its rendered media
+  // with the static inventory for every other route.
+  await afterLayout()
+
+  const media = siteMediaElements(renderedMediaElements())
+  if (!media.length) {
+    onProgress(1)
+    return
+  }
+
+  media.forEach((element) => {
+    if (element instanceof HTMLImageElement) element.loading = 'eager'
+  })
+
+  let readyCount = 0
+  onProgress(0)
+  await Promise.all(
+    media.map((element) =>
+      waitForMediaElement(element).then(() => {
+        readyCount += 1
+        onProgress(readyCount / media.length)
+      }),
+    ),
+  )
 }
 
 export function SiteBoot({ children }: { children: ReactNode }) {
@@ -68,7 +160,7 @@ export function SiteBoot({ children }: { children: ReactNode }) {
     media: false,
   })
   const [minimumElapsed, setMinimumElapsed] = useState(false)
-  const [timedOut, setTimedOut] = useState(false)
+  const [mediaProgress, setMediaProgress] = useState(0)
   const [visible, setVisible] = useState(true)
 
   useEffect(() => {
@@ -80,31 +172,27 @@ export function SiteBoot({ children }: { children: ReactNode }) {
     void prepareUsageData().then(() => mark('data'))
     void waitForDocument().then(() => mark('document'))
     void waitForFonts().then(() => mark('fonts'))
-    void waitForCriticalMedia().then(() => mark('media'))
+    void waitForSiteMedia((progress) => {
+      if (alive) setMediaProgress(progress)
+    }).then(() => mark('media'))
 
     const minimumTimer = window.setTimeout(
       () => setMinimumElapsed(true),
       MINIMUM_DISPLAY_MS,
     )
-    const safetyTimer = window.setTimeout(
-      () => setTimedOut(true),
-      SAFETY_TIMEOUT_MS,
-    )
-
     document.documentElement.classList.add('is-loading')
     document.getElementById('root')?.setAttribute('aria-busy', 'true')
 
     return () => {
       alive = false
       window.clearTimeout(minimumTimer)
-      window.clearTimeout(safetyTimer)
       document.documentElement.classList.remove('is-loading')
       document.getElementById('root')?.removeAttribute('aria-busy')
     }
   }, [])
 
   const allReady = configReady && Object.values(readiness).every(Boolean)
-  const canExit = minimumElapsed && (allReady || timedOut)
+  const canExit = minimumElapsed && allReady
 
   useEffect(() => {
     if (!canExit) return
@@ -124,11 +212,11 @@ export function SiteBoot({ children }: { children: ReactNode }) {
     let value = 6
     if (readiness.document) value += 18
     if (readiness.fonts) value += 16
-    if (readiness.media) value += 24
+    value += Math.round(24 * mediaProgress)
     if (readiness.data) value += 20
     if (configReady) value += 10
     return Math.min(value, 94)
-  }, [canExit, configReady, readiness])
+  }, [canExit, configReady, mediaProgress, readiness])
 
   return (
     <>

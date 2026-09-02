@@ -1,0 +1,405 @@
+{
+  "schema_version": 4,
+  "id": "TASK-DRESSER-FIGMA-002-R1",
+  "title": "Deliver the Figma plugin through an HttpOnly loopback session",
+  "goal": "The approved compact Dresser plugin loads its built UI from the companion's fixed /plugin origin, authenticates capabilities and render with an ephemeral HttpOnly session cookie, and completes the selected-Frame-to-beside-source PNG flow without exposing or persisting the bearer token.",
+  "status": "assigned",
+  "assignment": {
+    "token": "7c2b9d80534d4b85ba4264a3098577d1",
+    "pm_id": "railway-20260831-figma-plugin-mvp",
+    "executor": "figma-plugin-executor",
+    "claimed_at": "2026-08-31T20:23:02.036885Z",
+    "heartbeat_at": "2026-08-31T20:33:26.052527Z"
+  },
+  "depends_on": [
+    "TASK-DRESSER-FIGMA-002",
+    "TASK-DRESSER-FIGMA-001-R1"
+  ],
+  "delivery": {
+    "mode": "mvp",
+    "user_value": "A designer can run the approved local Figma plugin demo without copying, embedding, exposing, or persisting the companion bearer token.",
+    "slice": "vertical",
+    "demo": {
+      "steps": [
+        "Run the documented local development command, import the real-ID manifest, and open the plugin; the inline bootstrap navigates to http://127.0.0.1:4783/plugin and establishes an HttpOnly session.",
+        "Select one Frame, configure an exact Dresser preview through same-origin capabilities/render calls, and verify no bearer appears in any built artifact, URL, message, storage, or log.",
+        "Insert the fresh PNG 80 px beside the unchanged source Frame and confirm the session becomes invalid after companion restart."
+      ],
+      "evidence": "tasks/evidence/TASK-DRESSER-FIGMA-002-R1/demo.md"
+    },
+    "unlocks": [
+      "first authenticated selected-Frame-to-Dresser-to-Figma demo"
+    ],
+    "remediation": {
+      "source_task_id": "TASK-DRESSER-FIGMA-002",
+      "attempt": 1,
+      "dependency_depth": 1
+    },
+    "github": {
+      "required": false,
+      "remote": "origin",
+      "branch": "main",
+      "batch": "integration-group",
+      "push_after": "not-authorized-local-only",
+      "force_push": false
+    }
+  },
+  "work_classification": {
+    "ux_flow": false,
+    "reason": "The user-approved recommended visual contract freezes selection, hierarchy, states, defaults, validation, recovery, and insertion; R1 adds only the missing authentication handoff and implements that frozen flow."
+  },
+  "tracking": {
+    "provider": "local",
+    "local": {
+      "reason": "The approved development plugin and its single remediation are local-only with no external tracker, Community publication, deployment, or push."
+    }
+  },
+  "risk": {
+    "level": "high",
+    "reasons": [
+      "Expands the local bridge and plugin boundary to establish browser session authentication for user image bytes; failure could expose a secret or permit cross-origin rendering, so independent security preflight and negative-path verification are release gates."
+    ]
+  },
+  "impact": [
+    "backend-api",
+    "frontend",
+    "external-integration",
+    "data-privacy"
+  ],
+  "zones": [
+    "client",
+    "server",
+    "root"
+  ],
+  "scope": {
+    "in": [
+      "server/figma-plugin-bridge/server.mjs",
+      "server/figma-plugin-bridge/protocol.mjs",
+      "server/figma-plugin-bridge/session-state.mjs",
+      "server/figma-plugin-bridge/tests/*.test.mjs",
+      "figma-plugin/manifest.template.json",
+      "figma-plugin/bootstrap.html",
+      "figma-plugin/src/main.ts",
+      "figma-plugin/src/messages.ts",
+      "figma-plugin/src/ui/**/*",
+      "figma-plugin/tests/**/*",
+      "figma-plugin/tsconfig*.json",
+      "figma-plugin/vite.config.ts",
+      "figma-plugin/scripts/build.mjs",
+      "figma-plugin/scripts/dev.mjs",
+      "figma-plugin/README.md",
+      "package.json",
+      "pnpm-lock.yaml",
+      ".gitignore"
+    ],
+    "out": [
+      "Existing bearer-token semantics for opaque-origin tests and non-plugin local clients, including Host/origin/token/CORS validation and /v1/shutdown bearer-only behavior",
+      "dresser-preset/v1, BrowserSessionManager, server/mockup-mcp, .local/dresser-mirror, MANIFEST.sha256, Chrome/CDP rendering, and existing MCP artifacts",
+      "Approved TASK-DRESSER-FIGMA-002 visual hierarchy, dimensions, responsive rules, states, copy, icon strategy, capability controls, preview freshness, image bounds, naming, placement, and source-preservation criteria",
+      "batch/multi-frame, video, editable/vector output, preset persistence, analytics, cloud or remote rendering, public transport, and any production authentication system",
+      "Figma Community publication, plugin review/marketing assets, deployment, Git push, force-push, merge, tag, release, generated portfolio dist, portfolio source, tasks/HISTORY.md, source evidence, and unrelated dirty-worktree changes"
+    ]
+  },
+  "constraints": [
+    "Serve only the fully built self-contained plugin UI at exact GET /plugin on BRIDGE_ORIGIN; reject query strings, traversal, alternate static paths, wrong methods, Host values, and missing build output. Use no-store, nosniff, a restrictive self-only CSP/frame policy compatible with Figma Desktop, and no external script, style, font, image, or network dependency.",
+    "Keep manifest ui as a minimal inline bootstrap whose only runtime behavior is figma.showUI(__html__, { width: 360, height: 640, themeColors: true }) followed by navigation to http://127.0.0.1:4783/plugin. The bootstrap contains no bearer, session ID, screenshot, preset, local path, or mutable runtime state.",
+    "On a valid /plugin document request, generate a cryptographically random opaque session ID, store only its hash and bounded expiry in companion memory, and set it only as a __Host-prefixed HttpOnly Secure SameSite=None Path=/ cookie needed by the embedded non-null-origin iframe. Do not serialize it to runtime.json, files, build output, URLs, DOM, JavaScript, pluginMessage, clientStorage, local/session storage, IndexedDB, service workers, console, or logs.",
+    "Prove the exact cookie attributes work in Figma Desktop's embedded loopback iframe. If that environment rejects Secure loopback or third-party session cookies, return BLOCKED; do not weaken HttpOnly, Secure, SameSite, Host binding, origin checks, or fall back to bearer exposure/persistence.",
+    "Cookie sessions authorize only same-origin /v1/capabilities and /v1/render requests carrying a fixed non-secret plugin-client header and browser fetch metadata consistent with same-origin UI. They never authorize /v1/shutdown, /plugin issuance, arbitrary routes, opaque/null-origin requests, navigations, or requests with absent/conflicting origin metadata.",
+    "Require one unambiguous authentication mode per request: existing Bearer plus Origin:null follows the verified legacy path unchanged; session cookie plus exact BRIDGE_ORIGIN follows the plugin path without CORS response headers; reject requests containing both, wrong/expired/unknown cookies, cross-origin Origin/Referer/fetch metadata, or missing client marker before manager mutation.",
+    "Bound session lifetime and count, rotate on fresh plugin load, remove expired sessions, clear all sessions on stop/restart, and send an expired Max-Age=0 cookie on invalidation where a response is possible. A companion restart must invalidate every previously issued cookie even if the browser retains its opaque value.",
+    "The served non-null-origin UI must post to the Figma parent using the actual local development plugin ID and https://www.figma.com target origin, accept messages only from the expected Figma parent and typed schema, and keep that non-secret ID in the ignored development manifest/build configuration without inventing a Community ID.",
+    "Preserve the full approved TASK-DRESSER-FIGMA-002 UI and canvas contract: one bounded selected Frame, every live PNG capability, exact initial/stale/refreshed preview, latest-preset insertion, 4096 px limits, one named image rectangle at source absolute x + width + 80/y, selected result, unchanged source/parent/unrelated nodes, all recoverable negatives, and one undoable action.",
+    "Reuse @phosphor-icons/react with direct named imports, typed Question fallback, accessible names, and the approved 360x640/420x720 light/dark visual contract. Mobbin remains explicitly waived; do not alter the approved concept or introduce new UX decisions.",
+    "The development command must build bootstrap/main/served UI, start the verified fixed-port companion, and provide import instructions without printing secrets. Production networkAccess remains ['none']; only the exact fixed loopback origin is a development allowance.",
+    "Preserve the R1 route-specific preflight and truly-empty shutdown-body fixes, bridge redaction/cleanup/BUSY semantics, all MCP/mirror behavior, and unrelated dirty-worktree files. Do not publish, deploy, push, merge, tag, release, or edit generated portfolio dist."
+  ],
+  "acceptance_criteria": [
+    "The one-command local development path builds a sandbox-safe main, minimal secret-free bootstrap, and self-contained served UI; a real-ID manifest imports without error, /plugin opens at the approved 360x640 theme, and the companion issues a working ephemeral HttpOnly Secure SameSite session without exposing the bearer.",
+    "With exactly one selected Frame, the main thread exports a proportional PNG bounded to 4096 px, the non-null-origin UI receives only typed Uint8Array/context data, and authenticated same-origin capabilities load every current PNG-relevant device/color/background/picture/mesh/layout option and exact defaults.",
+    "The approved compact panel, 420x720 expansion, conditional controls, light/dark variables, keyboard/focus/labels/status states, named Phosphor icons, Question fallback, and reduced-motion behavior match the approved TASK-DRESSER-FIGMA-002 visual contract without new UX decisions.",
+    "Initial, manually refreshed, and pre-insert previews are exact browser-exported Dresser PNG bytes; setting changes mark preview stale, Insert renders first when stale, and the displayed final preview, returned metadata, and inserted bytes/dimensions agree.",
+    "Insert creates exactly one image-filled rectangle named 'Dresser — <source frame name>' at the rendered dimensions and source absolute x + width + 80/y on the current page, selects it, is undoable, and leaves the source Frame, its parent, and every unrelated node unchanged.",
+    "Empty/multiple/non-Frame/removed/changed selection, stale or malformed messages, offline bridge, expired/restarted/ambiguous session, legacy bad bearer, BUSY, timeout, invalid capability/PNG/metadata, oversized image, duplicate insert, and Figma mutation failure are recoverable and create no partial or misplaced node.",
+    "Session issuance and use are same-origin and bounded: cross-origin or null-origin cookie attempts, CSRF-like requests, missing client marker, navigation, wrong route, mixed auth, expired/unknown/replayed cookie, and post-restart cookie each fail before manager/shutdown mutation with no permissive CORS reflection.",
+    "No bearer or session value appears in bootstrap/main/ui bundles, manifest, URLs/query/hash, DOM, messages, browser/client storage, service worker/cache, runtime.json, stdout/stderr, errors, evidence, or Git; only cookie hashes live in process memory and all disappear on stop/restart.",
+    "The existing bearer path remains byte-for-contract compatible for authenticated capabilities/render/shutdown tests and other local clients, including opaque Origin:null CORS, while session cookies cannot invoke shutdown and all R1 preflight/body protections remain intact.",
+    "Plugin, bridge, security, selected-frame, visual/accessibility, MCP, mirror, cleanup, and scoped-diff verification pass with no Community publication, deployment, remote delivery, portfolio change, mirror/MCP contract change, or unrelated dirty-worktree mutation."
+  ],
+  "validation": {
+    "profiles": [
+      "baseline",
+      "security-baseline",
+      "backend-api",
+      "frontend",
+      "external-integration",
+      "data-privacy"
+    ],
+    "commands": [
+      {
+        "id": "targeted-session-tests",
+        "command": "node --test --test-name-pattern='plugin session|same-origin plugin UI|restart invalidation|selected Frame' server/figma-plugin-bridge/tests/*.test.mjs figma-plugin/tests/*.test.*",
+        "evidence": "tasks/evidence/TASK-DRESSER-FIGMA-002-R1/targeted-session-tests.log"
+      },
+      {
+        "id": "bridge-tests",
+        "command": "pnpm test:figma-bridge",
+        "evidence": "tasks/evidence/TASK-DRESSER-FIGMA-002-R1/bridge-tests.log"
+      },
+      {
+        "id": "plugin-tests",
+        "command": "pnpm test:figma-plugin",
+        "evidence": "tasks/evidence/TASK-DRESSER-FIGMA-002-R1/plugin-tests.log"
+      },
+      {
+        "id": "scoped-lint",
+        "command": "pnpm lint:figma-plugin && pnpm lint:figma-bridge",
+        "evidence": "tasks/evidence/TASK-DRESSER-FIGMA-002-R1/scoped-lint.log"
+      },
+      {
+        "id": "scoped-build",
+        "command": "pnpm build:figma-plugin && pnpm build:figma-bridge",
+        "evidence": "tasks/evidence/TASK-DRESSER-FIGMA-002-R1/scoped-build.log"
+      },
+      {
+        "id": "mcp-tests",
+        "command": "pnpm test:mockup-mcp",
+        "evidence": "tasks/evidence/TASK-DRESSER-FIGMA-002-R1/mcp-tests.log"
+      }
+    ],
+    "checks": [
+      {
+        "id": "live-session-security",
+        "description": "In Figma Desktop, inspect /plugin response/cookie attributes, same-origin capabilities/render, expiry, fresh-load rotation, stop/restart invalidation, legacy bearer parity, cookie denial on shutdown, and cross/null-origin, missing-marker, mixed-auth, navigation, replay, and CSRF-like negatives with zero manager side effect.",
+        "evidence": "tasks/evidence/TASK-DRESSER-FIGMA-002-R1/session-security.md"
+      },
+      {
+        "id": "selected-frame-demo",
+        "description": "Run the approved real-Figma demo from one disposable top-level Frame through exact capabilities, representative device/background/layout changes, stale/update/insert, and record matching preview/result bytes, name, dimensions, 80 px placement, selected result, one undo, and unchanged source/unrelated nodes.",
+        "evidence": "tasks/evidence/TASK-DRESSER-FIGMA-002-R1/demo.md"
+      },
+      {
+        "id": "capability-visual-fidelity",
+        "description": "Reconcile all visible options with live dresser-preset/v1 and compare exact preview/insert output for representative phone, tablet, browser/none, solid, mesh, picture, transparent, ratio, scale, and position states at approved panel sizes/themes without stale preset or unsupported UI.",
+        "evidence": "tasks/evidence/TASK-DRESSER-FIGMA-002-R1/fidelity.md"
+      },
+      {
+        "id": "privacy-scope-regression",
+        "description": "Scan built files, manifest, URLs, DOM, messages, all browser storage/cache, runtime state, process memory diagnostics, logs, errors, evidence, and Git diff for bearer/session leakage; verify process-only hashed sessions, cleanup, source privacy, four-task security scope, bearer/preflight/shutdown parity, MCP/mirror integrity, and no external or unrelated change.",
+        "evidence": "tasks/evidence/TASK-DRESSER-FIGMA-002-R1/privacy-scope.md"
+      },
+      {
+        "id": "icon-fallback",
+        "description": "Exercise an unknown icon key and verify direct named Phosphor imports, typed Question fallback, development/test-only diagnostic, and no empty box, emoji, glyph placeholder, or full-catalog bundle.",
+        "evidence": "tasks/evidence/TASK-DRESSER-FIGMA-002-R1/icon-fallback.md"
+      },
+      {
+        "id": "icon-accessibility",
+        "description": "At approved 360x640 and 420x720 light/dark states, keyboard through every control and verify accessible icon names, consistent geometry, visible focus, labels/status announcements, disabled/loading/error/success behavior, reduced motion, and no clipping.",
+        "evidence": "tasks/evidence/TASK-DRESSER-FIGMA-002-R1/accessibility-visual.md"
+      }
+    ]
+  },
+  "rollback": {
+    "steps": [
+      "Stop only the task-owned companion, invalidate and clear its in-memory sessions, expire the plugin cookie where possible, remove only ignored local plugin/runtime state, and undo/delete only the disposable verification result node.",
+      "Revert only TASK-DRESSER-FIGMA-002-R1 changes under server/figma-plugin-bridge, figma-plugin, package.json, pnpm-lock.yaml, and .gitignore; rerun TASK-DRESSER-FIGMA-001-R1 bridge/preflight/shutdown checks plus MCP and mirror regressions."
+    ],
+    "data_recovery": [
+      "No persistent user data or migration exists; sessions are ephemeral process memory, the source Frame is unchanged, and the single inserted image node is undoable."
+    ]
+  },
+  "interface": {
+    "scale": "small",
+    "references": {
+      "required": true,
+      "mobbin": {
+        "status": "not-required",
+        "queries": [
+          "desktop design plugin screenshot mockup configure preview insert canvas"
+        ],
+        "platforms": [
+          "desktop"
+        ],
+        "product_jobs": [
+          "turn one selected design frame into a device mockup"
+        ],
+        "flows": [
+          "selection validation, configure mockup, preview, insert beside source"
+        ],
+        "states": [
+          "no selection, loading, ready, stale preview, rendering, inserted, recoverable error"
+        ],
+        "evidence": "tasks/evidence/TASK-DRESSER-FIGMA-002-R1/reference-handoff.md",
+        "destination_tracking_ref": "TASK-DRESSER-FIGMA-002-R1",
+        "selections": [],
+        "reason": "Mobbin remains explicitly waived by the user's 'делай делай без мобина' approval. R1 preserves the already approved recommended visual contract and adds no UX discretion or fabricated Mobbin evidence.",
+        "waiver_evidence": "tasks/evidence/TASK-DRESSER-FIGMA-002-R1/reference-handoff.md"
+      },
+      "ux": [
+        {
+          "title": "Approved current Dresser configure-and-insert flow",
+          "source": "Inspected exact mirror and approved TASK-DRESSER-FIGMA-002 visual contract",
+          "url": "repository://tasks/visual/TASK-DRESSER-FIGMA-002/visual-contract.json",
+          "screens": [
+            "approved compact loaded, stale, rendering, inserted, and recoverable states"
+          ],
+          "patterns": [
+            "preview-first hierarchy, grouped conditional controls, explicit freshness, primary insert"
+          ],
+          "applied_to": [
+            "unchanged selection-to-preview-to-insert flow"
+          ],
+          "decision_controls": [
+            "flow",
+            "hierarchy",
+            "progressive-disclosure",
+            "screen-structure",
+            "state-transitions",
+            "defaults",
+            "validation",
+            "error-recovery"
+          ],
+          "evidence": "tasks/evidence/TASK-DRESSER-FIGMA-002-R1/reference-handoff.md"
+        },
+        {
+          "title": "Figma non-null-origin UI messaging contract",
+          "source": "Official Figma Developer Docs",
+          "url": "https://developers.figma.com/docs/plugins/creating-ui/",
+          "screens": [
+            "custom URL plugin iframe and parent messaging"
+          ],
+          "patterns": [
+            "custom non-null-origin iframe, explicit plugin ID, Figma target origin, typed messages"
+          ],
+          "applied_to": [
+            "secure served-UI bootstrap and unchanged typed selection/insertion states"
+          ],
+          "decision_controls": [
+            "flow",
+            "state-transitions",
+            "validation",
+            "error-recovery"
+          ],
+          "evidence": "tasks/evidence/TASK-DRESSER-FIGMA-002-R1/reference-handoff.md"
+        }
+      ],
+      "ui": [
+        {
+          "title": "Approved compact Dresser tool surface",
+          "source": "Approved TASK-DRESSER-FIGMA-002 visual contract",
+          "url": "repository://tasks/visual/TASK-DRESSER-FIGMA-002/visual-contract.json",
+          "screens": [
+            "360x640 default and 420x720 expanded light/dark panel"
+          ],
+          "patterns": [
+            "dark restrained tool character, compact controls, sticky actions, host theme variables"
+          ],
+          "applied_to": [
+            "all visible R1 plugin states without visual change"
+          ],
+          "decision_controls": [
+            "typography",
+            "density",
+            "spacing",
+            "color",
+            "surfaces",
+            "iconography",
+            "responsive-visual-treatment"
+          ],
+          "evidence": "tasks/evidence/TASK-DRESSER-FIGMA-002-R1/reference-handoff.md"
+        },
+        {
+          "title": "Figma showUI sizing and theme colors",
+          "source": "Official Figma Developer Docs",
+          "url": "https://developers.figma.com/docs/plugins/api/properties/figma-showui/",
+          "screens": [
+            "plugin iframe modal"
+          ],
+          "patterns": [
+            "explicit compact size, programmatic resize, host light/dark variables"
+          ],
+          "applied_to": [
+            "approved default and expanded served-UI presentation"
+          ],
+          "decision_controls": [
+            "density",
+            "spacing",
+            "color",
+            "surfaces",
+            "responsive-visual-treatment"
+          ],
+          "evidence": "tasks/evidence/TASK-DRESSER-FIGMA-002-R1/reference-handoff.md"
+        }
+      ]
+    },
+    "icons": {
+      "needed": true,
+      "strategy": "existing-library",
+      "library": "Phosphor Icons",
+      "package": "@phosphor-icons/react",
+      "dependency_files": [
+        "package.json",
+        "pnpm-lock.yaml"
+      ],
+      "resolver": "figma-plugin/src/ui/icons.ts",
+      "fallback": "Question",
+      "semantic_keys": [
+        "action.refresh-preview",
+        "action.insert",
+        "action.reset",
+        "action.retry",
+        "status.selection",
+        "status.error",
+        "background.solid",
+        "background.picture",
+        "background.mesh",
+        "background.transparent",
+        "action.unknown"
+      ],
+      "license_checked": true,
+      "evidence": "tasks/evidence/TASK-DRESSER-FIGMA-002-R1/icon-handoff.md"
+    }
+  },
+  "visual_gate": {
+    "required": true,
+    "reason": "R1 preserves the already approved TASK-DRESSER-FIGMA-002 recommended concept and all visible/canvas acceptance criteria; any visual deviation requires a new user decision rather than executor discretion."
+  },
+  "approvals": {
+    "intent": {
+      "status": "approved",
+      "evidence": "tasks/STATE.json"
+    },
+    "preflight": {
+      "status": "approved",
+      "evidence": "tasks/TASK-DRESSER-FIGMA-002-R1/preflight-verdict.json"
+    },
+    "visual": {
+      "status": "approved",
+      "evidence": "tasks/visual/TASK-DRESSER-FIGMA-002/visual-contract.json"
+    },
+    "destructive_action": {
+      "status": "not-required",
+      "evidence": ""
+    }
+  },
+  "evidence_required": [
+    "independent high-risk security preflight and approved inherited visual-contract evidence",
+    "targeted session, same-origin, restart, cross-origin, leakage, and selected-frame test logs",
+    "real Figma Desktop /plugin navigation and HttpOnly cookie evidence without secret values",
+    "selected-Frame exact preview and beside-source insertion evidence",
+    "session expiry/rotation/restart, mixed-auth, CSRF, shutdown-denial, and legacy-bearer parity evidence",
+    "built artifact, URL, message, storage/cache, runtime, log, error, evidence, and Git secret scan",
+    "plugin/bridge lint, build, tests, visual/accessibility, and icon evidence",
+    "MCP, mirror, preflight/shutdown, cleanup, scope, and unrelated-dirty-worktree regression evidence"
+  ],
+  "history": {
+    "summary": "Serve the approved Figma UI from loopback and authenticate it with an ephemeral HttpOnly same-origin session.",
+    "touchpoints": [
+      "served plugin UI",
+      "HttpOnly session",
+      "legacy bearer parity",
+      "Frame insertion"
+    ]
+  }
+}

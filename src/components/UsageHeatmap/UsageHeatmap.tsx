@@ -8,6 +8,7 @@ import {
   type MouseEvent,
 } from 'react'
 import party from 'party-js'
+import { useLang, type Lang } from '@/lib/i18n'
 import styles from './UsageHeatmap.module.css'
 
 // A short, thin, rounded strip — party.js colours the <div> via style.background,
@@ -57,8 +58,6 @@ type EstimatePayload = {
 }
 
 const WEEKS = 53
-const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
-
 /**
  * Live-first fetch: the deployed backend (/api/usage) wins when it's up;
  * otherwise the committed snapshot (/usage.json) keeps the cubes alive. Mirrors
@@ -164,16 +163,31 @@ type Cell = {
 }
 
 /** Tooltip copy for a day cell. Estimated days read as reconstructions, not fact. */
-function cellLabel(cell: Cell): string {
-  const d = cell.date.toLocaleDateString('en-US', {
+function cellLabel(cell: Cell, lang: Lang): string {
+  const locale = lang === 'ru' ? 'ru-RU' : 'en-US'
+  const d = cell.date.toLocaleDateString(locale, {
     day: 'numeric',
     month: 'short',
     year: 'numeric',
   })
-  if (cell.birthday) return `🎂 My birthday — ${d}`
-  if (cell.value <= 0) return `No activity · ${d}`
-  const tokens = cell.value.toLocaleString('en-US')
-  return `${tokens} tokens · ${d}`
+  if (cell.birthday) {
+    return lang === 'ru' ? `🎂 Мой день рождения — ${d}` : `🎂 My birthday — ${d}`
+  }
+  if (cell.value <= 0) {
+    return lang === 'ru' ? `Нет активности · ${d}` : `No activity · ${d}`
+  }
+  const tokens = cell.value.toLocaleString(locale)
+  return lang === 'ru' ? `${tokens} токенов · ${d}` : `${tokens} tokens · ${d}`
+}
+
+function pluralizeDays(value: number, lang: Lang) {
+  if (lang === 'en') return value === 1 ? 'day' : 'days'
+
+  const mod10 = value % 10
+  const mod100 = value % 100
+  if (mod10 === 1 && mod100 !== 11) return 'день'
+  if (mod10 >= 2 && mod10 <= 4 && (mod100 < 12 || mod100 > 14)) return 'дня'
+  return 'дней'
 }
 
 /**
@@ -251,6 +265,7 @@ function levelOf(value: number, thresholds: number[]): number {
 }
 
 export function UsageHeatmap() {
+  const { lang } = useLang()
   // Seed from the module cache so a remount (returning from a case page) renders
   // instantly with no fetch/flash.
   const [data, setData] = useState<UsagePayload | null>(usageValue)
@@ -357,7 +372,11 @@ export function UsageHeatmap() {
   const monthLabels = cols.map((col, i) => {
     const m = col[0].date.getMonth()
     const prev = i > 0 ? cols[i - 1][0].date.getMonth() : -1
-    return m !== prev ? MONTHS[m] : ''
+    return m !== prev
+      ? col[0].date.toLocaleDateString(lang === 'ru' ? 'ru-RU' : 'en-US', {
+          month: 'short',
+        })
+      : ''
   })
 
   const showTip = (e: MouseEvent<HTMLSpanElement>, cell: Cell) => {
@@ -366,19 +385,18 @@ export function UsageHeatmap() {
     const r = e.currentTarget.getBoundingClientRect()
     const h = host.getBoundingClientRect()
     setTip({
-      text: cellLabel(cell),
+      text: cellLabel(cell, lang),
       x: r.left - h.left + r.width / 2,
       y: r.top - h.top,
     })
-    if (cell.birthday) celebrate(e.currentTarget)
+    if (cell.birthday) celebrate(e.currentTarget, e.timeStamp)
   }
 
   // Party-popper on the birthday cell: paper confetti + ribbon streamers +
   // sparkles, all emitted from the cell via party.js. Throttled so re-entering
   // the cell doesn't machine-gun bursts.
-  const celebrate = (el: HTMLElement) => {
+  const celebrate = (el: HTMLElement, now: number) => {
     if (window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) return
-    const now = Date.now()
     if (now - lastPop.current < 600) return
     lastPop.current = now
     party.confetti(el, {
@@ -463,15 +481,16 @@ export function UsageHeatmap() {
 
       <div className={styles.footer}>
         <div className={styles.legend}>
-          <span>Less</span>
+          <span>{lang === 'ru' ? 'Меньше' : 'Less'}</span>
           {[0, 1, 2, 3, 4].map((l) => (
             <span key={l} className={styles.cell} data-level={l} />
           ))}
-          <span>More</span>
+          <span>{lang === 'ru' ? 'Больше' : 'More'}</span>
         </div>
         <p className={styles.stat}>
           <span>
-            {fmtCompact(stat.total)} tokens · {stat.activeDays} days
+            {fmtCompact(stat.total)} {lang === 'ru' ? 'токенов' : 'tokens'} ·{' '}
+            {stat.activeDays} {pluralizeDays(stat.activeDays, lang)}
           </span>
           <img className={styles.statIcon} src="/stickers/claude-icon.webp" alt="Claude" />
           <img className={styles.statIcon} src="/stickers/codex-icon.webp" alt="Codex" />

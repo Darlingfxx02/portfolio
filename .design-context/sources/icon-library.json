@@ -1,0 +1,13 @@
+{
+  "schemaVersion": 1,
+  "kind": "local-path",
+  "location": "/Users/darlingfxx/Projects/Neyrokey/iconsax/Icons collection",
+  "entryType": "directory",
+  "status": "configured",
+  "origin": "global-default",
+  "configuredAt": "2026-08-17T19:46:14.763Z",
+  "policy": {
+    "required": true,
+    "allowInventedSubstitutes": false
+  }
+}

@@ -1,0 +1,9 @@
+9a3ced9fd87e3eab2f50c6b8ca8f8511f1ae26a1d6009d98ec3b55440f41672e  server/mockup-mcp/browser-session.mjs
+927b8cb7db08a88dc5e9f4a11e43191bce1fdf246567761adf863b894d9f45d8  server/mockup-mcp/dresser-preset-v1.schema.json
+7be4b2eac6b4d22584963113754a9a2400a105257185850cbb7c06613670c0b4  server/mockup-mcp/preset-schema.mjs
+02e0970ad90e1dd7bd54c10a0a38be9e0264a4a2dc05b783310e3f8cc2257dcb  server/mockup-mcp/README.md
+f828fe69ffbf5ffb378c99246dd710c63a15b030ca85fbff8b8be6d11211f4a1  server/mockup-mcp/server.mjs
+f00e21d6b3c51b47b1e831be4461258190c7a9ae9aaefd7d435ddb1ea2cef442  server/mockup-mcp/tests/mcp-live.test.mjs
+e0e8bc1c4d98894a4fc5e9ad752c9d6525dfedacdd42373a2cb1eb9949ba1fc2  server/mockup-mcp/tests/preset-schema.test.mjs
+d6aaf3404be3a967c23fdb7770eab585e141a6904ae6b6ac7a93fd1ef9cc8286  server/mockup-mcp/tests/source-validation.test.mjs
+

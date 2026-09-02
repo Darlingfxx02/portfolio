@@ -1,0 +1,32 @@
+{
+  "schema_version": 2,
+  "delivery_mode": "mvp",
+  "tracking_provider": "local",
+  "tracking_bridge": "none",
+  "vertical_slice": {
+    "hypothesis": "A Figma development plugin can export one selected Frame into a compact Dresser editor, preserve the existing mockup and customization choices, and place the rendered PNG back beside the source Frame.",
+    "demo_outcome": "In Figma Desktop, select one Frame, open the Dresser plugin, choose a mockup and background in a plugin-sized interface, then insert the resulting PNG beside the selected Frame.",
+    "max_tasks_to_demo": 3
+  },
+  "goal": "Package Dresser as a Figma plugin that turns selected Figma Frames into configured mockup PNGs and places them back on the canvas.",
+  "do": [
+    "Create a development-loadable Figma plugin with a main-thread selection and canvas bridge",
+    "Adapt the Dresser interface to a compact Figma plugin window",
+    "Preserve the existing mockups, device settings, backgrounds, mesh palette, layout controls, and PNG rendering",
+    "Insert the generated PNG beside the source Frame with a predictable name and position"
+  ],
+  "keep": [
+    "Keep the existing interactive Dresser mirror and browser MCP usable",
+    "Do not alter unrelated portfolio work",
+    "Do not publish the plugin to Figma Community, push, or deploy in this slice",
+    "Do not add batch or multi-frame processing before the first demo"
+  ],
+  "success": [
+    "Figma Desktop imports the development plugin without manifest errors",
+    "One selected Frame is exported into the plugin and shown in the Dresser preview",
+    "The compact interface exposes the preserved mockup and customization controls",
+    "The generated PNG is inserted beside the source Frame and matches the preview",
+    "The existing local Dresser and MCP regression checks still pass"
+  ],
+  "approved_message": "да"
+}

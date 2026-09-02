@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "task_id": "TASK-DRESSER-FIGMA-002",
+  "phase": "visual-gate",
+  "verdict": "PASS",
+  "status": "approved",
+  "selected_concept": "recommended",
+  "user_message": "делай делай без мобина",
+  "reviewed_at": "2026-08-31T20:02:09Z",
+  "evidence": [
+    "tasks/visual/TASK-DRESSER-FIGMA-002/visual-contract.json",
+    "tasks/visual/TASK-DRESSER-FIGMA-002/baseline.md",
+    "tasks/visual/TASK-DRESSER-FIGMA-002/concept-recommended.md",
+    "tasks/evidence/TASK-DRESSER-FIGMA-002/reference-research.md",
+    "tasks/evidence/TASK-DRESSER-FIGMA-002/mobbin-waiver.md",
+    "tasks/evidence/TASK-DRESSER-FIGMA-002/icon-system.md",
+    "tasks/evidence/TASK-DRESSER-FIGMA-002/visual-gate-review.md"
+  ],
+  "reason": "The user's immediate instruction explicitly proceeds with the sole presented recommended concept and explicitly waives unavailable Mobbin research for this local MVP. The concept, reference boundaries, icons, invariants, visual states, dimensions, accessibility requirements, fidelity checks, and recovery behavior are frozen and testable.",
+  "conditions": [
+    "No new UX-flow, hierarchy, default, validation, recovery, dimension, or responsive decision may be introduced during implementation.",
+    "No Mobbin identifier, URL, screenshot, selection, or durable asset may be claimed or fabricated.",
+    "Any deviation from the approved recommended contract returns to the visual gate."
+  ]
+}

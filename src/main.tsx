@@ -1,29 +1,45 @@
-import { StrictMode } from 'react'
+import { createElement, lazy, StrictMode, Suspense } from 'react'
 import { createRoot } from 'react-dom/client'
+import { getInitialLanguage, LanguageProvider } from '@/lib/i18n'
 import './index.css'
 import './tailwind.css'
-import App from './App.tsx'
-import { PersonalizationProvider } from '@/lib/personalization'
-import { LanguageProvider } from '@/lib/i18n'
-import { SiteBoot } from '@/components/LoadingScreen/SiteBoot'
 
-// This domain serves the Russian portfolio only. Keep startup compatible with
-// a strict CSP by doing this in the bundled module instead of an inline script.
-document.documentElement.lang = 'ru'
-try {
-  window.localStorage.removeItem('lang')
-} catch {
-  // Storage can be disabled by the browser; the document language is still set.
-}
+const mockupEditorModule = lazy(() => import('./tools/mockup/MockupEditor.tsx'))
+const portfolioModule = lazy(async () => {
+  const [{ default: App }, { PersonalizationProvider }, { SiteBoot }] =
+    await Promise.all([
+      import('./App.tsx'),
+      import('@/lib/personalization'),
+      import('@/components/LoadingScreen/SiteBoot'),
+    ])
+
+  return {
+    default: () => (
+      <LanguageProvider>
+        <PersonalizationProvider>
+          <SiteBoot>
+            <App />
+          </SiteBoot>
+        </PersonalizationProvider>
+      </LanguageProvider>
+    ),
+  }
+})
+
+// Apply the saved language before React paints to avoid a language flash while
+// keeping startup compatible with the site's strict CSP.
+document.documentElement.lang = getInitialLanguage()
+
+const isMockupRoute = window.location.pathname.replace(/\/$/, '') === '/tools/mockup'
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <LanguageProvider>
-      <PersonalizationProvider>
-        <SiteBoot>
-          <App />
-        </SiteBoot>
-      </PersonalizationProvider>
-    </LanguageProvider>
+    <Suspense fallback={null}>
+      {isMockupRoute ? (
+        createElement(mockupEditorModule)
+      ) : (
+        createElement(portfolioModule)
+      )}
+    </Suspense>
   </StrictMode>,
 )

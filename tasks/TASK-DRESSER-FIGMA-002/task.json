@@ -1,0 +1,390 @@
+{
+  "schema_version": 4,
+  "id": "TASK-DRESSER-FIGMA-002",
+  "title": "Build the compact Dresser Figma plugin demo",
+  "goal": "In Figma Desktop, one selected Frame opens in a compact Dresser panel, exposes all current PNG mockup settings, previews the exact browser render, and inserts that PNG beside the unchanged source Frame.",
+  "status": "compiled",
+  "assignment": null,
+  "depends_on": [
+    "TASK-DRESSER-FIGMA-001"
+  ],
+  "delivery": {
+    "mode": "mvp",
+    "user_value": "A designer can turn one selected Figma Frame into a configured Dresser mockup and place it back on the canvas without exporting and re-importing files manually.",
+    "slice": "vertical",
+    "demo": {
+      "steps": [
+        "Start the local development companion/build command, import the generated manifest in Figma Desktop, and select one top-level Frame.",
+        "Open Dresser, choose a device/color and background, adjust aspect ratio, scale, and position in the approved compact panel, and update the exact preview.",
+        "Choose Insert beside frame and confirm a named PNG rectangle appears 80 px to the right while the source Frame remains unchanged."
+      ],
+      "evidence": "tasks/evidence/TASK-DRESSER-FIGMA-002/demo.md"
+    },
+    "unlocks": [
+      "first selected-Frame-to-Dresser-to-Figma demo",
+      "later batch and Community-packaging evaluation"
+    ],
+    "remediation": {
+      "source_task_id": null,
+      "attempt": 0,
+      "dependency_depth": 0
+    },
+    "github": {
+      "required": false,
+      "remote": "origin",
+      "branch": "main",
+      "batch": "integration-group",
+      "push_after": "not-authorized-local-only",
+      "force_push": false
+    }
+  },
+  "work_classification": {
+    "ux_flow": false,
+    "reason": "The user explicitly approved the recommended visual contract and waived unavailable Mobbin research; this rebaselined packet implements that frozen flow, hierarchy, states, defaults, validation, and recovery without making new UX-flow decisions."
+  },
+  "tracking": {
+    "provider": "local",
+    "local": {
+      "reason": "The approved first demo is a locally imported Figma development plugin with no external tracker, Community publication, deployment, or push."
+    }
+  },
+  "risk": {
+    "level": "medium",
+    "reasons": [
+      "Adds a new visible plugin flow and creates one image-backed node in the active Figma file, but the action is explicit, source-preserving, local-only, and undoable."
+    ]
+  },
+  "impact": [
+    "frontend",
+    "external-integration",
+    "data-privacy"
+  ],
+  "zones": [
+    "client",
+    "root"
+  ],
+  "scope": {
+    "in": [
+      "figma-plugin/manifest.template.json",
+      "figma-plugin/src/main.ts",
+      "figma-plugin/src/messages.ts",
+      "figma-plugin/src/ui/**/*",
+      "figma-plugin/tests/**/*",
+      "figma-plugin/tsconfig*.json",
+      "figma-plugin/vite.config.ts",
+      "figma-plugin/scripts/build.mjs",
+      "figma-plugin/scripts/dev.mjs",
+      "figma-plugin/README.md",
+      "package.json",
+      "pnpm-lock.yaml",
+      ".gitignore"
+    ],
+    "out": [
+      "TASK-DRESSER-FIGMA-001 bridge protocol and server behavior except consuming its frozen runtime contract",
+      ".local/dresser-mirror contents, MANIFEST.sha256, mockup/background assets, Dresser browser bundle, and browser automation selectors",
+      "existing /tools/mockup mirror, src/tools/mockup clean-room editor, portfolio routes/components/content, and server/mockup-mcp public contracts",
+      "multi-frame or batch rendering, video, animation, editable/vector reconstruction, replacement of the source Frame, preset persistence, analytics, cloud storage, and remote services",
+      "Figma Community publication, plugin review metadata, marketing assets, deploy, Git push, force-push, merge, tag, and release",
+      "generated portfolio dist assets, tasks/HISTORY.md, and unrelated dirty-worktree files"
+    ]
+  },
+  "constraints": [
+    "Implement only the user-approved recommended concept in tasks/visual/TASK-DRESSER-FIGMA-002/visual-contract.json; preserve its frozen hierarchy, states, compact dimensions, responsive rules, and reference boundaries without introducing new UX decisions.",
+    "Build a normal Figma Design development plugin with documentAccess set to dynamic-page, an inline bundled ui.html opened through figma.showUI(__html__, { width: 360, height: 640, themeColors: true }), and a separately bundled sandbox-safe main thread with no DOM or Node built-ins.",
+    "Use networkAccess.allowedDomains ['none'] plus only devAllowedDomains ['http://127.0.0.1:4783']; embed no mirror/media pack in ui.html, call no remote Dresser or third-party URL, and fail recoverably when the local companion is absent.",
+    "Do not invent or commit a Figma Community/plugin ID. Generate the actual development identity through Figma Desktop, keep it in an ignored local manifest overlay, and make the build fail with a clear setup instruction until that real local ID exists.",
+    "The main thread accepts exactly one selected Frame, exports it as PNG with exportAsync, scales down proportionally before export when needed so neither dimension exceeds 4096 px, captures the source node ID and absolute bounds, and never sends document structure, text, names, or unrelated nodes to the UI or companion.",
+    "Use typed, discriminated messages and Uint8Array only between main and UI. Reject unknown message types, stale request/selection IDs, malformed presets, invalid PNG responses, outputs above Figma's 4096 px image limit, and duplicate insert requests without mutating the document.",
+    "Populate device/color, solid, mesh, transparent, picture-pack, aspect-ratio, fixed padding, scale, and x/y controls only from authenticated dresser-preset/v1 capabilities; expose every returned PNG-relevant option and do not invent unavailable settings or video support.",
+    "Render an initial preview after a valid selection; mark it stale after control changes, provide an explicit Update preview action, and make Insert beside frame render first when stale so the inserted bytes always match the displayed final preview.",
+    "Insert with figma.createImage into a new rectangle named 'Dresser — <source frame name>', at the PNG's pixel dimensions, on the current page at source absolute x + width + 80 and source absolute y; select the result, preserve the source and its parent, and make the whole insertion one undoable plugin action.",
+    "Reuse @phosphor-icons/react through named imports and one typed resolver with Question fallback; no emoji, Unicode placeholder, custom-drawn icon, full-catalog import, or inaccessible icon-only action is allowed.",
+    "Use a compact original Dresser tool-panel treatment informed by the inspected current product and official Figma theme variables; do not copy Figma proprietary UI assets or add a new design-system dependency for the MVP.",
+    "Preserve unrelated dirty-worktree changes and do not publish, deploy, push, force-push, merge, tag, release, or edit generated portfolio dist files."
+  ],
+  "acceptance_criteria": [
+    "After the one-time real development ID setup, the documented local command starts the companion, builds main.js plus a self-contained ui.html, writes an importable local manifest, and Figma Desktop loads it without manifest, CSP, network, or console errors.",
+    "With exactly one selected Frame, the plugin exports a bounded PNG, opens at the approved compact size and theme, shows the source preview and selection state, and loads the exact authenticated dresser-preset/v1 capabilities from the local companion.",
+    "The panel exposes every current PNG-relevant device model/color, solid, mesh three-color palette, transparent, picture pack/image, aspect ratio, fixed padding, scale, horizontal, and vertical option returned by capabilities, with conditional controls and defaults matching that contract.",
+    "Initial, manually refreshed, and pre-insert previews are Dresser's browser-exported PNG bytes; a stale indicator appears after setting changes, and Insert always uses the latest displayed preset rather than an older preview.",
+    "Insert creates one image-filled rectangle on the current page named 'Dresser — <source frame name>', at the rendered image ratio and expected pixel dimensions, 80 px to the right of the source's absolute bounds, selects it, and leaves the source Frame and every unrelated node unchanged.",
+    "No selection, multiple selection, non-Frame selection, stale selection, export failure, companion unavailable or unauthorized, BUSY, invalid capability/render response, oversized image, and insertion failure each show a concise recoverable state with no partial node or silent fallback.",
+    "Frame and rendered image dimensions are kept within Figma's 4096 px per-side image limit without distortion; downscaling is explicit and the preview, inserted image, and reported dimensions agree.",
+    "Keyboard order, visible focus, labels, contrast, light/dark Figma theme variables, 360x640 and approved expanded layout, loading/disabled/error/success states, icon fallback, accessible icon names, and console cleanliness pass visual and accessibility review.",
+    "Only exported Frame PNG bytes and validated preset/capability data cross the token-protected loopback boundary; no source name, document content, token, image bytes, local path, or raw response is logged or persisted, and the existing mirror, MCP, and portfolio remain usable."
+  ],
+  "validation": {
+    "profiles": [
+      "baseline",
+      "security-baseline",
+      "frontend",
+      "external-integration",
+      "data-privacy"
+    ],
+    "commands": [
+      {
+        "id": "plugin-tests",
+        "command": "pnpm test:figma-plugin",
+        "evidence": "tasks/evidence/TASK-DRESSER-FIGMA-002/plugin-tests.log"
+      },
+      {
+        "id": "plugin-lint",
+        "command": "pnpm lint:figma-plugin",
+        "evidence": "tasks/evidence/TASK-DRESSER-FIGMA-002/plugin-lint.log"
+      },
+      {
+        "id": "plugin-build",
+        "command": "pnpm build:figma-plugin",
+        "evidence": "tasks/evidence/TASK-DRESSER-FIGMA-002/plugin-build.log"
+      },
+      {
+        "id": "mcp-regression",
+        "command": "pnpm test:mockup-mcp",
+        "evidence": "tasks/evidence/TASK-DRESSER-FIGMA-002/mcp-regression.log"
+      }
+    ],
+    "checks": [
+      {
+        "id": "development-manifest-import",
+        "description": "Using a real Figma Desktop-generated development ID and no Community action, run the documented local command, inspect manifest fields and built artifact references, import the manifest, and record a console-clean 360x640 themed panel launch with network limited to the declared loopback development origin.",
+        "evidence": "tasks/evidence/TASK-DRESSER-FIGMA-002/manifest-import.md"
+      },
+      {
+        "id": "selected-frame-demo",
+        "description": "Select one disposable top-level Frame, exercise selection export, initial preview, device/color/background/layout changes, preview refresh, and Insert; record source and result bounds/names plus screenshots proving one PNG rectangle appears 80 px right and the source is unchanged.",
+        "evidence": "tasks/evidence/TASK-DRESSER-FIGMA-002/demo.md"
+      },
+      {
+        "id": "capability-and-visual-fidelity",
+        "description": "Reconcile every visible option with live capabilities, then compare plugin preview and inserted pixels for representative phone, tablet, browser/none models and solid, mesh, picture, and transparent backgrounds at distinct ratios/positions; require current Dresser output with no unsupported setting or stale preset.",
+        "evidence": "tasks/evidence/TASK-DRESSER-FIGMA-002/fidelity.md"
+      },
+      {
+        "id": "selection-message-render-recovery",
+        "description": "Exercise empty, multi-node, non-Frame, removed or changed source, unknown/stale messages, missing runtime identity, offline/bad-token/BUSY/timeout bridge, invalid capability or PNG response, repeated insert, and restart; preserve recoverable context and create no partial node.",
+        "evidence": "tasks/evidence/TASK-DRESSER-FIGMA-002/recovery.md"
+      },
+      {
+        "id": "figma-image-boundary",
+        "description": "Use Frames below and above the 4096 px boundary and representative wide/tall ratios; verify proportional export/downscale, valid createImage input, matching preview/result dimensions, predictable placement, one undo step, and no source or unrelated-node mutation.",
+        "evidence": "tasks/evidence/TASK-DRESSER-FIGMA-002/image-boundary.md"
+      },
+      {
+        "id": "icon-fallback",
+        "description": "Exercise an unknown data-driven icon key and verify the typed resolver returns Phosphor Question, emits only a development/test diagnostic, uses direct named imports, and never renders an empty box, emoji, text glyph, or full icon catalog.",
+        "evidence": "tasks/evidence/TASK-DRESSER-FIGMA-002/icon-fallback.md"
+      },
+      {
+        "id": "icon-accessibility",
+        "description": "After visual approval, compare 360x640 and expanded light/dark states with the contract; keyboard through all controls and verify focus, labels, status announcements, accessible icon names, consistent geometry, disabled/loading behavior, and no horizontal clipping.",
+        "evidence": "tasks/evidence/TASK-DRESSER-FIGMA-002/accessibility-visual.md"
+      },
+      {
+        "id": "privacy-network-scope",
+        "description": "Inspect plugin messages, network, console, storage, bridge logs, generated files, and scoped Git diff; require only bounded PNG/preset traffic to 127.0.0.1:4783, no persistence or sensitive logging, and no mirror, MCP, portfolio, Community, deployment, push, or unrelated dirty-worktree change.",
+        "evidence": "tasks/evidence/TASK-DRESSER-FIGMA-002/privacy-scope.md"
+      }
+    ]
+  },
+  "rollback": {
+    "steps": [
+      "Close the development plugin and companion, remove only the ignored local development manifest/runtime state, and undo or delete only the disposable Dresser result node created during verification.",
+      "Remove figma-plugin and revert only its package.json, pnpm-lock.yaml, and .gitignore additions; rerun TASK-DRESSER-FIGMA-001 bridge tests and the existing MCP regression."
+    ],
+    "data_recovery": [
+      "Figma insertion is one undoable, newly created image node; the source Frame is never modified, and no screenshot or preset is persisted by the plugin."
+    ]
+  },
+  "interface": {
+    "scale": "small",
+    "references": {
+      "required": true,
+      "mobbin": {
+        "status": "not-required",
+        "queries": [
+          "desktop design plugin screenshot mockup configure preview insert canvas"
+        ],
+        "platforms": [
+          "desktop"
+        ],
+        "product_jobs": [
+          "turn one selected design frame into a device mockup"
+        ],
+        "flows": [
+          "selection validation, configure mockup, preview, insert beside source"
+        ],
+        "states": [
+          "no selection, loading, ready, stale preview, rendering, inserted, recoverable error"
+        ],
+        "evidence": "tasks/evidence/TASK-DRESSER-FIGMA-002/reference-research.md",
+        "destination_tracking_ref": "TASK-DRESSER-FIGMA-002",
+        "selections": [],
+        "reason": "Mobbin MCP is not installed or callable. After reviewing the recommended visual contract, the user explicitly said 'делай делай без мобина', approving a rebaseline that uses the inspected current Dresser and official Figma documentation instead. No Mobbin ID, URL, preview, selection, or durable asset was invented.",
+        "waiver_evidence": "tasks/evidence/TASK-DRESSER-FIGMA-002/mobbin-waiver.md"
+      },
+      "ux": [
+        {
+          "title": "Current Dresser configure-and-export workflow",
+          "source": "Inspected exact local Dresser mirror",
+          "url": "repository://.local/dresser-mirror/qa-loaded.png",
+          "screens": [
+            "loaded screenshot with device, color, layout, background, reset, and download controls"
+          ],
+          "patterns": [
+            "preview-first hierarchy, grouped device/layout/background controls, conditional background settings, final primary action"
+          ],
+          "applied_to": [
+            "selection-to-preview-to-insert sequence and control grouping"
+          ],
+          "decision_controls": [
+            "flow",
+            "hierarchy",
+            "progressive-disclosure",
+            "screen-structure",
+            "state-transitions",
+            "defaults",
+            "validation",
+            "error-recovery"
+          ],
+          "evidence": "tasks/evidence/TASK-DRESSER-FIGMA-002/reference-research.md"
+        },
+        {
+          "title": "Figma plugin UI messaging contract",
+          "source": "Official Figma Developer Docs",
+          "url": "https://developers.figma.com/docs/plugins/creating-ui/",
+          "screens": [
+            "plugin main/UI message bridge"
+          ],
+          "patterns": [
+            "short-lived modal UI, explicit main-to-UI and UI-to-main messages, Uint8Array transfer"
+          ],
+          "applied_to": [
+            "selection, render, stale-preview, error, and insertion state transitions"
+          ],
+          "decision_controls": [
+            "flow",
+            "state-transitions",
+            "validation",
+            "error-recovery"
+          ],
+          "evidence": "tasks/evidence/TASK-DRESSER-FIGMA-002/reference-research.md"
+        }
+      ],
+      "ui": [
+        {
+          "title": "Current Dresser dark tool surface",
+          "source": "Inspected exact local Dresser mirror",
+          "url": "repository://.local/dresser-mirror/qa-loaded.png",
+          "screens": [
+            "1440x1000 loaded editor"
+          ],
+          "patterns": [
+            "dark neutral stage, compact labeled controls, segmented modes, restrained borders, high-contrast primary action"
+          ],
+          "applied_to": [
+            "Dresser identity, control density, surfaces, and mode treatment without copying the desktop rail layout"
+          ],
+          "decision_controls": [
+            "typography",
+            "density",
+            "spacing",
+            "color",
+            "surfaces",
+            "iconography"
+          ],
+          "evidence": "tasks/evidence/TASK-DRESSER-FIGMA-002/reference-research.md"
+        },
+        {
+          "title": "Figma showUI sizing and theme colors",
+          "source": "Official Figma Developer Docs",
+          "url": "https://developers.figma.com/docs/plugins/api/properties/figma-showui/",
+          "screens": [
+            "plugin iframe modal"
+          ],
+          "patterns": [
+            "explicit compact width/height, programmatic resize, host light/dark CSS variables"
+          ],
+          "applied_to": [
+            "360x640 default panel, approved expanded state, responsive density, and theme treatment"
+          ],
+          "decision_controls": [
+            "density",
+            "spacing",
+            "color",
+            "surfaces",
+            "responsive-visual-treatment"
+          ],
+          "evidence": "tasks/evidence/TASK-DRESSER-FIGMA-002/reference-research.md"
+        }
+      ]
+    },
+    "icons": {
+      "needed": true,
+      "strategy": "existing-library",
+      "library": "Phosphor Icons",
+      "package": "@phosphor-icons/react",
+      "dependency_files": [
+        "package.json",
+        "pnpm-lock.yaml"
+      ],
+      "resolver": "figma-plugin/src/ui/icons.ts",
+      "fallback": "Question",
+      "semantic_keys": [
+        "action.refresh-preview",
+        "action.insert",
+        "action.reset",
+        "action.retry",
+        "status.selection",
+        "status.error",
+        "background.solid",
+        "background.picture",
+        "background.mesh",
+        "background.transparent",
+        "action.unknown"
+      ],
+      "license_checked": true,
+      "evidence": "tasks/evidence/TASK-DRESSER-FIGMA-002/icon-system.md"
+    }
+  },
+  "visual_gate": {
+    "required": true,
+    "reason": "This task introduces a new compact plugin screen, responsive hierarchy, multiple visible states, and a canvas artifact; the pending 360x640 concept must be approved before UI implementation."
+  },
+  "approvals": {
+    "intent": {
+      "status": "approved",
+      "evidence": "tasks/STATE.json"
+    },
+    "preflight": {
+      "status": "pending",
+      "evidence": ""
+    },
+    "visual": {
+      "status": "approved",
+      "evidence": "tasks/visual/TASK-DRESSER-FIGMA-002/visual-contract.json"
+    },
+    "destructive_action": {
+      "status": "not-required",
+      "evidence": ""
+    }
+  },
+  "evidence_required": [
+    "approved compact-panel visual contract and before-implementation gate event",
+    "plugin unit/integration test, lint, build, and MCP regression logs with exit codes",
+    "real Figma Desktop development-manifest import and console/network evidence",
+    "selected-Frame preview and beside-source insertion demo screenshots plus node metadata",
+    "capability reconciliation and preview-to-insert visual comparisons",
+    "selection, message, companion, render, and image-limit negative results",
+    "keyboard, focus, theme, responsive, status, and icon accessibility evidence",
+    "privacy, local-only network, no-persistence, scoped-diff, mirror, MCP, and portfolio regression evidence"
+  ],
+  "history": {
+    "summary": "Build a compact Figma panel that turns one selected Frame into a Dresser PNG inserted beside its source.",
+    "touchpoints": [
+      "Frame PNG export",
+      "compact plugin panel",
+      "browser preview",
+      "canvas image insertion"
+    ]
+  }
+}

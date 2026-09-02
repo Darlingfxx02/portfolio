@@ -1,30 +1,30 @@
 import { CaseNarrative } from "./CaseNarrative";
-import { useLang } from "@/lib/i18n";
+import { t, useLang } from "@/lib/i18n";
 
 const mobileIllustrations = [
   [
-    { src: "/zinda/mobile-case/section-01-desktop.avif", alt: "Шаблоны платежей в веб-версии" },
-    { src: "/zinda/mobile-case/section-01-mobile.avif", alt: "Шаблоны платежей в мобильной версии" },
+    { src: "/zinda/mobile-case/section-01-desktop.avif", alt: { ru: "Шаблоны платежей в веб-версии", en: "Payment templates on desktop" } },
+    { src: "/zinda/mobile-case/section-01-mobile.avif", alt: { ru: "Шаблоны платежей в мобильной версии", en: "Payment templates on mobile" } },
   ],
   [
-    { src: "/zinda/mobile-case/section-02-history.avif", alt: "История операций как последовательный мобильный список" },
-    { src: "/zinda/mobile-case/section-02-result.avif", alt: "Результат платежа как отдельное мобильное состояние" },
+    { src: "/zinda/mobile-case/section-02-history.avif", alt: { ru: "История операций как последовательный мобильный список", en: "Transaction history as a sequential mobile list" } },
+    { src: "/zinda/mobile-case/section-02-result.avif", alt: { ru: "Результат платежа как отдельное мобильное состояние", en: "Payment result as a dedicated mobile state" } },
   ],
   [
-    { src: "/zinda/mobile-case/section-03-payment.avif", alt: "Мобильная точка входа в счета и платежи" },
-    { src: "/zinda/mobile-case/section-03-exchange.avif", alt: "Мобильный сценарий обмена валют" },
+    { src: "/zinda/mobile-case/section-03-payment.avif", alt: { ru: "Мобильная точка входа в счета и платежи", en: "Mobile entry point for accounts and payments" } },
+    { src: "/zinda/mobile-case/section-03-exchange.avif", alt: { ru: "Мобильный сценарий обмена валют", en: "Mobile currency exchange flow" } },
   ],
   [
-    { src: "/zinda/mobile-case/section-04-documents.avif", alt: "Документы компании в мобильной версии" },
-    { src: "/zinda/mobile-case/section-04-roles.avif", alt: "Управление ролями сотрудников в мобильной версии" },
+    { src: "/zinda/mobile-case/section-04-documents.avif", alt: { ru: "Документы компании в мобильной версии", en: "Company documents on mobile" } },
+    { src: "/zinda/mobile-case/section-04-roles.avif", alt: { ru: "Управление ролями сотрудников в мобильной версии", en: "Employee role management on mobile" } },
   ],
   [
-    { src: "/zinda/mobile-case/section-05-chat-list.avif", alt: "Главная мобильного чата" },
-    { src: "/zinda/mobile-case/section-05-chat-detail.avif", alt: "Мобильный чат с отправленными файлами" },
+    { src: "/zinda/mobile-case/section-05-chat-list.avif", alt: { ru: "Главная мобильного чата", en: "Mobile chat home" } },
+    { src: "/zinda/mobile-case/section-05-chat-detail.avif", alt: { ru: "Мобильный чат с отправленными файлами", en: "Mobile chat with sent files" } },
   ],
   [
-    { src: "/zinda/mobile-case/section-06-planning.avif", alt: "Планирование мобильного направления и аудит нагрузки" },
-    { src: "/zinda/mobile-case/section-06-handoff.avif", alt: "Требования для самостоятельной передачи в разработку" },
+    { src: "/zinda/mobile-case/section-06-planning.avif", alt: { ru: "Планирование мобильного направления и аудит нагрузки", en: "Mobile direction planning and workload audit" } },
+    { src: "/zinda/mobile-case/section-06-handoff.avif", alt: { ru: "Требования для самостоятельной передачи в разработку", en: "Requirements for independent engineering handoff" } },
   ],
 ];
 
@@ -195,7 +195,10 @@ export function CaseZindaMobile() {
                 ],
               },
             ]).map((section, index) => {
-              const media = mobileIllustrations[index];
+              const media = mobileIllustrations[index]?.map((item) => ({
+                ...item,
+                alt: t(item.alt, lang),
+              }));
 
               return {
                 ...section,

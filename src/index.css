@@ -560,9 +560,19 @@ h3 {
 
 .zinda-mobile-page .case-narrative-media--mobile-comparison {
   grid-template-columns: minmax(0, 1.4fr) minmax(220px, 0.6fr);
+  align-items: start;
 }
 
-.zinda-mobile-page .case-narrative-media--mobile-comparison img {
+.zinda-mobile-page
+  .case-narrative-media--mobile-showcase.case-narrative-media--mobile-comparison
+  figure {
+  height: auto;
+}
+
+.zinda-mobile-page
+  .case-narrative-media--mobile-showcase.case-narrative-media--mobile-comparison
+  img {
+  height: auto;
   object-position: top;
 }
 

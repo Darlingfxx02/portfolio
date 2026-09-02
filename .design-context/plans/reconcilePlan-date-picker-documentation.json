@@ -1,0 +1,126 @@
+{
+  "schemaVersion": 1,
+  "workflow": "figma-reconcile",
+  "status": "implemented-partial",
+  "approvedBy": "user message 2026-08-24",
+  "target": {
+    "fileKey": "8SlcVurfGSkysWTlZsJYft",
+    "pageId": "2:69403",
+    "pageName": "⚙️ UI-kit",
+    "frameId": "40000085:8154",
+    "frameName": "reconciled/Date Picker documentation"
+  },
+  "contract": {
+    "experience": "editorial",
+    "platform": "desktop",
+    "primaryMoment": "Understand the Date Picker contract, compare canonical variants and implement accessible behavior without semantic ambiguity.",
+    "density": "balanced editorial",
+    "preserveSource": true,
+    "preservationMethod": "locked clone beside the target before mutation",
+    "createCanonicalComponents": false,
+    "note": "The existing reconcilePlan.json belongs to an earlier completed multi-document reconciliation and is intentionally preserved unchanged."
+  },
+  "componentDiscovery": {
+    "codeConnect": "not-found-in-repository",
+    "existingScreens": "target documentation plus top-level specimen instances overlapping the target",
+    "canonical": {
+      "Date Picker": "2:272534",
+      ".Date Item": "2:272501",
+      ".Date Title": "2:272478",
+      "Date Picker base component": "2:272568"
+    },
+    "typography": "No local text styles and Suisse Intl is unavailable in the write runtime. Editable documentation specimens use Inter; the original canonical Suisse instances remain linked, hidden and preserved on the page."
+  },
+  "semanticMerges": [
+    {
+      "from": ["left state list", "right state labels"],
+      "to": "one canonical state matrix"
+    },
+    {
+      "from": ["left specification labels", "right raw-value table"],
+      "to": "one semantic token table"
+    }
+  ],
+  "visibilityMap": {
+    "NOW": ["purpose", "canonical specimen", "anatomy", "variants", "state matrix"],
+    "SCAN": ["behavior sequences", "semantic tokens", "component API"],
+    "CRITICAL": ["keyboard interaction", "focus parity", "missing disabled and focus-visible states"],
+    "CONTEXT": ["owner", "version", "review date"],
+    "MORE": [],
+    "LATER": []
+  },
+  "blocks": [
+    {
+      "id": "purpose-specimen",
+      "status": "MATCH",
+      "component": "Date Picker / Size=Large (2:272535)",
+      "sourceInstance": "40000092:8159",
+      "documentationSpecimen": "40000143:37648"
+    },
+    {
+      "id": "anatomy-specimen",
+      "status": "MATCH",
+      "component": "Date Picker / Size=Small (2:272557)",
+      "sourceInstance": "40000093:8373",
+      "documentationSpecimen": "40000143:38397"
+    },
+    {
+      "id": "variants",
+      "status": "MATCH",
+      "component": "Date Picker / Size=Small and Size=Large",
+      "sourceInstances": ["40000095:8481", "40000095:8590"],
+      "documentationSpecimens": ["40000143:38840", "40000143:39389"],
+      "layout": "two complete vertical comparison cards"
+    },
+    {
+      "id": "date-states",
+      "status": "PARTIAL",
+      "component": ".Date Item (2:272501)",
+      "reason": "Default, Today, Weekend, Active, Range Start/Between/Finish and Hover exist; Focus, Disabled, Outside month and Event do not."
+    },
+    {
+      "id": "behavior",
+      "status": "MATCH",
+      "component": "Existing Date Picker Small before/after specimen instances",
+      "sourceInstances": ["40000097:8818", "40000097:8927", "40000097:9036", "40000097:9145"],
+      "documentationSpecimens": ["40000143:40138", "40000143:40581", "40000143:41024", "40000143:41467"]
+    },
+    {
+      "id": "documentation-typography",
+      "status": "NO MATCH",
+      "component": null,
+      "reason": "No canonical documentation text styles are available in the file."
+    },
+    {
+      "id": "focus-disabled-event",
+      "status": "NO MATCH",
+      "component": null,
+      "reason": "The canonical component API does not expose Focus-visible, Disabled, Outside month or Event properties."
+    }
+  ],
+  "tokenBindings": [
+    "Backgrounds/Primary",
+    "calendar/text/primary",
+    "calendar/text/secondary",
+    "button/colors/primary/bg/default",
+    "divider/default",
+    "background/calendar/default",
+    "calendar/item/colors/secondary/bg/active",
+    "list/padding",
+    "list/border-radius"
+  ],
+  "validation": {
+    "structure": ["source clone preserved", "target node ID preserved", "all visible specimens nested inside documentation", "canonical Suisse instances preserved hidden", "root height hugs content", "section clipping disabled"],
+    "visual": ["variants use two complete comparison cards", "states use a labeled 2x4 matrix", "no empty specimen slots", "no section overlaps", "no clipped text", "gap block visible 64px below target"],
+    "accessibility": ["secondary text contrast uses canonical token", "hover has a documented focus path", "keyboard behavior documented", "missing canonical states remain explicit gaps"]
+  },
+  "result": {
+    "targetFrame": "40000085:8154",
+    "targetHeight": 2761,
+    "backupFrame": "40000128:9683",
+    "gapBlock": "40000133:10349",
+    "documentationFont": "Inter",
+    "visibleTextFontFamilies": {"Inter": 449},
+    "remainingStatus": "PARTIAL until Focus-visible, Disabled, Outside month and Event are promoted into the canonical component API"
+  }
+}

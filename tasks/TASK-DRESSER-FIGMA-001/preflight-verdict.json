@@ -1,0 +1,147 @@
+{
+  "schema_version": 2,
+  "mode": "preflight",
+  "task_id": "TASK-DRESSER-FIGMA-001",
+  "delivery_mode": "mvp",
+  "scope_expansion": false,
+  "status": "PASS",
+  "checks": [
+    {
+      "id": "acceptance-1",
+      "status": "PASS",
+      "summary": "The fixed loopback listener, private per-run runtime identity, public non-sensitive health state, and clean stop are specific, bounded, and testable.",
+      "evidence": ["tasks/TASK-DRESSER-FIGMA-001/task.json", "tasks/evidence/TASK-DRESSER-FIGMA-001/preflight-review.md", ".gitignore"]
+    },
+    {
+      "id": "acceptance-2",
+      "status": "PASS",
+      "summary": "The live capability contract maps directly to the existing browser-discovered dresser-preset/v1 object and exact mirror integrity anchor.",
+      "evidence": ["tasks/TASK-DRESSER-FIGMA-001/task.json", "server/mockup-mcp/browser-session.mjs", "server/mockup-mcp/preset-schema.mjs", ".local/dresser-mirror/MANIFEST.sha256"]
+    },
+    {
+      "id": "acceptance-3",
+      "status": "PASS",
+      "summary": "The valid PNG and preset path can reuse BrowserSessionManager's genuine Dresser browser download, validated PNG metadata, unique output, and bounded artifact contract.",
+      "evidence": ["tasks/TASK-DRESSER-FIGMA-001/task.json", "server/mockup-mcp/browser-session.mjs", "tasks/evidence/TASK-DRESSER-FIGMA-001/preflight-review.md"]
+    },
+    {
+      "id": "acceptance-4",
+      "status": "PASS",
+      "summary": "Authentication, Host, CORS, method, route, media, body, PNG, and preset failures are enumerated and must be rejected before browser mutation with stable redacted errors.",
+      "evidence": ["tasks/TASK-DRESSER-FIGMA-001/task.json", "server/mockup-mcp/preset-schema.mjs"]
+    },
+    {
+      "id": "acceptance-5",
+      "status": "PASS",
+      "summary": "Deterministic BUSY behavior and exact owned Chrome, mirror, temporary-file, output, listener, and runtime cleanup are observable across success, failure, disconnect, timeout, shutdown, and restart.",
+      "evidence": ["tasks/TASK-DRESSER-FIGMA-001/task.json", "server/mockup-mcp/browser-session.mjs", "server/mockup-mcp/tests/mcp-live.test.mjs", "tasks/evidence/TASK-DRESSER-FIGMA-001/preflight-review.md"]
+    },
+    {
+      "id": "acceptance-6",
+      "status": "PASS",
+      "summary": "The packet explicitly forbids sensitive request, token, path, preset, CDP, and stack data in logs, errors, or evidence and freezes a direct leakage check.",
+      "evidence": ["tasks/TASK-DRESSER-FIGMA-001/task.json"]
+    },
+    {
+      "id": "acceptance-7",
+      "status": "PASS",
+      "summary": "The mirror, MCP contracts, live render, timeout cleanup, and interactive Dresser are protected by explicit exclusions and frozen regression gates.",
+      "evidence": ["tasks/TASK-DRESSER-FIGMA-001/task.json", "tasks/evidence/TASK-DRESSER-FIGMA-001/preflight-review.md", "server/mockup-mcp/server.mjs", ".local/dresser-mirror/MANIFEST.sha256"]
+    },
+    {
+      "id": "bridge-tests",
+      "status": "PASS",
+      "summary": "The task owns the bridge test directory and package script needed to define the frozen test command during implementation.",
+      "evidence": ["tasks/TASK-DRESSER-FIGMA-001/task.json", "package.json"]
+    },
+    {
+      "id": "bridge-lint",
+      "status": "PASS",
+      "summary": "The task owns the bridge files and package script needed for a bounded ESLint gate without touching unrelated portfolio code.",
+      "evidence": ["tasks/TASK-DRESSER-FIGMA-001/task.json", "package.json"]
+    },
+    {
+      "id": "bridge-build",
+      "status": "PASS",
+      "summary": "The task owns the bridge modules and package script needed for the frozen syntax/build gate.",
+      "evidence": ["tasks/TASK-DRESSER-FIGMA-001/task.json", "package.json"]
+    },
+    {
+      "id": "mcp-tests",
+      "status": "PASS",
+      "summary": "Fresh baseline execution passed all 10 MCP tests, including real browser export, timeout cleanup, capability discovery, and BUSY overlap.",
+      "evidence": ["tasks/TASK-DRESSER-FIGMA-001/task.json", "tasks/evidence/TASK-DRESSER-FIGMA-001/preflight-review.md", "server/mockup-mcp/tests/mcp-live.test.mjs"]
+    },
+    {
+      "id": "mcp-lint",
+      "status": "PASS",
+      "summary": "Fresh task-scoped MCP lint completed with exit 0.",
+      "evidence": ["tasks/TASK-DRESSER-FIGMA-001/task.json", "tasks/evidence/TASK-DRESSER-FIGMA-001/preflight-review.md", "package.json"]
+    },
+    {
+      "id": "mcp-build",
+      "status": "PASS",
+      "summary": "Fresh MCP syntax and schema build completed with exit 0.",
+      "evidence": ["tasks/TASK-DRESSER-FIGMA-001/task.json", "tasks/evidence/TASK-DRESSER-FIGMA-001/preflight-review.md", "package.json"]
+    },
+    {
+      "id": "mirror-integrity",
+      "status": "PASS",
+      "summary": "Fresh SHA-256 verification passed every exact mirror manifest entry.",
+      "evidence": ["tasks/TASK-DRESSER-FIGMA-001/task.json", "tasks/evidence/TASK-DRESSER-FIGMA-001/preflight-review.md", ".local/dresser-mirror/MANIFEST.sha256"]
+    },
+    {
+      "id": "authenticated-live-demo",
+      "status": "PASS",
+      "summary": "The frozen demo is reproducible against the exact local listener and distinguishes Dresser's browser download from screenshots or arbitrary output paths.",
+      "evidence": ["tasks/TASK-DRESSER-FIGMA-001/task.json", "server/mockup-mcp/browser-session.mjs"]
+    },
+    {
+      "id": "transport-negatives",
+      "status": "PASS",
+      "summary": "The negative matrix is concrete across token, Host, opaque-origin CORS, method, path, content type, preset, body framing, size, timing, overlap, and disconnect boundaries.",
+      "evidence": ["tasks/TASK-DRESSER-FIGMA-001/task.json"]
+    },
+    {
+      "id": "owned-state-cleanup",
+      "status": "PASS",
+      "summary": "The check records only task-owned paths and PIDs and verifies cleanup without deleting pre-existing MCP artifacts or unrelated processes.",
+      "evidence": ["tasks/TASK-DRESSER-FIGMA-001/task.json", "server/mockup-mcp/browser-session.mjs", "server/mockup-mcp/tests/mcp-live.test.mjs"]
+    },
+    {
+      "id": "scope-and-neighbor-regression",
+      "status": "PASS",
+      "summary": "The frozen review covers scoped diff, exact two-tool MCP contract, browser success and timeout, mirror manifest, interactive route, and preservation of plugin UI, portfolio, and dirty worktree.",
+      "evidence": ["tasks/TASK-DRESSER-FIGMA-001/task.json", "tasks/evidence/TASK-DRESSER-FIGMA-001/preflight-review.md", "server/mockup-mcp/server.mjs"]
+    },
+    {
+      "id": "scope",
+      "status": "PASS",
+      "summary": "Ownership is bounded to the new bridge, tests, and package scripts; the dependent plugin is sequential, and mirror, MCP, UI, deployment, generated assets, and unrelated dirty work are excluded.",
+      "evidence": ["tasks/TASK-DRESSER-FIGMA-001/task.json", "tasks/TASK-DRESSER-FIGMA-002/task.json", "tasks/evidence/TASK-DRESSER-FIGMA-001/preflight-review.md"]
+    },
+    {
+      "id": "risk:backend-api",
+      "status": "PASS",
+      "summary": "The local API risk is bounded by fixed routes and origin, closed input contracts, stable redacted errors, body limits, and direct protocol tests.",
+      "evidence": ["tasks/TASK-DRESSER-FIGMA-001/task.json"]
+    },
+    {
+      "id": "risk:external-integration",
+      "status": "PASS",
+      "summary": "The Chrome and mirror integration is exact, loopback-only, timeout-bounded, serialized, and protected by live regression and owned-process cleanup checks.",
+      "evidence": ["tasks/TASK-DRESSER-FIGMA-001/task.json", "server/mockup-mcp/browser-session.mjs", "tasks/evidence/TASK-DRESSER-FIGMA-001/preflight-review.md"]
+    },
+    {
+      "id": "risk:data-privacy",
+      "status": "PASS",
+      "summary": "Ephemeral authentication, private ignored runtime state, bounded PNG-only input, redaction, loopback transport, and bridge-owned cleanup define a reproducible privacy boundary.",
+      "evidence": ["tasks/TASK-DRESSER-FIGMA-001/task.json", ".gitignore"]
+    }
+  ],
+  "findings": [],
+  "debt": [],
+  "reviewer": {
+    "independent_from_executor": true
+  }
+}

@@ -2,6 +2,7 @@ import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react
 import styles from './SelectedWork.module.css'
 import { getWorks, peekWorks } from '@/lib/works'
 import { trackEvent } from '@/lib/analytics'
+import { useLang } from '@/lib/i18n'
 
 // Fallback pool — used until/unless the CMS returns works (VITE_DIRECTUS_URL
 // unset or backend down). Rather than blank neutral tiles (which read as a
@@ -16,18 +17,6 @@ const CASE_FALLBACK: PoolItem[] = [
     url: '/cases/case-cover-zinda-formation.jpg',
     ratio: 0.5625,
     caseId: 'zinda',
-  },
-  {
-    id: 'zinda-system',
-    url: '/cases/case-cover-zinda-system.jpg',
-    ratio: 0.5625,
-    caseId: 'zinda-system',
-  },
-  {
-    id: 'zinda-mobile',
-    url: '/cases/case-cover-zinda-mobile.jpg',
-    ratio: 0.5625,
-    caseId: 'zinda-mobile',
   },
   { id: 'ovork-1', url: '/cases/ovork-1.webp', ratio: 1.55, caseId: 'ovork' },
   { id: 'ovork-2', url: '/cases/ovork-2.webp', ratio: 1.55, caseId: 'ovork' },
@@ -163,6 +152,7 @@ function Grid({ pool }: { pool: PoolItem[] }) {
 }
 
 function Cell({ tile }: { tile: Tile }) {
+  const { lang } = useLang()
   const open = tile.caseId
     ? () => {
         trackEvent('work_tile_opened', { case_id: tile.caseId })
@@ -176,7 +166,13 @@ function Cell({ tile }: { tile: Tile }) {
       data-clickable={open ? true : undefined}
       role={open ? 'link' : undefined}
       tabIndex={open ? 0 : undefined}
-      aria-label={open ? `Open ${tile.caseId} case study` : undefined}
+      aria-label={
+        open
+          ? lang === 'ru'
+            ? `Открыть кейс ${tile.caseId}`
+            : `Open ${tile.caseId} case study`
+          : undefined
+      }
       onClick={open}
       onKeyDown={
         open
@@ -194,7 +190,7 @@ function Cell({ tile }: { tile: Tile }) {
           className={styles.img}
           src={tile.url}
           alt=""
-          loading="lazy"
+          loading="eager"
           decoding="async"
           // A broken CMS asset would otherwise leave a torn-image glyph; hide it
           // so the tile degrades to its neutral fill instead of looking broken.

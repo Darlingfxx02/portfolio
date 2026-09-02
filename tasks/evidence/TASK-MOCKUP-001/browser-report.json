@@ -1,0 +1,296 @@
+{
+  "initial": {
+    "title": true,
+    "canvas": [
+      1200,
+      1200
+    ],
+    "exportDisabled": true,
+    "storage": {
+      "local": [],
+      "session": []
+    },
+    "resources": [
+      "http://127.0.0.1:5173/@vite/client",
+      "http://127.0.0.1:5173/src/main.tsx",
+      "https://fonts.googleapis.com/css2?family=Geist:wght@300..700&display=swap",
+      "http://127.0.0.1:5173/@react-refresh",
+      "http://127.0.0.1:5173/node_modules/.vite/deps/react.js?v=4e0f1770",
+      "http://127.0.0.1:5173/src/index.css",
+      "http://127.0.0.1:5173/node_modules/.vite/deps/react-dom_client.js?v=4e0f1770",
+      "http://127.0.0.1:5173/node_modules/.vite/deps/react_jsx-dev-runtime.js?v=4e0f1770",
+      "http://127.0.0.1:5173/src/tailwind.css",
+      "http://127.0.0.1:5173/node_modules/.vite/deps/chunk-B-1-B7_t.js?v=4e0f1770",
+      "http://127.0.0.1:5173/node_modules/.vite/deps/react-dom.js?v=4e0f1770",
+      "http://127.0.0.1:5173/node_modules/.pnpm/vite@8.0.16_@types+node@24.13.2_jiti@2.7.0/node_modules/vite/dist/client/env.mjs",
+      "http://127.0.0.1:5173/src/tools/mockup/MockupEditor.tsx",
+      "http://127.0.0.1:5173/favicon.svg",
+      "http://127.0.0.1:5173/src/tools/mockup/MockupEditor.module.css",
+      "http://127.0.0.1:5173/src/tools/mockup/renderMockup.ts",
+      "http://127.0.0.1:5173/src/tools/mockup/icons.ts",
+      "http://127.0.0.1:5173/node_modules/.vite/deps/@phosphor-icons_react.js?v=4e0f1770"
+    ]
+  },
+  "valid": {
+    "ready": true,
+    "filenameVisible": false,
+    "exportDisabled": false,
+    "rangeValues": [
+      "180",
+      "1.32",
+      "0.46",
+      "-0.28"
+    ],
+    "background": "#7c5cff",
+    "labels": [
+      "Back to portfolio",
+      "Reset",
+      "Export PNG",
+      "Replace imagePNG or JPEG"
+    ]
+  },
+  "validCanvasSha256": "041a21ad8a9123e5b1651120ee7fd165f755446fcdb6873f65dd696852f6c26f",
+  "invalid": {
+    "unsupported": {
+      "error": "Choose a PNG or JPEG image. Your current composition is unchanged.",
+      "compositionPreserved": true,
+      "ready": true
+    },
+    "corrupt": {
+      "error": "This image could not be read. Try another PNG or JPEG; your current composition is unchanged.",
+      "compositionPreserved": true,
+      "ready": true
+    },
+    "zero-dimension": {
+      "error": "This image could not be read. Try another PNG or JPEG; your current composition is unchanged.",
+      "compositionPreserved": true,
+      "ready": true
+    }
+  },
+  "privacy": {
+    "storageBefore": {
+      "local": [],
+      "session": []
+    },
+    "storageAfter": {
+      "local": [],
+      "session": [],
+      "indexedDb": [],
+      "caches": [],
+      "resources": [
+        "http://127.0.0.1:5173/@vite/client",
+        "http://127.0.0.1:5173/src/main.tsx",
+        "https://fonts.googleapis.com/css2?family=Geist:wght@300..700&display=swap",
+        "http://127.0.0.1:5173/@react-refresh",
+        "http://127.0.0.1:5173/node_modules/.vite/deps/react.js?v=4e0f1770",
+        "http://127.0.0.1:5173/src/index.css",
+        "http://127.0.0.1:5173/node_modules/.vite/deps/react-dom_client.js?v=4e0f1770",
+        "http://127.0.0.1:5173/node_modules/.vite/deps/react_jsx-dev-runtime.js?v=4e0f1770",
+        "http://127.0.0.1:5173/src/tailwind.css",
+        "http://127.0.0.1:5173/node_modules/.vite/deps/chunk-B-1-B7_t.js?v=4e0f1770",
+        "http://127.0.0.1:5173/node_modules/.vite/deps/react-dom.js?v=4e0f1770",
+        "http://127.0.0.1:5173/node_modules/.pnpm/vite@8.0.16_@types+node@24.13.2_jiti@2.7.0/node_modules/vite/dist/client/env.mjs",
+        "http://127.0.0.1:5173/src/tools/mockup/MockupEditor.tsx",
+        "http://127.0.0.1:5173/favicon.svg",
+        "http://127.0.0.1:5173/src/tools/mockup/MockupEditor.module.css",
+        "http://127.0.0.1:5173/src/tools/mockup/renderMockup.ts",
+        "http://127.0.0.1:5173/src/tools/mockup/icons.ts",
+        "http://127.0.0.1:5173/node_modules/.vite/deps/@phosphor-icons_react.js?v=4e0f1770"
+      ]
+    },
+    "requests": [
+      {
+        "url": "http://127.0.0.1:5173/tools/mockup",
+        "method": "GET",
+        "hasPostData": false
+      },
+      {
+        "url": "http://127.0.0.1:5173/@vite/client",
+        "method": "GET",
+        "hasPostData": false
+      },
+      {
+        "url": "https://fonts.googleapis.com/css2?family=Geist:wght@300..700&display=swap",
+        "method": "GET",
+        "hasPostData": false
+      },
+      {
+        "url": "http://127.0.0.1:5173/src/main.tsx",
+        "method": "GET",
+        "hasPostData": false
+      },
+      {
+        "url": "http://127.0.0.1:5173/@react-refresh",
+        "method": "GET",
+        "hasPostData": false
+      },
+      {
+        "url": "http://127.0.0.1:5173/node_modules/.vite/deps/react.js?v=4e0f1770",
+        "method": "GET",
+        "hasPostData": false
+      },
+      {
+        "url": "http://127.0.0.1:5173/node_modules/.vite/deps/react-dom_client.js?v=4e0f1770",
+        "method": "GET",
+        "hasPostData": false
+      },
+      {
+        "url": "http://127.0.0.1:5173/src/index.css",
+        "method": "GET",
+        "hasPostData": false
+      },
+      {
+        "url": "http://127.0.0.1:5173/src/tailwind.css",
+        "method": "GET",
+        "hasPostData": false
+      },
+      {
+        "url": "http://127.0.0.1:5173/node_modules/.vite/deps/react_jsx-dev-runtime.js?v=4e0f1770",
+        "method": "GET",
+        "hasPostData": false
+      },
+      {
+        "url": "http://127.0.0.1:5173/node_modules/.vite/deps/chunk-B-1-B7_t.js?v=4e0f1770",
+        "method": "GET",
+        "hasPostData": false
+      },
+      {
+        "url": "http://127.0.0.1:5173/node_modules/.vite/deps/react-dom.js?v=4e0f1770",
+        "method": "GET",
+        "hasPostData": false
+      },
+      {
+        "url": "http://127.0.0.1:5173/node_modules/.pnpm/vite@8.0.16_@types+node@24.13.2_jiti@2.7.0/node_modules/vite/dist/client/env.mjs",
+        "method": "GET",
+        "hasPostData": false
+      },
+      {
+        "url": "http://127.0.0.1:5173/src/tools/mockup/MockupEditor.tsx",
+        "method": "GET",
+        "hasPostData": false
+      },
+      {
+        "url": "http://127.0.0.1:5173/favicon.svg",
+        "method": "GET",
+        "hasPostData": false
+      },
+      {
+        "url": "http://127.0.0.1:5173/src/tools/mockup/MockupEditor.module.css",
+        "method": "GET",
+        "hasPostData": false
+      },
+      {
+        "url": "http://127.0.0.1:5173/src/tools/mockup/renderMockup.ts",
+        "method": "GET",
+        "hasPostData": false
+      },
+      {
+        "url": "http://127.0.0.1:5173/src/tools/mockup/icons.ts",
+        "method": "GET",
+        "hasPostData": false
+      },
+      {
+        "url": "http://127.0.0.1:5173/node_modules/.vite/deps/@phosphor-icons_react.js?v=4e0f1770",
+        "method": "GET",
+        "hasPostData": false
+      },
+      {
+        "url": "https://fonts.gstatic.com/s/geist/v5/gyByhwUxId8gMEwcGFWNOITd.woff2",
+        "method": "GET",
+        "hasPostData": false
+      },
+      {
+        "url": "https://fonts.gstatic.com/s/geist/v5/gyByhwUxId8gMEwYGFWNOITddY4.woff2",
+        "method": "GET",
+        "hasPostData": false
+      }
+    ],
+    "requestCountAfterInitialLoad": 3
+  },
+  "focus": [
+    {
+      "name": "Back to portfolio",
+      "tag": "A",
+      "outlineWidth": "2px",
+      "outlineStyle": "solid",
+      "outlineColor": "rgb(255, 255, 255)"
+    },
+    {
+      "name": "Reset",
+      "tag": "BUTTON",
+      "outlineWidth": "2px",
+      "outlineStyle": "solid",
+      "outlineColor": "rgb(255, 255, 255)"
+    },
+    {
+      "name": "Export PNG",
+      "tag": "BUTTON",
+      "outlineWidth": "2px",
+      "outlineStyle": "solid",
+      "outlineColor": "rgb(255, 255, 255)"
+    },
+    {
+      "name": "Replace imagePNG or JPEG",
+      "tag": "BUTTON",
+      "outlineWidth": "2px",
+      "outlineStyle": "solid",
+      "outlineColor": "rgb(255, 255, 255)"
+    },
+    {
+      "name": "Background",
+      "tag": "INPUT",
+      "outlineWidth": "2px",
+      "outlineStyle": "solid",
+      "outlineColor": "rgb(255, 255, 255)"
+    },
+    {
+      "name": "Padding",
+      "tag": "INPUT",
+      "outlineWidth": "2px",
+      "outlineStyle": "solid",
+      "outlineColor": "rgb(255, 255, 255)"
+    },
+    {
+      "name": "Scale",
+      "tag": "INPUT",
+      "outlineWidth": "2px",
+      "outlineStyle": "solid",
+      "outlineColor": "rgb(255, 255, 255)"
+    },
+    {
+      "name": "Horizontal",
+      "tag": "INPUT",
+      "outlineWidth": "2px",
+      "outlineStyle": "solid",
+      "outlineColor": "rgb(255, 255, 255)"
+    },
+    {
+      "name": "Vertical",
+      "tag": "INPUT",
+      "outlineWidth": "2px",
+      "outlineStyle": "solid",
+      "outlineColor": "rgb(255, 255, 255)"
+    }
+  ],
+  "consoleBeforeFallback": [
+    {
+      "type": "debug",
+      "text": "[vite] connecting..."
+    },
+    {
+      "type": "info",
+      "text": "%cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold"
+    },
+    {
+      "type": "debug",
+      "text": "[vite] connected."
+    }
+  ],
+  "iconFallback": true,
+  "fallbackDiagnostic": [
+    {
+      "type": "warning",
+      "text": "[Mockup Studio] Unknown icon key: not.a.real.icon"
+    }
+  ]
+}

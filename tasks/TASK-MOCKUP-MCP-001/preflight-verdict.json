@@ -1,0 +1,159 @@
+{
+  "schema_version": 2,
+  "mode": "preflight",
+  "task_id": "TASK-MOCKUP-MCP-001",
+  "delivery_mode": "mvp",
+  "scope_expansion": false,
+  "status": "PASS",
+  "checks": [
+    {
+      "id": "acceptance-1",
+      "status": "PASS",
+      "summary": "The stdio startup, exact two-tool discovery contract, and machine-readable schemas are specific and testable.",
+      "evidence": ["tasks/TASK-MOCKUP-MCP-001/task.json", "package.json"]
+    },
+    {
+      "id": "acceptance-2",
+      "status": "PASS",
+      "summary": "Capability discovery is tied to the exact live mirror, versioned metadata, stable IDs, defaults, bounds, and browser-visible controls.",
+      "evidence": ["tasks/TASK-MOCKUP-MCP-001/task.json", ".local/dresser-mirror/qa-report.json", ".local/dresser-mirror/MANIFEST.sha256"]
+    },
+    {
+      "id": "acceptance-3",
+      "status": "PASS",
+      "summary": "The render acceptance covers one valid image, every preset class, browser UI mutation, and Dresser's own PNG export.",
+      "evidence": ["tasks/TASK-MOCKUP-MCP-001/task.json", ".local/dresser-mirror/index.html"]
+    },
+    {
+      "id": "acceptance-4",
+      "status": "PASS",
+      "summary": "Artifact location, MIME type, byte size, SHA-256, dimensions, PNG signature, existence, and visual preset reflection are observable.",
+      "evidence": ["tasks/TASK-MOCKUP-MCP-001/task.json"]
+    },
+    {
+      "id": "acceptance-5",
+      "status": "PASS",
+      "summary": "Sequential isolation and overlapping-call serialization or stable busy rejection are explicitly testable.",
+      "evidence": ["tasks/TASK-MOCKUP-MCP-001/task.json"]
+    },
+    {
+      "id": "acceptance-6",
+      "status": "PASS",
+      "summary": "Input, schema, capability, browser, mirror, timeout, and download negative paths require bounded non-leaking errors and no stale artifact.",
+      "evidence": ["tasks/TASK-MOCKUP-MCP-001/task.json"]
+    },
+    {
+      "id": "acceptance-7",
+      "status": "PASS",
+      "summary": "Network, log-redaction, source privacy, and temporary-state cleanup boundaries are explicit and reproducible.",
+      "evidence": ["tasks/TASK-MOCKUP-MCP-001/task.json", ".local/dresser-mirror/qa-report.json", ".local/dresser-mirror/server.mjs"]
+    },
+    {
+      "id": "acceptance-8",
+      "status": "PASS",
+      "summary": "Neighbor preservation and task-scoped MCP gates are required, while full-repository lint is a strict no-regression comparison against the exact accepted preflight baseline.",
+      "evidence": ["tasks/TASK-MOCKUP-MCP-001/task.json", "tasks/evidence/TASK-MOCKUP-MCP-001/preflight-lint.log", "tasks/evidence/TASK-MOCKUP-MCP-001/preflight-review.md"]
+    },
+    {
+      "id": "mcp-tests",
+      "status": "PASS",
+      "summary": "The task owns the test directory and package script addition needed to make the frozen MCP test command real during implementation.",
+      "evidence": ["tasks/TASK-MOCKUP-MCP-001/task.json", "package.json"]
+    },
+    {
+      "id": "lint",
+      "status": "PASS",
+      "summary": "The corrected required command is task-scoped MCP lint, and package.json plus task-owned server files are in scope to define and satisfy it.",
+      "evidence": ["tasks/TASK-MOCKUP-MCP-001/task.json", "package.json", "tasks/evidence/TASK-MOCKUP-MCP-001/preflight-review.md"]
+    },
+    {
+      "id": "build",
+      "status": "PASS",
+      "summary": "The corrected task-scoped MCP build command is explicitly owned through package.json and the task-owned server files.",
+      "evidence": ["package.json", "tasks/TASK-MOCKUP-MCP-001/task.json"]
+    },
+    {
+      "id": "mirror-integrity",
+      "status": "PASS",
+      "summary": "Fresh preflight execution validated every entry in the exact mirror manifest.",
+      "evidence": [".local/dresser-mirror/MANIFEST.sha256", "tasks/evidence/TASK-MOCKUP-MCP-001/preflight-review.md"]
+    },
+    {
+      "id": "diff-check",
+      "status": "PASS",
+      "summary": "Fresh preflight execution of git diff --check passed.",
+      "evidence": ["tasks/evidence/TASK-MOCKUP-MCP-001/preflight-review.md"]
+    },
+    {
+      "id": "protocol-and-capabilities",
+      "status": "PASS",
+      "summary": "The check requires live MCP schema validation and reconciliation against browser-visible mirror controls.",
+      "evidence": ["tasks/TASK-MOCKUP-MCP-001/task.json", ".local/dresser-mirror/qa-report.json"]
+    },
+    {
+      "id": "browser-render-demo",
+      "status": "PASS",
+      "summary": "The solid and mesh scenarios exercise materially different settings and explicitly distinguish Dresser export from browser screenshots.",
+      "evidence": ["tasks/TASK-MOCKUP-MCP-001/task.json"]
+    },
+    {
+      "id": "input-and-failure-negatives",
+      "status": "PASS",
+      "summary": "The required failure matrix covers file, media, preset, browser, mirror, timeout, download, leakage, and stale-artifact behavior.",
+      "evidence": ["tasks/TASK-MOCKUP-MCP-001/task.json"]
+    },
+    {
+      "id": "isolation-and-concurrency",
+      "status": "PASS",
+      "summary": "The check specifies clean-page reset, distinct sequential jobs, overlapping calls, unique outputs, and no overwrite.",
+      "evidence": ["tasks/TASK-MOCKUP-MCP-001/task.json"]
+    },
+    {
+      "id": "privacy-network-boundary",
+      "status": "PASS",
+      "summary": "The check observes network, logs, MCP errors, media payloads, source identity, and temporary filesystem cleanup.",
+      "evidence": ["tasks/TASK-MOCKUP-MCP-001/task.json", ".local/dresser-mirror/qa-report.json", ".local/dresser-mirror/server.mjs"]
+    },
+    {
+      "id": "neighbor-regression",
+      "status": "PASS",
+      "summary": "The interactive mirror route, exact mirror integrity, scoped diff, existing portfolio, and prior editor ownership are explicit regression boundaries.",
+      "evidence": ["tasks/TASK-MOCKUP-MCP-001/task.json", ".local/dresser-mirror/MANIFEST.sha256"]
+    },
+    {
+      "id": "full-repo-lint-baseline-debt",
+      "status": "PASS",
+      "summary": "A fresh full-repository lint run exactly reproduced the frozen 10-error, five-file out-of-scope baseline; the packet rejects any changed or task-owned finding.",
+      "evidence": ["tasks/TASK-MOCKUP-MCP-001/task.json", "tasks/evidence/TASK-MOCKUP-MCP-001/preflight-lint.log", "tasks/evidence/TASK-MOCKUP-MCP-001/preflight-review.md"]
+    },
+    {
+      "id": "scope",
+      "status": "PASS",
+      "summary": "Ownership remains bounded to MCP implementation, tests, documentation, and required package metadata; the corrected lint policy no longer requires edits to excluded portfolio files.",
+      "evidence": ["tasks/TASK-MOCKUP-MCP-001/task.json", "tasks/evidence/TASK-MOCKUP-MCP-001/preflight-lint.log", "tasks/evidence/TASK-MOCKUP-MCP-001/preflight-review.md"]
+    },
+    {
+      "id": "risk:backend-api",
+      "status": "PASS",
+      "summary": "Closed versioned schemas, exact two-tool discovery, bounded errors, clean browser state, and direct MCP tests cover the API boundary.",
+      "evidence": ["tasks/TASK-MOCKUP-MCP-001/task.json"]
+    },
+    {
+      "id": "risk:external-integration",
+      "status": "PASS",
+      "summary": "The browser integration is loopback-only, disposable, timeout-bounded, and excluded from public transport or deployment.",
+      "evidence": ["tasks/TASK-MOCKUP-MCP-001/task.json", ".local/dresser-mirror/server.mjs"]
+    },
+    {
+      "id": "risk:data-privacy",
+      "status": "PASS",
+      "summary": "Source validation, no arbitrary output path, log and error redaction, loopback traffic, cleanup, and intentional-artifact retention are frozen.",
+      "evidence": ["tasks/TASK-MOCKUP-MCP-001/task.json"]
+    }
+  ],
+  "findings": [],
+  "debt": [],
+  "reviewer": {
+    "independent_from_executor": true
+  }
+}

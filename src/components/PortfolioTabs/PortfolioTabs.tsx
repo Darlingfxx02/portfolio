@@ -23,28 +23,28 @@ const aboutCopy = {
   ],
 }
 
-const CV_URL = '/cv/Timothe_Ermolaev_Resume.pdf?v=20260726-7'
+const CV_URL = '/cv/Timothe_Ermolaev_Resume.pdf?v=20260830-1'
 
 const aboutPhotos = [
   {
     src: '/stickers/self-portrait.webp',
-    alt: 'Тимофей в зеркале',
+    alt: { ru: 'Тимофей в зеркале', en: 'Timothe in a mirror' },
   },
   {
     src: '/about/hobby1.webp',
-    alt: 'Сноуборды на подъёмнике',
+    alt: { ru: 'Сноуборды на подъёмнике', en: 'Snowboards on a ski lift' },
   },
   {
     src: '/stickers/device-stack.webp',
-    alt: 'Ноутбук и телефон',
+    alt: { ru: 'Ноутбук и телефон', en: 'Laptop and phone' },
   },
   {
     src: '/about/hobby2.webp',
-    alt: 'Стол для пинг-понга',
+    alt: { ru: 'Стол для пинг-понга', en: 'Table tennis table' },
   },
   {
     src: '/stickers/friends-selfie.webp',
-    alt: 'Тимофей с другом',
+    alt: { ru: 'Тимофей с другом', en: 'Timothe with a friend' },
   },
 ]
 
@@ -53,6 +53,8 @@ function revealStyle(index: number) {
 }
 
 function PhotoTrack({ decorative = false }: { decorative?: boolean }) {
+  const { lang } = useLang()
+
   return (
     <div className={styles.photoTrack} aria-hidden={decorative || undefined}>
       {[0, 1, 2, 3, 4].map((copy) => (
@@ -65,7 +67,7 @@ function PhotoTrack({ decorative = false }: { decorative?: boolean }) {
             <figure key={photo.src} className={styles.photoCard}>
               <img
                 src={photo.src}
-                alt={!decorative && copy === 0 ? photo.alt : ''}
+                alt={!decorative && copy === 0 ? t(photo.alt, lang) : ''}
                 draggable={false}
               />
             </figure>
@@ -77,10 +79,12 @@ function PhotoTrack({ decorative = false }: { decorative?: boolean }) {
 }
 
 function AboutPhotoCarousel() {
+  const { lang } = useLang()
+
   return (
     <section
       className={styles.photoCarousel}
-      aria-label="Фотографии"
+      aria-label={lang === 'ru' ? 'Фотографии' : 'Photos'}
     >
       <div className={styles.photoStage}>
         <div className={styles.photoGlowRail} aria-hidden>
@@ -201,33 +205,13 @@ const workExperienceGroups: Array<{
         status: 'Soon',
       },
       {
-        id: 'zinda-mobile',
-        caseId: 'zinda-mobile',
-        experienceId: 'zinda',
-        year: '2024',
-        title: {
-          ru: 'Zinda. Мобильное приложение — самостоятельное направление',
-          en: 'Zinda Mobile. An independently led direction',
-        },
-      },
-      {
-        id: 'zinda-system',
-        caseId: 'zinda-system',
-        experienceId: 'zinda',
-        year: '2023 — 2024',
-        title: {
-          ru: 'Zinda. Дизайн-система банка',
-          en: 'Zinda. The bank design system',
-        },
-      },
-      {
         id: 'zinda',
         caseId: 'zinda',
         experienceId: 'zinda',
-        year: '2023',
+        year: '2023 — 2024',
         title: {
-          ru: 'Zinda. Как мы собирали банк',
-          en: 'Zinda. How we built the bank',
+          ru: 'Zinda. Новый B2B-банк для бизнеса',
+          en: 'Zinda. A new B2B bank for business',
         },
       },
     ],
@@ -259,8 +243,13 @@ export function PortfolioTabs({
 }: {
   activeTab: PortfolioContentTab
 }) {
+  const { lang } = useLang()
+
   return (
-    <main className={styles.section} aria-label="Портфолио">
+    <main
+      className={styles.section}
+      aria-label={lang === 'ru' ? 'Портфолио' : 'Portfolio'}
+    >
       <div
         id={`panel-${activeTab}`}
         className={styles.panel}
@@ -293,7 +282,9 @@ function About() {
           className={`${styles.connect} ${styles.revealBlock}`}
           style={revealStyle(1)}
         >
-          <p className={styles.connectLabel}>Connect</p>
+          <p className={styles.connectLabel}>
+            {lang === 'ru' ? 'Связаться' : 'Connect'}
+          </p>
           <ul className={styles.connectList}>
             {links.map((link) => (
               <li key={link.label}>
@@ -388,10 +379,14 @@ function WorkList() {
                 const unavailable = !study || Boolean(study.disabled)
                 const chipLabel =
                   project.status === 'Soon'
-                    ? 'Скоро'
+                    ? lang === 'ru'
+                      ? 'Скоро'
+                      : 'Soon'
                     : project.status === 'NDA' || study?.disabled
                       ? 'NDA'
-                      : 'Открыть'
+                      : lang === 'ru'
+                        ? 'Открыть'
+                        : 'Open'
                 const content = (
                   <>
                     <span className={styles.workTitleRow}>

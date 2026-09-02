@@ -1,0 +1,153 @@
+{
+  "schema_version": 2,
+  "task_id": "TASK-DRESSER-FIGMA-002",
+  "status": "approved",
+  "baseline": [
+    {
+      "path": "baseline.md",
+      "viewport": "1440x1000 source and 360x640 target",
+      "state": "existing wide Dresser mirror; no Figma plugin panel exists"
+    }
+  ],
+  "concepts": [
+    {
+      "id": "recommended",
+      "path": "concept-recommended.md",
+      "label": "Compact Dresser tool panel",
+      "cost": "medium",
+      "risk": "medium"
+    }
+  ],
+  "selected_concept": "recommended",
+  "change_region": "Only the new local Figma development plugin panel and the newly inserted PNG rectangle beside a selected Frame.",
+  "reference_application": {
+    "ux": [
+      {
+        "reference": "Current exact Dresser configure-and-export workflow",
+        "controls": [
+          "preview-first hierarchy",
+          "device, background, and layout grouping",
+          "conditional background controls",
+          "secondary reset and primary final action"
+        ],
+        "restriction": "Controls flow and hierarchy only; the wide desktop rail is not copied into the plugin."
+      },
+      {
+        "reference": "Official Figma Creating a User Interface documentation",
+        "controls": [
+          "typed main/UI state transitions",
+          "Uint8Array selection and PNG transport",
+          "recoverable selection, render, and insertion states"
+        ],
+        "restriction": "Controls plugin communication and state behavior, not graphical styling."
+      }
+    ],
+    "ui": [
+      {
+        "reference": "Inspected .local/dresser-mirror/qa-loaded.png",
+        "controls": [
+          "dark restrained tool character",
+          "compact labels and segmented choices",
+          "low-contrast borders and high-contrast final action"
+        ],
+        "restriction": "Do not copy the 292 px rail geometry or any proprietary Figma visual asset."
+      },
+      {
+        "reference": "Official Figma showUI theme and sizing contract",
+        "controls": [
+          "360x640 default",
+          "420x720 expanded state",
+          "host light/dark theme variables"
+        ],
+        "restriction": "Controls size, density, color tokens, surfaces, and responsive treatment only."
+      }
+    ]
+  },
+  "icon_strategy": {
+    "library": "@phosphor-icons/react",
+    "fallback": "Question",
+    "semantic_keys": [
+      "action.refresh-preview",
+      "action.insert",
+      "action.reset",
+      "action.retry",
+      "status.selection",
+      "status.error",
+      "background.solid",
+      "background.picture",
+      "background.mesh",
+      "background.transparent",
+      "action.unknown"
+    ],
+    "rules": [
+      "Use named imports only through one typed resolver.",
+      "Name every icon-only control and hide decorative icons from assistive technology.",
+      "Unknown keys use Question with a development/test diagnostic; never render emoji or a placeholder glyph."
+    ]
+  },
+  "must_preserve": [
+    "Every current PNG-relevant model, color, background, mesh palette, picture pack, aspect ratio, fixed padding, scale, and position capability.",
+    "The existing exact Dresser mirror and browser-backed MCP behavior.",
+    "The selected source Frame, its parent, and every unrelated Figma node.",
+    "Local-only image privacy and unrelated dirty-worktree changes."
+  ],
+  "must_change": [
+    "Add a compact Figma plugin panel for one selected Frame.",
+    "Replace the wide desktop rail with one progressive single-column tool flow.",
+    "Show exact Dresser PNG preview freshness and recovery states.",
+    "Insert the final PNG 80 px beside the source Frame."
+  ],
+  "structure": [
+    "44 px header with Dresser title and concise selection state.",
+    "Full-width exact rendered preview near the top.",
+    "Scrollable Device, Background, and Layout sections with conditional controls.",
+    "Sticky footer with Reset, Update preview, and primary Insert actions."
+  ],
+  "behavior": [
+    "One valid Frame triggers bounded PNG export and an initial exact preview.",
+    "Control changes mark the preview stale; Update refreshes it, while Insert refreshes first when stale.",
+    "No, multiple, non-Frame, stale, or removed selection prevents insertion and explains recovery.",
+    "Errors preserve the last valid preview and source context and expose a retry.",
+    "Successful insertion selects the new named PNG node beside the unchanged source."
+  ],
+  "responsive": [
+    "Default target is 360x640 with one vertical scroll region and no horizontal clipping.",
+    "Approved expanded target is 420x720; preview may grow but hierarchy and footer remain stable.",
+    "Widths below 320 px and mobile/touch adaptation are outside this local Figma Desktop MVP."
+  ],
+  "content": [
+    "Use Dresser as the plugin name.",
+    "Use concise labels: Model, Color, Background, Layout, Padding, Scale, Horizontal, Vertical, Reset, Update preview, Insert beside frame.",
+    "No-selection message: Select one Frame in Figma.",
+    "Never surface or persist a local path, token, raw payload, or unrelated document content."
+  ],
+  "visual_details": {
+    "panel": "Figma theme CSS variables with Dresser-dark fallback",
+    "surface": "subtle neutral elevations with one-pixel low-contrast separators",
+    "primary_text": "host primary text token",
+    "secondary_text": "host secondary text token",
+    "accent": "one high-contrast primary Insert action; preview pixels are never recolored",
+    "radius": "6-8 px controls and 10 px preview shell",
+    "focus": "2 px visible high-contrast outline with offset",
+    "motion": "120-180 ms state feedback only; honor prefers-reduced-motion"
+  },
+  "acceptance": [
+    "At 360x640, preview and primary Insert action remain immediately legible while all settings are reachable in one scroll column.",
+    "The panel reads as Dresser adapted to a Figma tool window, not a squeezed copy of the wide browser editor.",
+    "Every conditional state has a stable location and does not shift the sticky footer off screen.",
+    "Light and dark host themes preserve contrast, focus, and the original rendered preview.",
+    "The exact final preview and inserted image agree, and the source Frame remains unchanged.",
+    "Icon geometry, accessible names, and fallback behavior are consistent."
+  ],
+  "approval": {
+    "status": "approved",
+    "required_user_message": "Утверждаю визуальный контракт TASK-DRESSER-FIGMA-002: recommended.",
+    "user_message": "делай делай без мобина",
+    "timestamp": "2026-08-31T19:56:58Z"
+  },
+  "known_debt": [
+    "Mobbin MCP is unavailable; no stable Mobbin reference or durable provider asset exists, and this must remain visible in approval evidence.",
+    "The first demo depends on a local token-protected browser companion and is not yet a self-contained Figma Community package.",
+    "Batch, video, editable output, remote rendering, and plugin publication are deferred."
+  ]
+}

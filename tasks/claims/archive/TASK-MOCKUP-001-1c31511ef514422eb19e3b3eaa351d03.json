@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "task_id": "TASK-MOCKUP-001",
+  "token": "1c31511ef514422eb19e3b3eaa351d03",
+  "state": "archived",
+  "pm_id": "railway-20260830-mockup-prototype",
+  "executor": "/root/mockup_executor",
+  "claimed_at": "2026-08-30T16:00:16.192409Z",
+  "heartbeat_at": "2026-08-30T16:09:47.680753Z",
+  "outcome": "implemented",
+  "reason": "",
+  "finished_at": "2026-08-30T16:11:28.119653Z"
+}

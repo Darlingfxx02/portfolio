@@ -1,0 +1,235 @@
+{
+  "schema_version": 4,
+  "id": "TASK-DRESSER-FIGMA-001-R1",
+  "title": "Enforce route-specific preflight and empty shutdown body",
+  "goal": "The local Figma bridge accepts CORS preflight only for each route's exact method and headers, and POST /v1/shutdown cannot trigger shutdown unless its fully consumed request body is empty, including chunked transfer.",
+  "status": "verified",
+  "assignment": {
+    "token": "874eb690af824a2ab6cb46053865916d",
+    "pm_id": "railway-20260831-figma-plugin-mvp",
+    "executor": "figma-bridge-remediation-executor",
+    "claimed_at": "2026-08-31T08:17:08.350123Z",
+    "heartbeat_at": "2026-08-31T08:21:19.782043Z",
+    "finished_at": "2026-08-31T08:22:55.962155Z",
+    "outcome": "implemented"
+  },
+  "depends_on": [
+    "TASK-DRESSER-FIGMA-001"
+  ],
+  "delivery": {
+    "mode": "mvp",
+    "user_value": "The local Figma bridge rejects misleading preflight permissions and body-bearing shutdown requests before the dependent plugin is integrated.",
+    "slice": "hardening",
+    "demo": {
+      "steps": [
+        "Start a task-owned bridge with a stub manager and shutdown observer.",
+        "Replay the three wrong-route-method OPTIONS requests and unsupported route/header preflights; observe bounded rejection and no reflected permission.",
+        "Replay authenticated POST /v1/shutdown with a non-empty chunked body; observe rejection and confirm shutdown is not called, then verify a truly empty request succeeds."
+      ],
+      "evidence": "tasks/evidence/TASK-DRESSER-FIGMA-001-R1/reproducer-regression.md"
+    },
+    "unlocks": [
+      "final integration verification of TASK-DRESSER-FIGMA-001",
+      "safe dependency handoff to TASK-DRESSER-FIGMA-002"
+    ],
+    "remediation": {
+      "source_task_id": "TASK-DRESSER-FIGMA-001",
+      "attempt": 1,
+      "dependency_depth": 1
+    },
+    "github": {
+      "required": false,
+      "remote": "origin",
+      "branch": "main",
+      "batch": "integration-group",
+      "push_after": "not-authorized-local-only",
+      "force_push": false
+    }
+  },
+  "work_classification": {
+    "ux_flow": false,
+    "reason": "This remediation tightens HTTP request validation only; it does not change Figma selection flow, plugin states, information architecture, or visible UI."
+  },
+  "tracking": {
+    "provider": "local",
+    "local": {
+      "reason": "The source bridge and its single remediation remain locally tracked with no external tracker, publication, deployment, or push."
+    }
+  },
+  "risk": {
+    "level": "medium",
+    "reasons": [
+      "Changes a security-sensitive local HTTP validation boundary, but only narrows accepted requests and is covered by exact transport reproducers and full bridge regression."
+    ]
+  },
+  "impact": [
+    "backend-api",
+    "external-integration",
+    "data-privacy"
+  ],
+  "zones": [
+    "server"
+  ],
+  "scope": {
+    "in": [
+      "server/figma-plugin-bridge/server.mjs",
+      "server/figma-plugin-bridge/protocol.mjs",
+      "server/figma-plugin-bridge/tests/server.test.mjs",
+      "server/figma-plugin-bridge/tests/protocol.test.mjs"
+    ],
+    "out": [
+      "All bridge endpoints, response payloads, token/Host/origin rules, render request and PNG validation, capability/render semantics, runtime state, temporary-file lifecycle, process cleanup, and port binding except the two frozen request-validation blockers",
+      "server/mockup-mcp, dresser-preset/v1, .local/dresser-mirror, MANIFEST.sha256, Chrome/CDP automation, and existing MCP artifacts",
+      "figma-plugin manifest/controller/UI, visual gate, selection flow, canvas insertion, portfolio source, and generated dist assets",
+      "new dependencies, package.json or pnpm-lock.yaml changes, public transport, deployment, publication, Figma Community actions, Git push, force-push, merge, tag, or release",
+      "tasks/HISTORY.md, source-task evidence, unrelated task packets, and unrelated dirty-worktree changes"
+    ]
+  },
+  "constraints": [
+    "Implement one explicit preflight policy table for only /v1/capabilities, /v1/render, and /v1/shutdown; do not infer or echo the caller's requested method or headers as permission.",
+    "Allow /v1/capabilities preflight only for GET with authorization; allow /v1/render only for POST with authorization, content-type, and x-dresser-preset; allow /v1/shutdown only for POST with authorization. Header names and ordering may be case-insensitive, but required headers must be present and every extra header must be rejected.",
+    "For an allowed preflight, emit only the route's canonical Access-Control-Allow-Methods and Access-Control-Allow-Headers values. For an OPTIONS request to an unknown route, wrong route/method pair, missing required header, or extra header, return the existing bounded NOT_FOUND or INVALID_PREFLIGHT error without reflecting unsupported permissions or invoking manager/shutdown behavior.",
+    "POST /v1/shutdown must fully and boundedly consume the request stream before responding or scheduling shutdown, and must accept only zero decoded body bytes. Reject any decoded byte from Content-Length or Transfer-Encoding: chunked with the existing redacted INVALID_BODY contract; a valid zero-length request, including an empty chunked stream, may retain the existing 202 response.",
+    "Do not rely only on Content-Length, do not begin shutdown before end-of-stream validation, and preserve bounded handling of abort, stream error, conflicting framing rejected by Node, and slow/incomplete bodies without logging body bytes or token values.",
+    "Add automated regression cases for the exact four integration reproducers plus the valid per-route preflight matrix, unsupported OPTIONS route/header combinations, empty Content-Length shutdown, and empty versus non-empty chunked shutdown; assert no manager call or shutdown callback on every rejected request.",
+    "Preserve all passing source-task behavior and evidence boundaries, including loopback-only binding, Host/origin/token validation, capabilities, render, BUSY, error redaction, temporary cleanup, owned process cleanup, exact mirror integrity, MCP schemas, and interactive Dresser behavior.",
+    "Preserve unrelated dirty-worktree changes and do not edit package metadata, mirror/MCP/plugin/portfolio files, generated dist, source-task evidence, or perform external delivery."
+  ],
+  "acceptance_criteria": [
+    "OPTIONS /v1/capabilities requesting POST, OPTIONS /v1/render requesting GET, and OPTIONS /v1/shutdown requesting GET each return a bounded rejection, expose no Access-Control-Allow-Methods or Access-Control-Allow-Headers permission for the requested combination, and call neither manager nor shutdown.",
+    "The valid route matrix is exact: capabilities permits only GET plus authorization, render permits only POST plus authorization/content-type/x-dresser-preset, and shutdown permits only POST plus authorization; response permission headers are canonical and are not derived by reflecting caller input.",
+    "OPTIONS to an unsupported route, a supported route missing any required preflight header, or a supported route requesting any extra header returns stable NOT_FOUND or INVALID_PREFLIGHT JSON with no unsupported CORS permission, manager call, shutdown callback, token disclosure, or stack trace.",
+    "Authenticated POST /v1/shutdown with any decoded body byte, including the verified non-empty chunked reproducer, returns the existing bounded INVALID_BODY error and does not send 202, schedule shutdown, remove runtime state, or close the listener.",
+    "Authenticated POST /v1/shutdown with a truly empty fully consumed body succeeds with the unchanged 202 response for both explicit Content-Length: 0 and an empty chunked stream, and invokes shutdown exactly once only after validation.",
+    "Automated tests reproduce all four reported failures before the fix, pass after it, and cover the complete allowed/denied route-method-header matrix plus empty/non-empty shutdown framing without weakening existing assertions.",
+    "The complete bridge suite, scoped lint/build, MCP suite, mirror integrity, and source-task neighbor behaviors pass with changes limited to the four frozen files."
+  ],
+  "validation": {
+    "profiles": [
+      "baseline",
+      "security-baseline",
+      "backend-api",
+      "external-integration",
+      "data-privacy"
+    ],
+    "commands": [
+      {
+        "id": "targeted-reproducers",
+        "command": "node --test --test-name-pattern='route-specific preflight|shutdown body' server/figma-plugin-bridge/tests/server.test.mjs server/figma-plugin-bridge/tests/protocol.test.mjs",
+        "evidence": "tasks/evidence/TASK-DRESSER-FIGMA-001-R1/targeted-reproducers.log"
+      },
+      {
+        "id": "bridge-tests",
+        "command": "pnpm test:figma-bridge",
+        "evidence": "tasks/evidence/TASK-DRESSER-FIGMA-001-R1/bridge-tests.log"
+      },
+      {
+        "id": "bridge-lint",
+        "command": "pnpm lint:figma-bridge",
+        "evidence": "tasks/evidence/TASK-DRESSER-FIGMA-001-R1/bridge-lint.log"
+      },
+      {
+        "id": "bridge-build",
+        "command": "pnpm build:figma-bridge",
+        "evidence": "tasks/evidence/TASK-DRESSER-FIGMA-001-R1/bridge-build.log"
+      },
+      {
+        "id": "mcp-tests",
+        "command": "pnpm test:mockup-mcp",
+        "evidence": "tasks/evidence/TASK-DRESSER-FIGMA-001-R1/mcp-tests.log"
+      },
+      {
+        "id": "mirror-integrity",
+        "command": "cd .local/dresser-mirror && shasum -a 256 -c MANIFEST.sha256",
+        "evidence": "tasks/evidence/TASK-DRESSER-FIGMA-001-R1/mirror-integrity.log"
+      },
+      {
+        "id": "diff-check",
+        "command": "git diff --check",
+        "evidence": "tasks/evidence/TASK-DRESSER-FIGMA-001-R1/diff-check.log"
+      }
+    ],
+    "checks": [
+      {
+        "id": "exact-integration-reproducers",
+        "description": "Replay the three wrong route/method OPTIONS requests and the authenticated non-empty chunked shutdown request from integration-blocker.md against a task-owned bridge; record stable rejection, absent permission reflection, listener/runtime continuity, and zero manager/shutdown calls.",
+        "evidence": "tasks/evidence/TASK-DRESSER-FIGMA-001-R1/reproducer-regression.md"
+      },
+      {
+        "id": "complete-preflight-matrix",
+        "description": "Exercise every valid route/method/header combination, every cross-route method, missing required header, extra header, case/order variant, and unknown OPTIONS route; verify only canonical allowed responses and bounded NOT_FOUND or INVALID_PREFLIGHT negatives.",
+        "evidence": "tasks/evidence/TASK-DRESSER-FIGMA-001-R1/preflight-matrix.md"
+      },
+      {
+        "id": "shutdown-framing-and-liveness",
+        "description": "Exercise Content-Length 0, positive length, absent length, empty chunked, non-empty chunked, slow/incomplete, aborted, and parser-rejected conflicting framing; require full empty-body validation before the sole successful shutdown callback and liveness after every app-level rejection.",
+        "evidence": "tasks/evidence/TASK-DRESSER-FIGMA-001-R1/shutdown-framing.md"
+      },
+      {
+        "id": "scope-security-neighbor-regression",
+        "description": "Inspect the four-file scoped diff and rerun passing auth, Host, origin, capability, render, BUSY, redaction, cleanup, MCP, and mirror checks; confirm no package, runtime-state, UI, portfolio, mirror, MCP contract, task-history, or unrelated dirty-worktree change.",
+        "evidence": "tasks/evidence/TASK-DRESSER-FIGMA-001-R1/regression.md"
+      }
+    ]
+  },
+  "rollback": {
+    "steps": [
+      "Revert only TASK-DRESSER-FIGMA-001-R1 changes in server.mjs, protocol.mjs, server.test.mjs, and protocol.test.mjs.",
+      "Stop only any R1 test-owned bridge listener, remove only its disposable runtime/input state, and rerun the source bridge tests, lint, build, MCP tests, and mirror-integrity command."
+    ],
+    "data_recovery": [
+      "No persistent user data, migration, or intentional artifact is changed; remediation tests use disposable requests and the source Frame/plugin UI are outside scope."
+    ]
+  },
+  "interface": null,
+  "visual_gate": {
+    "required": false,
+    "reason": "This remediation changes only local HTTP validation and regression tests; it has no visible interface or UX-flow effect."
+  },
+  "approvals": {
+    "intent": {
+      "status": "approved",
+      "evidence": "tasks/STATE.json"
+    },
+    "preflight": {
+      "status": "approved",
+      "evidence": "tasks/TASK-DRESSER-FIGMA-001-R1/preflight-verdict.json"
+    },
+    "visual": {
+      "status": "not-required",
+      "evidence": ""
+    },
+    "destructive_action": {
+      "status": "not-required",
+      "evidence": ""
+    }
+  },
+  "evidence_required": [
+    "targeted exact-reproducer regression log",
+    "complete route-specific preflight matrix evidence",
+    "empty and non-empty Content-Length/chunked shutdown framing evidence",
+    "manager and shutdown callback non-invocation evidence for every rejected request",
+    "bridge test, lint, and build logs with exit codes",
+    "MCP regression and exact mirror-integrity evidence",
+    "four-file scoped diff, redaction, cleanup, liveness, and neighbor-regression evidence"
+  ],
+  "history": {
+    "summary": "Reject cross-route CORS preflights and body-bearing shutdown requests before any bridge side effect.",
+    "touchpoints": [
+      "preflight route matrix",
+      "shutdown body framing",
+      "transport regressions"
+    ]
+  },
+  "integration": {
+    "status": "integrated",
+    "integrated_at": "2026-08-31T08:26:23Z",
+    "report": "tasks/evidence/integration/integration-report.json",
+    "final_verification_required": true
+  },
+  "final_review": {
+    "status": "PASS_WITH_DEBT",
+    "verdict": "tasks/audit/TASK-DRESSER-FIGMA-001-R1/verdict.json",
+    "accepted_debt": true
+  }
+}

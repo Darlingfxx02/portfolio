@@ -1,0 +1,129 @@
+{
+  "schema_version": 2,
+  "mode": "preflight",
+  "task_id": "TASK-MOCKUP-MCP-001-R1",
+  "delivery_mode": "mvp",
+  "scope_expansion": false,
+  "status": "PASS",
+  "checks": [
+    {
+      "id": "acceptance-1",
+      "status": "PASS",
+      "summary": "Immediate rejection handling, bounded DOWNLOAD_FAILED, process liveness, and rejection/exception observation directly target the verified export-timeout race.",
+      "evidence": ["tasks/TASK-MOCKUP-MCP-001-R1/task.json", "tasks/audit/TASK-MOCKUP-MCP-001/verdict.json", "tasks/audit/TASK-MOCKUP-MCP-001/final-verification.md", "server/mockup-mcp/browser-session.mjs"]
+    },
+    {
+      "id": "acceptance-2",
+      "status": "PASS",
+      "summary": "Owned Chrome and mirror PIDs, port closure, CDP closure, disposable-directory cleanup, and absence of stale artifacts are concrete and bounded to session-owned resources.",
+      "evidence": ["tasks/TASK-MOCKUP-MCP-001-R1/task.json", "server/mockup-mcp/browser-session.mjs"]
+    },
+    {
+      "id": "acceptance-3",
+      "status": "PASS",
+      "summary": "The automated regression must use the exact mirror and real Chrome, prove export invocation, induce timeout after launch, and explicitly forbids the defective immediate-throw stub.",
+      "evidence": ["tasks/TASK-MOCKUP-MCP-001-R1/task.json", "server/mockup-mcp/tests/mcp-live.test.mjs", "tasks/audit/TASK-MOCKUP-MCP-001/final-verification.md"]
+    },
+    {
+      "id": "acceptance-4",
+      "status": "PASS",
+      "summary": "The packet freezes happy-path, capability, isolation, BUSY, negative, public schema, metadata, and stable-code regressions.",
+      "evidence": ["tasks/TASK-MOCKUP-MCP-001-R1/task.json", "tasks/audit/TASK-MOCKUP-MCP-001/verdict.json"]
+    },
+    {
+      "id": "acceptance-5",
+      "status": "PASS",
+      "summary": "The two-file scope is independently provable with the preflight hash baseline and all required task, mirror, diff, and accepted-lint checks are frozen.",
+      "evidence": ["tasks/TASK-MOCKUP-MCP-001-R1/task.json", "tasks/evidence/TASK-MOCKUP-MCP-001-R1/preflight-baseline.sha256", "tasks/evidence/TASK-MOCKUP-MCP-001-R1/preflight-review.md"]
+    },
+    {
+      "id": "live-timeout-regression",
+      "status": "PASS",
+      "summary": "The targeted command selects a named real-browser timeout test in the in-scope live test file and reserves raw evidence.",
+      "evidence": ["tasks/TASK-MOCKUP-MCP-001-R1/task.json", "server/mockup-mcp/tests/mcp-live.test.mjs"]
+    },
+    {
+      "id": "mcp-tests",
+      "status": "PASS",
+      "summary": "The existing complete MCP suite is frozen as a required regression gate after remediation.",
+      "evidence": ["tasks/TASK-MOCKUP-MCP-001-R1/task.json", "package.json"]
+    },
+    {
+      "id": "lint",
+      "status": "PASS",
+      "summary": "The existing task-scoped MCP lint command covers both remediation files without requiring unrelated portfolio changes.",
+      "evidence": ["tasks/TASK-MOCKUP-MCP-001-R1/task.json", "package.json"]
+    },
+    {
+      "id": "build",
+      "status": "PASS",
+      "summary": "The existing task-scoped syntax/schema build command remains a required bounded gate.",
+      "evidence": ["tasks/TASK-MOCKUP-MCP-001-R1/task.json", "package.json"]
+    },
+    {
+      "id": "mirror-integrity",
+      "status": "PASS",
+      "summary": "Fresh preflight verification passed every exact mirror manifest entry.",
+      "evidence": ["tasks/TASK-MOCKUP-MCP-001-R1/task.json", ".local/dresser-mirror/MANIFEST.sha256", "tasks/evidence/TASK-MOCKUP-MCP-001-R1/preflight-review.md"]
+    },
+    {
+      "id": "diff-check",
+      "status": "PASS",
+      "summary": "Fresh preflight git diff --check passed and remains frozen for final validation.",
+      "evidence": ["tasks/TASK-MOCKUP-MCP-001-R1/task.json", "tasks/evidence/TASK-MOCKUP-MCP-001-R1/preflight-review.md"]
+    },
+    {
+      "id": "independent-live-timeout",
+      "status": "PASS",
+      "summary": "The independent check requires the real manager/mirror/Chrome path, export-stage timeout, bounded error, liveness, and no process-level rejection or exception.",
+      "evidence": ["tasks/TASK-MOCKUP-MCP-001-R1/task.json", "tasks/audit/TASK-MOCKUP-MCP-001/final-verification.md"]
+    },
+    {
+      "id": "owned-process-cleanup",
+      "status": "PASS",
+      "summary": "The check requires exact owned PIDs, test port and disposable paths while protecting unrelated Chrome and the user's port-5173 mirror.",
+      "evidence": ["tasks/TASK-MOCKUP-MCP-001-R1/task.json", "server/mockup-mcp/browser-session.mjs"]
+    },
+    {
+      "id": "contract-and-happy-regression",
+      "status": "PASS",
+      "summary": "The frozen comparison covers discovery, capabilities, successful render, schemas, preset version, codes, artifact metadata, and success cleanup.",
+      "evidence": ["tasks/TASK-MOCKUP-MCP-001-R1/task.json", "tasks/audit/TASK-MOCKUP-MCP-001/verdict.json"]
+    },
+    {
+      "id": "scope-and-baseline",
+      "status": "PASS",
+      "summary": "The check combines exact two-file ownership, the newly recorded preflight hash baseline, and the unchanged accepted full-lint result.",
+      "evidence": ["tasks/TASK-MOCKUP-MCP-001-R1/task.json", "tasks/evidence/TASK-MOCKUP-MCP-001-R1/preflight-baseline.sha256", "tasks/evidence/TASK-MOCKUP-MCP-001-R1/preflight-review.md"]
+    },
+    {
+      "id": "scope",
+      "status": "PASS",
+      "summary": "Both verified defects map to the only two in-scope files; public contract, mirror, package metadata, portfolio, feature work, external actions, and unrelated debt remain excluded.",
+      "evidence": ["tasks/TASK-MOCKUP-MCP-001-R1/task.json", "tasks/audit/TASK-MOCKUP-MCP-001/verdict.json", "tasks/evidence/TASK-MOCKUP-MCP-001-R1/preflight-baseline.sha256"]
+    },
+    {
+      "id": "risk:backend-api",
+      "status": "PASS",
+      "summary": "The remediation preserves the existing DOWNLOAD_FAILED contract and explicitly retests MCP liveness, schemas, codes, and happy behavior.",
+      "evidence": ["tasks/TASK-MOCKUP-MCP-001-R1/task.json"]
+    },
+    {
+      "id": "risk:external-integration",
+      "status": "PASS",
+      "summary": "Real Chrome, exact mirror, CDP, owned child termination, port closure, bounded escalation, and unrelated-process protection are all observable.",
+      "evidence": ["tasks/TASK-MOCKUP-MCP-001-R1/task.json", "server/mockup-mcp/browser-session.mjs"]
+    },
+    {
+      "id": "risk:data-privacy",
+      "status": "PASS",
+      "summary": "The packet preserves loopback, redaction, unique-output, disposable-state, mirror-integrity, and unrelated-process boundaries from the source task.",
+      "evidence": ["tasks/TASK-MOCKUP-MCP-001-R1/task.json", "tasks/audit/TASK-MOCKUP-MCP-001/verdict.json"]
+    }
+  ],
+  "findings": [],
+  "debt": [],
+  "reviewer": {
+    "independent_from_executor": true
+  }
+}
