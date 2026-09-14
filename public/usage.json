@@ -1,6 +1,6 @@
 {
-  "generatedAt": "2026-09-13T11:41:39.698Z",
-  "tz": "Europe/Samara",
+  "generatedAt": "2026-09-14T01:10:05.027Z",
+  "tz": "Europe/Moscow",
   "metric": "tokens",
   "sources": [
     "claude",
