@@ -1,15 +1,17 @@
 import styles from './HeaderTools.module.css'
-
-const CV_URL = '/cv/Timothe_Ermolaev_Resume.pdf?v=20260830-1'
+import { useLang } from '@/lib/i18n'
+import { cvDownloads } from '@/data/cvDownloads'
 
 /** Top-right link that downloads the current CV. */
 export function HeaderTools() {
+  const { lang } = useLang()
+  const download = cvDownloads[lang]
   return (
     <div className={styles.tools}>
       <a
         className={styles.cv}
-        href={CV_URL}
-        download="Timothe_Ermolaev_Resume.pdf"
+        href={download.href}
+        download={download.filename}
       >
         CV
       </a>

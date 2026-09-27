@@ -25,7 +25,7 @@ export const cv = {
   contacts: [
     { label: { ru: 'Почта', en: 'Email' }, value: profile.email, href: `mailto:${profile.email}` },
     { label: { ru: 'Telegram', en: 'Telegram' }, value: profile.telegramHandle, href: profile.telegram },
-    { label: { ru: 'Портфолио', en: 'Portfolio' }, value: 'darling.design', href: 'https://darling.design/#works' },
+    { label: { ru: 'Портфолио', en: 'Portfolio' }, value: 'darlingdesign.pro', href: 'https://darlingdesign.pro/#works' },
     { label: { ru: 'GitHub', en: 'GitHub' }, value: 'Darlingfxx02', href: profile.links.claudeSkills },
   ],
   // Headline metrics — a scannable strip near the top of the CV.

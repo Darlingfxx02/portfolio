@@ -562,6 +562,11 @@
 }
 
 @media print {
+  :global(html),
+  :global(body) {
+    background: #fff !important;
+  }
+
   @page {
     size: A4;
     margin: 0;

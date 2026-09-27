@@ -4,6 +4,7 @@ import { experience } from '@/data/experience'
 import { useLang, t } from '@/lib/i18n'
 import { trackEvent } from '@/lib/analytics'
 import { profile } from '@/data/profile'
+import { cvDownloads } from '@/data/cvDownloads'
 import { MediaGrid } from '@/components/MediaGrid/MediaGrid'
 import styles from './PortfolioTabs.module.css'
 
@@ -22,8 +23,6 @@ const aboutCopy = {
     'Today I work extensively with coding models to build interfaces, automate routine work, and test ideas faster. I am interested in finding areas where AI does more than create an impressive demo—where it genuinely augments designers and helps turn an idea into a working product.',
   ],
 }
-
-const CV_URL = '/cv/Timothe_Ermolaev_Resume.pdf?v=20260830-1'
 
 const aboutPhotos = [
   {
@@ -270,7 +269,7 @@ function About() {
     { label: 'Telegram', href: profile.telegram, external: true },
     { label: 'Email', href: `mailto:${profile.email}`, external: false },
     { label: 'GitHub', href: profile.links.claudeSkills, external: true },
-    { label: 'CV', href: CV_URL, external: false, download: 'Timothe_Ermolaev_Resume.pdf' },
+    { label: 'CV', href: cvDownloads[lang].href, external: false, download: cvDownloads[lang].filename },
   ]
 
   return (
