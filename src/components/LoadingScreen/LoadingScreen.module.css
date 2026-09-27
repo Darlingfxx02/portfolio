@@ -11,9 +11,9 @@
   cursor: wait;
   clip-path: inset(0 0 0 0);
   transition:
-    clip-path 720ms var(--ease),
-    filter 720ms var(--ease),
-    transform 720ms var(--ease);
+    clip-path 400ms var(--ease),
+    filter 400ms var(--ease),
+    transform 400ms var(--ease);
 }
 
 .screen::before {

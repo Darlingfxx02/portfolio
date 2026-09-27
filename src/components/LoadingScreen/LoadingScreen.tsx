@@ -18,7 +18,7 @@ export function LoadingScreen({ progress, exiting }: LoadingScreenProps) {
     let frame = 0
 
     const tick = (now: number) => {
-      const elapsed = Math.min((now - startedAt) / 520, 1)
+      const elapsed = Math.min((now - startedAt) / 240, 1)
       const eased = 1 - Math.pow(1 - elapsed, 3)
       const next = from + (progress - from) * eased
       displayedRef.current = next
