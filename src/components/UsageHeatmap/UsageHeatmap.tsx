@@ -146,13 +146,6 @@ function dateKey(d: Date): string {
   return `${y}-${m}-${day}`
 }
 
-function fmtCompact(n: number): string {
-  if (n >= 1e9) return `${(n / 1e9).toFixed(1)}B`
-  if (n >= 1e6) return `${(n / 1e6).toFixed(1)}M`
-  if (n >= 1e3) return `${(n / 1e3).toFixed(1)}K`
-  return String(n)
-}
-
 type Cell = {
   date: Date
   key: string
@@ -178,16 +171,6 @@ function cellLabel(cell: Cell, lang: Lang): string {
   }
   const tokens = cell.value.toLocaleString(locale)
   return lang === 'ru' ? `${tokens} токенов · ${d}` : `${tokens} tokens · ${d}`
-}
-
-function pluralizeDays(value: number, lang: Lang) {
-  if (lang === 'en') return value === 1 ? 'day' : 'days'
-
-  const mod10 = value % 10
-  const mod100 = value % 100
-  if (mod10 === 1 && mod100 !== 11) return 'день'
-  if (mod10 >= 2 && mod10 <= 4 && (mod100 < 12 || mod100 > 14)) return 'дня'
-  return 'дней'
 }
 
 /**
@@ -237,23 +220,6 @@ function buildGrid(
   const thresholds = nonzero.length ? [q(0.25), q(0.5), q(0.75)] : [0, 0, 0]
 
   return { cols, thresholds }
-}
-
-/** Total tokens + active days over the trailing 30 days (real records only). */
-function last30Stat(days: Record<string, number>): { total: number; activeDays: number } {
-  const now = new Date()
-  const today = new Date(now.getFullYear(), now.getMonth(), now.getDate())
-  let total = 0
-  let activeDays = 0
-  for (let i = 0; i < 30; i++) {
-    const d = new Date(today.getFullYear(), today.getMonth(), today.getDate() - i)
-    const v = days[dateKey(d)] || 0
-    if (v > 0) {
-      total += v
-      activeDays++
-    }
-  }
-  return { total, activeDays }
 }
 
 function levelOf(value: number, thresholds: number[]): number {
@@ -365,14 +331,11 @@ export function UsageHeatmap() {
   if (!data || !grid) return null
 
   const { cols, thresholds } = grid
-  const stat = last30Stat(data.days)
 
-  // Month label sits above the first column whose top-row month differs from
-  // the previous column's — GitHub's placement.
   const monthLabels = cols.map((col, i) => {
-    const m = col[0].date.getMonth()
-    const prev = i > 0 ? cols[i - 1][0].date.getMonth() : -1
-    return m !== prev
+    const month = col[0].date.getMonth()
+    const previous = i > 0 ? cols[i - 1][0].date.getMonth() : -1
+    return month !== previous
       ? col[0].date.toLocaleDateString(lang === 'ru' ? 'ru-RU' : 'en-US', {
           month: 'short',
         })
@@ -414,7 +377,12 @@ export function UsageHeatmap() {
   }
 
   return (
-    <section id="usage" className={styles.section} ref={sectionRef}>
+    <section
+      id="usage"
+      className={styles.section}
+      ref={sectionRef}
+      aria-label={lang === 'ru' ? 'Активность использования ИИ за год' : 'AI usage over the past year'}
+    >
       <div className={styles.leftFade} data-show={leftFade || undefined} aria-hidden />
       <div className={styles.rightFade} data-show={rightFade || undefined} aria-hidden />
       <div
@@ -427,37 +395,26 @@ export function UsageHeatmap() {
           setRightFade(max - el.scrollLeft > 4)
         }}
       >
-        <div className={styles.body}>
-          <div className={styles.gridWrap}>
-            <div className={styles.months}>
-              {monthLabels.map((m, i) => (
-                <span key={i} className={styles.month}>
-                  {m}
-                </span>
-              ))}
+        <div className={styles.cols} onMouseLeave={() => setTip(null)}>
+          {cols.map((col, ci) => (
+            <div key={ci} className={styles.col}>
+              <span className={styles.month}>{monthLabels[ci]}</span>
+              {col.map((cell) =>
+                cell.future ? (
+                  <span key={cell.key} className={styles.cellFuture} />
+                ) : (
+                  <span
+                    key={cell.key}
+                    className={styles.cell}
+                    data-level={levelOf(cell.value, thresholds)}
+                    data-estimated={cell.estimated || undefined}
+                    data-birthday={cell.birthday || undefined}
+                    onMouseEnter={(e) => showTip(e, cell)}
+                  />
+                ),
+              )}
             </div>
-
-            <div className={styles.cols} onMouseLeave={() => setTip(null)}>
-              {cols.map((col, ci) => (
-                <div key={ci} className={styles.col}>
-                  {col.map((cell) =>
-                    cell.future ? (
-                      <span key={cell.key} className={styles.cellFuture} />
-                    ) : (
-                      <span
-                        key={cell.key}
-                        className={styles.cell}
-                        data-level={levelOf(cell.value, thresholds)}
-                        data-estimated={cell.estimated || undefined}
-                        data-birthday={cell.birthday || undefined}
-                        onMouseEnter={(e) => showTip(e, cell)}
-                      />
-                    ),
-                  )}
-                </div>
-              ))}
-            </div>
-          </div>
+          ))}
         </div>
       </div>
 
@@ -478,22 +435,6 @@ export function UsageHeatmap() {
           {tip.text}
         </div>
       )}
-
-      <div className={styles.footer}>
-        <div className={styles.legend}>
-          <span>{lang === 'ru' ? 'Меньше' : 'Less'}</span>
-          {[0, 1, 2, 3, 4].map((l) => (
-            <span key={l} className={styles.cell} data-level={l} />
-          ))}
-          <span>{lang === 'ru' ? 'Больше' : 'More'}</span>
-        </div>
-        <p className={styles.stat}>
-          <span>
-            {fmtCompact(stat.total)} {lang === 'ru' ? 'токенов' : 'tokens'} ·{' '}
-            {stat.activeDays} {pluralizeDays(stat.activeDays, lang)}
-          </span>
-        </p>
-      </div>
     </section>
   )
 }

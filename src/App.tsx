@@ -8,6 +8,7 @@ import {
 } from 'react'
 import { Profile } from '@/components/Profile/Profile'
 import { UsageHeatmap } from '@/components/UsageHeatmap/UsageHeatmap'
+import { NoTipePromo } from '@/components/NoTipePromo/NoTipePromo'
 import { Experience } from '@/components/Experience/Experience'
 import { PortfolioHeader } from '@/components/PortfolioHeader/PortfolioHeader'
 import {
@@ -222,7 +223,10 @@ function App() {
                   aria-labelledby="tab-home"
                 >
                   <Profile />
-                  <UsageHeatmap />
+                  <div className={styles.productActivity}>
+                    <NoTipePromo />
+                    <UsageHeatmap />
+                  </div>
                   <Experience />
                 </main>
               ) : (

@@ -196,7 +196,8 @@
     transform 160ms var(--ease);
 }
 
-.workItem[data-chip-visible] .hoverChip {
+.workItem[data-chip-visible] .hoverChip,
+.workItem:focus-visible .hoverChip {
   opacity: 1;
   transform: translate(12px, -50%) scale(1);
 }

@@ -137,11 +137,28 @@ type WorkProject = {
 
 const workExperienceGroups: Array<{
   id: string
-  experienceId: string
+  experienceId?: string
+  company?: { ru: string; en: string }
+  period?: string
   logo: string
   role?: { ru: string; en: string }
   projects: WorkProject[]
 }> = [
+  {
+    id: 'notipe',
+    company: { ru: 'Свой продукт', en: 'My product' },
+    logo: '/notipe/icon.png',
+    role: { ru: 'Дизайн и разработка', en: 'Design and development' },
+    period: '2026',
+    projects: [
+      {
+        id: 'notipe',
+        title: { ru: 'No Tipe. Голосовой ввод', en: 'No Tipe. Voice typing' },
+        year: '2026',
+        status: 'Soon',
+      },
+    ],
+  },
   {
     id: 'wmt',
     experienceId: 'wmt',
@@ -341,17 +358,23 @@ function WorkList() {
                   aria-hidden
                   data-brand={job.id}
                 />
-                <p>{experienceById.get(job.experienceId)?.company ?? job.id}</p>
+                <p>
+                  {job.company
+                    ? t(job.company, lang)
+                    : job.experienceId
+                      ? experienceById.get(job.experienceId)?.company ?? job.id
+                      : job.id}
+                </p>
               </div>
               <p className={styles.jobRole}>
                 {job.role
                   ? t(job.role, lang)
-                  : experienceById.get(job.experienceId)
+                  : job.experienceId && experienceById.get(job.experienceId)
                   ? t(experienceById.get(job.experienceId)!.category, lang)
                   : ''}
               </p>
               <p className={styles.jobPeriod}>
-                {formatExperiencePeriod(job.experienceId, lang)}
+                {job.period ?? (job.experienceId ? formatExperiencePeriod(job.experienceId, lang) : '')}
               </p>
             </div>
 
@@ -378,9 +401,7 @@ function WorkList() {
                 const unavailable = !study || Boolean(study.disabled)
                 const chipLabel =
                   project.status === 'Soon'
-                    ? lang === 'ru'
-                      ? 'Скоро'
-                      : 'Soon'
+                    ? 'Soon'
                     : project.status === 'NDA' || study?.disabled
                       ? 'NDA'
                       : lang === 'ru'
@@ -407,6 +428,11 @@ function WorkList() {
                       className={styles.workItem}
                       data-disabled
                       data-work-item
+                      data-project={project.id}
+                      role="link"
+                      aria-disabled="true"
+                      aria-label={`${title} — ${chipLabel}`}
+                      tabIndex={0}
                       onPointerEnter={positionHoverChip}
                       onPointerMove={positionHoverChip}
                       onPointerLeave={hideHoverChip}
@@ -421,6 +447,7 @@ function WorkList() {
                     key={project.id}
                     className={styles.workItem}
                     data-work-item
+                    data-project={project.id}
                     href={`#case/${study.id}`}
                     onPointerEnter={positionHoverChip}
                     onPointerMove={positionHoverChip}
