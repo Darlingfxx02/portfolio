@@ -6,6 +6,7 @@ import {
   type Icon as PhIcon,
 } from '@phosphor-icons/react'
 import type { Loc } from '@/lib/i18n'
+import { cvDownloads } from '@/data/cvDownloads'
 
 export type FolderBodyGradient = { from: string; to: string }
 
@@ -30,7 +31,7 @@ export const sections: FolderSection[] = [
   },
   {
     label: { ru: 'CV', en: 'CV' },
-    href: '/cv/Timothe_Ermolaev_Resume.pdf?v=20260830-1',
+    href: cvDownloads.ru.href,
     Icon: ReadCvLogo,
     color: '#3b82f6',
     download: true,
