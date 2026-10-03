@@ -145,15 +145,15 @@ const workExperienceGroups: Array<{
   projects: WorkProject[]
 }> = [
   {
-    id: 'notipe',
+    id: 'notype',
     company: { ru: 'Свой продукт', en: 'My product' },
-    logo: '/notipe/icon.png',
+    logo: '/notype/icon.png',
     role: { ru: 'Дизайн и разработка', en: 'Design and development' },
     period: '2026',
     projects: [
       {
-        id: 'notipe',
-        title: { ru: 'No Tipe. Голосовой ввод', en: 'No Tipe. Voice typing' },
+        id: 'notype',
+        title: { ru: 'No Type. Голосовой ввод', en: 'No Type. Voice typing' },
         year: '2026',
         status: 'Soon',
       },
