@@ -9,10 +9,12 @@ import {
 } from 'react'
 import { createPortal } from 'react-dom'
 import { t, useLang, type Loc } from '@/lib/i18n'
+import { WorkVideo, type WorkVideoSource } from '@/components/WorkVideo/WorkVideo'
 import styles from './MediaGrid.module.css'
 
 type MediaSlot = {
   src: string
+  video?: WorkVideoSource
   alt: Loc
   size:
     | 'standard'
@@ -22,6 +24,7 @@ type MediaSlot = {
     | 'widePhones'
     | 'wide620'
     | 'wideKyc'
+    | 'video'
   wide?: boolean
 }
 
@@ -40,6 +43,7 @@ const cardRatios: Record<MediaSlot['size'], number> = {
   widePhones: 1708 / 1074.583,
   wide620: 1708 / 620,
   wideKyc: 3309 / 1475,
+  video: 16 / 9,
 }
 
 const cardMotion = {
@@ -49,6 +53,20 @@ const cardMotion = {
 }
 
 const slots: MediaSlot[] = [
+  {
+    src: '/notype/cloud-demo-20261004.webp',
+    video: {
+      webm: '/notype/cloud-demo-20261004.webm',
+      mp4: '/notype/cloud-demo-20261004.mp4',
+      poster: '/notype/cloud-demo-20261004.webp',
+    },
+    alt: {
+      ru: 'No Type: диктовка, настройки, перевод и расшифровка',
+      en: 'No Type: voice typing, settings, translation, and transcription',
+    },
+    size: 'video',
+    wide: true,
+  },
   {
     src: '/media-grid/crypto-wallet-swap.jpg?v=20260729-1',
     alt: { ru: 'Мобильные интерфейсы криптокошелька и обмена активов', en: 'Crypto wallet and asset swap mobile interfaces' },
@@ -308,7 +326,11 @@ export function MediaGrid() {
             onPointerOver={(event) => event.stopPropagation()}
             onClick={(event) => openCard(index, event)}
           >
-            <img src={slot.src} alt={t(slot.alt, lang)} draggable={false} />
+            {slot.video ? (
+              <WorkVideo source={slot.video} paused={activeIndex !== null} />
+            ) : (
+              <img src={slot.src} alt={t(slot.alt, lang)} draggable={false} />
+            )}
           </button>
         ))}
       </section>
@@ -334,7 +356,11 @@ export function MediaGrid() {
               tabIndex={-1}
               onClick={(event) => event.stopPropagation()}
             >
-              <img src={activeSlot.src} alt={t(activeSlot.alt, lang)} draggable={false} />
+              {activeSlot.video ? (
+                <WorkVideo source={activeSlot.video} paused={isClosing} />
+              ) : (
+                <img src={activeSlot.src} alt={t(activeSlot.alt, lang)} draggable={false} />
+              )}
             </div>
           </div>,
           document.body,
