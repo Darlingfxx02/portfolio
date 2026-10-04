@@ -54,11 +54,11 @@ const cardMotion = {
 
 const slots: MediaSlot[] = [
   {
-    src: '/notype/cloud-demo-20261004.webp?v=20261004-3',
+    src: '/notype/cloud-demo-en-20261004.webp?v=20261004-en1',
     video: {
-      webm: '/notype/cloud-demo-20261004.webm?v=20261004-3',
-      mp4: '/notype/cloud-demo-20261004.mp4?v=20261004-3',
-      poster: '/notype/cloud-demo-20261004.webp?v=20261004-3',
+      webm: '/notype/cloud-demo-en-20261004.webm?v=20261004-en1',
+      mp4: '/notype/cloud-demo-en-20261004.mp4?v=20261004-en1',
+      poster: '/notype/cloud-demo-en-20261004.webp?v=20261004-en1',
     },
     alt: {
       ru: 'No Type: диктовка, настройки, перевод и расшифровка',
