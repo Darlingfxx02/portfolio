@@ -46,8 +46,8 @@ export function WorkVideo({ source, paused = false }: { source: WorkVideoSource;
       <video
         ref={ref}
         className={styles.video}
-        width={1280}
-        height={720}
+        width={2560}
+        height={1440}
         poster={source.poster}
         preload="none"
         muted
