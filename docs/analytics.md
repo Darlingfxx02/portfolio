@@ -70,3 +70,9 @@ Use this to verify instrumentation without sending data anywhere:
 ```dotenv
 VITE_ANALYTICS_DEBUG=true
 ```
+
+## No Type referrals
+
+The No Type promo card uses `https://notype.tech/?utm_source=portfolio&utm_medium=referral&utm_campaign=cross_site&utm_content=notype_card`. It preserves `product_opened` and adds `notype_site_click` for regular and middle-button clicks. The author keys on No Type link here with `utm_source=notype&utm_medium=referral&utm_campaign=cross_site&utm_content=author_button`. On initialization, that exact parameter combination emits `visit_from_notype` once per page load and sets `cross_site_source=notype` and `cross_site_entry=author_button`. Generic referrals or unrelated campaigns do not trigger this arrival event. Existing analytics configuration, including cookieless Clarity mode, is preserved.
+
+In Clarity project `xt3hihuyx4`, select Smart events → `notype_site_click` to see sessions with a card click, or `visit_from_notype` to see arrivals from the author button. Custom tags can filter the same inbound traffic. Use filtered users/sessions for audience size; clicks can repeat. No Type project `ysdxhclm8d` has the opposite events `author_site_click` and `visit_from_portfolio`. Collection begins with this deployment; historical button attribution cannot be reconstructed.

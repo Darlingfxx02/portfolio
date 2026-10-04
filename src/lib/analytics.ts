@@ -26,6 +26,8 @@ declare global {
 const SAFE_TAG_KEYS = new Set([
   'case_id',
   'contact_target',
+  'cross_site_source',
+  'cross_site_entry',
   'provider',
   'recipient',
   'route',
@@ -246,6 +248,22 @@ export function initAnalytics() {
   initialized = true
   initUmami()
   initClarity()
+  const params = new URLSearchParams(window.location.search)
+  if (
+    params.get('utm_source') === 'notype' &&
+    params.get('utm_medium') === 'referral' &&
+    params.get('utm_campaign') === 'cross_site' &&
+    params.get('utm_content') === 'author_button'
+  ) {
+    trackEvent('visit_from_notype', {
+      cross_site_source: 'notype',
+      cross_site_entry: 'author_button',
+    })
+  }
+}
+
+export function trackNoTypeClick() {
+  trackEvent('notype_site_click', { target: 'notype' })
 }
 
 export function trackEvent(eventName: string, payload: AnalyticsPayload = {}) {

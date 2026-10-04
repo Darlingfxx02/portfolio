@@ -1,5 +1,5 @@
 import { useLang } from '@/lib/i18n'
-import { trackEvent } from '@/lib/analytics'
+import { trackEvent, trackNoTypeClick } from '@/lib/analytics'
 import styles from './NoTypePromo.module.css'
 
 export function NoTypePromo() {
@@ -8,7 +8,7 @@ export function NoTypePromo() {
   return (
     <a
       className={styles.card}
-      href="https://notype.tech/"
+      href="https://notype.tech/?utm_source=portfolio&utm_medium=referral&utm_campaign=cross_site&utm_content=notype_card"
       target="_blank"
       rel="noopener noreferrer"
       aria-label={
@@ -16,7 +16,17 @@ export function NoTypePromo() {
           ? 'No Type — мой продукт. Открыть сайт'
           : 'No Type — my product. Visit the website'
       }
-      onClick={() => trackEvent('product_opened', { target: 'notype' })}
+      onClick={(event) => {
+        if (event.defaultPrevented) return
+        trackEvent('product_opened', { target: 'notype' })
+        trackNoTypeClick()
+      }}
+      onAuxClick={(event) => {
+        if (event.button === 1 && !event.defaultPrevented) {
+          trackEvent('product_opened', { target: 'notype' })
+          trackNoTypeClick()
+        }
+      }}
     >
       <span className={styles.face} aria-hidden>
         <picture>
