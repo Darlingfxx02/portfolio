@@ -9,9 +9,9 @@
   border-radius: 16px;
   /* Keep the surface and gradient stroke visible against the black page. */
   background:
-    linear-gradient(#161616, #161616) padding-box,
-    linear-gradient(180deg, rgba(255, 255, 255, 0.16), rgba(255, 255, 255, 0.06)) border-box,
-    #161616;
+    linear-gradient(#0c0c0c, #0c0c0c) padding-box,
+    linear-gradient(180deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.025)) border-box,
+    #0c0c0c;
   color: #fff;
   font-family: var(--font-sf);
   text-align: left;
@@ -80,7 +80,7 @@
 }
 
 .version {
-  color: #8c8c94;
+  color: #808088;
   font-size: 12px;
   line-height: 14px;
   letter-spacing: 0;
@@ -90,7 +90,7 @@
 .description {
   display: block;
   padding-top: 5px;
-  color: #ababb2;
+  color: #9e9ea5;
   font-size: 14px;
   line-height: 19.6px;
   letter-spacing: 0;
