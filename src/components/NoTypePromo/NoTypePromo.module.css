@@ -7,11 +7,11 @@
   padding: 8px 12px;
   border: 1px solid transparent;
   border-radius: 16px;
-  /* Figma's inside stroke: white → transparent at 3%, over the card fill. */
+  /* Keep the surface and gradient stroke visible against the black page. */
   background:
-    linear-gradient(#040404, #040404) padding-box,
-    linear-gradient(180deg, rgba(255, 255, 255, 0.03), transparent) border-box,
-    #040404;
+    linear-gradient(#161616, #161616) padding-box,
+    linear-gradient(180deg, rgba(255, 255, 255, 0.16), rgba(255, 255, 255, 0.06)) border-box,
+    #161616;
   color: #fff;
   font-family: var(--font-sf);
   text-align: left;
@@ -80,7 +80,7 @@
 }
 
 .version {
-  color: #717177;
+  color: #8c8c94;
   font-size: 12px;
   line-height: 14px;
   letter-spacing: 0;
@@ -90,7 +90,7 @@
 .description {
   display: block;
   padding-top: 5px;
-  color: #929298;
+  color: #ababb2;
   font-size: 14px;
   line-height: 19.6px;
   letter-spacing: 0;
