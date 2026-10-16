@@ -3,6 +3,7 @@ import { ArrowUUpLeft } from '@phosphor-icons/react'
 import { profile } from '@/data/profile'
 import { useLang } from '@/lib/i18n'
 import { trackEvent } from '@/lib/analytics'
+import { LanguageSwitcher } from '@/components/LanguageSwitcher/LanguageSwitcher'
 import styles from './DockBar.module.css'
 
 const CTA_HREF = profile.telegram
@@ -97,6 +98,9 @@ export function DockBar({
             {lang === 'ru' ? 'Контакты' : 'Contact'}
           </span>
         </button>
+        <div className={styles.mobileLanguage}>
+          <LanguageSwitcher variant="dock" />
+        </div>
       </div>
     </div>
   )

@@ -9,7 +9,7 @@ const LANGUAGES: Array<{ value: Lang; shortLabel: string; label: string }> = [
 export function LanguageSwitcher({
   variant = 'header',
 }: {
-  variant?: 'header' | 'surface'
+  variant?: 'header' | 'surface' | 'dock'
 }) {
   const { lang, setLang } = useLang()
 

@@ -40,6 +40,21 @@
   box-shadow: var(--shadow-dock);
 }
 
+/* Large segmented control for the mobile dock. */
+.switcher[data-variant='dock'] {
+  --switcher-bg: var(--dock-bg);
+  --switcher-border: var(--dock-line);
+  --switcher-color: var(--text-mid);
+  --switcher-active-bg: var(--text);
+  --switcher-active-color: var(--bg);
+
+  height: 44px;
+  border-color: var(--switcher-border);
+  box-shadow: var(--shadow-dock);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+}
+
 .option {
   box-sizing: border-box;
   min-width: 30px;
@@ -64,6 +79,16 @@
 .switcher[data-variant='surface'] .option {
   height: 34px;
   border-bottom: 0;
+}
+
+.switcher[data-variant='dock'] .option {
+  min-width: 42px;
+  height: 38px;
+  padding: 0 11px;
+  border-bottom: 0;
+  font-size: 14px;
+  font-weight: var(--wt-medium);
+  letter-spacing: var(--tracking);
 }
 
 .switcher[data-variant='header'] .option {

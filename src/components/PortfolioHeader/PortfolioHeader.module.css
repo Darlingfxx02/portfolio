@@ -117,12 +117,11 @@
   .header {
     justify-content: flex-start;
     height: 64px;
-    padding: 18px 12px 12px 84px;
+    padding: 18px 12px 12px;
   }
 
   .language {
-    top: 18px;
-    left: 12px;
+    display: none;
   }
 
   .nav {

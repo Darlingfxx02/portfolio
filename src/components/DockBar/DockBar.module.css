@@ -110,14 +110,18 @@
 }
 
 /* ── Dock pill ─────────────────────────────────────── */
-/* The dock shrinks to the CTA's width so the CTA — and only the CTA —
-   is centered on screen. Burger + back are positioned around it, out of
-   flow, so showing/hiding the back button never nudges the CTA. */
+/* The dock shrinks to the CTA's width on desktop so the CTA stays centered.
+   On mobile the language control joins the row; back remains out of flow so
+   showing it never changes the row's centered position. */
 .dock {
   position: relative;
   display: inline-flex;
   align-items: center;
   pointer-events: none;
+}
+
+.mobileLanguage {
+  display: none;
 }
 
 /* Flanking buttons — each its own pill, vertically centered on the CTA. */
@@ -298,4 +302,15 @@
 
 .ctaLabel[data-show='false'] {
   transform: translate(-50%, -50%) scale(0.88);
+}
+
+@media (max-width: 720px) {
+  .dock {
+    gap: 8px;
+  }
+
+  .mobileLanguage {
+    display: inline-flex;
+    pointer-events: auto;
+  }
 }
