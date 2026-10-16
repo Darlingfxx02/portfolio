@@ -65,6 +65,9 @@ export function DockBar({
             <ArrowUUpLeft size={18} weight="bold" />
           </button>
         )}
+        <div className={styles.mobileLanguage}>
+          <LanguageSwitcher variant="dock" />
+        </div>
         <button
           className={styles.cta}
           type="button"
@@ -98,9 +101,6 @@ export function DockBar({
             {lang === 'ru' ? 'Контакты' : 'Contact'}
           </span>
         </button>
-        <div className={styles.mobileLanguage}>
-          <LanguageSwitcher variant="dock" />
-        </div>
       </div>
     </div>
   )

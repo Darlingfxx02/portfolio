@@ -115,7 +115,7 @@
 
 @media (max-width: 720px) {
   .header {
-    justify-content: flex-start;
+    justify-content: center;
     height: 64px;
     padding: 18px 12px 12px;
   }
@@ -125,7 +125,7 @@
   }
 
   .nav {
-    justify-content: flex-start;
+    justify-content: center;
     gap: 18px;
     max-width: none;
   }
