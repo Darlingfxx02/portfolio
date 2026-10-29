@@ -1,5 +1,6 @@
-import type { CSSProperties, PointerEvent } from 'react'
+import { useEffect, useId, useRef, useState, type CSSProperties, type PointerEvent, type ReactNode } from 'react'
 import { cases } from '@/data/cases'
+import wmtLogo from '@/assets/company/wmt.svg'
 import { experience } from '@/data/experience'
 import { useLang, t } from '@/lib/i18n'
 import { trackEvent } from '@/lib/analytics'
@@ -102,6 +103,10 @@ function AboutPhotoCarousel() {
 
 function positionHoverChip(event: PointerEvent<HTMLElement>) {
   const item = event.currentTarget
+  if ((event.target as Element).closest('button')) {
+    delete item.dataset.chipVisible
+    return
+  }
   const rect = item.getBoundingClientRect()
   item.style.setProperty('--chip-x', `${event.clientX - rect.left}px`)
   item.style.setProperty('--chip-y', `${event.clientY - rect.top}px`)
@@ -110,9 +115,10 @@ function positionHoverChip(event: PointerEvent<HTMLElement>) {
   const rail = item.closest<HTMLElement>('[data-work-rail]')
   if (rail) {
     const railRect = rail.getBoundingClientRect()
+    const headingRect = item.querySelector('[data-work-item]')?.getBoundingClientRect() ?? rect
     rail.style.setProperty(
       '--rail-y',
-      `${rect.top - railRect.top + rect.height / 2}px`,
+      `${headingRect.top - railRect.top + headingRect.height / 2}px`,
     )
     rail.dataset.railActive = 'true'
   }
@@ -133,6 +139,7 @@ type WorkProject = {
   caseId?: string
   experienceId?: string
   status?: 'NDA' | 'Soon'
+  previewImages?: [string, string, string]
 }
 
 const workExperienceGroups: Array<{
@@ -162,7 +169,7 @@ const workExperienceGroups: Array<{
   {
     id: 'wmt',
     experienceId: 'wmt',
-    logo: '/company-favicons/wmt-current.svg?v=20260726-2',
+    logo: wmtLogo,
     role: {
       ru: 'Продуктовый дизайнер',
       en: 'Product designer',
@@ -338,6 +345,88 @@ function About() {
   )
 }
 
+function WorkProjectRow({ project, title, children }: {
+  project: WorkProject
+  title: string
+  children: ReactNode
+}) {
+  const { lang } = useLang()
+  const [selected, setSelected] = useState(0)
+  const [cycle, setCycle] = useState(0)
+  const [inView, setInView] = useState(false)
+  const [pageVisible, setPageVisible] = useState(() =>
+    typeof document === 'undefined' || !document.hidden,
+  )
+  const previewId = useId()
+  const rowRef = useRef<HTMLDivElement>(null)
+  const playing = inView && pageVisible
+
+  useEffect(() => {
+    const row = rowRef.current
+    if (!row) return
+    const observer = new IntersectionObserver(([entry]) => setInView(entry.isIntersecting), {
+      threshold: 0.1,
+    })
+    observer.observe(row)
+    const syncVisibility = () => setPageVisible(!document.hidden)
+    document.addEventListener('visibilitychange', syncVisibility)
+    return () => {
+      observer.disconnect()
+      document.removeEventListener('visibilitychange', syncVisibility)
+    }
+  }, [])
+
+  const selectPreview = (index: number) => {
+    setSelected(index)
+    setCycle((current) => current + 1)
+  }
+  const previewLabel = (index: number) => lang === 'ru'
+    ? `${title}: превью ${index + 1}`
+    : `${title}: preview ${index + 1}`
+  const selectedImage = project.previewImages?.[selected]
+
+  return (
+    <div ref={rowRef} className={styles.workProject} data-project-row={project.id}
+      onPointerEnter={positionHoverChip}
+      onPointerMove={positionHoverChip}
+      onPointerLeave={hideHoverChip}>
+      <div className={styles.workRow}>
+        {children}
+        <div className={styles.workPreviews} role="group"
+          aria-label={lang === 'ru' ? `Превью: ${title}` : `Previews: ${title}`}>
+          {[0, 1, 2].map((index) => (
+            <button key={index} type="button" className={styles.previewThumb}
+              aria-label={previewLabel(index)}
+              aria-pressed={selected === index}
+              aria-controls={previewId}
+              onClick={() => selectPreview(index)}>
+              <span className={styles.previewFrame}>
+                {project.previewImages?.[index] && (
+                  <img src={project.previewImages[index]} alt="" loading="lazy" />
+                )}
+                {selected === index && (
+                  <svg key={cycle} className={styles.previewProgress} viewBox="0 0 64 36" aria-hidden>
+                    <path d="M32 .75H58A5.25 5.25 0 0 1 63.25 6V30A5.25 5.25 0 0 1 58 35.25H6A5.25 5.25 0 0 1 .75 30V6A5.25 5.25 0 0 1 6 .75H32"
+                      pathLength={100}
+                      style={{ animationPlayState: playing ? 'running' : 'paused' }}
+                      onAnimationEnd={() => selectPreview((selected + 1) % 3)} />
+                  </svg>
+                )}
+              </span>
+            </button>
+          ))}
+        </div>
+      </div>
+      <div id={previewId} className={styles.previewExpanded}
+        role="region" aria-label={previewLabel(selected)} aria-live="off">
+        <div className={`${styles.previewFrame} ${styles.previewFull}`}>
+          {selectedImage && <img src={selectedImage} alt={previewLabel(selected)} />}
+        </div>
+      </div>
+    </div>
+  )
+}
+
 function WorkList() {
   const { lang } = useLang()
 
@@ -421,10 +510,8 @@ function WorkList() {
                   </>
                 )
 
-                if (unavailable) {
-                  return (
+                const link = unavailable ? (
                     <div
-                      key={project.id}
                       className={styles.workItem}
                       data-disabled
                       data-work-item
@@ -433,25 +520,15 @@ function WorkList() {
                       aria-disabled="true"
                       aria-label={`${title} — ${chipLabel}`}
                       tabIndex={0}
-                      onPointerEnter={positionHoverChip}
-                      onPointerMove={positionHoverChip}
-                      onPointerLeave={hideHoverChip}
                     >
                       {content}
                     </div>
-                  )
-                }
-
-                return (
+                  ) : (
                   <a
-                    key={project.id}
                     className={styles.workItem}
                     data-work-item
                     data-project={project.id}
                     href={`#case/${study.id}`}
-                    onPointerEnter={positionHoverChip}
-                    onPointerMove={positionHoverChip}
-                    onPointerLeave={hideHoverChip}
                     onClick={() =>
                       trackEvent('case_opened', {
                         case_id: study.id,
@@ -461,6 +538,12 @@ function WorkList() {
                   >
                     {content}
                   </a>
+                )
+
+                return (
+                  <WorkProjectRow key={project.id} project={project} title={title}>
+                    {link}
+                  </WorkProjectRow>
                 )
               })}
             </div>

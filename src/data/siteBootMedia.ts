@@ -1,3 +1,5 @@
+import wmtLogo from '@/assets/company/wmt.svg'
+
 // Every image used by the portfolio, including routes that are not mounted at
 // boot. Keep the exact cache-busting query from the rendered source so the
 // browser cache is shared when the route mounts later.
@@ -12,10 +14,9 @@ export const siteBootImageSources = [
   '/stickers/friends-selfie.webp',
   '/about/hobby1.webp',
   '/about/hobby2.webp',
-  '/company-favicons/wmt-current.svg',
+  wmtLogo,
   '/company-favicons/uxart-current.svg',
   '/company-favicons/zinda.svg',
-  '/company-favicons/wmt-current.svg?v=20260726-2',
   '/company-favicons/uxart-current.svg?v=20260726-3',
 
   '/cases/case-cover-ovork.avif?v=20260723-1',
@@ -116,4 +117,4 @@ export const siteBootImageSources = [
   '/cv/portrait-print-v2.png',
 ]
 
-export const siteBootVideoSources = ['/hero-video.webm']
+export const siteBootVideoSources = ['/hero-video-silent.webm']

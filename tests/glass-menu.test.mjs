@@ -81,15 +81,18 @@ function element(attributes = {}) {
 }
 
 function fixture(menuLayout = layout) {
+  const root = element()
   const scene = Object.assign(element({ 'data-menu-open': 'false',
     'data-menu-placement': menuLayout.placement ?? 'below' }), {
-    offsetWidth: menuLayout.size, getBoundingClientRect: () => ({ left: 28, top: 14 }),
+    offsetWidth: menuLayout.size, getBoundingClientRect: () => ({
+      left: 28 + Number.parseFloat(root.style.getPropertyValue('--back-space') || '0'), top: 14,
+    }),
   })
   const trigger = element(), tint = element(), blueTint = element(), back = element()
   const events = []
   const menu = Object.assign(element(), { dispatchEvent: (event) => events.push(event.type) })
   const panel = { offsetWidth: menuLayout.width, offsetHeight: menuLayout.height }
-  const motion = createLiquidMenu({ scene: () => scene, trigger: () => trigger, menu: () => menu,
+  const motion = createLiquidMenu({ root: () => root, scene: () => scene, trigger: () => trigger, menu: () => menu,
     panel: () => panel, tint: () => tint, blueTint: () => blueTint, back: () => back })
   let ready = true, now = 0
   const body = motion.attach(0, () => ready), popup = motion.attach(1, () => ready)
@@ -98,7 +101,7 @@ function fixture(menuLayout = layout) {
   const advance = (milliseconds) => { for (let i = 0; i < milliseconds; i += 16) tick() }
   tick()
   events.length = 0
-  return { scene, trigger, tint, blueTint, panel, events, body, popup, arrow, back, tick, advance,
+  return { root, scene, trigger, tint, blueTint, panel, events, body, popup, arrow, back, tick, advance,
     open: (value) => scene.setAttribute('data-menu-open', String(value)),
     showBack: (value) => scene.setAttribute('data-back-visible', String(value)),
     ready: (value) => { ready = value },
@@ -195,13 +198,13 @@ test('a temporarily unmeasured panel retains its last valid field', () => {
 
 test('the case arrow splits sideways into a matching circle at desktop and mobile sizes', () => {
   for (const size of [44, 50]) {
-    const side = planMenu({ size, width: size, height: size, radius: size / 2, gap: 10, placement: 'right' })
+    const side = planMenu({ size, width: size, height: size, radius: size / 2, gap: 10, placement: 'left' })
     const start = sampleMenu(side, 0).pose
     const middle = sampleMenu(side, 0.45).pose
     const end = sampleMenu(side, 1).pose
     assert.equal(middle.bodies.length, 1)
     assert.ok(middle.head.width > size + 8, 'The language button gives way horizontally')
-    assert.deepEqual(end.panel, { left: size + 10, top: 0, width: size, height: size })
+    assert.deepEqual(end.panel, { left: -size - 10, top: 0, width: size, height: size })
     assert.deepEqual(end.bodies[0].shape, start.bodies[0].shape)
     const circleArea = Math.PI * (size / 2) ** 2
     assert.ok(Math.abs(area(end.bodies[1]) - circleArea) / circleArea < 0.005)
@@ -262,4 +265,27 @@ test('rapid case exit reverses the current arrow pose and cold maps keep all lay
   f.advance(1800)
   assert.equal(f.backProgress, 0)
   assert.equal(f.arrow.opacity(), 0)
+})
+
+test('the visible Back button stays anchored throughout rejoining instead of sliding left', () => {
+  for (const size of [44, 50]) {
+    const f = fixture({ ...layout, size })
+    f.showBack(true)
+    f.advance(1800)
+    f.showBack(false)
+    let visibleFrames = 0
+    for (let i = 0; i < 110; i++) {
+      f.tick()
+      if (Number(f.back.style.getPropertyValue('opacity')) > 0) {
+        visibleFrames++
+        const space = Number.parseFloat(f.root.style.getPropertyValue('--back-space'))
+        const translate = Number.parseFloat(f.back.style.getPropertyValue('translate'))
+        const center = 28 + space - size / 2 - 10 + translate
+        assert.ok(Math.abs(center - (28 + size / 2)) < 0.01, 'Layout and liquid motion must cancel the arrow drift')
+      }
+    }
+    assert.ok(visibleFrames > 5)
+    assert.equal(f.root.style.getPropertyValue('--back-space'), '0.000px')
+    assert.equal(f.backProgress, 0)
+  }
 })

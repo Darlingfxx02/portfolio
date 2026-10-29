@@ -4,6 +4,7 @@ import { smooth } from './liquidFlow.ts'
 import { menuBodyPath, planMenu, sampleMenu, type MenuPlan } from './liquidMenuFlow.ts'
 
 type Elements = {
+  root?: () => HTMLElement | null
   scene: () => HTMLElement | null
   trigger: () => HTMLElement | null
   menu: () => HTMLElement | null
@@ -69,7 +70,7 @@ export function createLiquidMenu(elements: Elements) {
       }
       plan = prepare(layout)
       backPlan = prepare({ size: layout.size, width: layout.size, height: layout.size,
-        gap: 10, placement: 'right', radius: layout.size / 2 })
+        gap: 10, placement: 'left', radius: layout.size / 2 })
       const shapes = (source: MenuPlan, index: number) =>
         source.stops.flatMap((stop) => stop.bodies[index] ? [stop.bodies[index].shape] : [])
       paths = [[...shapes(plan, 0), ...shapes(backPlan, 0)], shapes(plan, 1), shapes(backPlan, 1)]
@@ -116,6 +117,18 @@ export function createLiquidMenu(elements: Elements) {
     }
     fields = next
     const sample = fields[0].sample
+    // Reserve space with the same field that moves the arrow. Its visible
+    // centre stays anchored while the language button flows back into it.
+    // A separate CSS width transition used to drag both controls left first.
+    const arrowPanel = fields[2].sample.pose.panel
+    const backSpace = (layout.size / 2 - arrowPanel.left - arrowPanel.width / 2)
+      * smooth(0, 0.2, backSpring.value)
+    const root = elements.root?.()
+    if (root) {
+      style(root, '--back-space', `${backSpace.toFixed(3)}px`)
+      const positioned = scene.getBoundingClientRect()
+      origin = { left: positioned.left, top: positioned.top }
+    }
 
     const d = fields.flatMap(({ sample: state, index, visible }) =>
       visible && state.pose.bodies[index] ? [menuBodyPath(state.pose.bodies[index])] : []).join('')
@@ -142,7 +155,7 @@ export function createLiquidMenu(elements: Elements) {
     if (back) {
       const live = fields[2].sample.pose.panel
       const reveal = smooth(0.47, 0.88, backSpring.value)
-      style(back, 'translate', `${(live.left + live.width / 2 - (layout.size * 1.5 + 10)).toFixed(3)}px ${(live.top + live.height / 2 - layout.size / 2).toFixed(3)}px`)
+      style(back, 'translate', `${(live.left + live.width / 2 + layout.size / 2 + 10).toFixed(3)}px ${(live.top + live.height / 2 - layout.size / 2).toFixed(3)}px`)
       style(back, 'opacity', String(reveal))
       style(back, 'visibility', reveal > 0 ? 'visible' : 'hidden')
       style(back, 'pointer-events', showBack && reveal > 0.85 ? 'auto' : 'none')

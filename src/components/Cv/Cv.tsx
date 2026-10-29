@@ -5,6 +5,7 @@ import {
   Sun,
 } from '@phosphor-icons/react'
 import { cv } from '@/data/cv'
+import wmtLogo from '@/assets/company/wmt.svg'
 import { experience, type ExperienceItem } from '@/data/experience'
 import { LanguageSwitcher } from '@/components/LanguageSwitcher/LanguageSwitcher'
 import { useLang, t } from '@/lib/i18n'
@@ -12,7 +13,7 @@ import { useTheme } from '@/lib/theme'
 import styles from './Cv.module.css'
 
 const COMPANY_LOGOS: Record<string, string> = {
-  wmt: '/company-favicons/wmt-current.svg?v=20260726-2',
+  wmt: wmtLogo,
   uxart: '/company-favicons/uxart-current.svg?v=20260726-3',
   zinda: '/company-favicons/zinda.svg',
 }

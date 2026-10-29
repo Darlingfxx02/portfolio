@@ -4,7 +4,7 @@ import { mix, smooth, type FlowBox } from './liquidFlow.ts'
 
 export type MenuLayout = {
   size: number; width: number; height: number; gap: number
-  placement?: 'below' | 'above' | 'right'
+  placement?: 'below' | 'above' | 'left'
   radius?: number
 }
 export type MenuBody = FlowBox & { shape: LensWaypoint }
@@ -23,7 +23,7 @@ const flipBox = <T extends FlowBox>(box: T, size: number): T => ({
   ...box, top: size - box.top - box.height,
 })
 const turnBox = <T extends FlowBox>(box: T, size: number): T => ({
-  ...box, left: box.top, top: size - box.left - box.width,
+  ...box, left: size - box.top - box.height, top: box.left,
   width: box.height, height: box.width,
 })
 
@@ -31,7 +31,7 @@ const turnBox = <T extends FlowBox>(box: T, size: number): T => ({
 export function menuKinematics(layout: MenuLayout, progress: number): {
   head: FlowBox; panel: FlowBox; pull: number; neck: number
 } {
-  if (layout.placement === 'right') {
+  if (layout.placement === 'left') {
     const state = menuKinematics({ ...layout, width: layout.height, height: layout.width, placement: 'below' }, progress)
     return { ...state, head: turnBox(state.head, layout.size), panel: turnBox(state.panel, layout.size) }
   }
@@ -102,7 +102,7 @@ function pose(layout: MenuLayout, p: number): MenuPose {
 /** Prepare the shared field once, including the instant its neck separates. */
 export function planMenu(layout: MenuLayout): MenuPlan {
   const downward = { ...layout, placement: 'below' as const,
-    ...(layout.placement === 'right' ? { width: layout.height, height: layout.width } : {}) }
+    ...(layout.placement === 'left' ? { width: layout.height, height: layout.width } : {}) }
   let low = 0.5, high = 1
   for (let i = 0; i < 12; i++) {
     const p = (low + high) / 2
@@ -129,12 +129,12 @@ export function planMenu(layout: MenuLayout): MenuPlan {
       })),
     }))
   }
-  if (layout.placement === 'right') {
+  if (layout.placement === 'left') {
     stops = stops.map((stop) => ({ ...stop,
       head: turnBox(stop.head, layout.size), panel: turnBox(stop.panel, layout.size),
       bodies: stop.bodies.map((item) => ({ ...turnBox(item, layout.size),
         shape: { ...item.shape, width: item.height, height: item.width,
-          outline: item.shape.outline!.map(([x, y]): ShapePoint => [y, item.width - x]) },
+          outline: item.shape.outline!.map(([x, y]): ShapePoint => [item.height - y, x]) },
       })),
     }))
   }

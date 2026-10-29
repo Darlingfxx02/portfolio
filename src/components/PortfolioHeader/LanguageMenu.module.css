@@ -1,21 +1,17 @@
 .root {
   --control-size: 50px;
   position: relative;
-  width: var(--control-size);
+  width: calc(var(--control-size) + var(--back-space, 0px));
   height: var(--control-size);
-  transition: width 560ms cubic-bezier(.22, 1, .36, 1);
   /* Follow the animated outline, including the expanded menu. */
   filter: var(--shadow-glass-contour);
   --lg-foreground: var(--control-text-strong);
 }
 
-.root[data-back-visible='true'] {
-  width: calc(var(--control-size) * 2 + 10px);
-}
-
 .scene {
   width: var(--control-size);
   height: var(--control-size);
+  margin-left: auto;
   /* The optical animator extends this circle to the moving menu outline. */
   clip-path: circle(50% at 50% 50%);
   background: transparent;
@@ -50,7 +46,7 @@
 
 .back,
 .backOptics {
-  left: calc(100% + 10px);
+  left: calc(-100% - 10px);
 }
 
 .back {
@@ -181,7 +177,6 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .root,
   .trigger,
   .icon,
   .blueTint {

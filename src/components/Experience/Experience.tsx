@@ -1,4 +1,5 @@
 import { useCompanyConfig } from '@/lib/personalization'
+import wmtLogo from '@/assets/company/wmt.svg'
 import { t, useLang, type Loc } from '@/lib/i18n'
 import styles from './Experience.module.css'
 
@@ -16,7 +17,7 @@ const featuredExperience: FeaturedExperience[] = [
     company: 'WMT AI',
     role: { ru: 'Продуктовый дизайнер · AI', en: 'Product designer · AI' },
     period: { ru: '2025 — наст. время', en: '2025 — present' },
-    logo: '/company-favicons/wmt-current.svg',
+    logo: wmtLogo,
   },
   {
     id: 'uxart',

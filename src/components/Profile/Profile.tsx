@@ -22,7 +22,7 @@ export function Profile() {
           poster={theme === 'dark' ? '/hero-video-poster.png' : undefined}
           aria-label={t(profile.name, lang)}
         >
-          <source src="/hero-video.webm" type="video/webm" />
+          <source src="/hero-video-silent.webm" type="video/webm" />
         </video>
         <div className={styles.videoGradients} aria-hidden />
       </div>

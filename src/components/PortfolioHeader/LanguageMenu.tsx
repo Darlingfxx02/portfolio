@@ -47,6 +47,7 @@ export function LanguageMenu({ backdropRef, glass, placement = 'below', showBack
   const motionRef = useRef<ReturnType<typeof createLiquidMenu> | null>(null)
   const attachGeometry = useCallback((index: 0 | 1 | 2, prepared: (shape: LensWaypoint) => boolean) => {
     const motion = motionRef.current ??= createLiquidMenu({
+      root: () => rootRef.current,
       scene: () => sceneRef.current, trigger: () => triggerRef.current,
       menu: () => menuRef.current, panel: () => panelRef.current,
       tint: () => tintRef.current, blueTint: () => blueTintRef.current,
@@ -145,6 +146,17 @@ export function LanguageMenu({ backdropRef, glass, placement = 'below', showBack
           <path ref={tintRef} fill={glassFill(glass.shell)} />
           <rect ref={blueTintRef} className={styles.blueTint} fill="#4484e4" fillOpacity="0.2" />
         </svg>
+        <button ref={backRef} type="button" className={styles.back} aria-label={backLabel} title={backLabel}
+          disabled={!showBack} aria-hidden={!showBack || undefined} tabIndex={showBack ? 0 : -1}
+          onClick={() => {
+            close(true)
+            trackEvent('back_clicked', { target: 'work' })
+            if (onBack) onBack()
+            else window.location.hash = '#work'
+          }}>
+          <ArrowUUpLeft size={24} weight="regular" stroke="currentColor"
+            strokeWidth={theme === 'light' ? 4 : 0} strokeLinejoin="round" aria-hidden="true" />
+        </button>
         <button ref={triggerRef} type="button" className={styles.trigger} aria-label={label} title={label}
             aria-haspopup="menu" aria-expanded={open} aria-controls={open ? menuId : undefined}
             onClick={() => open ? close() : show()}
@@ -160,17 +172,6 @@ export function LanguageMenu({ backdropRef, glass, placement = 'below', showBack
             }}>
           <span className={styles.icon} aria-hidden="true"
             style={{ '--icon-mask': `url("${theme === 'light' ? translateMediumIcon : translateIcon}")` } as CSSProperties} />
-        </button>
-        <button ref={backRef} type="button" className={styles.back} aria-label={backLabel} title={backLabel}
-          disabled={!showBack} aria-hidden={!showBack || undefined} tabIndex={showBack ? 0 : -1}
-          onClick={() => {
-            close(true)
-            trackEvent('back_clicked', { target: 'work' })
-            if (onBack) onBack()
-            else window.location.hash = '#work'
-          }}>
-          <ArrowUUpLeft size={24} weight="regular" stroke="currentColor"
-            strokeWidth={theme === 'light' ? 4 : 0} strokeLinejoin="round" aria-hidden="true" />
         </button>
         {present && (
           <div ref={menuRef} className={styles.menu}

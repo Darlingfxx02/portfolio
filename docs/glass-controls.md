@@ -116,13 +116,15 @@ stops, folding the interpolated panel inward just before it opens. A dense
 area check over the final motion catches this on desktop and mobile layouts.
 
 Case navigation shares this same scene. A second spring pulls a matching round
-Back button out to the right of the language control using the rotated menu
+Back button out to the left of the language control using the rotated menu
 field, and rejoins it when leaving cases. The source field is still owned by
 one surface; a third surface takes the arrow only after separation. If the
 language menu is open when the case state changes, it closes before the arrow
 moves. Once the arrow rests, the menu can open normally beside it. Both springs
 retain velocity on reversal and respect reduced motion. The mobile dock reserves
-space for the pair; desktop keeps them in the upper-left corner. Back calls the
+space for the pair using the same spring and contour, with no separate width
+transition. The visible arrow stays anchored while the language control joins
+it on return; desktop keeps the pair in the upper-left corner. Back calls the
 existing Work return action, preserving its scroll position.
 
 The motion follows Apple's [Meet Liquid Glass, 4:32–5:23](https://developer.apple.com/videos/play/wwdc2025/219/?time=272):
