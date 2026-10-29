@@ -131,8 +131,20 @@ export function initSfx() {
       last = null
     }
   })
+  document.addEventListener('pointerout', (e) => {
+    const next = e.relatedTarget instanceof Element
+      ? e.relatedTarget.closest(SFX_SELECTOR) : null
+    // Leaving the window produces no next pointerover. Reset here so returning
+    // to the same control plays feedback, while moves within it stay silent.
+    if (next !== last) last = null
+  })
+  window.addEventListener('blur', () => { last = null })
   document.addEventListener('click', (e) => {
-    const el = (e.target as Element | null)?.closest(SFX_SELECTOR)
+    // React may replace the clicked SVG before this bubbling listener runs.
+    // The original event path still contains its button, even after removal.
+    const el = e.composedPath().find(
+      (node): node is Element => node instanceof Element && node.matches(SFX_SELECTOR),
+    )
     if (el && el.getAttribute('data-sfx-click') !== 'off') click()
   })
 }

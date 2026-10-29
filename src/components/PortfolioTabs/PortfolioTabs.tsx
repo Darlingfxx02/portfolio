@@ -251,7 +251,7 @@ function formatExperiencePeriod(
       ? start
       : `${start} — ${endLabel}`
     : start
-  return includeDuration && duration ? `${years} · ${t(duration, lang)}` : years
+  return includeDuration && duration ? `${years} (${t(duration, lang)})` : years
 }
 
 export function PortfolioTabs({
@@ -325,7 +325,7 @@ function About() {
         <div className={styles.aboutCopy}>
           {aboutCopy[lang].map((paragraph, index) => (
             <p
-              key={paragraph}
+              key={index}
               className={styles.revealBlock}
               style={revealStyle(index + 2)}
             >

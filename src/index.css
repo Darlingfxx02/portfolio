@@ -1,6 +1,21 @@
 :root {
   /* ── Color tokens ───────────────────────────── */
   --bg: #000;
+  --bg-rgb: 0 0 0;
+  --text-rgb: 255 255 255;
+  --card-bg: #0c0c0c;
+  --card-line-start: rgb(255 255 255 / 8%);
+  --card-line-end: rgb(255 255 255 / 2.5%);
+  --promo-muted: #808088;
+  --promo-description: #9e9ea5;
+  --control-text: rgb(255 255 255 / 78%);
+  --control-text-strong: var(--text);
+  --control-accent: #78adff;
+  --control-text-shadow: 0 1px 3px rgb(0 0 0 / 70%);
+  --shadow-glass: none;
+  --shadow-glass-contour: none;
+  --chip-bg: #2a2a2a;
+  --birthday: #fff;
   --paper: #ffffff;
   --slot: #fafafa;
   /* Neutral placeholder fill — a hair lighter than black. */
@@ -70,6 +85,16 @@
   --wt-medium: 520;
   --wt-strong: 610;
 
+  /* Shared title/subtitle typography for Work entries and the product card. */
+  --entry-title-size: 16px;
+  --company-logo-size: 36px;
+  --entry-subtitle-size: 16px;
+  --entry-title-weight: 400;
+  --entry-subtitle-weight: 400;
+  --entry-line-height: 1.2;
+  --entry-tracking: -0.32px;
+  --entry-copy-gap: 4px;
+
   /* Letter-spacing — tightened a hair to offset the wider glyphs. */
   --tracking: -0.02em;
   --tracking-body: 0.01em;
@@ -80,6 +105,9 @@
   --radius: 16px;
   --radius-lg: 32px;
   --ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --segment-height: 40px;
+  --segment-font-size: 15px;
+  --segment-padding-inline: 18px;
 
   color-scheme: dark;
   font-family: var(--font-sans);
@@ -91,6 +119,76 @@
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+/* Shared light palette; imagery keeps its original colours. */
+:root[data-theme='light'] {
+  color-scheme: light;
+  --wt-regular: 480;
+  font-weight: var(--wt-regular);
+  --entry-title-weight: var(--wt-medium);
+  --entry-subtitle-weight: var(--wt-regular);
+  --bg: #f5f5f5;
+  --bg-rgb: 245 245 245;
+  --text-rgb: 20 20 24;
+  --text: #141418;
+  --text-strong: rgb(20 20 24 / 92%);
+  --text-mid: rgb(20 20 24 / 74%);
+  --text-dim: rgb(20 20 24 / 62%);
+  --text-faint: rgb(20 20 24 / 56%);
+  --fill: rgb(20 20 24 / 5%);
+  --line: rgb(20 20 24 / 10%);
+  --hover: rgb(20 20 24 / 7%);
+  --surface: rgb(248 248 250 / 94%);
+  --hairline: rgb(20 20 24 / 4%);
+  --bar-bg: rgb(255 255 255 / 88%);
+  --bar-border: rgb(20 20 24 / 10%);
+  --dock-bg: rgb(250 250 252 / 86%);
+  --shadow-dock: 0 12px 32px -12px rgb(0 0 0 / 22%);
+  --shadow-panel: 0 24px 60px -20px rgb(0 0 0 / 20%);
+  --card-bg: #f7f7f8;
+  --card-line-start: rgb(20 20 24 / 10%);
+  --card-line-end: rgb(20 20 24 / 4%);
+  --promo-muted: #73737b;
+  --promo-description: #62626b;
+  --control-text: #080808;
+  --control-text-strong: #080808;
+  --control-accent: #1764cc;
+  --control-text-shadow: none;
+  --shadow-glass: 0 8px 28px rgb(0 0 0 / 3%);
+  --shadow-glass-contour: drop-shadow(0 8px 14px rgb(0 0 0 / 3%));
+  --chip-bg: #ededf0;
+  --birthday: #141418;
+  --case-folder-from: #f0f0f3;
+  --case-folder-to: #dcdce3;
+  --case-folder-outline: rgb(20 20 24 / 8%);
+  --case-folder-tab-stroke: rgb(20 20 24 / 12%);
+  --case-folder-icon: rgb(20 20 24 / 32%);
+  --case-folder-icon-hover: rgb(20 20 24 / 56%);
+  --case-folder-shadow: rgb(20 20 24 / 12%);
+  --c-surface: #f3f3f5;
+  --c-surface-2: #eceef1;
+  --c-text: #202329;
+  --c-text-2: #484e58;
+  --c-text-3: #6c737d;
+  --c-border: #dedfe3;
+  --c-accent: #007aa8;
+  --c-warm: #b9430e;
+}
+
+@media (max-width: 720px) {
+  :root {
+    --segment-font-size: 14px;
+    --segment-padding-inline: clamp(8px, 2.7vw, 16px);
+    --entry-subtitle-size: 14px;
+  }
+}
+
+@media (max-width: 360px) {
+  :root {
+    --segment-font-size: 12px;
+    --segment-padding-inline: 7px;
+  }
 }
 
 /* ── Reset ────────────────────────────────────── */

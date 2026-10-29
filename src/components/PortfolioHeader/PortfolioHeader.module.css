@@ -7,126 +7,198 @@
   align-items: flex-start;
   justify-content: center;
   width: 100%;
-  height: 72px;
-  padding: 24px 28px 14px;
-  background: linear-gradient(180deg, #000 72%, rgba(0, 0, 0, 0));
-  color: var(--text);
+  height: 80px;
+  padding: 14px 28px;
+  color: var(--control-text-strong);
   font-family: var(--font-sf);
+  pointer-events: none;
 }
 
-.language {
+.language,
+.theme {
   position: absolute;
-  top: 24px;
-  left: 28px;
+  top: 14px;
+  pointer-events: auto;
+}
+
+.language { left: 28px; }
+.theme { right: 28px; }
+
+.scene {
+  max-width: calc(100% - 132px);
+  border-radius: 999px;
+  /* Clip the paint source and SVG filter outsets to the same capsule. */
+  overflow: clip;
+  background: transparent;
+  box-shadow: var(--shadow-glass);
+  pointer-events: auto;
+}
+
+.backdrop {
+  /* Opaque source with a gutter: refraction can sample outside the capsule,
+     and WebKit never mixes the unrefracted page through transparent pixels. */
+  inset: calc(-1 * var(--glass-gutter, 64px));
+  width: calc(100% + 2 * var(--glass-gutter, 64px));
+  height: calc(100% + 2 * var(--glass-gutter, 64px));
+  overflow: hidden;
+  background: var(--bg);
+  pointer-events: none;
+}
+
+.mirror {
+  position: absolute;
+  top: 0;
+  left: 0;
+  transform-origin: top left;
+  pointer-events: none;
+}
+
+.opticalInput {
+  position: absolute;
+  inset: 0;
+  /* Frost is part of the material graph, controlled per surface. */
+}
+
+.mirror :global(*) {
+  animation: none !important;
+  transition: none !important;
+  content-visibility: visible !important;
 }
 
 .nav {
+  --glass-inset: 5px;
+  --glass-gap: 2px;
+  --lg-foreground: var(--control-text-strong);
+  position: relative;
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   justify-content: center;
-  gap: 24px;
-  width: 100%;
-  max-width: 640px;
-  overflow-x: auto;
-  scrollbar-width: none;
+  gap: 2px;
+  padding: 5px var(--glass-inset);
+  border-radius: 999px;
+  /* Flat fill is independent of the shader's directional illumination. */
+  background: var(--glass-fill, transparent);
+  text-shadow: var(--control-text-shadow);
 }
 
-.nav::-webkit-scrollbar {
-  display: none;
+.indicator {
+  position: absolute;
+  top: 0;
+  left: 0;
+  border-radius: 999px;
+  background-color: var(--glass-fill, transparent);
+  pointer-events: none;
+}
+
+:global(:root[data-theme='light']) .nav {
+  /* The scene already clips the capsule. A second clip isolates the white
+     shell fill, preventing the indicator from blending with the glass below. */
+  clip-path: none !important;
+}
+
+:global(:root[data-theme='light']) .indicator {
+  /* Keep the fill's lightness and the glass backdrop's hue/saturation.
+     Neutral glass resolves to the page colour; coloured glass stays tinted. */
+  mix-blend-mode: luminosity;
+}
+
+.tabTrack {
+  position: relative;
+  display: flex;
+  gap: var(--glass-gap);
 }
 
 .tab {
   position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   flex: none;
-  padding: 0 0 4px;
-  color: var(--text-dim);
-  font-size: 15px;
-  font-weight: var(--wt-regular);
+  height: var(--segment-height);
+  padding: 0 var(--segment-padding-inline);
+  border: 0;
+  border-radius: 999px;
+  color: var(--control-text);
+  font-size: var(--segment-font-size);
+  font-weight: var(--wt-medium);
   line-height: 1.5;
   letter-spacing: 0;
+  opacity: 1;
   user-select: none;
   -webkit-user-select: none;
-  transition: color 180ms ease;
+  transition: color 180ms ease, background-color 180ms ease;
 }
 
-.tab::after {
+.labelFrame {
+  position: relative;
+  /* Avoid the inline baseline gap inside the SDK's label wrapper. */
+  display: block;
+  flex: none;
+  height: 1.5em;
+  pointer-events: none;
+}
+
+.labelLayer {
   position: absolute;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  height: 2px;
-  background: var(--text);
-  content: '';
+  top: 0;
+  left: 50%;
+  width: max-content;
+  white-space: pre;
+  transform: translateX(-50%);
+}
+
+.labelChar {
+  display: inline-block;
   opacity: 0;
-  transform: scaleX(0.45);
-  transform-origin: 0 50%;
-  transition:
-    opacity 180ms ease,
-    transform 260ms var(--ease);
 }
 
-.tab:hover {
-  color: var(--text-mid);
-}
-
+.tab:hover,
 .tab[data-active] {
-  color: var(--text);
+  color: var(--control-text-strong);
 }
 
-.tab[data-active]::after {
-  opacity: 1;
-  transform: scaleX(1);
-}
-
-/* The outgoing underline follows the direction of section travel. */
-.nav[data-transition-direction='forward'] .tab::after {
-  transform-origin: 100% 50%;
-}
-
-.nav[data-transition-direction='backward'] .tab::after {
-  transform-origin: 0 50%;
+.tab:focus-visible {
+  outline: none;
+  /* A second pill here would stay behind while the shader indicator travels. */
+  background: transparent;
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 4px;
 }
 
 .tab[data-pending] {
-  color: var(--text-mid);
-}
-
-.tab[data-pending]::after {
-  opacity: 1;
-  transform: scaleX(var(--tab-progress, 0));
-  transition:
-    opacity 100ms ease,
-    transform 80ms linear;
-}
-
-.nav[data-transition-direction='forward'] .tab[data-transition-target]::after {
-  transform-origin: 0 50%;
-}
-
-.nav[data-transition-direction='backward'] .tab[data-transition-target]::after {
-  transform-origin: 100% 50%;
-}
-
-/* Keep a cancelled partial underline anchored to its original side. */
-.tab[data-transition-target]:not([data-pending])::after {
-  opacity: 0;
-  transform: scaleX(0);
+  color: var(--control-text-strong);
 }
 
 @media (max-width: 720px) {
   .header {
-    justify-content: center;
     height: 64px;
-    padding: 18px 12px 12px;
+    padding: 8px 12px;
   }
 
-  .language {
-    display: none;
+  .language,
+  .theme {
+    top: 10px;
+  }
+
+  .language { left: 12px; }
+  .theme { right: 12px; }
+
+  .scene {
+    max-width: 100%;
   }
 
   .nav {
-    justify-content: center;
-    gap: 18px;
-    max-width: none;
+    --glass-inset: 4px;
+    --glass-gap: 0px;
+    gap: 0;
+    padding: 4px var(--glass-inset);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .indicator,
+  .tab {
+    transition: none;
   }
 }

@@ -1,0 +1,190 @@
+.root {
+  --control-size: 50px;
+  position: relative;
+  width: var(--control-size);
+  height: var(--control-size);
+  transition: width 560ms cubic-bezier(.22, 1, .36, 1);
+  /* Follow the animated outline, including the expanded menu. */
+  filter: var(--shadow-glass-contour);
+  --lg-foreground: var(--control-text-strong);
+}
+
+.root[data-back-visible='true'] {
+  width: calc(var(--control-size) * 2 + 10px);
+}
+
+.scene {
+  width: var(--control-size);
+  height: var(--control-size);
+  /* The optical animator extends this circle to the moving menu outline. */
+  clip-path: circle(50% at 50% 50%);
+  background: transparent;
+}
+
+.trigger,
+.back {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--control-text-strong);
+}
+
+.bodyOptics,
+.panelOptics,
+.backOptics {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  background: transparent;
+}
+
+.back,
+.backOptics {
+  left: calc(100% + 10px);
+}
+
+.back {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.panelOptics {
+  top: calc(100% + 10px);
+  width: 200px;
+  height: 102px;
+}
+
+.tint {
+  position: absolute;
+  top: 0;
+  left: 0;
+  max-width: none;
+  overflow: visible;
+  pointer-events: none;
+}
+
+.blueTint {
+  opacity: 0;
+  transition: opacity 180ms ease;
+}
+
+.scene[data-menu-open='true'] .blueTint {
+  opacity: 1;
+}
+
+.icon {
+  display: block;
+  flex: none;
+  width: 24px;
+  height: 24px;
+  scale: var(--icon-scale, 1);
+  mask: var(--icon-mask) center / contain no-repeat;
+  -webkit-mask: var(--icon-mask) center / contain no-repeat;
+  background: var(--control-text-strong);
+  transition: background-color 180ms ease;
+}
+
+.scene[data-menu-open='true'] .icon {
+  background: var(--control-accent);
+}
+
+.trigger:focus-visible,
+.back:focus-visible {
+  outline: none;
+}
+
+.trigger:focus-visible::after,
+.back:focus-visible::after {
+  content: '';
+  position: absolute;
+  inset: 5px;
+  border: 2px solid var(--text-mid);
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.menu {
+  position: absolute;
+  top: calc(100% + 10px);
+  left: 0;
+  width: 200px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 6px;
+  border-radius: 24px;
+  background: transparent;
+  color: var(--control-text-strong);
+  opacity: 0;
+  /* Keep WebKit's text layer through the final blur-to-clear frame. */
+  will-change: opacity, filter;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}
+
+.root[data-placement='above'] .panelOptics,
+.root[data-placement='above'] .menu {
+  top: auto;
+  bottom: calc(100% + 10px);
+}
+
+.option {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 44px;
+  padding: 0 14px;
+  border-radius: 18px;
+  font-size: 15px;
+  font-weight: var(--wt-medium);
+  line-height: 1.5;
+  text-align: left;
+  color: var(--control-text);
+  text-shadow: var(--control-text-shadow);
+}
+
+.option[aria-checked='true'],
+.option:hover,
+.option:focus-visible {
+  color: var(--control-text-strong);
+  background: var(--selection-fill);
+  outline: none;
+}
+
+.check {
+  font-size: 17px;
+  line-height: 1;
+}
+
+@media (max-width: 720px) {
+  .root {
+    --control-size: 44px;
+  }
+
+  .icon,
+  .back > svg {
+    width: 22px;
+    height: 22px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .root,
+  .trigger,
+  .icon,
+  .blueTint {
+    transition: none;
+  }
+}

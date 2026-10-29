@@ -1,0 +1,2 @@
+patchedDependencies:
+  '@glass-sdk/liquid-glass@0.0.2': patches/@glass-sdk__liquid-glass@0.0.2.patch

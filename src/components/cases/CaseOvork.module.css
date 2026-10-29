@@ -60,7 +60,7 @@
 }
 
 .notificationBand {
-  background: #101210;
+  background: var(--card-bg);
 }
 
 .notificationGrid {

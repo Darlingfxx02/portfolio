@@ -1,0 +1,652 @@
+diff --git a/dist/core.js b/dist/core.js
+index 27a50151b0ebbb12ec1b6e0fba433e2a98c7354c..cf734240c9c3391b69d2e3644d42bf0cd1aa0500 100644
+--- a/dist/core.js
++++ b/dist/core.js
+@@ -4,3 +4,5 @@ import { roundRectDistance as l, smoothMin as u, smoothUnion as d } from "./core
+ import { materials as f } from "./core/materials.js";
+ import { edgeDisplacement as p } from "./core/optics.js";
+ export { a as Spring, e as concentricOutline, t as contentInsets, n as cornerPlacement, p as edgeDisplacement, r as insetShape, f as materials, i as polygonClip, l as roundRectDistance, o as rubberBand, s as settleTime, u as smoothMin, d as smoothUnion, c as springs };
++
++export { shapePolygon } from "./core/shape.js";
+diff --git a/dist/dom/lens-layers.js b/dist/dom/lens-layers.js
+index 57ca398166695991bd005caded946e83ea9a171b..1d5fd166983ebca461029970369b9d10d6f32bad 100644
+--- a/dist/dom/lens-layers.js
++++ b/dist/dom/lens-layers.js
+@@ -1,3 +1,4 @@
++import { refractionMarkup } from "./optics.js";
+ import { materials as e } from "../core/materials.js";
+ import { mapImage as t, mapUrl as n } from "./map-image.js";
+ import { patchFilters as r } from "./filter-patch.js";
+@@ -38,7 +39,7 @@ function m(m) {
+ 						written: /* @__PURE__ */ new Map()
+ 					}, t.element.style.isolation = "isolate", t.element.append(e), y.set(t.serial, n);
+ 				}
+-				let r = t.options, i = t.frame, a = r.material === "regular" ? Math.max(e.regular.blur, (r.appearance === "dark" ? e.regular.dark : e.regular.light).fillSigma) : 0, o = Math.ceil(3 * a + t.refraction + 4), s = {
++				let r = t.options, i = t.frame, a = r.optics ? r.optics.frost : r.material === "regular" ? Math.max(e.regular.blur, (r.appearance === "dark" ? e.regular.dark : e.regular.light).fillSigma) : 0, o = Math.ceil(3 * a + t.refraction + 4), s = {
+ 					left: m.left + t.x - 2,
+ 					top: m.top + t.y - 2,
+ 					width: t.w + 4,
+@@ -123,11 +124,16 @@ function m(m) {
+ 						h: e.h / h.sy
+ 					});
+ 				}, A = Math.max(h.sx, h.sy), j = "SourceGraphic", M = [k("field", "lfield")];
+-				if (g.material === "regular") {
++				if (g.optics) {
++					if (g.optics.frost > 0) {
++						M.push(`<feGaussianBlur in="${j}" stdDeviation="${g.optics.frost / A}" result="lfrost"/>`);
++						j = "lfrost";
++					}
++				} else if (g.material === "regular") {
+ 					let e = o("l", j, g, 1 / A);
+ 					M.push(e.markup), j = e.result;
+ 				}
+-				M.push(`<feDisplacementMap in="${j}" in2="lfield" scale="${2 * e.refraction / A}" xChannelSelector="R" yChannelSelector="G" ${O} result="lrefracted"/>`, u("l", g, e.parents.length > 0));
++				M.push(refractionMarkup("l", j, 2 * e.refraction / A, g), u("l", g, e.parents.length > 0));
+ 				let N = "lcolor", P = "loverlay", F = c(g);
+ 				if (F) {
+ 					let e = l("l", g, F);
+diff --git a/dist/dom/map-commit.js b/dist/dom/map-commit.js
+new file mode 100644
+index 0000000000000000000000000000000000000000..766bf8397fa65f126f70b4e94a120412607a5203
+--- /dev/null
++++ b/dist/dom/map-commit.js
+@@ -0,0 +1,9 @@
++// Rendering and image warm-up finish asynchronously. A map belongs only to
++// the geometry that requested it, never to the latest box by coincidence.
++export function commitCurrentMaterialMaps(surface, key, geometry, maps) {
++  if (surface.wanted !== key || surface.key !== key) return false;
++  surface.maps = maps;
++  surface.shown = geometry;
++  surface.error = undefined;
++  return true;
++}
+diff --git a/dist/dom/maps.js b/dist/dom/maps.js
+index 4193ca06d4c69100e8c8f1bc4fa9da10fd84bfa3..b29df54e49ec3cc7248b3b4fdcd2ed6663bb210b 100644
+--- a/dist/dom/maps.js
++++ b/dist/dom/maps.js
+@@ -16,14 +16,15 @@ if (typeof indexedDB < "u" && typeof Image < "u") {
+ 		for (let t of c()) {
+ 			let n = t.slice(e.length), r, i;
+ 			try {
+-				let [e, t, a, o, s, c, l] = JSON.parse(n);
++				let [e, t, a, o, s, c, l, optics] = JSON.parse(n);
+ 				r = {
+ 					width: e,
+ 					height: t,
+ 					radius: a,
+ 					dpr: o,
+ 					appearance: s,
+-					outline: c
++					outline: c,
++					optics
+ 				}, i = l;
+ 			} catch {
+ 				continue;
+@@ -64,7 +65,8 @@ var y = (e, t) => JSON.stringify([
+ 	e.dpr,
+ 	e.appearance,
+ 	e.outline,
+-	t
++	t,
++	e.optics
+ ]), b = ["field", "overlay"];
+ function x(e, t, n, r) {
+ 	let i = Object.fromEntries(b.map((e, t) => [e, n[t].slice(1)]));
+diff --git a/dist/dom/material-graph.js b/dist/dom/material-graph.js
+index 95b3b9d187139cb8efd291e9f46fab923e0210e7..ac58d57abccb4c7340c215225cd54ce5181f45bc 100644
+--- a/dist/dom/material-graph.js
++++ b/dist/dom/material-graph.js
+@@ -1,3 +1,4 @@
++import { opticalToneMarkup } from "./optics.js";
+ import { materials as e } from "../core/materials.js";
+ //#region src/dom/material-graph.ts
+ var t = (e) => e.appearance === "dark";
+@@ -9,6 +10,7 @@ function n(n, r, i, a = 1) {
+ 	};
+ }
+ function r(n, r, i) {
++	if (r.optics) return opticalToneMarkup(n, r);
+ 	if (r.material === "regular") {
+ 		let [i, a, o, s] = (t(r) ? e.regular.dark : e.regular.light).tone, c = Array.from({ length: 33 }, (e, n) => {
+ 			let s = n / 32, c = i + a * s + o * s * s, l = t(r) ? .9 : .8;
+diff --git a/dist/dom/optics.js b/dist/dom/optics.js
+new file mode 100644
+index 0000000000000000000000000000000000000000..c6f341020ad97212e4c44d20311469462ad6ba7f
+--- /dev/null
++++ b/dist/dom/optics.js
+@@ -0,0 +1,56 @@
++// Local Figma-style optical controls. Applied per surface, before compositing.
++// data-glass-optics is a JSON object; an absent attribute retains SDK defaults.
++const clamp = (value, fallback, min, max) => Number.isFinite(value)
++  ? Math.min(max, Math.max(min, value)) : fallback;
++export function readOptics(surface) {
++  const raw = surface.element.getAttribute("data-glass-optics");
++  if (surface.opticsAttribute === raw) return false;
++  surface.opticsAttribute = raw;
++  surface.path = undefined; // Re-prepare a custom outline when its lighting changes.
++  let value;
++  try { value = raw ? JSON.parse(raw) : null; } catch { value = null; }
++  surface.options.optics = value && typeof value === "object" ? {
++    lightAngle: clamp(value.lightAngle, -35, -180, 180),
++    lightIntensity: clamp(value.lightIntensity, .35, 0, 1),
++    refraction: clamp(value.refraction, .44, 0, 1),
++    depth: clamp(value.depth, 18, 1, 100),
++    dispersion: clamp(value.dispersion, 0, 0, 1),
++    frost: clamp(value.frost, 1.25, 0, 24),
++    splay: clamp(value.splay, .5, 0, 1),
++    brightness: clamp(value.brightness, 1, 0, 2),
++    saturation: clamp(value.saturation, 1, 0, 2),
++    shadowLift: clamp(value.shadowLift, 0, 0, .3),
++  } : undefined;
++  return true;
++}
++export function mapOptics(surface) {
++  const o = surface.options.optics;
++  return o ? { depth: o.depth, lightAngle: o.lightAngle,
++    lightIntensity: o.lightIntensity, splay: o.splay } : undefined;
++}
++export function refractionMarkup(p, input, scale, options) {
++  const dispersion = options.optics?.dispersion ?? 0;
++  const displace = (factor, result) => `<feDisplacementMap in="${input}" in2="${p}field" scale="${scale * factor}" xChannelSelector="R" yChannelSelector="G" result="${result}"/>`;
++  if (!dispersion) return displace(1, `${p}refracted`);
++  // Three true displaced samples. Recombine their RGB channels, then restore
++  // the central sample's alpha; the shape mask is applied by the scene later.
++  const channel = (name, index) => {
++    const matrix = Array.from({length: 20}, (_, i) => i === index * 5 + index || i === 18 ? 1 : 0).join(" ");
++    return `<feColorMatrix in="${p}${name}Sample" type="matrix" values="${matrix}" result="${p}${name}"/>`;
++  };
++  const spread = dispersion * .15;
++  return displace(1 + spread, `${p}redSample`) + displace(1, `${p}greenSample`)
++    + displace(1 - spread, `${p}blueSample`)
++    + channel("red", 0) + channel("green", 1) + channel("blue", 2)
++    + `<feComposite in="${p}red" in2="${p}green" operator="arithmetic" k2="1" k3="1" result="${p}rg"/>`
++    + `<feComposite in="${p}rg" in2="${p}blue" operator="arithmetic" k2="1" k3="1" result="${p}rgb"/>`
++    + `<feComposite in="${p}rgb" in2="${p}greenSample" operator="in" result="${p}refracted"/>`;
++}
++export function opticalToneMarkup(p, options) {
++  const o = options.optics;
++  if (!o) return undefined;
++  const slope = o.brightness * (1 - o.shadowLift);
++  return `<feComponentTransfer in="${p}refracted" result="${p}opticalTone">`
++    + ["R", "G", "B"].map(c => `<feFunc${c} type="linear" slope="${slope}" intercept="${o.shadowLift}"/>`).join("")
++    + `</feComponentTransfer><feColorMatrix in="${p}opticalTone" type="saturate" values="${o.saturation}" result="${p}color"/>`;
++}
+diff --git a/dist/dom.js b/dist/dom.js
+index b94e747358c1a37a4cc0f4f6480fa76d0e23071c..88aad6c1fcd28380294c0cc0a91074daf2b91d69 100644
+--- a/dist/dom.js
++++ b/dist/dom.js
+@@ -1,3 +1,5 @@
++import { readOptics, mapOptics, refractionMarkup } from "./dom/optics.js";
++import { commitCurrentMaterialMaps } from "./dom/map-commit.js";
+ import { cornerOptions as e, shapeClip as t, shapePolygon as n } from "./core/shape.js";
+ import { polygonClip as r } from "./core/concentric.js";
+ import { createTicker as i } from "./dom/ticker.js";
+@@ -36,7 +38,13 @@ function I(e) {
+ 	let t = e.promoted;
+ 	e.promoted = void 0, t && !t.value && e.element.style.getPropertyValue("will-change") === F && e.element.style.removeProperty("will-change");
+ }
+-var Ie = 1, L = (e) => JSON.stringify(A(e) ?? e);
++var Ie = 1, L = (e) => {
++  const shape = A(e) ?? e;
++  // Morph metadata (e.g. resting) and property order must not change a map key.
++  return JSON.stringify({ width: shape.width, height: shape.height,
++    radius: shape.radius, outline: shape.outline, dpr: shape.dpr,
++    appearance: shape.appearance, optics: shape.optics });
++};
+ function Le(e, t) {
+ 	let n = 1;
+ 	for (let r = e; r && r !== t; r = r.parentElement) {
+@@ -92,11 +100,12 @@ function R(o, s = {}) {
+ 		let t = Z.get(e);
+ 		t !== void 0 && (et(e, t), Z.delete(e));
+ 	}, at = (e, t) => {
++		if (e.options.optics) return e.options.optics.refraction * 50;
+ 		if (e.options.refraction !== void 0) return e.options.refraction;
+ 		if (!t.length) return C[e.options.material ?? "clear"].refraction;
+ 		let n = Math.min(...t.map((t) => Math.min(e.x - t.x, e.y - t.y, t.x + t.w - e.x - e.w, t.y + t.h - e.y - e.h)));
+ 		return Math.max(0, Math.min(8, n * .6));
+-	}, ot = (e) => [...H].filter((t) => t !== e && t.element.contains(e.element)), st = (e, t) => e.options.material === "regular" ? Math.max(C.regular.blur, (e.options.appearance === "dark" ? C.regular.dark : C.regular.light).fillSigma) * t : 0, Q = 0, ct = -1, lt = [], ut = () => (ct !== Q && (lt = [...H].sort((e, t) => j(e.element, t.element)), ct = Q), lt), dt = -1, ft = [], pt = () => (dt !== Q && (ft = [...ut(), ...nt].sort((e, t) => j(e.element, t.element)), dt = Q), ft);
++	}, ot = (e) => [...H].filter((t) => t !== e && t.element.contains(e.element)), st = (e, t) => e.options.optics ? e.options.optics.frost * t : e.options.material === "regular" ? Math.max(C.regular.blur, (e.options.appearance === "dark" ? C.regular.dark : C.regular.light).fillSigma) * t : 0, Q = 0, ct = -1, lt = [], ut = () => (ct !== Q && (lt = [...H].sort((e, t) => j(e.element, t.element)), ct = Q), lt), dt = -1, ft = [], pt = () => (dt !== Q && (ft = [...ut(), ...nt].sort((e, t) => j(e.element, t.element)), dt = Q), ft);
+ 	function mt(e, t) {
+ 		if (!z) return;
+ 		if (!e || !t) {
+@@ -115,7 +124,7 @@ function R(o, s = {}) {
+ 		} : void 0, l = a.filter((e) => e.maps && (e.opacity >= .001 || s.has(e))), u = new Map(l.map((e) => [e, ot(e)])), _ = new Map(l.map((e) => [e, at(e, u.get(e))])), v = (e) => _.get(e) + 4, y = (e, t) => e.x < t.x + t.w && t.x < e.x + e.w && e.y < t.y + t.h && t.y < e.y + e.h, b = (e, t) => {
+ 			let n = Math.max(v(e), v(t));
+ 			return e.x < t.x + t.w + n && t.x - n < e.x + e.w && e.y < t.y + t.h + n && t.y - n < e.y + e.h;
+-		}, x = (e) => `${e.options.material ?? "clear"},${e.options.appearance ?? "light"},${e.options.tint ?? ""},${_.get(e)}`, w = (e) => f && e.opacity >= .999 && !u.get(e).length, E = (e) => w(e) && !l.some((t) => t !== e && b(e, t) && (!w(t) || x(t) !== x(e) || ve(e, t))), D = [], O = /* @__PURE__ */ new Map();
++		}, x = (e) => `${e.options.material ?? "clear"},${e.options.appearance ?? "light"},${e.options.tint ?? ""},${_.get(e)},${JSON.stringify(e.options.optics)}`, w = (e) => f && e.opacity >= .999 && !u.get(e).length, E = (e) => w(e) && !l.some((t) => t !== e && b(e, t) && (!w(t) || x(t) !== x(e) || ve(e, t))), D = [], O = /* @__PURE__ */ new Map();
+ 		for (let e of l) {
+ 			if (s.has(e)) continue;
+ 			let t = o.get(e);
+@@ -131,7 +140,7 @@ function R(o, s = {}) {
+ 			r || (r = [], O.set(n, r), D.push(r)), r.push(e);
+ 		}
+ 		let k = new Map(D.flatMap((e) => e.map((t) => [t, e]))), j = ae(), M = new Map(l.map((e) => {
+-			let t = e.options.appearance === "dark" ? C.regular.dark : C.regular.light, n = e.options.material === "regular" ? p(C.regular.blur) + p(t.fillSigma) : 0;
++			let t = e.options.appearance === "dark" ? C.regular.dark : C.regular.light, n = e.options.optics ? p(e.options.optics.frost) : e.options.material === "regular" ? p(C.regular.blur) + p(t.fillSigma) : 0;
+ 			return [e, j * (n + _.get(e))];
+ 		})), N = (e) => e.reduce((e, t) => e + Math.max(...t.map((e) => M.get(e))) + (t.length === 1 || c(t) ? l.filter((e) => !t.includes(e) && t.some((t) => y(e, t))).reduce((e, t) => Math.max(e, M.get(t)), 0) : 0), 0), P = m(e * j, t * j, N(D)), ue = new Map(l.map((e) => [e, _.get(e) * P])), de = new Map(l.map((e) => {
+ 			let t = e.place, n = !o.has(e) && !s.has(e) && (t ? t.stretched && t.a.x === t.b.x && t.a.y === t.b.y && t.a.w === t.b.w && t.a.h === t.b.h : !(!e.shown || e.shown.outline));
+@@ -220,7 +229,12 @@ function R(o, s = {}) {
+ 				let re = ge(e, t, A).map((e) => a.names[e]).filter((e) => !!e);
+ 				(re.length || j.length) && o.push(`<feMerge result="${y}crop" ${I(A)}>${re.map((e) => `<feMergeNode in="${e}"/>`).join("")}<feMergeNode in="${s}"/>${j.map((e) => `<feMergeNode in="${e}"/>`).join("")}</feMerge>`);
+ 				let ie = re.length || j.length ? `${y}crop` : s, ae = ie;
+-				if (v.material === "regular") {
++				if (v.optics) {
++					if (v.optics.frost > 0) {
++						o.push(`<feGaussianBlur in="${ie}" stdDeviation="${v.optics.frost * P}" result="${y}frost"/>`);
++						ae = `${y}frost`;
++					}
++				} else if (v.material === "regular") {
+ 					let e = p?.get(n);
+ 					if (e) m.has(e.result) || (o.push(e.markup), m.add(e.result)), ae = e.result;
+ 					else {
+@@ -229,7 +243,7 @@ function R(o, s = {}) {
+ 					}
+ 				}
+ 				let M = ue.get(_);
+-				o.push(`<feDisplacementMap in="${ae}" in2="${y}field" scale="${M * 2}" xChannelSelector="R" yChannelSelector="G" result="${y}refracted"/>`, Ae(y, v, k.length > 0));
++				o.push(refractionMarkup(y, ae, M * 2, v), Ae(y, v, k.length > 0));
+ 				let oe = `${y}color`, se = `${y}overlay`, N = Oe(v);
+ 				if (N) {
+ 					let e = ke(y, v, N);
+@@ -338,7 +352,8 @@ function R(o, s = {}) {
+ 			if (e.preparing.delete(r), !B && H.has(e) && e.path?.some((e) => L({
+ 				...e,
+ 				dpr: t.dpr,
+-				appearance: t.appearance
++				appearance: t.appearance,
++				optics: t.optics
+ 			}) === r)) {
+ 				let i = K.has(n);
+ 				K.warm(n), e.prepared.set(r, {
+@@ -354,23 +369,37 @@ function R(o, s = {}) {
+ 		});
+ 	}
+ 	function gt(e, t, n) {
++		// Prepare width-independent cap textures before a custom capsule moves.
++		// Otherwise a narrow full-image fallback is stretched across a wide box
++		// while the first reusable map is still being decoded/warmed.
++		if (e.options.geometry && t.radius === "capsule") {
++			let candidate = { ...t, width: t.height * 3 }, key = L(candidate);
++			if (e.warmingCapsule !== key) {
++				e.warmingCapsule = key, W++;
++				D(candidate).then(maps => { if (!B && H.has(e)) K.warm(maps); })
++					.catch(() => { if (e.warmingCapsule === key) e.warmingCapsule = void 0; })
++					.finally(() => { W--; $.wake(); });
++			}
++		}
+ 		let r = n ? L(t) : JSON.stringify(t);
+-		if (e.wanted = r, r === e.key || e.inflight) return;
++		if (e.wanted = r, r === e.key) return;
+ 		let i = n ? k(t) : O(t);
+ 		if (i && (K.has(i) || !e.maps)) {
+ 			e.key = r, K.warm(i), e.maps = i, e.shown = t, e.error = void 0, V = !0;
+ 			return;
+ 		}
++		// A warm current map takes precedence over an unrelated older request.
++		if (e.inflight) return;
+ 		e.key = r, e.inflight = !0, W++, (n ? D(t) : E(t)).then((n) => {
+ 			if (e.inflight = !1, B || !H.has(e)) return;
+-			if (f && !e.maps && e.wanted !== r) {
+-				e.key = void 0, $.wake();
++			if (e.wanted !== r) {
++				e.key === r && (e.key = void 0), $.wake();
+ 				return;
+ 			}
+ 			let i = K.has(n);
+ 			K.warm(n);
+ 			let a = () => {
+-				!B && H.has(e) && (e.maps = n, e.shown = t, e.error = void 0, V = !0, $.wake());
++				!B && H.has(e) && commitCurrentMaterialMaps(e, r, t, n) && (V = !0, $.wake());
+ 			};
+ 			e.maps && !i ? setTimeout(a, 50) : a();
+ 		}).catch((t) => {
+@@ -396,13 +425,15 @@ function R(o, s = {}) {
+ 		}));
+ 		let h = [...H].some((e) => e.outline?.pending());
+ 		We = h;
++		H.forEach(surface => { if (readOptics(surface)) V = true; });
+ 		let g = (e, t) => L({
+ 			width: t.width,
+ 			height: t.height,
+ 			radius: t.radius,
+ 			outline: t.outline,
+ 			dpr: t.dpr ?? Ie,
+-			appearance: e.options.appearance
++			appearance: e.options.appearance,
++			optics: mapOptics(e)
+ 		}), _ = /* @__PURE__ */ new Map(), v = (e, t) => {
+ 			e.writtenClip !== t && (e.writtenClip = t, i.push(() => {
+ 				e.element.style.clipPath = t, e.element.style.borderRadius = "0px";
+@@ -425,7 +456,8 @@ function R(o, s = {}) {
+ 					radius: e.radius,
+ 					outline: e.outline,
+ 					dpr: e.dpr ?? Ie,
+-					appearance: t.options.appearance
++					appearance: t.options.appearance,
++					optics: mapOptics(t)
+ 				}, !!e.resting);
+ 			}
+ 			let i = n.draw;
+@@ -508,7 +540,7 @@ function R(o, s = {}) {
+ 					height: u.height,
+ 					radius: u.radius
+ 				} : e, d = u.width / l.width, p = u.height / l.height, m = n(l.width, l.height, l.radius).map(([e, n]) => [(u.left - t.left + e * d) * o, (u.top - t.top + n * p) * s]);
+-				v(c, r(m));
++				v(c, r(u.outline ? u.outline.map(([px, py]) => [(u.left - t.left + px) * o, (u.top - t.top + py) * s]) : m));
+ 				let h = u.radius === "capsule" ? Math.min(u.width, u.height) / 2 : u.radius;
+ 				y(c, `${h.toFixed(2)}px`);
+ 				let _ = c.maps ? "1" : "0";
+@@ -530,7 +562,8 @@ function R(o, s = {}) {
+ 				height: T,
+ 				radius: E,
+ 				dpr: C,
+-				appearance: c.options.appearance
++				appearance: c.options.appearance,
++				optics: mapOptics(c)
+ 			};
+ 			if (E === "capsule" && !D && Math.abs(b / w - x / T) > .004) {
+ 				let e = n(b, x, "capsule").map(([e, t]) => [e * w / b, t * T / x]);
+@@ -570,7 +603,10 @@ function R(o, s = {}) {
+ 		C !== q && (q = C, V = !0);
+ 		let w = `${M()} ${devicePixelRatio}`;
+ 		w !== Ye && (Ye = w, V = !0);
+-		let T = V, E = (a || s) && e - Ge < 15, D = V && !h && !E;
++		// A live DOM surface must share a frame with its optical mask and rim.
++		// Throttling geometry changes leaves the old rim behind the moving fill
++		// on high-refresh displays. Only defer animation without a box change.
++		let T = V, E = a && !s && e - Ge < 15, D = V && !h && !E;
+ 		D && (Ge = e), !h && !E && (V = !1);
+ 		let O = G.error(), k = Ve?.message !== O?.message;
+ 		return Ve = O, i.push(() => {
+@@ -623,7 +659,14 @@ function R(o, s = {}) {
+ 				prepared: /* @__PURE__ */ new Map(),
+ 				preparing: /* @__PURE__ */ new Set()
+ 			}, i = () => v(n.motion);
+-			(n.morphFrom || n.fluid) && !n.concentric && r.animators.push(r.outline = x(t, {
++			n.geometry ? r.animators.push(r.outline = n.geometry(t, shape => {
++				const prepared = r.prepared.get(L({
++					width: shape.width, height: shape.height, radius: shape.radius,
++					outline: shape.outline, dpr: shape.dpr ?? Ie,
++					appearance: n.appearance, optics: mapOptics(r)
++				}));
++				return !!prepared && prepared.ready <= performance.now();
++			})) : (n.morphFrom || n.fluid) && !n.concentric && r.animators.push(r.outline = x(t, {
+ 				from: n.morphFrom,
+ 				morph: n.morph,
+ 				layout: n.fluid,
+@@ -639,7 +682,8 @@ function R(o, s = {}) {
+ 						radius: e.radius,
+ 						outline: e.outline,
+ 						dpr: e.dpr ?? Ie,
+-						appearance: n.appearance
++						appearance: n.appearance,
++						optics: mapOptics(r)
+ 					}));
+ 					return !!t && t.ready <= performance.now();
+ 				}
+diff --git a/dist/gpu/maps.js b/dist/gpu/maps.js
+index d0afa9052ee3daafcf290f915a551d4989e661dc..116c13bbdf832db7d33b0321e183a4c440687935 100644
+--- a/dist/gpu/maps.js
++++ b/dist/gpu/maps.js
+@@ -1,8 +1,110 @@
+-//#region src/gpu/maps.wgsl
+-var e = {
+-	version: 1,
+-	wgsl: "// Lisse outlines tessellated once on the host, shared with DOM clipping.\n// A batch renders several shapes into one atlas: each shape owns a band of\n// rows holding its two planes, so every map of an animation path is one\n// pass and one readback. The field plane carries displacement in red and\n// green and shape coverage in alpha; SVG reads a displacement map\n// unpremultiplied, so the two never interfere. The overlay plane is the rim\n// shade with the highlight drawn over it, ready to paint over the material.\nstruct Shape {\n  size: vec2f,\n  // First atlas row of this shape, and physical rows per plane.\n  row: f32,\n  rows: f32,\n  // Physical columns this shape covers; the atlas is as wide as its widest shape.\n  columns: f32,\n  dpr: f32,\n  dark: f32,\n  symmetric: f32,\n  // Outline segment range in the shared segment table.\n  start: u32,\n  count: u32,\n  pad: vec2u,\n}\nstruct Batch { count: u32, pad: vec3u, shapes: array<Shape, 32> }\nstruct Outline { segments: array<vec4f, 4096> }\n@group(0) @binding(0) var<uniform> batch: Batch;\n@group(0) @binding(1) var<uniform> outline: Outline;\nfn sat(x: f32) -> f32 { return clamp(x, 0.0, 1.0); }\nfn shape(s: Shape, point: vec2f) -> vec3f {\n  let symmetric = s.symmetric != 0.0;\n  let p = select(point, vec2f(abs(point.x), -abs(point.y)), symmetric) + s.size * 0.5;\n  var distance2 = 1e20;\n  var delta = vec2f(0.0);\n  var outward = vec2f(0.0, -1.0);\n  for (var i = s.start; i < s.start + s.count; i++) {\n    let segment = outline.segments[i];\n    let edge = segment.zw - segment.xy;\n    let nearest = segment.xy + edge * sat(dot(p-segment.xy, edge) / dot(edge, edge));\n    let v = p - nearest;\n    let d2 = dot(v, v);\n    if (d2 < distance2) {\n      distance2 = d2;\n      delta = v;\n      outward = normalize(vec2f(edge.y, -edge.x));\n    }\n  }\n  let direction = select(-1.0, 1.0, dot(delta, outward) >= 0.0);\n  let distance = sqrt(distance2);\n  let normal = select(outward, delta * direction / max(distance, 0.00001), distance > 0.00001);\n  return vec3f(distance * direction, select(normal, vec2f(normal.x, -normal.y) * sign(point), symmetric));\n}\n@fragment fn fs_main(@builtin(position) position: vec4f) -> @location(0) vec4f {\n  var index = 0u;\n  for (var k = 1u; k < batch.count; k++) {\n    if (position.y >= batch.shapes[k].row) { index = k; }\n  }\n  let s = batch.shapes[index];\n  let band = position.y - s.row;\n  let plane = min(u32(band / s.rows), 1u);\n  let local = vec2f(position.x / s.columns, (band - f32(plane) * s.rows) / s.rows);\n  let point = local * (s.size + 4.0) - (s.size + 4.0) * 0.5;\n  let field = shape(s, point);\n  let d = field.x; let n = field.yz;\n  let aa = max(fwidth(d), 1.0 / s.dpr);\n  // Derivatives above stay in uniform control flow; columns past this\n  // shape's width belong to a wider shape in the same atlas.\n  if (position.x >= s.columns) { return vec4f(0.0); }\n  let coverage = sat(0.5 - d / aa);\n  let depth = sat(-d * 0.05);\n  let edge = 1.0 - sat(sqrt((2.0 - depth) * depth));\n  if (plane == 0u) { return vec4f(vec2f(0.5) - n * edge * 0.5, 0.5, coverage); }\n  // Keep the top/bottom light away from the side outline, including capsules.\n  let spread = 1.08;\n  let directional = pow(sat((abs(n.y) - cos(spread)) / (1.0 - cos(spread))), 1.25);\n  let diffuseDir = pow(sat((abs(n.y) - cos(spread * 0.65)) / (1.0 - cos(spread * 0.65))), 1.25);\n  let stroke = sat((d + 0.9) / aa + 0.5) * sat(0.5 - d / aa);\n  var specular = directional * stroke;\n  specular = specular / (1.0 + 0.5 * (1.0 - specular));\n  let diffuse = diffuseDir * 0.18 * pow(1.0 - sat(-d / 4.5), 2.0) * coverage;\n  let highlight = sat(specular * mix(1.0, 0.82, s.dark) + diffuse * mix(1.0, 0.40, s.dark));\n  let adjusted = d - 0.5;\n  let falloff = 1.0 - sat(-adjusted / 0.5);\n  let ramp = mix(select(0.0, 1.0, falloff > 0.0), falloff, 0.75);\n  let outline = ramp * sat((adjusted + 0.5) / aa + 0.5) * sat(-adjusted / aa + 0.5);\n  let sideSpread = 0.98;\n  let weights = clamp((vec2f(n.x, -n.x) - cos(sideSpread)) / (1.0 - cos(sideSpread)), vec2f(0), vec2f(1)) * outline;\n  let shade = dot(weights / (vec2f(1) + 0.4 * (vec2f(1) - weights)), vec2f(1)) * mix(0.48, 0.60, s.dark);\n  // Light over a black rim, unpremultiplied for the PNG encoder.\n  let alpha = highlight + shade * (1.0 - highlight);\n  let light = mix(1.0, 0.82, s.dark) * highlight / max(alpha, 0.00001);\n  return vec4f(vec3f(light), alpha);\n}\n",
+-	functionExports: []
+-};
+-//#endregion
+-export { e as default };
++// Locally extended SDK shader. Defaults preserve the upstream material.
++const shader = { version: 1, wgsl: `// Lisse outlines tessellated once on the host, shared with DOM clipping.
++// A batch renders several shapes into one atlas: each shape owns a band of
++// rows holding its two planes, so every map of an animation path is one
++// pass and one readback. The field plane carries displacement in red and
++// green and shape coverage in alpha; SVG reads a displacement map
++// unpremultiplied, so the two never interfere. The overlay plane is the rim
++// shade with the highlight drawn over it, ready to paint over the material.
++struct Shape {
++  size: vec2f,
++  // First atlas row of this shape, and physical rows per plane.
++  row: f32,
++  rows: f32,
++  // Physical columns this shape covers; the atlas is as wide as its widest shape.
++  columns: f32,
++  dpr: f32,
++  dark: f32,
++  symmetric: f32,
++  // Outline segment range in the shared segment table.
++  start: u32,
++  count: u32,
++  pad: vec2u,
++  // depth, light angle (radians), intensity, splay (-1 = SDK defaults).
++  optics: vec4f,
++}
++struct Batch { count: u32, pad: vec3u, shapes: array<Shape, 32> }
++struct Outline { segments: array<vec4f, 4096> }
++@group(0) @binding(0) var<uniform> batch: Batch;
++@group(0) @binding(1) var<uniform> outline: Outline;
++fn sat(x: f32) -> f32 { return clamp(x, 0.0, 1.0); }
++fn shape(s: Shape, point: vec2f) -> vec3f {
++  let symmetric = s.symmetric != 0.0;
++  let p = select(point, vec2f(abs(point.x), -abs(point.y)), symmetric) + s.size * 0.5;
++  var distance2 = 1e20;
++  var delta = vec2f(0.0);
++  var outward = vec2f(0.0, -1.0);
++  for (var i = s.start; i < s.start + s.count; i++) {
++    let segment = outline.segments[i];
++    let edge = segment.zw - segment.xy;
++    let nearest = segment.xy + edge * sat(dot(p-segment.xy, edge) / dot(edge, edge));
++    let v = p - nearest;
++    let d2 = dot(v, v);
++    if (d2 < distance2) {
++      distance2 = d2;
++      delta = v;
++      outward = normalize(vec2f(edge.y, -edge.x));
++    }
++  }
++  let direction = select(-1.0, 1.0, dot(delta, outward) >= 0.0);
++  let distance = sqrt(distance2);
++  let normal = select(outward, delta * direction / max(distance, 0.00001), distance > 0.00001);
++  return vec3f(distance * direction, select(normal, vec2f(normal.x, -normal.y) * sign(point), symmetric));
++}
++@fragment fn fs_main(@builtin(position) position: vec4f) -> @location(0) vec4f {
++  var index = 0u;
++  for (var k = 1u; k < batch.count; k++) {
++    if (position.y >= batch.shapes[k].row) { index = k; }
++  }
++  let s = batch.shapes[index];
++  let band = position.y - s.row;
++  let plane = min(u32(band / s.rows), 1u);
++  let local = vec2f(position.x / s.columns, (band - f32(plane) * s.rows) / s.rows);
++  let point = local * (s.size + 4.0) - (s.size + 4.0) * 0.5;
++  let field = shape(s, point);
++  let d = field.x; let n = field.yz;
++  let aa = max(fwidth(d), 1.0 / s.dpr);
++  // Derivatives above stay in uniform control flow; columns past this
++  // shape's width belong to a wider shape in the same atlas.
++  if (position.x >= s.columns) { return vec4f(0.0); }
++  let coverage = sat(0.5 - d / aa);
++  let depth = sat(-d / max(s.optics.x, 1.0));
++  let edge = 1.0 - sat(sqrt((2.0 - depth) * depth));
++  if (plane == 0u) { return vec4f(vec2f(0.5) - n * edge * 0.5, 0.5, coverage); }
++  // Keep the top/bottom light away from the side outline, including capsules.
++  var spread = 1.08;
++  var directional = pow(sat((abs(n.y) - cos(spread)) / (1.0 - cos(spread))), 1.25);
++  var diffuseDir = pow(sat((abs(n.y) - cos(spread * 0.65)) / (1.0 - cos(spread * 0.65))), 1.25);
++  if (s.optics.w >= 0.0) {
++    // Continuous broad lobes: no angular gate where a highlight abruptly
++    // vanishes on the capsule's sides. Splay widens the light distribution.
++    let exponent = mix(8.0, 1.5, s.optics.w);
++    let lightDir = vec2f(sin(s.optics.y), -cos(s.optics.y));
++    let facing = dot(n, lightDir);
++    let front = pow(max(facing, 0.0), exponent);
++    let back = pow(max(-facing, 0.0), exponent);
++    let ambient = mix(0.10, 0.18, s.optics.w);
++    directional = ambient + (1.0 - ambient) * (front + back * 0.72);
++    diffuseDir = 0.04 + 0.96 * pow(abs(facing), max(1.0, exponent * 0.55));
++  }
++  let stroke = sat((d + 0.9) / aa + 0.5) * sat(0.5 - d / aa);
++  var specular = directional * stroke;
++  specular = specular / (1.0 + 0.5 * (1.0 - specular));
++  let diffuse = diffuseDir * 0.18 * pow(1.0 - sat(-d / 4.5), 2.0) * coverage;
++  let highlight = sat((specular * mix(1.0, 0.82, s.dark) + diffuse * mix(1.0, 0.40, s.dark)) * s.optics.z);
++  let adjusted = d - 0.5;
++  let falloff = 1.0 - sat(-adjusted / 0.5);
++  let ramp = mix(select(0.0, 1.0, falloff > 0.0), falloff, 0.75);
++  let outline = ramp * sat((adjusted + 0.5) / aa + 0.5) * sat(-adjusted / aa + 0.5);
++  let sideSpread = 0.98;
++  let weights = clamp((vec2f(n.x, -n.x) - cos(sideSpread)) / (1.0 - cos(sideSpread)), vec2f(0), vec2f(1)) * outline;
++  let legacyShade = dot(weights / (vec2f(1) + 0.4 * (vec2f(1) - weights)), vec2f(1)) * mix(0.48, 0.60, s.dark);
++  let softShade = (0.08 + 0.08 * (1.0 - abs(dot(n, vec2f(sin(s.optics.y), -cos(s.optics.y)))))) * outline;
++  let shade = select(legacyShade, softShade, s.optics.w >= 0.0) * s.optics.z;
++  // Light over a black rim, unpremultiplied for the PNG encoder.
++  let alpha = highlight + shade * (1.0 - highlight);
++  let light = mix(1.0, 0.82, s.dark) * highlight / max(alpha, 0.00001);
++  return vec4f(vec3f(light), alpha);
++}
++`, functionExports: [] };
++export default shader;
+diff --git a/dist/gpu.js b/dist/gpu.js
+index 202e9fdcff70c24074ff390a77ffd41dde57c4ae..2a2769adfaa795210961761503f2346685ca2650 100644
+--- a/dist/gpu.js
++++ b/dist/gpu.js
+@@ -43,7 +43,8 @@ var f = class {
+ 			symmetric: 1,
+ 			start: 0,
+ 			count: 0,
+-			pad: [0, 0]
++			pad: [0, 0],
++			optics: [20, 0, 1, -1]
+ 		};
+ 		this.shader = a(e, i, {
+ 			label: "liquid-glass/material-field",
+@@ -128,7 +129,13 @@ var f = class {
+ 					symmetric: +!e.geometry.outline,
+ 					start: t,
+ 					count: e.segments.length,
+-					pad: [0, 0]
++					pad: [0, 0],
++					optics: e.geometry.optics ? [
++						e.geometry.optics.depth,
++						e.geometry.optics.lightAngle * Math.PI / 180,
++						e.geometry.optics.lightIntensity,
++						e.geometry.optics.splay
++					] : [20, 0, 1, -1]
+ 				};
+ 				return r += e.rows * 2 + e.rows * 2 % 2, a;
+ 			}), s = r;
+diff --git a/dist/react/surface.js b/dist/react/surface.js
+index a02a196a95912b7e401b77277573e620d9ec526d..8778a5c64d85c499c20ea2af8f3e387911c89fc2 100644
+--- a/dist/react/surface.js
++++ b/dist/react/surface.js
+@@ -4,7 +4,7 @@ import { useScene as t } from "./scene.js";
+ import { useCallback as n, useLayoutEffect as r, useMemo as i, useRef as a } from "react";
+ import { useRender as o } from "@base-ui/react/use-render";
+ //#region src/react/surface.tsx
+-function s({ material: s, appearance: c, radius: l, concentric: u, refraction: d, tint: f, interactive: p = !1, morphFrom: m, morph: h, neck: g, morphEnter: _, fluid: v = !1, motion: y, render: b, ref: x, children: S, className: C = "", style: w, ...T }) {
++function s({ geometry, material: s, appearance: c, radius: l, concentric: u, refraction: d, tint: f, interactive: p = !1, morphFrom: m, morph: h, neck: g, morphEnter: _, fluid: v = !1, motion: y, render: b, ref: x, children: S, className: C = "", style: w, ...T }) {
+ 	let E = t(), { controller: D } = E;
+ 	s ??= E.material, c ??= E.appearance, y ??= E.motion;
+ 	let O = !!u, k = typeof u == "object" ? u.inset : void 0, A = a(m);
+@@ -12,6 +12,7 @@ function s({ material: s, appearance: c, radius: l, concentric: u, refraction: d
+ 		A.current = m;
+ 	});
+ 	let j = !!m, M = i(() => ({
++		geometry,
+ 		material: s,
+ 		appearance: c,
+ 		radius: l,
+@@ -29,6 +30,7 @@ function s({ material: s, appearance: c, radius: l, concentric: u, refraction: d
+ 			return typeof e == "function" ? e() : e?.current;
+ 		} : void 0
+ 	}), [
++		geometry,
+ 		s,
+ 		c,
+ 		l,
+diff --git a/dist/types/core/index.d.ts b/dist/types/core/index.d.ts
+index c6c9b3f3a5b2f44eeab0ab45aba3794e3b263748..a2359d8a7103aa44d0db6ee6237c21c8c41fd49e 100644
+--- a/dist/types/core/index.d.ts
++++ b/dist/types/core/index.d.ts
+@@ -8,3 +8,5 @@ export { Spring, springs, settleTime, rubberBand } from "./spring.js";
+ export type { SpringOptions } from "./spring.js";
+ export { smoothUnion, smoothMin, roundRectDistance } from "./union.js";
+ export type { RoundRect } from "./union.js";
++
++export { shapePolygon } from "./shape.js";
+diff --git a/dist/types/dom/index.d.ts b/dist/types/dom/index.d.ts
+index c41abe503798c67b9b87ae86296fab89603db137..33f2bb7581abab318a10028b89df50d111fd3378 100644
+--- a/dist/types/dom/index.d.ts
++++ b/dist/types/dom/index.d.ts
+@@ -1,5 +1,5 @@
+ import type { GlassMotion, SurfaceAnimator } from "./interaction.js";
+-import type { GlassMorph } from "./morph.js";
++import type { GlassMorph, GeometryAnimator, LensWaypoint } from "./morph.js";
+ export { attachInteraction, resolveMotion } from "./interaction.js";
+ export type { GlassMotion, SurfaceAnimator } from "./interaction.js";
+ export { attachGeometryMotion, radiusPixels } from "./morph.js";
+@@ -23,6 +23,8 @@ export interface GlassSceneOptions {
+ }
+ /** Material plus the motion a registered surface takes part in. */
+ export interface SurfaceOptions extends MaterialOptions {
++    /** Custom outline motion, sampled in the same frame as the optical graph. */
++    geometry?: (element: HTMLElement, prepared: (shape: LensWaypoint) => boolean) => GeometryAnimator;
+     /** React to touch and pointer input: grow, stretch toward a drag, settle with
+      * overshoot, and light up beneath the pointer. */
+     interactive?: boolean;
+diff --git a/dist/types/dom/morph.d.ts b/dist/types/dom/morph.d.ts
+index 38355bacc9323590ccf913540a3dd21cf3b232f2..5bb0144f830b96f9e40c3f21adcc9e2f169f8699 100644
+--- a/dist/types/dom/morph.d.ts
++++ b/dist/types/dom/morph.d.ts
+@@ -1,3 +1,4 @@
++import type { ShapePoint } from "../core/concentric.js";
+ import type { GlassRadius } from "../core/shape.js";
+ import type { Box, MorphGeometry } from "../core/morph-path.js";
+ import type { GlassMotion, SurfaceAnimator } from "./interaction.js";
+@@ -11,6 +12,8 @@ export interface LensPlacement extends Box {
+ }
+ /** One frame of an animated outline. */
+ export interface LensFrame extends Box {
++    /** Actual current contour in frame-local viewport pixels. */
++    outline?: ShapePoint[];
+     /** Pixels, or a capsule whose ends stay exact at every width. */
+     radius: number | "capsule";
+     /** The material to draw: the two prepared shapes around this frame,
+diff --git a/dist/types/gpu/geometry.d.ts b/dist/types/gpu/geometry.d.ts
+index 3416866641299401a39f45a4d36ac40eff7d99e6..a1830c9523abccec57347f5271d9050c1b5d0b17 100644
+--- a/dist/types/gpu/geometry.d.ts
++++ b/dist/types/gpu/geometry.d.ts
+@@ -3,6 +3,8 @@ import type { ShapePoint } from "../core/concentric.js";
+ export interface MapGeometry {
+     /** Resolved convex outline for container-relative glass, in local CSS pixels. */
+     outline?: ShapePoint[];
++    /** Local Figma-style map controls; other optics are applied in SVG. */
++    optics?: { depth: number; lightAngle: number; lightIntensity: number; splay: number };
+     width: number;
+     height: number;
+     radius: GlassRadius;
+diff --git a/dist/types/react/surface.d.ts b/dist/types/react/surface.d.ts
+index 822408649bd0ba0461b6a08b3ddafc6438a5111a..db545c6b2ef2f3a997fc4b3e0afb164cdfc7c023 100644
+--- a/dist/types/react/surface.d.ts
++++ b/dist/types/react/surface.d.ts
+@@ -1,6 +1,6 @@
+ import type { HTMLAttributes, Ref, RefObject } from "react";
+ import { useRender } from "@base-ui/react/use-render";
+-import type { GlassMotion, GlassMorph } from "../dom/index.js";
++import type { GeometryAnimator, LensWaypoint, GlassMotion, GlassMorph } from "../dom/index.js";
+ import type { MaterialOptions } from "../core/materials.js";
+ /** How a glass surface moves. Every option is available to any surface. */
+ export interface GlassMotionProps {
+@@ -28,6 +28,8 @@ export interface GlassMotionProps {
+     motion?: GlassMotion;
+ }
+ export interface GlassSurfaceProps extends HTMLAttributes<HTMLElement>, MaterialOptions, GlassMotionProps {
++    /** Custom outline motion. Material maps are prepared by the scene. */
++    geometry?: (element: HTMLElement, prepared: (shape: LensWaypoint) => boolean) => GeometryAnimator;
+     render?: useRender.RenderProp;
+     ref?: Ref<HTMLElement>;
+ }

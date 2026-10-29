@@ -22,7 +22,7 @@ const featuredExperience: FeaturedExperience[] = [
     id: 'uxart',
     company: 'UXART',
     role: { ru: 'UX/UI-дизайнер', en: 'UX/UI designer' },
-    period: { ru: '2023 — 2025 · 1,5 года', en: '2023 — 2025 · 1.5 years' },
+    period: { ru: '2023 — 2025 (1,5 года)', en: '2023 — 2025 (1.5 years)' },
     logo: '/company-favicons/uxart-current.svg',
   },
 ]

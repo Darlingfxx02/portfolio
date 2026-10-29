@@ -25,6 +25,17 @@ import { AnalyticsConsent } from '@/components/AnalyticsConsent/AnalyticsConsent
 import { cases } from '@/data/cases'
 import { initSfx, tabTick } from '@/lib/sound'
 import { initAnalytics, trackEvent } from '@/lib/analytics'
+import type { SelectionPreview } from '@/lib/glass/liquidSelection'
+import { useGlassSettings } from '@/lib/glass/useGlassSettings'
+import { useMobileLayout } from '@/lib/useMobileLayout'
+import {
+  adjacentSection,
+  navigationArrival,
+  sectionEdgeDirection,
+  sectionScrollPosition,
+  type ScrollNavigation,
+  type SectionScrollDirection,
+} from '@/lib/sectionScroll'
 import styles from './App.module.css'
 
 const CASE_COMPONENTS: Record<string, ComponentType> = {
@@ -37,8 +48,6 @@ const CASE_COMPONENTS: Record<string, ComponentType> = {
 
 const SECTION_ORDER: PortfolioTab[] = ['home', 'explorations', 'work', 'about']
 const TOUCH_SECTION_DISTANCE = 320
-type SectionScrollDirection = 'forward' | 'backward'
-type SectionArrival = 'top' | 'saved'
 
 const SCROLL_STORAGE_PREFIX = 'darling-live:scroll:'
 
@@ -68,6 +77,7 @@ function scrollStorageKey(hash: string) {
 }
 
 function saveScrollPosition(hash: string, position = window.scrollY) {
+  if (hash.startsWith('#case/')) return
   try {
     window.localStorage.setItem(scrollStorageKey(hash), String(Math.max(0, position)))
   } catch {
@@ -84,14 +94,12 @@ function savedScrollPosition(hash: string) {
   }
 }
 
-function scrollImmediatelyTo(hash: string, arrival: SectionArrival = 'saved') {
+function scrollImmediatelyTo(hash: string, navigation: ScrollNavigation = 'restore') {
   const root = document.documentElement
   const previousScrollBehavior = root.style.scrollBehavior
   const maxScroll = Math.max(0, root.scrollHeight - window.innerHeight)
-  const target =
-    arrival === 'saved'
-      ? Math.min(savedScrollPosition(hash), maxScroll)
-      : 0
+  const arrival = navigationArrival(hash, navigation)
+  const target = sectionScrollPosition(arrival, maxScroll, arrival === 'saved' ? savedScrollPosition(hash) : 0)
 
   root.style.scrollBehavior = 'auto'
   window.scrollTo(0, target)
@@ -103,6 +111,9 @@ function scrollImmediatelyTo(hash: string, arrival: SectionArrival = 'saved') {
 }
 
 function App() {
+  const glassSourceRef = useRef<HTMLDivElement>(null)
+  const glassController = useGlassSettings()
+  const mobileControls = useMobileLayout()
   const hash = useHash()
   const caseId = hash.startsWith('#case/') ? hash.slice('#case/'.length) : ''
   const caseStudy = cases.find((study) => study.id === caseId)
@@ -110,36 +121,36 @@ function App() {
   const onCase = !!CaseView
   const onCv = hash === '#cv'
   const activeTab = tabFromHash(hash)
-  const activeTabIndex = SECTION_ORDER.indexOf(activeTab)
-  const nextTab = SECTION_ORDER[(activeTabIndex + 1) % SECTION_ORDER.length]
-  const previousTab =
-    SECTION_ORDER[(activeTabIndex - 1 + SECTION_ORDER.length) % SECTION_ORDER.length]
-  const sectionArrivalRef = useRef<SectionArrival>('saved')
+  const nextTab = adjacentSection(SECTION_ORDER, activeTab, 'forward')
+  const previousTab = adjacentSection(SECTION_ORDER, activeTab, 'backward')
+  const scrollNavigationRef = useRef<ScrollNavigation>('restore')
   const resetSectionTransitionRef = useRef<() => void>(() => {})
 
-  const showTab = useCallback((tab: PortfolioTab, arrival: SectionArrival = 'saved') => {
+  const showTab = useCallback((tab: PortfolioTab, navigation: ScrollNavigation = 'restore') => {
     const nextHash = `#${tab}`
-    if (arrival === 'saved') resetSectionTransitionRef.current()
+    if (navigation === 'menu' || navigation === 'restore') resetSectionTransitionRef.current()
     saveScrollPosition(window.location.hash)
-    sectionArrivalRef.current = arrival
+    scrollNavigationRef.current = navigation
     if (window.location.hash === nextHash) {
-      scrollImmediatelyTo(nextHash, arrival)
-      sectionArrivalRef.current = 'saved'
+      scrollImmediatelyTo(nextHash, navigation)
+      scrollNavigationRef.current = 'restore'
       return
     }
     tabTick()
     window.location.hash = nextHash
   }, [])
 
+  const selectTab = useCallback((tab: PortfolioTab) => showTab(tab, 'menu'), [showTab])
+
   const navigateSection = useCallback(
     (direction: SectionScrollDirection) => {
-      if (direction === 'forward') showTab(nextTab, 'top')
-      else showTab(previousTab, 'top')
+      if (direction === 'forward' && nextTab) showTab(nextTab, 'forward')
+      else if (direction === 'backward' && previousTab) showTab(previousTab, 'backward')
     },
     [nextTab, previousTab, showTab],
   )
 
-  const sectionTransition = useCyclicSectionScroll({
+  const sectionTransition = useSectionScroll({
     activeTab,
     disabled: onCase,
     onNavigate: navigateSection,
@@ -163,11 +174,11 @@ function App() {
     }
   }, [])
 
-  // Manual navigation restores the remembered position. Cyclic edge navigation
-  // overrides it with the top/bottom edge that the gesture crossed.
+  // Cases and menu selections start at the top. Section gestures enter through
+  // the matching edge; other section returns can restore their saved position.
   useLayoutEffect(() => {
-    scrollImmediatelyTo(hash, sectionArrivalRef.current)
-    sectionArrivalRef.current = 'saved'
+    scrollImmediatelyTo(hash, scrollNavigationRef.current)
+    scrollNavigationRef.current = 'restore'
   }, [hash])
 
   useLayoutEffect(() => {
@@ -204,37 +215,48 @@ function App() {
       ) : (
         <>
           <PortfolioHeader
+            backdropRef={glassSourceRef}
+            glassController={glassController}
+            showSideControls={!mobileControls}
+            showBack={onCase}
+            onBack={onCase ? () => showTab('work') : undefined}
             activeTab={onCase ? 'work' : activeTab}
             pendingTab={onCase ? undefined : pendingTab}
             transitionProgress={onCase ? 0 : sectionTransition.progress}
             transitionDirection={onCase ? undefined : sectionTransition.direction}
-            onTabChange={showTab}
+            selectionPreviewRef={sectionTransition.selectionPreviewRef}
+            onTabChange={selectTab}
           />
-          {onCase ? (
-            <CaseView />
-          ) : (
-            <div id="top" className={styles.page}>
-              {activeTab === 'home' ? (
-                <main
-                  key="home"
-                  id="panel-home"
-                  className={styles.homeScreen}
-                  role="tabpanel"
-                  aria-labelledby="tab-home"
-                >
-                  <Profile />
-                  <div className={styles.productActivity}>
-                    <NoTypePromo />
-                    <UsageHeatmap />
-                  </div>
-                  <Experience />
-                </main>
-              ) : (
-                <PortfolioTabs key={activeTab} activeTab={activeTab} />
-              )}
-            </div>
-          )}
+          <div ref={glassSourceRef}>
+            {onCase ? (
+              <CaseView />
+            ) : (
+              <div id="top" className={styles.page}>
+                {activeTab === 'home' ? (
+                  <main
+                    key="home"
+                    id="panel-home"
+                    className={styles.homeScreen}
+                    role="tabpanel"
+                    aria-labelledby="tab-home"
+                  >
+                    <Profile />
+                    <div className={styles.productActivity}>
+                      <NoTypePromo glass={glassController.settings} />
+                      <UsageHeatmap />
+                    </div>
+                    <Experience />
+                  </main>
+                ) : (
+                  <PortfolioTabs key={activeTab} activeTab={activeTab} />
+                )}
+              </div>
+            )}
+          </div>
           <DockBar
+            backdropRef={glassSourceRef}
+            glass={glassController.settings}
+            showControls={mobileControls}
             showBack={onCase}
             onBack={onCase ? () => showTab('work') : undefined}
             onContact={() => showTab('about')}
@@ -247,7 +269,7 @@ function App() {
   )
 }
 
-function useCyclicSectionScroll({
+function useSectionScroll({
   activeTab,
   disabled,
   onNavigate,
@@ -258,21 +280,11 @@ function useCyclicSectionScroll({
 }) {
   const [progress, setProgress] = useState(0)
   const [direction, setDirection] = useState<SectionScrollDirection>()
-  const lockedRef = useRef(false)
-  const unlockTimerRef = useRef<number | null>(null)
+  const selectionPreviewRef = useRef<SelectionPreview | null>(null)
   const reset = useCallback(() => {
     setProgress(0)
     setDirection(undefined)
   }, [])
-
-  useEffect(
-    () => () => {
-      if (unlockTimerRef.current) {
-        window.clearTimeout(unlockTimerRef.current)
-      }
-    },
-    [],
-  )
 
   useEffect(() => {
     if (disabled) return
@@ -289,6 +301,8 @@ function useCyclicSectionScroll({
       window.scrollY + window.innerHeight >=
       document.documentElement.scrollHeight - 2
     const atTop = () => window.scrollY <= 2
+    const hasNeighbor = (nextDirection: SectionScrollDirection) =>
+      adjacentSection(SECTION_ORDER, activeTab, nextDirection) !== undefined
 
     const clearIdleTimer = () => {
       if (idleTimer !== null) {
@@ -308,22 +322,24 @@ function useCyclicSectionScroll({
       setProgress(0)
     }
 
-    const scheduleGestureReset = () => {
-      clearIdleTimer()
-      idleTimer = window.setTimeout(resetGesture, 650)
-    }
-
     const navigate = (nextDirection: SectionScrollDirection) => {
-      if (lockedRef.current) return
-      lockedRef.current = true
       resetGesture()
       setDirection(nextDirection)
       onNavigate(nextDirection)
-      if (unlockTimerRef.current) window.clearTimeout(unlockTimerRef.current)
-      unlockTimerRef.current = window.setTimeout(() => {
-        lockedRef.current = false
-        unlockTimerRef.current = null
-      }, 1100)
+    }
+
+    const finishGesture = () => {
+      const preview = selectionPreviewRef.current
+      const target = gestureDirection && adjacentSection(SECTION_ORDER, activeTab, gestureDirection)
+      if (gestureDirection && preview?.source === `tab-${activeTab}` &&
+        preview.target === `tab-${target}` && preview.position > 0.5) {
+        navigate(gestureDirection)
+      } else resetGesture()
+    }
+
+    const scheduleGestureFinish = () => {
+      clearIdleTimer()
+      idleTimer = window.setTimeout(finishGesture, 650)
     }
 
     const updateWheelProgress = (
@@ -344,24 +360,19 @@ function useCyclicSectionScroll({
       const nextProgress = Math.min(distanceProgress, timeProgress)
 
       setProgress(nextProgress)
-      scheduleGestureReset()
+      scheduleGestureFinish()
       if (distanceProgress >= 1 && timeProgress >= 1) navigate(nextDirection)
     }
 
     const onWheel = (event: WheelEvent) => {
-      if (lockedRef.current) {
-        if (event.deltaY !== 0) event.preventDefault()
-        return
-      }
+      if (event.deltaY === 0 || event.ctrlKey) return
 
-      const nextDirection =
-        event.deltaY > 0 && atBottom()
-          ? 'forward'
-          : event.deltaY < 0 && atTop()
-            ? 'backward'
-            : null
-
-      if (!nextDirection) {
+      const nextDirection = sectionEdgeDirection(
+        event.deltaY,
+        window.scrollY,
+        Math.max(0, document.documentElement.scrollHeight - window.innerHeight),
+      )
+      if (!nextDirection || !hasNeighbor(nextDirection)) {
         resetGesture()
         return
       }
@@ -379,7 +390,7 @@ function useCyclicSectionScroll({
     const onTouchStart = (event: TouchEvent) => {
       const startsAtTop = atTop()
       const startsAtBottom = atBottom()
-      if ((!startsAtBottom && !startsAtTop) || lockedRef.current) {
+      if (!startsAtBottom && !startsAtTop) {
         touchStartY = null
         touchStartEdge = null
         return
@@ -394,11 +405,6 @@ function useCyclicSectionScroll({
     }
 
     const onTouchMove = (event: TouchEvent) => {
-      if (lockedRef.current) {
-        event.preventDefault()
-        return
-      }
-
       if (touchStartY === null) return
       const currentY = event.touches[0]?.clientY
       if (currentY === undefined) return
@@ -419,7 +425,7 @@ function useCyclicSectionScroll({
           : distance < 0 && startedForBackward && atTop()
             ? 'backward'
             : null
-      if (!nextDirection) {
+      if (!nextDirection || !hasNeighbor(nextDirection)) {
         touchStartY = null
         touchStartEdge = null
         gestureDirection = null
@@ -442,7 +448,10 @@ function useCyclicSectionScroll({
     }
 
     const onTouchEnd = () => {
-      if (!lockedRef.current) resetGesture()
+      finishGesture()
+    }
+    const onTouchCancel = () => {
+      resetGesture()
     }
 
     const onKeyDown = (event: KeyboardEvent) => {
@@ -455,14 +464,8 @@ function useCyclicSectionScroll({
             ? 'backward'
             : null
       if (!nextDirection) return
-      if (lockedRef.current) {
-        event.preventDefault()
-        return
-      }
-      if (
-        (nextDirection === 'forward' && !atBottom()) ||
-        (nextDirection === 'backward' && !atTop())
-      ) {
+      const atEdge = nextDirection === 'forward' ? atBottom() : atTop()
+      if (!atEdge || !hasNeighbor(nextDirection)) {
         return
       }
 
@@ -478,7 +481,7 @@ function useCyclicSectionScroll({
     window.addEventListener('touchstart', onTouchStart, { passive: true })
     window.addEventListener('touchmove', onTouchMove, { passive: false })
     window.addEventListener('touchend', onTouchEnd, { passive: true })
-    window.addEventListener('touchcancel', onTouchEnd, { passive: true })
+    window.addEventListener('touchcancel', onTouchCancel, { passive: true })
     window.addEventListener('keydown', onKeyDown)
 
     return () => {
@@ -487,12 +490,12 @@ function useCyclicSectionScroll({
       window.removeEventListener('touchstart', onTouchStart)
       window.removeEventListener('touchmove', onTouchMove)
       window.removeEventListener('touchend', onTouchEnd)
-      window.removeEventListener('touchcancel', onTouchEnd)
+      window.removeEventListener('touchcancel', onTouchCancel)
       window.removeEventListener('keydown', onKeyDown)
     }
   }, [activeTab, disabled, onNavigate])
 
-  return { progress, direction, reset }
+  return { progress, direction, reset, selectionPreviewRef }
 }
 
 export default App

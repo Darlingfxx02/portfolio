@@ -40,9 +40,9 @@
   pointer-events: none;
   background: linear-gradient(
     180deg,
-    rgba(0, 0, 0, 0) 0%,
-    rgba(0, 0, 0, 0.0721) 67.308%,
-    #000 100%
+    rgb(var(--bg-rgb) / 0) 0%,
+    rgb(var(--bg-rgb) / 7.21%) 67.308%,
+    var(--bg) 100%
   );
 }
 
@@ -71,6 +71,10 @@
 
 .name {
   color: var(--text-strong);
+}
+
+:global(:root[data-theme='light']) .name {
+  font-weight: var(--wt-medium);
 }
 
 .age {
@@ -111,6 +115,11 @@
   flex: none;
   border-radius: 5px;
   object-fit: contain;
+}
+
+:global(:root[data-theme='light']) .codexIcon {
+  /* The original macOS asset includes a 100px transparent inset on 1024px. */
+  transform: scale(1.243);
 }
 
 @media (max-width: 560px) {

@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef } from 'react'
 import {
   DownloadSimple,
   Moon,
@@ -8,6 +8,7 @@ import { cv } from '@/data/cv'
 import { experience, type ExperienceItem } from '@/data/experience'
 import { LanguageSwitcher } from '@/components/LanguageSwitcher/LanguageSwitcher'
 import { useLang, t } from '@/lib/i18n'
+import { useTheme } from '@/lib/theme'
 import styles from './Cv.module.css'
 
 const COMPANY_LOGOS: Record<string, string> = {
@@ -28,19 +29,6 @@ const CV_LABELS = {
 }
 
 const cvText = (value: string) => value.replace(/[‐‑‒–—−]/g, '-')
-type CvTheme = 'light' | 'dark'
-
-const getInitialTheme = (): CvTheme => {
-  if (typeof window === 'undefined') return 'dark'
-
-  const saved = window.localStorage.getItem('cv-theme')
-  if (saved === 'light' || saved === 'dark') return saved
-
-  return window.matchMedia('(prefers-color-scheme: light)').matches
-    ? 'light'
-    : 'dark'
-}
-
 const entryTags = (category: string) =>
   category
     .split(/[·,]/)
@@ -49,7 +37,7 @@ const entryTags = (category: string) =>
 
 export function Cv() {
   const { lang } = useLang()
-  const [theme, setTheme] = useState<CvTheme>(getInitialTheme)
+  const { theme, toggleTheme } = useTheme()
   const prevTitle = useRef('')
   const employment = experience.filter(
     (item) => item.kind === 'employment' && !item.parentId,
@@ -73,10 +61,6 @@ export function Cv() {
     window.addEventListener('afterprint', onAfter)
     return () => window.removeEventListener('afterprint', onAfter)
   }, [])
-
-  useEffect(() => {
-    window.localStorage.setItem('cv-theme', theme)
-  }, [theme])
 
   const onDownload = () => {
     prevTitle.current = document.title
@@ -223,9 +207,7 @@ export function Cv() {
         <button
           type="button"
           className={styles.themeToggle}
-          onClick={() =>
-            setTheme((value) => (value === 'dark' ? 'light' : 'dark'))
-          }
+          onClick={toggleTheme}
           aria-label={
             theme === 'dark'
               ? lang === 'ru'

@@ -1,0 +1,66 @@
+.scene {
+  position: relative;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  overflow: clip;
+  background: transparent;
+  box-shadow: var(--shadow-glass);
+  --lg-foreground: var(--control-text-strong);
+}
+
+.optics,
+.trigger {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+}
+
+.optics { pointer-events: none; }
+
+.trigger {
+  display: grid;
+  place-items: center;
+  padding: 0;
+  color: var(--control-text-strong);
+}
+
+.icon {
+  stroke-width: 16;
+  transition: transform 180ms var(--ease), stroke-width 460ms ease;
+}
+
+.icon[data-theme='light'] { stroke-width: 20; }
+
+.rays {
+  transform-origin: 128px 128px;
+  transition: opacity 200ms ease, transform 460ms cubic-bezier(0.65, 0, 0.35, 1);
+}
+
+.icon[data-theme='light'] .rays {
+  opacity: 0;
+  transform: scale(0.65);
+}
+
+.icon[data-theme='dark'] .rays {
+  transition-delay: 100ms, 0ms;
+}
+
+.trigger:active svg { transform: scale(0.94); }
+
+.trigger:focus-visible {
+  outline: 2px solid var(--text-mid);
+  outline-offset: -6px;
+}
+
+@media (max-width: 720px) {
+  .scene { width: 44px; height: 44px; }
+  .trigger svg { width: 22px; height: 22px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .trigger svg,
+  .rays { transition: none; }
+}

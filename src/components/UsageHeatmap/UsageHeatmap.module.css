@@ -73,13 +73,32 @@
   gap: var(--gap);
 }
 
-.month {
+.year {
+  position: relative;
   width: var(--cell);
-  height: 16px;
+  height: 18px;
   color: var(--text-faint);
-  font-size: 9px;
-  line-height: 16px;
+  font-size: 11px;
+  font-weight: var(--wt-strong);
+  line-height: 18px;
   white-space: nowrap;
+}
+
+.yearText {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.year[data-align='start'] .yearText {
+  left: 0;
+  transform: none;
+}
+
+.year[data-align='end'] .yearText {
+  left: auto;
+  right: 0;
+  transform: none;
 }
 
 .cell {
@@ -112,9 +131,9 @@
   background: var(--dot);
 }
 
-/* Birthday cell (6 Mar) — plain white, no glow. */
+/* Birthday cell (6 Mar) — neutral contrast in either theme. */
 .cell[data-birthday] {
-  background: #fff;
+  background: var(--birthday);
   outline: none;
   box-shadow: none;
   cursor: default;

@@ -4,6 +4,7 @@
 export const siteBootImageSources = [
   '/hero-video-poster.png',
   '/stickers/codex-icon.webp',
+  '/stickers/codex-icon-dark.png',
   '/stickers/claude-icon.webp',
   '/stickers/figma-icon.webp',
   '/stickers/self-portrait.webp',

@@ -1,6 +1,7 @@
 import { createElement, lazy, StrictMode, Suspense } from 'react'
 import { createRoot } from 'react-dom/client'
 import { getInitialLanguage, LanguageProvider } from '@/lib/i18n'
+import { ThemeProvider } from '@/lib/theme'
 import './index.css'
 import './tailwind.css'
 
@@ -16,11 +17,13 @@ const portfolioModule = lazy(async () => {
   return {
     default: () => (
       <LanguageProvider>
-        <PersonalizationProvider>
-          <SiteBoot>
-            <App />
-          </SiteBoot>
-        </PersonalizationProvider>
+        <ThemeProvider>
+          <PersonalizationProvider>
+            <SiteBoot>
+              <App />
+            </SiteBoot>
+          </PersonalizationProvider>
+        </ThemeProvider>
       </LanguageProvider>
     ),
   }

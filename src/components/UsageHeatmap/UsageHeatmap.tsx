@@ -332,15 +332,27 @@ export function UsageHeatmap() {
 
   const { cols, thresholds } = grid
 
-  const monthLabels = cols.map((col, i) => {
-    const month = col[0].date.getMonth()
-    const previous = i > 0 ? cols[i - 1][0].date.getMonth() : -1
-    return month !== previous
-      ? col[0].date.toLocaleDateString(lang === 'ru' ? 'ru-RU' : 'en-US', {
-          month: 'short',
-        })
-      : ''
+  const yearLabels = cols.map((col) => {
+    const boundary = col.find((cell) =>
+      !cell.future && cell.date.getMonth() === 0 && cell.date.getDate() === 1,
+    )
+    if (!boundary) return ''
+    const year = boundary.date.getFullYear()
+    return String(year)
   })
+
+  // The last week may contain future placeholders in the following month.
+  // Label the last actual day, including days without recorded activity.
+  const lastDay = cols[cols.length - 1].filter((cell) => !cell.future).at(-1)
+  const lastMonth = lastDay?.date.toLocaleDateString(lang === 'ru' ? 'ru-RU' : 'en-US', {
+    month: 'long',
+  }) ?? ''
+  // Early in January, keep the year and month together so their labels do not
+  // overlap in the last few columns of the grid.
+  const endYearIndex = yearLabels.findIndex((year, ci) => year && ci >= cols.length - 8)
+  const endLabel = [endYearIndex >= 0 ? yearLabels[endYearIndex] : '', lastMonth]
+    .filter(Boolean)
+    .join(' · ')
 
   const showTip = (e: MouseEvent<HTMLSpanElement>, cell: Cell) => {
     const host = sectionRef.current
@@ -398,7 +410,14 @@ export function UsageHeatmap() {
         <div className={styles.cols} onMouseLeave={() => setTip(null)}>
           {cols.map((col, ci) => (
             <div key={ci} className={styles.col}>
-              <span className={styles.month}>{monthLabels[ci]}</span>
+              <span className={styles.year}
+                data-align={ci < 4 ? 'start' : ci >= cols.length - 4 ? 'end' : undefined}>
+                {ci === cols.length - 1 ? (
+                  <span className={styles.yearText}>{endLabel}</span>
+                ) : yearLabels[ci] && ci !== endYearIndex ? (
+                  <span className={styles.yearText}>{yearLabels[ci]}</span>
+                ) : null}
+              </span>
               {col.map((cell) =>
                 cell.future ? (
                   <span key={cell.key} className={styles.cellFuture} />

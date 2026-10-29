@@ -1,9 +1,11 @@
 import { profile } from '@/data/profile'
 import { t, useLang } from '@/lib/i18n'
+import { useTheme } from '@/lib/theme'
 import styles from './Profile.module.css'
 
 export function Profile() {
   const { lang } = useLang()
+  const { theme } = useTheme()
 
   return (
     <section className={styles.section}>
@@ -17,7 +19,7 @@ export function Profile() {
           muted
           loop
           playsInline
-          poster="/hero-video-poster.png"
+          poster={theme === 'dark' ? '/hero-video-poster.png' : undefined}
           aria-label={t(profile.name, lang)}
         >
           <source src="/hero-video.webm" type="video/webm" />
@@ -37,7 +39,9 @@ export function Profile() {
           <p className={styles.tokenLine}>
             <span>{t(profile.bio.token, lang)}</span>
             <span className={styles.aiIcons} aria-label="Codex and Claude">
-              <img src="/stickers/codex-icon.webp" alt="Codex" />
+              <img className={styles.codexIcon}
+                src={theme === 'light' ? '/stickers/codex-icon-dark.png' : '/stickers/codex-icon.webp'}
+                alt="Codex" />
               <img src="/stickers/claude-icon.webp" alt="Claude" />
             </span>
             <span>{t(profile.bio.tail, lang)}</span>

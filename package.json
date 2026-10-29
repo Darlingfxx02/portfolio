@@ -8,6 +8,7 @@
     "build": "tsc -b && vite build",
     "usage": "node scripts/aggregate-usage.mjs",
     "lint": "eslint .",
+    "test:glass": "node --test tests/glass*.test.mjs",
     "preview": "vite preview",
     "mockup-mcp": "node server/mockup-mcp/server.mjs",
     "test:mockup-mcp": "node --test --test-concurrency=1 server/mockup-mcp/tests/*.test.mjs",
@@ -23,6 +24,7 @@
     "lint:figma-plugin": "eslint figma-plugin/src figma-plugin/scripts figma-plugin/vite.config.ts --max-warnings=0"
   },
   "dependencies": {
+    "@glass-sdk/liquid-glass": "~0.0.2",
     "@modelcontextprotocol/sdk": "1.30.0",
     "@phosphor-icons/react": "^2.1.10",
     "gsap": "^3.15.0",

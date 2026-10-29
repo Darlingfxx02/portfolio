@@ -11,8 +11,8 @@
   overflow-y: auto;
   overscroll-behavior: contain;
   padding: 88px clamp(20px, 7vw, 120px) 140px;
-  background: #000;
-  color: #fff;
+  background: var(--bg);
+  color: var(--text);
   font-family: var(--font-sf);
   animation: canvasIn 260ms cubic-bezier(0.22, 1, 0.36, 1) both;
 }
@@ -30,7 +30,7 @@
   min-width: 0;
   flex-direction: column;
   gap: 28px;
-  color: #fff;
+  color: var(--text);
   opacity: 0;
   transform: translateY(24px) scale(0.985);
   animation: cardIn 520ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
@@ -99,7 +99,7 @@
 }
 
 .title {
-  color: #fff;
+  color: var(--text);
   font-size: 20px;
   font-weight: var(--wt-medium);
   line-height: 1.25;
@@ -107,7 +107,7 @@
 }
 
 .description {
-  color: rgba(255, 255, 255, 0.52);
+  color: var(--text-mid);
   font-size: 17px;
   line-height: 1.45;
   letter-spacing: -0.025em;
@@ -116,7 +116,7 @@
 .openLink {
   padding-bottom: 3px;
   border-bottom: 1px solid currentColor;
-  color: rgba(255, 255, 255, 0.7);
+  color: var(--text-strong);
   font-size: 16px;
   line-height: 1.25;
   letter-spacing: -0.025em;
@@ -125,7 +125,7 @@
 
 .card:hover .openLink,
 .card:focus-visible .openLink {
-  color: #fff;
+  color: var(--text);
 }
 
 @keyframes canvasIn {
