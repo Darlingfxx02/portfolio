@@ -345,11 +345,28 @@ function About() {
   )
 }
 
-function WorkProjectRow({ project, title, children }: {
+type WorkProjectRowProps = {
   project: WorkProject
   title: string
   children: ReactNode
-}) {
+}
+
+function WorkProjectRow(props: WorkProjectRowProps) {
+  // Case previews are an unfinished local experiment. Production keeps the
+  // compact list until the previews are ready to publish.
+  if (import.meta.env.DEV) return <WorkProjectPreview {...props} />
+
+  return (
+    <div className={styles.workProject} data-project-row={props.project.id}
+      onPointerEnter={positionHoverChip}
+      onPointerMove={positionHoverChip}
+      onPointerLeave={hideHoverChip}>
+      {props.children}
+    </div>
+  )
+}
+
+function WorkProjectPreview({ project, title, children }: WorkProjectRowProps) {
   const { lang } = useLang()
   const [selected, setSelected] = useState(0)
   const [cycle, setCycle] = useState(0)

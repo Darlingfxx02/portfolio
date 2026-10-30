@@ -7,7 +7,6 @@ import {
   type CSSProperties,
   type MouseEvent,
 } from 'react'
-import { createPortal } from 'react-dom'
 import { t, useLang, type Loc } from '@/lib/i18n'
 import { WorkVideo, type WorkVideoSource } from '@/components/WorkVideo/WorkVideo'
 import styles from './MediaGrid.module.css'
@@ -66,6 +65,19 @@ const slots: MediaSlot[] = [
     },
     size: 'video',
     wide: true,
+  },
+  {
+    src: '/media-grid/sber-health-half-poster.webp',
+    video: {
+      webm: '/media-grid/sber-health-half.webm?v=20261030-blur2',
+      mp4: '/media-grid/sber-health-half.mp4?v=20261030-blur2',
+      poster: '/media-grid/sber-health-half-poster.webp',
+    },
+    alt: {
+      ru: 'СберЗдоровье: AI-ассистент, главная и динамика пульса',
+      en: 'SberHealth: AI assistant, home and heart rate trends',
+    },
+    size: 'landscape',
   },
   {
     src: '/media-grid/crypto-wallet-swap.jpg?v=20260729-1',
@@ -186,7 +198,8 @@ const slots: MediaSlot[] = [
 export function MediaGrid() {
   const { lang } = useLang()
   const cardRefs = useRef<Array<HTMLButtonElement | null>>([])
-  const viewerCardRef = useRef<HTMLDivElement | null>(null)
+  const dialogRefs = useRef<Array<HTMLDialogElement | null>>([])
+  const viewerCardRefs = useRef<Array<HTMLDivElement | null>>([])
   const [activeIndex, setActiveIndex] = useState<number | null>(null)
   const [originRect, setOriginRect] = useState<CardRect | null>(null)
   const [isClosing, setIsClosing] = useState(false)
@@ -206,7 +219,7 @@ export function MediaGrid() {
   const closeCard = useCallback(async () => {
     if (activeIndex === null || isClosing) return
 
-    const viewerCard = viewerCardRef.current
+    const viewerCard = viewerCardRefs.current[activeIndex]
     const sourceCard = cardRefs.current[activeIndex]
     if (!viewerCard || !sourceCard) {
       setActiveIndex(null)
@@ -217,6 +230,8 @@ export function MediaGrid() {
     setIsClosing(true)
 
     const restoreGrid = () => {
+      dialogRefs.current[activeIndex]?.close()
+      viewerCard.getAnimations().forEach((animation) => animation.cancel())
       setActiveIndex(null)
       setOriginRect(null)
       window.requestAnimationFrame(() => {
@@ -230,11 +245,14 @@ export function MediaGrid() {
       return
     }
 
+    // Closing can start before the opening animation has finished.
+    const currentTransform = getComputedStyle(viewerCard).transform
+    viewerCard.getAnimations().forEach((animation) => animation.cancel())
     const currentRect = viewerCard.getBoundingClientRect()
     const targetRect = sourceCard.getBoundingClientRect()
     const animation = viewerCard.animate(
       [
-        { transform: 'translate(0, 0) scale(1, 1)' },
+        { transform: currentTransform },
         {
           transform: `translate(${targetRect.left - currentRect.left}px, ${
             targetRect.top - currentRect.top
@@ -256,9 +274,14 @@ export function MediaGrid() {
   }, [activeIndex, isClosing])
 
   useLayoutEffect(() => {
-    if (activeIndex === null || !originRect || !viewerCardRef.current) return
+    if (activeIndex === null || !originRect) return
+    const dialog = dialogRefs.current[activeIndex]
+    const viewerCard = viewerCardRefs.current[activeIndex]
+    if (!dialog || !viewerCard) return
 
-    const viewerCard = viewerCardRef.current
+    // Promote the existing media to the top layer; never recreate or reparent
+    // the video. Its decoder, current frame and playback clock stay intact.
+    if (!dialog.open) dialog.showModal()
     viewerCard.focus({ preventScroll: true })
 
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
@@ -288,10 +311,13 @@ export function MediaGrid() {
     document.body.style.overflow = 'hidden'
 
     const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') void closeCard()
+      if (event.key === 'Escape') {
+        event.preventDefault()
+        void closeCard()
+      }
       if (event.key === 'Tab') {
         event.preventDefault()
-        viewerCardRef.current?.focus({ preventScroll: true })
+        viewerCardRefs.current[activeIndex]?.focus({ preventScroll: true })
       }
     }
     window.addEventListener('keydown', handleKeyDown)
@@ -302,69 +328,65 @@ export function MediaGrid() {
     }
   }, [activeIndex, closeCard])
 
-  const activeSlot = activeIndex === null ? null : slots[activeIndex]
-
   return (
-    <>
-      <section
-        className={styles.grid}
-        aria-label={lang === 'ru' ? 'Избранные работы' : 'Selected media'}
-        aria-hidden={activeIndex !== null ? true : undefined}
-        data-viewing={activeIndex !== null && !isClosing ? '' : undefined}
-      >
-        {slots.map((slot, index) => (
-          <button
-            ref={(node) => {
-              cardRefs.current[index] = node
-            }}
-            type="button"
+    <section
+      className={styles.grid}
+      aria-label={lang === 'ru' ? 'Избранные работы' : 'Selected media'}
+      data-viewing={activeIndex !== null && !isClosing ? '' : undefined}
+    >
+      {slots.map((slot, index) => {
+        const expanded = index === activeIndex
+        return (
+          <div
             key={slot.src}
             className={`${styles.slot} ${styles[slot.size]} ${slot.wide ? styles.wide : ''}`}
             style={{ '--reveal-index': index } as CSSProperties}
-            aria-label={`${lang === 'ru' ? 'Увеличить превью' : 'Expand preview'}: ${t(slot.alt, lang)}`}
-            aria-haspopup="dialog"
-            onPointerOver={(event) => event.stopPropagation()}
-            onClick={(event) => openCard(index, event)}
+            data-active={expanded ? '' : undefined}
           >
-            {slot.video ? (
-              <WorkVideo source={slot.video} paused={activeIndex !== null} />
-            ) : (
-              <img src={slot.src} alt={t(slot.alt, lang)} draggable={false} />
-            )}
-          </button>
-        ))}
-      </section>
-
-      {activeSlot &&
-        originRect &&
-        createPortal(
-          <div
-            className={`${styles.viewer} ${isClosing ? styles.viewerClosing : ''}`}
-            role="dialog"
-            aria-modal="true"
-            aria-label={t(activeSlot.alt, lang)}
-            onClick={() => void closeCard()}
-          >
-            <div
-              ref={viewerCardRef}
-              className={styles.viewerCard}
-              style={
-                {
-                  '--media-ratio': cardRatios[activeSlot.size],
-                } as CSSProperties
-              }
-              tabIndex={-1}
-              onClick={(event) => event.stopPropagation()}
+            <button
+              ref={(node) => {
+                cardRefs.current[index] = node
+              }}
+              type="button"
+              className={styles.openButton}
+              aria-label={`${lang === 'ru' ? 'Увеличить превью' : 'Expand preview'}: ${t(slot.alt, lang)}`}
+              aria-haspopup="dialog"
+              onPointerOver={(event) => event.stopPropagation()}
+              onClick={(event) => openCard(index, event)}
+            />
+            <dialog
+              ref={(node) => {
+                dialogRefs.current[index] = node
+              }}
+              className={`${styles.viewer} ${expanded && isClosing ? styles.viewerClosing : ''}`}
+              aria-label={t(slot.alt, lang)}
+              aria-hidden={!expanded || undefined}
+              onCancel={(event) => {
+                event.preventDefault()
+                void closeCard()
+              }}
+              onClick={(event) => {
+                if (event.target === event.currentTarget) void closeCard()
+              }}
             >
-              {activeSlot.video ? (
-                <WorkVideo source={activeSlot.video} paused={isClosing} />
-              ) : (
-                <img src={activeSlot.src} alt={t(activeSlot.alt, lang)} draggable={false} />
-              )}
-            </div>
-          </div>,
-          document.body,
-        )}
-    </>
+              <div
+                ref={(node) => {
+                  viewerCardRefs.current[index] = node
+                }}
+                className={styles.viewerCard}
+                style={{ '--media-ratio': cardRatios[slot.size] } as CSSProperties}
+                tabIndex={expanded ? -1 : undefined}
+              >
+                {slot.video ? (
+                  <WorkVideo source={slot.video} paused={activeIndex !== null && !expanded} />
+                ) : (
+                  <img src={slot.src} alt={t(slot.alt, lang)} draggable={false} />
+                )}
+              </div>
+            </dialog>
+          </div>
+        )
+      })}
+    </section>
   )
 }

@@ -56,8 +56,8 @@ export function WorkVideo({ source, paused = false }: { source: WorkVideoSource;
         disablePictureInPicture
         tabIndex={-1}
       >
-        <source src={source.webm} type={'video/webm; codecs="vp9"'} />
         <source src={source.mp4} type="video/mp4" />
+        <source src={source.webm} type={'video/webm; codecs="vp9"'} />
       </video>
     </span>
   )

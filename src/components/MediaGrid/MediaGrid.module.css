@@ -27,7 +27,7 @@
   --reveal-x: 8px;
 }
 
-.grid[data-viewing] .slot {
+.grid[data-viewing] .slot:not([data-active]) {
   pointer-events: none;
   opacity: 0;
   filter: blur(8px);
@@ -77,39 +77,88 @@
   transition: transform 360ms var(--ease);
 }
 
-.slot:hover img {
+.slot:has(.openButton:hover) img {
   transform: scale(1.012);
 }
 
+.openButton {
+  position: absolute;
+  z-index: 1;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+  padding: 0;
+  border-radius: inherit;
+  background: transparent;
+  cursor: zoom-in;
+}
+
+.openButton:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: -3px;
+}
+
+/* Closed dialogs are inline media. showModal() promotes this same DOM tree,
+   including its playing video, to the browser's top layer. */
 .viewer {
+  position: static;
+  display: block;
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  max-height: none;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  overflow: visible;
+  background: transparent;
+  color: inherit;
+}
+
+.viewer[open] {
   position: fixed;
-  z-index: 2000;
   inset: 0;
   display: grid;
   place-items: center;
+  width: 100%;
+  height: 100%;
   padding: 64px 32px;
-  background: rgba(0, 0, 0, 0.86);
+  box-sizing: border-box;
   cursor: zoom-out;
+}
+
+.viewer::backdrop {
+  background: rgba(0, 0, 0, 0.86);
   animation: viewerIn 260ms ease both;
 }
 
 .viewerClosing {
   pointer-events: none;
+}
+
+.viewerClosing::backdrop {
   animation: viewerOut 460ms ease both;
 }
 
 .viewerCard {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.03);
+  aspect-ratio: var(--media-ratio);
+  transform-origin: 0 0;
+}
+
+.viewer[open] .viewerCard {
   width: min(
     832px,
     calc(100vw - 64px),
     calc((100dvh - 128px) * var(--media-ratio))
   );
-  overflow: hidden;
-  border-radius: 6px;
-  background: rgba(255, 255, 255, 0.03);
+  height: auto;
   cursor: default;
-  aspect-ratio: var(--media-ratio);
-  transform-origin: 0 0;
   will-change: transform;
 }
 
@@ -159,11 +208,11 @@
     grid-template-columns: 1fr;
   }
 
-  .viewer {
+  .viewer[open] {
     padding: 48px 16px;
   }
 
-  .viewerCard {
+  .viewer[open] .viewerCard {
     width: min(
       calc(100vw - 32px),
       calc((100dvh - 96px) * var(--media-ratio))
@@ -181,8 +230,8 @@
     transition: none;
   }
 
-  .viewer,
-  .viewerClosing {
+  .viewer::backdrop,
+  .viewerClosing::backdrop {
     animation-duration: 1ms;
   }
 }
