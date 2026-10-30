@@ -69,8 +69,8 @@ const slots: MediaSlot[] = [
   {
     src: '/media-grid/sber-health-half-poster.webp',
     video: {
-      webm: '/media-grid/sber-health-half.webm?v=20261030-blur2',
-      mp4: '/media-grid/sber-health-half.mp4?v=20261030-blur2',
+      webm: '/media-grid/sber-health-half.webm?v=20261030-persistent-blur3',
+      mp4: '/media-grid/sber-health-half.mp4?v=20261030-persistent-blur3',
       poster: '/media-grid/sber-health-half-poster.webp',
     },
     alt: {
