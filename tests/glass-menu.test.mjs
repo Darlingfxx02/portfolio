@@ -84,13 +84,14 @@ function fixture(menuLayout = layout) {
   const root = element()
   const scene = Object.assign(element({ 'data-menu-open': 'false',
     'data-menu-placement': menuLayout.placement ?? 'below' }), {
+    left: 28, top: 14,
     offsetWidth: menuLayout.size, getBoundingClientRect: () => ({
-      left: 28 + Number.parseFloat(root.style.getPropertyValue('--back-space') || '0'), top: 14,
+      left: scene.left + Number.parseFloat(root.style.getPropertyValue('--back-space') || '0'), top: scene.top,
     }),
   })
   const trigger = element(), tint = element(), blueTint = element(), back = element()
   const events = []
-  const menu = Object.assign(element(), { dispatchEvent: (event) => events.push(event.type) })
+  let menu = Object.assign(element(), { dispatchEvent: (event) => events.push(event.type) })
   const panel = { offsetWidth: menuLayout.width, offsetHeight: menuLayout.height }
   const motion = createLiquidMenu({ root: () => root, scene: () => scene, trigger: () => trigger, menu: () => menu,
     panel: () => panel, tint: () => tint, blueTint: () => blueTint, back: () => back })
@@ -102,12 +103,50 @@ function fixture(menuLayout = layout) {
   tick()
   events.length = 0
   return { root, scene, trigger, tint, blueTint, panel, events, body, popup, arrow, back, tick, advance,
+    get menu() { return menu },
+    remountMenu: () => { menu = Object.assign(element(), { dispatchEvent: (event) => events.push(event.type) }) },
     open: (value) => scene.setAttribute('data-menu-open', String(value)),
     showBack: (value) => scene.setAttribute('data-back-visible', String(value)),
     ready: (value) => { ready = value },
     get backProgress() { return Number(scene.getAttribute('data-liquid-back-progress')) },
     get progress() { return Number(scene.getAttribute('data-liquid-menu-progress')) } }
 }
+
+test('resting contours are reused while their viewport position still updates', () => {
+  const f = fixture()
+  f.open(true)
+  f.advance(1800)
+  const before = f.popup.geometry()
+  const path = f.tint.getAttribute('d')
+  f.scene.left += 40
+  f.scene.top += 15
+  f.advance(320)
+  const after = f.popup.geometry()
+  assert.equal(after.outline, before.outline, 'Do not allocate another 96-point contour while stationary')
+  assert.equal(after.left, before.left + 40)
+  assert.equal(after.top, before.top + 15)
+  assert.equal(f.tint.getAttribute('d'), path)
+  f.remountMenu()
+  f.tick()
+  assert.equal(f.menu.style.getPropertyValue('--menu-reveal'), '1', 'A replacement label layer still receives its paint')
+  f.panel.offsetWidth += 20
+  f.tick()
+  assert.notEqual(f.popup.geometry().outline, before.outline)
+  assert.ok(f.popup.geometry().width > before.width)
+})
+
+test('reusing a resting contour does not hide invalidated material maps', () => {
+  const f = fixture()
+  f.ready(false)
+  f.tick()
+  assert.equal(f.body.pending(), true)
+  f.ready(true)
+  f.tick()
+  assert.equal(f.body.pending(), false)
+  f.open(true)
+  f.advance(1800)
+  assert.equal(f.progress, 1)
+})
 
 test('optics, colored fill and icon share the same moving source on every frame', () => {
   const f = fixture()

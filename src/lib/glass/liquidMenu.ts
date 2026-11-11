@@ -20,7 +20,9 @@ const attribute = (element: Element | null, name: string, value: string) => {
   if (element && element.getAttribute(name) !== value) element.setAttribute(name, value)
 }
 const style = (element: HTMLElement, name: string, value: string) => {
-  if (element.style.getPropertyValue(name) !== value) element.style.setProperty(name, value)
+  if (element.style.getPropertyValue(name) === value) return false
+  element.style.setProperty(name, value)
+  return true
 }
 
 /** One physical model drives the source, neck, panel, optics, tint and labels.
@@ -42,6 +44,16 @@ export function createLiquidMenu(elements: Elements) {
   let lastTime = 0
   let waiting = false
   let notified = false
+  const samples = new WeakMap<MenuPlan, { progress: number; sample: Sample }>()
+  let painted: unknown[] = []
+
+  function sample(source: MenuPlan, progress: number) {
+    const cached = samples.get(source)
+    if (cached?.progress === progress) return cached.sample
+    const value = sampleMenu(source, progress)
+    samples.set(source, { progress, sample: value })
+    return value
+  }
 
   function update(now: number) {
     if (lastFrame === now) return
@@ -94,8 +106,8 @@ export function createLiquidMenu(elements: Elements) {
       if (spring.value === 0) backSpring.step(dt)
     }
     const sampleFields = () => {
-      const menuSample = sampleMenu(plan!, spring.value)
-      const backSample = sampleMenu(backPlan!, backSpring.value)
+      const menuSample = sample(plan!, spring.value)
+      const backSample = sample(backPlan!, backSpring.value)
       const fromBack = spring.value === 0 && backSpring.value > 0
       return [
         { sample: fromBack ? backSample : menuSample, index: 0, plan: fromBack ? backPlan! : plan!, visible: true },
@@ -116,16 +128,23 @@ export function createLiquidMenu(elements: Elements) {
       next = sampleFields()
     }
     fields = next
-    const sample = fields[0].sample
+    const menu = elements.menu(), root = elements.root?.(), back = elements.back?.()
+    const tint = elements.tint(), blueTint = elements.blueTint()
+    // Scrolling/content mutations wake the SDK even when both springs rest.
+    // Reuse the exact contour; still refresh the viewport origin and check map
+    // readiness above. A newly mounted menu must receive its paint immediately.
+    const paintState = [fields[1].sample, fields[2].sample, open, showBack, spring.settled,
+      scene, trigger, menu, root, back, tint, blueTint]
+    if (paintState.every((value, index) => value === painted[index])) return
+    painted = paintState
+    const currentSample = fields[0].sample
     // Reserve space with the same field that moves the arrow. Its visible
     // centre stays anchored while the language button flows back into it.
     // A separate CSS width transition used to drag both controls left first.
     const arrowPanel = fields[2].sample.pose.panel
     const backSpace = (layout.size / 2 - arrowPanel.left - arrowPanel.width / 2)
       * smooth(0, 0.2, backSpring.value)
-    const root = elements.root?.()
-    if (root) {
-      style(root, '--back-space', `${backSpace.toFixed(3)}px`)
+    if (root && style(root, '--back-space', `${backSpace.toFixed(3)}px`)) {
       const positioned = scene.getBoundingClientRect()
       origin = { left: positioned.left, top: positioned.top }
     }
@@ -134,12 +153,11 @@ export function createLiquidMenu(elements: Elements) {
       visible && state.pose.bodies[index] ? [menuBodyPath(state.pose.bodies[index])] : []).join('')
     const clip = `path("${d}")`
     if (scene.style.clipPath !== clip) scene.style.clipPath = clip
-    attribute(elements.tint(), 'd', d)
-    const { head, pull } = sample.pose
+    attribute(tint, 'd', d)
+    const { head, pull } = currentSample.pose
     const centerY = head.top + head.height / 2
     // The neutral fill follows the entire liquid body; blue belongs only to
     // its moving head, so it never spills onto the detached menu above/below.
-    const blueTint = elements.blueTint()
     attribute(blueTint, 'x', String(head.left))
     attribute(blueTint, 'y', String(head.top))
     attribute(blueTint, 'width', String(head.width))
@@ -151,7 +169,6 @@ export function createLiquidMenu(elements: Elements) {
     attribute(scene, 'data-liquid-menu-progress', spring.value.toFixed(4))
     attribute(scene, 'data-liquid-menu-state', spring.settled ? open ? 'open' : 'closed' : open ? 'opening' : 'closing')
     attribute(scene, 'data-liquid-back-progress', backSpring.value.toFixed(4))
-    const back = elements.back?.()
     if (back) {
       const live = fields[2].sample.pose.panel
       const reveal = smooth(0.47, 0.88, backSpring.value)
@@ -160,7 +177,6 @@ export function createLiquidMenu(elements: Elements) {
       style(back, 'visibility', reveal > 0 ? 'visible' : 'hidden')
       style(back, 'pointer-events', showBack && reveal > 0.85 ? 'auto' : 'none')
     }
-    const menu = elements.menu()
     if (menu) {
       const livePanel = fields[1].sample.pose.panel
       const reveal = smooth(0.47, 0.88, spring.value)

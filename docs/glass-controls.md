@@ -66,6 +66,19 @@ old source refs during hot reload. Change optical settings, not the backdrop's
 DOM structure. After changing the package patch, restart Vite with `--force`
 to discard its cached dependency prebundle.
 
+Backdrop updates share a per-window frame queue in `backdropFrame.ts`. Scroll
+and media events schedule work once per frame. All mirrors read before any
+mirror writes; source bounds, computed styles and animation lists are shared
+for that frame only. Detached replacement trees are inserted in the write phase.
+Text-node changes update their existing copies without rebuilding the page mirror.
+Live video, sampling resolution, optical settings and animation timing are unchanged.
+The menu also reuses its sampled contours and paint when the pose is unchanged,
+while still checking material readiness and refreshing its viewport position.
+`glass-backdrop-frame.test.mjs` covers batching, fresh reads, cancellation and
+live-frame scheduling; menu tests cover cache invalidation and positioning.
+These checks do not establish Windows frame rate or browser pixel equivalence;
+compare section switching and language-menu motion on the affected machine.
+
 When upgrading the SDK, explicitly port and review the patch before updating
 the lockfile. Run `pnpm test:glass`, `pnpm build`, and verify the real browser:
 zero light, zero refraction, strong Frost, dispersion, layer independence,
